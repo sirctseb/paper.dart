@@ -24,943 +24,921 @@
  * @classexample
  * // Create a point at x: 10, y: 5
  * var point = new Point(10, 5);
- * console.log(point.x); // 10
- * console.log(point.y); // 5
+ * print(point.x); // 10
+ * print(point.y); // 5
  */
-var Point = this.Point = Base.extend(/** @lends Point# */{
-	/**
-	 * Creates a Point object with the given x and y coordinates.
-	 *
-	 * @name Point#initialize
-	 * @param {Number} x the x coordinate
-	 * @param {Number} y the y coordinate
-	 *
-	 * @example
-	 * // Create a point at x: 10, y: 5
-	 * var point = new Point(10, 5);
-	 * console.log(point.x); // 10
-	 * console.log(point.y); // 5
-	 */
-	/**
-	 * Creates a Point object using the numbers in the given array as
-	 * coordinates.
-	 *
-	 * @name Point#initialize
-	 * @param {array} array
-	 *
-	 * @example
-	 * // Creating a point at x: 10, y: 5 using an array of numbers:
-	 * var array = [10, 5];
-	 * var point = new Point(array);
-	 * console.log(point.x); // 10
-	 * console.log(point.y); // 5
-	 *
-	 * @example
-	 * // Passing an array to a functionality that expects a point:
-	 *
-	 * // Create a circle shaped path at x: 50, y: 50
-	 * // with a radius of 30:
-	 * var path = new Path.Circle([50, 50], 30);
-	 * path.fillColor = 'red';
-	 *
-	 * // Which is the same as doing:
-	 * var path = new Path.Circle(new Point(50, 50), 30);
-	 * path.fillColor = 'red';
-	 */
-	/**
-	 * Creates a Point object using the properties in the given object.
-	 *
-	 * @name Point#initialize
-	 * @param {object} object
-	 *
-	 * @example
-	 * // Creating a point using an object literal with length and angle
-	 * // properties:
-	 *
-	 * var point = new Point({
-	 * 	length: 10,
-	 * 	angle: 90
-	 * });
-	 * console.log(point.length); // 10
-	 * console.log(point.angle); // 90
-	 *
-	 * @example
-	 * // Creating a point at x: 10, y: 20 using an object literal:
-	 *
-	 * var point = new Point({
-	 * 	x: 10,
-	 * 	y: 20
-	 * });
-	 * console.log(point.x); // 10
-	 * console.log(point.y); // 20
-	 *
-	 * @example
-	 * // Passing an object to a functionality that expects a point:
-	 *
-	 * var center = {
-	 * 	x: 50,
-	 * 	y: 50
-	 * };
-	 *
-	 * // Creates a circle shaped path at x: 50, y: 50
-	 * // with a radius of 30:
-	 * var path = new Path.Circle(center, 30);
-	 * path.fillColor = 'red';
-	 */
-	/**
-	 * Creates a Point object using the width and height values of the given
-	 * Size object.
-	 *
-	 * @name Point#initialize
-	 * @param {Size} size
-	 *
-	 * @example
-	 * // Creating a point using a size object.
-	 *
-	 * // Create a Size with a width of 100pt and a height of 50pt
-	 * var size = new Size(100, 50);
-	 * console.log(size); // { width: 100, height: 50 }
-	 * var point = new Point(size);
-	 * console.log(point); // { x: 100, y: 50 }
-	 */
-	/**
-	 * Creates a Point object using the coordinates of the given Point object.
-	 *
-	 * @param {Point} point
-	 * @name Point#initialize
-	 */
-	initialize: function(arg0, arg1) {
-		if (arg1 !== undefined) {
-			this.x = arg0;
-			this.y = arg1;
-		} else if (arg0 !== undefined) {
-			if (arg0 == null) {
-				this.x = this.y = 0;
-			} else if (arg0.x !== undefined) {
-				this.x = arg0.x;
-				this.y = arg0.y;
-			} else if (arg0.width !== undefined) {
-				this.x = arg0.width;
-				this.y = arg0.height;
-			} else if (Array.isArray(arg0)) {
-				this.x = arg0[0];
-				this.y = arg0.length > 1 ? arg0[1] : arg0[0];
-			} else if (arg0.angle !== undefined) {
-				this.x = arg0.length;
-				this.y = 0;
-				this.setAngle(arg0.angle);
-			} else if (typeof arg0 === 'number') {
-				this.x = this.y = arg0;
-			} else {
-				this.x = this.y = 0;
-			}
-		} else {
-			this.x = this.y = 0;
-		}
-	},
+class Point {
+  // TODO try to support different constructor in the default?
+  //Point(var first, [var second = null]) {
+    //check types, etc.
+  //}
 
-	/**
-	 * The x coordinate of the point
-	 *
-	 * @name Point#x
-	 * @type Number
-	 */
+  /**
+   * Creates a Point object with the given x and y coordinates.
+   *
+   * @name Point#initialize
+   * @param {Number} x the x coordinate
+   * @param {Number} y the y coordinate
+   *
+   * @example
+   * // Create a point at x: 10, y: 5
+   * Point point = new Point(10, 5);
+   * print(point.x); // 10
+   * print(point.y); // 5
+   */
+  // TODO can you do Point(this.x, this.y) if they are setters?
+  Point([num x = 0, num y = 0]) {
+    _x = x;
+    _y = y;
+  }
+  /**
+   * Creates a Point object using the numbers in the given list as
+   * coordinates.
+   *
+   * @name Point#initialize
+   * @param {List} list
+   *
+   * @example
+   * // Creating a point at x: 10, y: 5 using a list of numbers:
+   * List list = [10, 5];
+   * var point = new Point.fromList(list);
+   * print(point.x); // 10
+   * print(point.y); // 5
+   *
+   * TODO support below
+   * @example
+   * // Passing an array to a functionality that expects a point:
+   *
+   * // Create a circle shaped path at x: 50, y: 50
+   * // with a radius of 30:
+   * var path = new Path.Circle([50, 50], 30);
+   * path.fillColor = 'red';
+   *
+   * // Which is the same as doing:
+   * var path = new Path.Circle(new Point(50, 50), 30);
+   * path.fillColor = 'red';
+   */
+  Point.fromList(List point) {
+    _x = point[0];
+    _y = point[1];
+  }
+  /**
+   * Creates a Point object using the properties in the given map.
+   *
+   * @name Point#initialize
+   * @param {Map} object
+   *
+   * @example
+   * // Creating a point using an object literal with length and angle
+   * // properties:
+   *
+   * var point = new Point({
+   *   length: 10,
+   *   angle: 90
+   * });
+   * print(point.length); // 10
+   * print(point.angle); // 90
+   *
+   * @example
+   * // Creating a point at x: 10, y: 20 using an object literal:
+   *
+   * var point = new Point({
+   *   x: 10,
+   *   y: 20
+   * });
+   * print(point.x); // 10
+   * print(point.y); // 20
+   *
+   * @example
+   * // Passing an object to a functionality that expects a point:
+   *
+   * var center = {
+   *   x: 50,
+   *   y: 50
+   * };
+   *
+   * // Creates a circle shaped path at x: 50, y: 50
+   * // with a radius of 30:
+   * var path = new Path.Circle(center, 30);
+   * path.fillColor = 'red';
+   */
+  Point.fromMap(Map map) {
+    // read from {"x": x, "y": y}
+    if(map.containsKey("x")) {
+    _x = map["x"];
+    _y = map["y"];
+    }
+    // read from {"length": length, "angle": angle}
+    else if(map.containsKey("angle")) {
+      _x = map["length"];
+      setAngle(map["angle"]);
+    }
+    // read from {"width": width, "height": height}
+    else if(map.containsKey("width")) {
+      _x = map["width"];
+      _y = map["height"];
+    }
+  }
+  /**
+   * Creates a Point object using the width and height values of the given
+   * Size object.
+   *
+   * @name Point#initialize
+   * @param {Size} size
+   *
+   * @example
+   * // Creating a point using a size object.
+   *
+   * // Create a Size with a width of 100pt and a height of 50pt
+   * var size = new Size(100, 50);
+   * print(size); // { width: 100, height: 50 }
+   * var point = new Point(size);
+   * print(point); // { x: 100, y: 50 }
+   */
+  /**
+   * Creates a Point object using the coordinates of the given Point object.
+   *
+   * @param {Point} point
+   * @name Point#initialize
+   */
 
-	/**
-	 * The y coordinate of the point
-	 *
-	 * @name Point#y
-	 * @type Number
-	 */
+  /**
+   * The x coordinate of the point
+   *
+   * @name Point#x
+   * @type Number
+   */
+  num get x() => _x;
 
-	set: function(x, y) {
-		this.x = x;
-		this.y = y;
-		return this;
-	},
+  /**
+   * The y coordinate of the point
+   *
+   * @name Point#y
+   * @type Number
+   */
+  num get y() => _y;
 
-	/**
-	 * Returns a copy of the point.
-	 *
-	 * @example
-	 * var point1 = new Point();
-	 * var point2 = point1;
-	 * point2.x = 1; // also changes point1.x
-	 *
-	 * var point2 = point1.clone();
-	 * point2.x = 1; // doesn't change point1.x
-	 *
-	 * @returns {Point} the cloned point
-	 */
-	clone: function() {
-		return Point.create(this.x, this.y);
-	},
+  Point set(num x, num y) {
+    _x = x;
+    _y = y;
+    return this;
+  }
 
-	/**
-	 * @return {String} A string representation of the point.
-	 */
-	toString: function() {
-		var format = Base.formatNumber;
-		return '{ x: ' + format(this.x) + ', y: ' + format(this.y) + ' }';
-	},
+  /**
+   * Returns a copy of the point.
+   *
+   * @example
+   * var point1 = new Point();
+   * var point2 = point1;
+   * point2.x = 1; // also changes point1.x
+   *
+   * var point2 = point1.clone();
+   * point2.x = 1; // doesn't change point1.x
+   *
+   * @returns {Point} the cloned point
+   */
+  Point clone() {
+    return new Point(x, y);
+  }
 
-	/**
-	 * Returns the addition of the supplied value to both coordinates of
-	 * the point as a new point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#add
-	 * @function
-	 * @param {Number} number the number to add
-	 * @return {Point} the addition of the point and the value as a new point
-	 *
-	 * @example
-	 * var point = new Point(5, 10);
-	 * var result = point + 20;
-	 * console.log(result); // {x: 25, y: 30}
-	 */
-	/**
-	 * Returns the addition of the supplied point to the point as a new
-	 * point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#add
-	 * @function
-	 * @param {Point} point the point to add
-	 * @return {Point} the addition of the two points as a new point
-	 *
-	 * @example
-	 * var point1 = new Point(5, 10);
-	 * var point2 = new Point(10, 20);
-	 * var result = point1 + point2;
-	 * console.log(result); // {x: 15, y: 30}
-	 */
-	add: function(point) {
-		point = Point.read(arguments);
-		return Point.create(this.x + point.x, this.y + point.y);
-	},
+  /**
+   * @return {String} A string representation of the point.
+   */
+  Point toString() {
+    // TODO formatting
+    //var format = Base.formatNumber;
+    return '{ x: ' + x + ', y: ' + y + ' }';
+  }
 
-	/**
-	 * Returns the subtraction of the supplied value to both coordinates of
-	 * the point as a new point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#subtract
-	 * @function
-	 * @param {Number} number the number to subtract
-	 * @return {Point} the subtraction of the point and the value as a new point
-	 *
-	 * @example
-	 * var point = new Point(10, 20);
-	 * var result = point - 5;
-	 * console.log(result); // {x: 5, y: 15}
-	 */
-	/**
-	 * Returns the subtraction of the supplied point to the point as a new
-	 * point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#subtract
-	 * @function
-	 * @param {Point} point the point to subtract
-	 * @return {Point} the subtraction of the two points as a new point
-	 *
-	 * @example
-	 * var firstPoint = new Point(10, 20);
-	 * var secondPoint = new Point(5, 5);
-	 * var result = firstPoint - secondPoint;
-	 * console.log(result); // {x: 5, y: 15}
-	 */
-	subtract: function(point) {
-		point = Point.read(arguments);
-		return Point.create(this.x - point.x, this.y - point.y);
-	},
+  // TODO support adding scalar?
+  /**
+   * Returns the addition of the supplied value to both coordinates of
+   * the point as a new point.
+   * The object itself is not modified!
+   *
+   * @name Point#add
+   * @function
+   * @param {Number} number the number to add
+   * @return {Point} the addition of the point and the value as a new point
+   *
+   * @example
+   * var point = new Point(5, 10);
+   * var result = point + 20;
+   * print(result); // {x: 25, y: 30}
+   */
+  /**
+   * Returns the addition of the supplied point to the point as a new
+   * point.
+   * The object itself is not modified!
+   *
+   * @name Point#add
+   * @function
+   * @param {Point} point the point to add
+   * @return {Point} the addition of the two points as a new point
+   *
+   * @example
+   * var point1 = new Point(5, 10);
+   * var point2 = new Point(10, 20);
+   * var result = point1 + point2;
+   * print(result); // {x: 15, y: 30}
+   */
+  Point add(Point point) {
+    return new Point(x + point.x, y + point.y);
+  }
+  // operator version
+  Point operator + (Point point) {
+    return add(point);
+  }
 
-	/**
-	 * Returns the multiplication of the supplied value to both coordinates of
-	 * the point as a new point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#multiply
-	 * @function
-	 * @param {Number} number the number to multiply by
-	 * @return {Point} the multiplication of the point and the value as a new point
-	 *
-	 * @example
-	 * var point = new Point(10, 20);
-	 * var result = point * 2;
-	 * console.log(result); // {x: 20, y: 40}
-	 */
-	/**
-	 * Returns the multiplication of the supplied point to the point as a new
-	 * point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#multiply
-	 * @function
-	 * @param {Point} point the point to multiply by
-	 * @return {Point} the multiplication of the two points as a new point
-	 *
-	 * @example
-	 * var firstPoint = new Point(5, 10);
-	 * var secondPoint = new Point(4, 2);
-	 * var result = firstPoint * secondPoint;
-	 * console.log(result); // {x: 20, y: 20}
-	 */
-	multiply: function(point) {
-		point = Point.read(arguments);
-		return Point.create(this.x * point.x, this.y * point.y);
-	},
+  /**
+   * Returns the subtraction of the supplied value to both coordinates of
+   * the point as a new point.
+   * The object itself is not modified!
+   *
+   * @name Point#subtract
+   * @function
+   * @param {Number} number the number to subtract
+   * @return {Point} the subtraction of the point and the value as a new point
+   *
+   * @example
+   * var point = new Point(10, 20);
+   * var result = point - 5;
+   * print(result); // {x: 5, y: 15}
+   */
+  /**
+   * Returns the subtraction of the supplied point to the point as a new
+   * point.
+   * The object itself is not modified!
+   *
+   * @name Point#subtract
+   * @function
+   * @param {Point} point the point to subtract
+   * @return {Point} the subtraction of the two points as a new point
+   *
+   * @example
+   * var firstPoint = new Point(10, 20);
+   * var secondPoint = new Point(5, 5);
+   * var result = firstPoint - secondPoint;
+   * print(result); // {x: 5, y: 15}
+   */
+  Point subtract(Point point) {
+    return new Point(x - point.x, y - point.y);
+  }
+  // operator version
+  Point operator - (Point point) {
+    return subtract(point);
+  }
 
-	/**
-	 * Returns the division of the supplied value to both coordinates of
-	 * the point as a new point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#divide
-	 * @function
-	 * @param {Number} number the number to divide by
-	 * @return {Point} the division of the point and the value as a new point
-	 *
-	 * @example
-	 * var point = new Point(10, 20);
-	 * var result = point / 2;
-	 * console.log(result); // {x: 5, y: 10}
-	 */
-	/**
-	 * Returns the division of the supplied point to the point as a new
-	 * point.
-	 * The object itself is not modified!
-	 *
-	 * @name Point#divide
-	 * @function
-	 * @param {Point} point the point to divide by
-	 * @return {Point} the division of the two points as a new point
-	 *
-	 * @example
-	 * var firstPoint = new Point(8, 10);
-	 * var secondPoint = new Point(2, 5);
-	 * var result = firstPoint / secondPoint;
-	 * console.log(result); // {x: 4, y: 2}
-	 */
-	divide: function(point) {
-		point = Point.read(arguments);
-		return Point.create(this.x / point.x, this.y / point.y);
-	},
+  /**
+   * Returns the multiplication of the supplied value to both coordinates of
+   * the point as a new point.
+   * The object itself is not modified!
+   *
+   * @name Point#multiply
+   * @function
+   * @param {Number} number the number to multiply by
+   * @return {Point} the multiplication of the point and the value as a new point
+   *
+   * @example
+   * var point = new Point(10, 20);
+   * var result = point * 2;
+   * print(result); // {x: 20, y: 40}
+   */
+  /**
+   * Returns the multiplication of the supplied point to the point as a new
+   * point.
+   * The object itself is not modified!
+   *
+   * @name Point#multiply
+   * @function
+   * @param {Point} point the point to multiply by
+   * @return {Point} the multiplication of the two points as a new point
+   *
+   * @example
+   * var firstPoint = new Point(5, 10);
+   * var secondPoint = new Point(4, 2);
+   * var result = firstPoint * secondPoint;
+   * print(result); // {x: 20, y: 20}
+   */
+  Point multiply(value) {
+    // component-wise multiplication
+    if(value is Point) {
+      return new Point(x * value.x, y * value.y);
+    }
+    // scalar multiplication
+    return new Point(x * value, y * value);
+  };
+  // operator version
+  // TODO NOTE: this does dot product for Point argument, instead of component-wise like above
+  Object operator * (value) {
+    if(value is Point) {
+      return x * value.x + y * value.y;
+    }
+    return new Point(x * value, y * value);
+  }
 
-	/**
-	 * The modulo operator returns the integer remainders of dividing the point
-	 * by the supplied value as a new point.
-	 *
-	 * @name Point#modulo
-	 * @function
-	 * @param {Number} value
-	 * @return {Point} the integer remainders of dividing the point by the value
-	 *                 as a new point
-	 *
-	 * @example
-	 * var point = new Point(12, 6);
-	 * console.log(point % 5); // {x: 2, y: 1}
-	 */
-	/**
-	 * The modulo operator returns the integer remainders of dividing the point
-	 * by the supplied value as a new point.
-	 *
-	 * @name Point#modulo
-	 * @function
-	 * @param {Point} point
-	 * @return {Point} the integer remainders of dividing the points by each
-	 *                 other as a new point
-	 *
-	 * @example
-	 * var point = new Point(12, 6);
-	 * console.log(point % new Point(5, 2)); // {x: 2, y: 0}
-	 */
-	modulo: function(point) {
-		point = Point.read(arguments);
-		return Point.create(this.x % point.x, this.y % point.y);
-	},
+  /**
+   * Returns the division of the supplied value to both coordinates of
+   * the point as a new point.
+   * The object itself is not modified!
+   *
+   * @name Point#divide
+   * @function
+   * @param {Number} number the number to divide by
+   * @return {Point} the division of the point and the value as a new point
+   *
+   * @example
+   * var point = new Point(10, 20);
+   * var result = point / 2;
+   * print(result); // {x: 5, y: 10}
+   */
+  /**
+   * Returns the division of the supplied point to the point as a new
+   * point.
+   * The object itself is not modified!
+   *
+   * @name Point#divide
+   * @function
+   * @param {Point} point the point to divide by
+   * @return {Point} the division of the two points as a new point
+   *
+   * @example
+   * var firstPoint = new Point(8, 10);
+   * var secondPoint = new Point(2, 5);
+   * var result = firstPoint / secondPoint;
+   * print(result); // {x: 4, y: 2}
+   */
+  Point divide(value) {
+    // component-wise division
+    if(value is Point) {
+      return new Point(x / value.x, y / value.y);
+    }
+    // division by scalar
+    return new Point(x / value, y / value);
+  }
+  // operator version
+  Point operator / (value) {
+    return divide(value);
+  }
 
-	negate: function() {
-		return Point.create(-this.x, -this.y);
-	},
+  /**
+   * The modulo operator returns the integer remainders of dividing the point
+   * by the supplied value as a new point.
+   *
+   * @name Point#modulo
+   * @function
+   * @param {Number} value
+   * @return {Point} the integer remainders of dividing the point by the value
+   *                 as a new point
+   *
+   * @example
+   * var point = new Point(12, 6);
+   * print(point % 5); // {x: 2, y: 1}
+   */
+  /**
+   * The modulo operator returns the integer remainders of dividing the point
+   * by the supplied value as a new point.
+   *
+   * @name Point#modulo
+   * @function
+   * @param {Point} point
+   * @return {Point} the integer remainders of dividing the points by each
+   *                 other as a new point
+   *
+   * @example
+   * var point = new Point(12, 6);
+   * print(point % new Point(5, 2)); // {x: 2, y: 0}
+   */
+  Point modulo(value) {
+    if(value is Point) {
+      return new Point(x % value.x, y % value.y);
+    }
+    return new Point(x % value, y % value);
+  }
+  // operator version
+  Point operator % (value) {
+    return modulo(value);
+  }
 
-	/**
-	 * Transforms the point by the matrix as a new point. The object itself
-	 * is not modified!
-	 *
-	 * @param {Matrix} matrix
-	 * @return {Point} The transformed point
-	 */
-	transform: function(matrix) {
-		return matrix ? matrix._transformPoint(this) : this;
-	},
+  // depending on the language version, this may already be the operator
+  Point negate() {
+    return new Point(-x, -y);
+  }
+  // TODO implement operator version once they push the language changes
 
-	/**
-	 * {@grouptitle Distance & Length}
-	 *
-	 * Returns the distance between the point and another point.
-	 *
-	 * @param {Point} point
-	 * @param {Boolean} squared Controls whether the distance should remain
-	 *        squared, or its square root should be calculated.
-	 * @return {Number}
-	 */
-	getDistance: function(point, squared) {
-		point = Point.read(arguments);
-		var x = point.x - this.x,
-			y = point.y - this.y,
-			d = x * x + y * y;
-		return squared ? d : Math.sqrt(d);
-	},
+  /**
+   * Transforms the point by the matrix as a new point. The object itself
+   * is not modified!
+   *
+   * @param {Matrix} matrix
+   * @return {Point} The transformed point
+   */
+  Point transform(Matrix matrix) {
+    // TODO operator for matrix-point multiplication?
+    return matrix ? matrix.transformPoint(this) : this;
+  },
 
-	/**
-	 * The length of the vector that is represented by this point's coordinates.
-	 * Each point can be interpreted as a vector that points from the origin
-	 * ({@code x = 0}, {@code y = 0}) to the point's location.
-	 * Setting the length changes the location but keeps the vector's angle.
-	 *
-	 * @type Number
-	 * @bean
-	 */
-	getLength: function() {
-		// Supports a hidden parameter 'squared', which controls whether the
-		// squared length should be returned. Hide it so it produces a bean
-		// property called #length.
-		var l = this.x * this.x + this.y * this.y;
-		return (arguments.length && arguments[0]) ? l : Math.sqrt(l);
-	},
+  /**
+   * {@grouptitle Distance & Length}
+   *
+   * Returns the distance between the point and another point.
+   *
+   * @param {Point} point
+   * @param {Boolean} squared Controls whether the distance should remain
+   *        squared, or its square root should be calculated.
+   * @return {Number}
+   */
+  num getDistance(Point point, [bool squared = false]) {
+    num x = point.x - this.x;
+    num y = point.y - this.y;
+    num d = x * x + y * y;
+    return squared ? d : Math.sqrt(d);
+  }
 
-	setLength: function(length) {
-		// Whenever setting x/y, use #set() instead of direct assignment,
-		// so LinkedPoint does not report changes twice.
-		if (this.isZero()) {
-			var angle = this._angle || 0;
-			this.set(
-				Math.cos(angle) * length,
-				Math.sin(angle) * length
-			);
-		} else {
-			var scale = length / this.getLength();
-			// Force calculation of angle now, so it will be preserved even when
-			// x and y are 0
-			if (scale == 0)
-				this.getAngle();
-			this.set(
-				this.x * scale,
-				this.y * scale
-			);
-		}
-		return this;
-	},
+  /**
+   * The length of the vector that is represented by this point's coordinates.
+   * Each point can be interpreted as a vector that points from the origin
+   * ({@code x = 0}, {@code y = 0}) to the point's location.
+   * Setting the length changes the location but keeps the vector's angle.
+   *
+   * @type Number
+   * @bean
+   */
+  num getLength([bool square = false]) {
+    // Supports a hidden parameter 'squared', which controls whether the
+    // squared length should be returned. Hide it so it produces a bean
+    // property called #length.
+    var l = x * x + y * y;
+    return (arguments.length && arguments[0]) ? l : Math.sqrt(l);
+  }
+  // property getter for length
+  num get length() => Math.sqrt(x*x + y*y);
 
-	/**
-	 * Normalize modifies the {@link #length} of the vector to {@code 1} without
-	 * changing its angle and returns it as a new point. The optional
-	 * {@code length} parameter defines the length to normalize to.
-	 * The object itself is not modified!
-	 *
-	 * @param {Number} [length=1] The length of the normalized vector
-	 * @return {Point} The normalized vector of the vector that is represented
-	 *                 by this point's coordinates.
-	 */
-	normalize: function(length) {
-		if (length === undefined)
-			length = 1;
-		var current = this.getLength(),
-			scale = current != 0 ? length / current : 0,
-			point = Point.create(this.x * scale, this.y * scale);
-		// Preserve angle.
-		point._angle = this._angle;
-		return point;
-	},
+  Point setLength(length) {
+    // Whenever setting x/y, use #set() instead of direct assignment,
+    // so LinkedPoint does not report changes twice.
+    if (isZero()) {
+      // TODO declare _angle and get/set
+      num angle = this.angle;
+      x = Math.cos(angle) * length;
+      y = Math.cos(angle) * length;
+    } else {
+      var scale = length / this.length;
+      // Force calculation of angle now, so it will be preserved even when
+      // x and y are 0
+      if (scale == 0)
+        this.getAngle();
+      this.x *= scale;
+      this.y *= scale;
+    }
+    return this;
+  }
+  // property setter for length
+  num set length(value) => setLength(value);
 
-	/**
-	 * {@grouptitle Angle & Rotation}
-	 * Returns the smaller angle between two vectors. The angle is unsigned, no
-	 * information about rotational direction is given.
-	 *
-	 * @name Point#getAngle
-	 * @function
-	 * @param {Point} point
-	 * @return {Number} the angle in degrees
-	 */
-	/**
-	 * The vector's angle in degrees, measured from the x-axis to the vector.
-	 *
-	 * The angle is unsigned, no information about rotational direction is
-	 * given.
-	 *
-	 * @name Point#getAngle
-	 * @bean
-	 * @type Number
-	 */
-	getAngle: function(/* point */) {
-		// Hide parameters from Bootstrap so it injects bean too
-		return this.getAngleInRadians(arguments[0]) * 180 / Math.PI;
-	},
+  /**
+   * Normalize modifies the {@link #length} of the vector to {@code 1} without
+   * changing its angle and returns it as a new point. The optional
+   * {@code length} parameter defines the length to normalize to.
+   * The object itself is not modified!
+   * 
+   * TODO I don't really like that normalize doesn't modify the object
+   * it should be called normalized then
+   *
+   * @param {Number} [length=1] The length of the normalized vector
+   * @return {Point} The normalized vector of the vector that is represented
+   *                 by this point's coordinates.
+   */
+  Point normalize([num length = 1]) {
+    num current = this.length;
+    num scale = current != 0 ? length / current : 0;
+    Point point = this * scale;
+    // Preserve angle.
+    // TODO does this not happen automatically
+    point.angle = angle;
+    return point;
+  }
 
-	setAngle: function(angle) {
-		angle = this._angle = angle * Math.PI / 180;
-		if (!this.isZero()) {
-			var length = this.getLength();
-			// Use #set() instead of direct assignment of x/y, so LinkedPoint
-			// does not report changes twice.
-			this.set(
-				Math.cos(angle) * length,
-				Math.sin(angle) * length
-			);
-		}
-		return this;
-	},
+  /**
+   * {@grouptitle Angle & Rotation}
+   * Returns the smaller angle between two vectors. The angle is unsigned, no
+   * information about rotational direction is given.
+   *
+   * @name Point#getAngle
+   * @function
+   * @param {Point} point
+   * @return {Number} the angle in degrees
+   */
+  /**
+   * The vector's angle in degrees, measured from the x-axis to the vector.
+   *
+   * The angle is unsigned, no information about rotational direction is
+   * given.
+   *
+   * @name Point#getAngle
+   * @bean
+   * @type Number
+   */
+  num getAngle([Point point = null]) {
+    // Hide parameters from Bootstrap so it injects bean too
+    _angle = getAngleInRadians(point) * 180 / Math.PI;
+    return _angle;
+  }
+  // backing field
+  num _angle;
+  // property getter
+  num get angle() => getAngle();
 
-	/**
-	 * Returns the smaller angle between two vectors in radians. The angle is
-	 * unsigned, no information about rotational direction is given.
-	 *
-	 * @name Point#getAngleInRadians
-	 * @function
-	 * @param {Point} point
-	 * @return {Number} the angle in radians
-	 */
-	/**
-	 * The vector's angle in radians, measured from the x-axis to the vector.
-	 *
-	 * The angle is unsigned, no information about rotational direction is
-	 * given.
-	 *
-	 * @name Point#getAngleInRadians
-	 * @bean
-	 * @type Number
-	 */
-	getAngleInRadians: function(/* point */) {
-		// Hide parameters from Bootstrap so it injects bean too
-		if (arguments[0] === undefined) {
-			if (this._angle == null)
-				this._angle = Math.atan2(this.y, this.x);
-			return this._angle;
-		} else {
-			var point = Point.read(arguments),
-				div = this.getLength() * point.getLength();
-			if (div == 0) {
-				return NaN;
-			} else {
-				return Math.acos(this.dot(point) / div);
-			}
-		}
-	},
+  Point setAngle(angle) {
+    angle = this._angle = angle * Math.PI / 180;
+    if (!isZero()) {
+      var length = this.getLength();
+      // Use #set() instead of direct assignment of x/y, so LinkedPoint
+      // does not report changes twice.
+      _x = Math.cos(angle) * length;
+      _y = Math.sin(angle) * length;
+    }
+    return this;
+  }
+  // property setter
+  set angle(num angle) => setAngle(angle);
 
-	getAngleInDegrees: function(/* point */) {
-		return this.getAngle(arguments[0]);
-	},
+  /**
+   * Returns the smaller angle between two vectors in radians. The angle is
+   * unsigned, no information about rotational direction is given.
+   *
+   * @name Point#getAngleInRadians
+   * @function
+   * @param {Point} point
+   * @return {Number} the angle in radians
+   */
+  /**
+   * The vector's angle in radians, measured from the x-axis to the vector.
+   *
+   * The angle is unsigned, no information about rotational direction is
+   * given.
+   *
+   * @name Point#getAngleInRadians
+   * @bean
+   * @type Number
+   */
+  num getAngleInRadians([Point point = null]) {
+    // Hide parameters from Bootstrap so it injects bean too
+    if (point == null) {
+      if (_angle == null)
+        _angle = Math.atan2(y, x);
+      return _angle;
+    } else {
+      num div = getLength() * point.getLength();
+      if (div == 0) {
+        return NaN;
+      } else {
+        return Math.acos(this.dot(point) / div);
+      }
+    }
+  }
 
-	/**
-	 * The quadrant of the {@link #angle} of the point.
-	 *
-	 * Angles between 0 and 90 degrees are in quadrant {@code 1}. Angles between
-	 * 90 and 180 degrees are in quadrant {@code 2}, angles between 180 and 270
-	 * degrees are in quadrant {@code 3} and angles between 270 and 360 degrees
-	 * are in quadrant {@code 4}.
-	 *
-	 * @type Number
-	 * @bean
-	 *
-	 * @example
-	 * var point = new Point({
-	 * 	angle: 10,
-	 * 	length: 20
-	 * });
-	 * console.log(point.quadrant); // 1
-	 *
-	 * point.angle = 100;
-	 * console.log(point.quadrant); // 2
-	 *
-	 * point.angle = 190;
-	 * console.log(point.quadrant); // 3
-	 *
-	 * point.angle = 280;
-	 * console.log(point.quadrant); // 4
-	 */
-	getQuadrant: function() {
-		return this.x >= 0 ? this.y >= 0 ? 1 : 4 : this.y >= 0 ? 2 : 3;
-	},
+  num getAngleInDegrees([Point point = null]) {
+    return getAngle(point);
+  }
 
-	/**
-	 * Returns the angle between two vectors. The angle is directional and
-	 * signed, giving information about the rotational direction.
-	 *
-	 * Read more about angle units and orientation in the description of the
-	 * {@link #angle} property.
-	 *
-	 * @param {Point} point
-	 * @return {Number} the angle between the two vectors
-	 */
-	getDirectedAngle: function(point) {
-		point = Point.read(arguments);
-		return Math.atan2(this.cross(point), this.dot(point)) * 180 / Math.PI;
-	},
+  /**
+   * The quadrant of the {@link #angle} of the point.
+   *
+   * Angles between 0 and 90 degrees are in quadrant {@code 1}. Angles between
+   * 90 and 180 degrees are in quadrant {@code 2}, angles between 180 and 270
+   * degrees are in quadrant {@code 3} and angles between 270 and 360 degrees
+   * are in quadrant {@code 4}.
+   *
+   * @type Number
+   * @bean
+   *
+   * @example
+   * var point = new Point({
+   *   angle: 10,
+   *   length: 20
+   * });
+   * print(point.quadrant); // 1
+   *
+   * point.angle = 100;
+   * print(point.quadrant); // 2
+   *
+   * point.angle = 190;
+   * print(point.quadrant); // 3
+   *
+   * point.angle = 280;
+   * print(point.quadrant); // 4
+   */
+  int getQuadrant() {
+    return x >= 0 ? y >= 0 ? 1 : 4 : y >= 0 ? 2 : 3;
+  }
+  // quadrant getter
+  int get quadrant() => getQuadrant();
 
-	/**
-	 * Rotates the point by the given angle around an optional center point.
-	 * The object itself is not modified.
-	 *
-	 * Read more about angle units and orientation in the description of the
-	 * {@link #angle} property.
-	 *
-	 * @param {Number} angle the rotation angle
-	 * @param {Point} center the center point of the rotation
-	 * @returns {Point} the rotated point
-	 */
-	rotate: function(angle, center) {
-		angle = angle * Math.PI / 180;
-		var point = center ? this.subtract(center) : this,
-			s = Math.sin(angle),
-			c = Math.cos(angle);
-		point = Point.create(
-			point.x * c - point.y * s,
-			point.y * c + point.x * s
-		);
-		return center ? point.add(center) : point;
-	},
+  /**
+   * Returns the angle between two vectors. The angle is directional and
+   * signed, giving information about the rotational direction.
+   *
+   * Read more about angle units and orientation in the description of the
+   * {@link #angle} property.
+   *
+   * @param {Point} point
+   * @return {Number} the angle between the two vectors
+   */
+  num getDirectedAngle(Point point) {
+    return Math.atan2(cross(point), dot(point)) * 180 / Math.PI;
+  }
 
-	/**
-	 * Checks whether the coordinates of the point are equal to that of the
-	 * supplied point.
-	 *
-	 * @param {Point} point
-	 * @return {Boolean} {@true if the points are equal}
-	 *
-	 * @example
-	 * var point = new Point(5, 10);
-	 * console.log(point == new Point(5, 10)); // true
-	 * console.log(point == new Point(1, 1)); // false
-	 * console.log(point != new Point(1, 1)); // true
-	 */
-	equals: function(point) {
-		point = Point.read(arguments);
-		return this.x == point.x && this.y == point.y;
-	},
+  /**
+   * Rotates the point by the given angle around an optional center point.
+   * The object itself is not modified.
+   *
+   * Read more about angle units and orientation in the description of the
+   * {@link #angle} property.
+   *
+   * @param {Number} angle the rotation angle
+   * @param {Point} center the center point of the rotation
+   * @returns {Point} the rotated point
+   */
+  Point rotate(num angle, [Point center = null]) {
+    angle = angle * Math.PI / 180;
+    Point point = center == null ? this - center : this;
+    num s = Math.sin(angle);
+    num c = Math.cos(angle);
+    point = new Point(
+      point.x * c - point.y * s,
+      point.y * c + point.x * s
+    );
+    return center == null ? point + center : point;
+  }
 
-	/**
-	 * {@grouptitle Tests}
-	 *
-	 * Checks whether the point is inside the boundaries of the rectangle.
-	 *
-	 * @param {Rectangle} rect the rectangle to check against
-	 * @returns {Boolean} {@true if the point is inside the rectangle}
-	 */
-	isInside: function(rect) {
-		return rect.contains(this);
-	},
+  /**
+   * Checks whether the coordinates of the point are equal to that of the
+   * supplied point.
+   *
+   * @param {Point} point
+   * @return {Boolean} {@true if the points are equal}
+   *
+   * @example
+   * var point = new Point(5, 10);
+   * print(point == new Point(5, 10)); // true
+   * print(point == new Point(1, 1)); // false
+   * print(point != new Point(1, 1)); // true
+   */
+  bool equals(Point point) {
+    return x == point.x && y == point.y;
+  }
+  // operator version
+  bool operator == (Point point) => equals(point);
 
-	/**
-	 * Checks if the point is within a given distance of another point.
-	 *
-	 * @param {Point} point the point to check against
-	 * @param {Number} tolerance the maximum distance allowed
-	 * @returns {Boolean} {@true if it is within the given distance}
-	 */
-	isClose: function(point, tolerance) {
-		return this.getDistance(point) < tolerance;
-	},
+  /**
+   * {@grouptitle Tests}
+   *
+   * Checks whether the point is inside the boundaries of the rectangle.
+   *
+   * @param {Rectangle} rect the rectangle to check against
+   * @returns {Boolean} {@true if the point is inside the rectangle}
+   */
+  bool isInside(Rectangle rect) {
+    return rect.contains(this);
+  }
 
-	/**
-	 * Checks if the vector represented by this point is colinear (parallel) to
-	 * another vector.
-	 *
-	 * @param {Point} point the vector to check against
-	 * @returns {Boolean} {@true it is parallel}
-	 */
-	isColinear: function(point) {
-		return this.cross(point) < Numerical.TOLERANCE;
-	},
+  /**
+   * Checks if the point is within a given distance of another point.
+   *
+   * @param {Point} point the point to check against
+   * @param {Number} tolerance the maximum distance allowed
+   * @returns {Boolean} {@true if it is within the given distance}
+   */
+  bool isClose(Point point, num tolerance) {
+    return this.getDistance(point) < tolerance;
+  }
 
-	/**
-	 * Checks if the vector represented by this point is orthogonal
-	 * (perpendicular) to another vector.
-	 *
-	 * @param {Point} point the vector to check against
-	 * @returns {Boolean} {@true it is orthogonal}
-	 */
-	isOrthogonal: function(point) {
-		return this.dot(point) < Numerical.TOLERANCE;
-	},
+  /**
+   * Checks if the vector represented by this point is colinear (parallel) to
+   * another vector.
+   *
+   * @param {Point} point the vector to check against
+   * @returns {Boolean} {@true it is parallel}
+   */
+  bool isColinear(Point point) {
+    return this.cross(point) < Numerical.TOLERANCE;
+  }
 
-	/**
-	 * Checks if this point has both the x and y coordinate set to 0.
-	 *
-	 * @returns {Boolean} {@true both x and y are 0}
-	 */
-	isZero: function() {
-		return this.x == 0 && this.y == 0;
-	},
+  /**
+   * Checks if the vector represented by this point is orthogonal
+   * (perpendicular) to another vector.
+   *
+   * @param {Point} point the vector to check against
+   * @returns {Boolean} {@true it is orthogonal}
+   */
+  bool isOrthogonal(point) {
+    return dot(point) < Numerical.TOLERANCE;
+  }
 
-	/**
-	 * Checks if this point has an undefined value for at least one of its
-	 * coordinates.
-	 *
-	 * @returns {Boolean} {@true if either x or y are not a number}
-	 */
-	isNaN: function() {
-		return isNaN(this.x) || isNaN(this.y);
-	},
+  /**
+   * Checks if this point has both the x and y coordinate set to 0.
+   *
+   * @returns {Boolean} {@true both x and y are 0}
+   */
+  bool isZero() {
+    return x == 0 && y == 0;
+  }
 
-	/**
-	 * {@grouptitle Vector Math Functions}
-	 * Returns the dot product of the point and another point.
-	 *
-	 * @param {Point} point
-	 * @returns {Number} the dot product of the two points
-	 */
-	dot: function(point) {
-		point = Point.read(arguments);
-		return this.x * point.x + this.y * point.y;
-	},
+  /**
+   * Checks if this point has an undefined value for at least one of its
+   * coordinates.
+   *
+   * @returns {Boolean} {@true if either x or y are not a number}
+   */
+  bool isNaN() {
+    return isNaN(x) || isNaN(y);
+  }
 
-	/**
-	 * Returns the cross product of the point and another point.
-	 *
-	 * @param {Point} point
-	 * @returns {Number} the cross product of the two points
-	 */
-	cross: function(point) {
-		point = Point.read(arguments);
-		return this.x * point.y - this.y * point.x;
-	},
+  /**
+   * {@grouptitle Vector Math Functions}
+   * Returns the dot product of the point and another point.
+   *
+   * @param {Point} point
+   * @returns {Number} the dot product of the two points
+   */
+  num dot(Point point) {
+    return x * point.x + y * point.y;
+  },
 
-	/**
-	 * Returns the projection of the point on another point.
-	 * Both points are interpreted as vectors.
-	 *
-	 * @param {Point} point
-	 * @returns {Point} the projection of the point on another point
-	 */
-	project: function(point) {
-		point = Point.read(arguments);
-		if (point.isZero()) {
-			return Point.create(0, 0);
-		} else {
-			var scale = this.dot(point) / point.dot(point);
-			return Point.create(
-				point.x * scale,
-				point.y * scale
-			);
-		}
-	},
+  /**
+   * Returns the cross product of the point and another point.
+   *
+   * @param {Point} point
+   * @returns {Number} the cross product of the two points
+   */
+  num cross(Point point) {
+    return x * point.y - y * point.x;
+  },
 
-	/**
-	 * This property is only present if the point is an anchor or control point
-	 * of a {@link Segment} or a {@link Curve}. In this case, it returns
-	 * {@true it is selected}
-	 *
-	 * @name Point#selected
-	 * @property
-	 * @return {Boolean} {@true the point is selected}
-	 */
+  /**
+   * Returns the projection of the point on another point.
+   * Both points are interpreted as vectors.
+   *
+   * @param {Point} point
+   * @returns {Point} the projection of the point on another point
+   */
+  Point project(Point point) {
+    if (point.isZero()) {
+      return new Point(0, 0);
+    } else {
+      num scale = dot(point) / point.dot(point);
+      return new Point(
+        point.x * scale,
+        point.y * scale
+      );
+    }
+  }
 
-	statics: /** @lends Point */{
-		/**
-		 * Provide a faster creator for Points out of two coordinates that
-		 * does not rely on Point#initialize at all. This speeds up all math
-		 * operations a lot.
-		 *
-		 * @ignore
-		 */
-		create: function(x, y) {
-			// Don't use the shorter form as we want absolute maximum
-			// performance here:
-			// return new Point(Point.dont).set(x, y);
-			var point = new Point(Point.dont);
-			point.x = x;
-			point.y = y;
-			return point;
-		},
+  // TODO implement
+  /**
+   * This property is only present if the point is an anchor or control point
+   * of a {@link Segment} or a {@link Curve}. In this case, it returns
+   * {@true it is selected}
+   *
+   * @name Point#selected
+   * @property
+   * @return {Boolean} {@true the point is selected}
+   */
 
-		/**
-		 * Returns a new point object with the smallest {@link #x} and
-		 * {@link #y} of the supplied points.
-		 *
-		 * @static
-		 * @param {Point} point1
-		 * @param {Point} point2
-		 * @returns {Point} The newly created point object
-		 *
-		 * @example
-		 * var point1 = new Point(10, 100);
-		 * var point2 = new Point(200, 5);
-		 * var minPoint = Point.min(point1, point2);
-		 * console.log(minPoint); // {x: 10, y: 5}
-		 */
-		min: function(point1, point2) {
-			point1 = Point.read(arguments, 0, 1);
-			point2 = Point.read(arguments, 1, 1);
-			return Point.create(
-				Math.min(point1.x, point2.x),
-				Math.min(point1.y, point2.y)
-			);
-		},
+  /**
+   * Returns a new point object with the smallest {@link #x} and
+   * {@link #y} of the supplied points.
+   *
+   * @static
+   * @param {Point} point1
+   * @param {Point} point2
+   * @returns {Point} The newly created point object
+   *
+   * @example
+   * var point1 = new Point(10, 100);
+   * var point2 = new Point(200, 5);
+   * var minPoint = Point.min(point1, point2);
+   * print(minPoint); // {x: 10, y: 5}
+   */
+  static Point min(Point point1, Point point2) {
+    return new Point(
+      Math.min(point1.x, point2.x),
+      Math.min(point1.y, point2.y)
+    );
+  }
 
-		/**
-		 * Returns a new point object with the largest {@link #x} and
-		 * {@link #y} of the supplied points.
-		 *
-		 * @static
-		 * @param {Point} point1
-		 * @param {Point} point2
-		 * @returns {Point} The newly created point object
-		 *
-		 * @example
-		 * var point1 = new Point(10, 100);
-		 * var point2 = new Point(200, 5);
-		 * var maxPoint = Point.max(point1, point2);
-		 * console.log(maxPoint); // {x: 200, y: 100}
-		 */
-		max: function(point1, point2) {
-			point1 = Point.read(arguments, 0, 1);
-			point2 = Point.read(arguments, 1, 1);
-			return Point.create(
-				Math.max(point1.x, point2.x),
-				Math.max(point1.y, point2.y)
-			);
-		},
+  /**
+   * Returns a new point object with the largest {@link #x} and
+   * {@link #y} of the supplied points.
+   *
+   * @static
+   * @param {Point} point1
+   * @param {Point} point2
+   * @returns {Point} The newly created point object
+   *
+   * @example
+   * var point1 = new Point(10, 100);
+   * var point2 = new Point(200, 5);
+   * var maxPoint = Point.max(point1, point2);
+   * print(maxPoint); // {x: 200, y: 100}
+   */
+  static Point max(Point point1, Point point2) {
+    return Point.create(
+      Math.max(point1.x, point2.x),
+      Math.max(point1.y, point2.y)
+    );
+  }
 
-		/**
-		 * Returns a point object with random {@link #x} and {@link #y} values
-		 * between {@code 0} and {@code 1}.
-		 *
-		 * @returns {Point} The newly created point object
-		 * @static
-		 *
-		 * @example
-		 * var maxPoint = new Point(100, 100);
-		 * var randomPoint = Point.random();
-		 *
-		 * // A point between {x:0, y:0} and {x:100, y:100}:
-		 * var point = maxPoint * randomPoint;
-		 */
-		random: function() {
-			return Point.create(Math.random(), Math.random());
-		}
-	}
-}, new function() { // Scope for injecting round, ceil, floor, abs:
-	/**
-	 * {@grouptitle Math Functions}
-	 *
-	 * Returns a new point with rounded {@link #x} and {@link #y} values. The
-	 * object itself is not modified!
-	 *
-	 * @name Point#round
-	 * @function
-	 * @return {Point}
-	 *
-	 * @example
-	 * var point = new Point(10.2, 10.9);
-	 * var roundPoint = point.round();
-	 * console.log(roundPoint); // {x: 10, y: 11}
-	 */
+  /**
+   * Returns a point object with random {@link #x} and {@link #y} values
+   * between {@code 0} and {@code 1}.
+   *
+   * @returns {Point} The newly created point object
+   * @static
+   *
+   * @example
+   * var maxPoint = new Point(100, 100);
+   * var randomPoint = Point.random();
+   *
+   * // A point between {x:0, y:0} and {x:100, y:100}:
+   * var point = maxPoint * randomPoint;
+   */
+  Point.random() {
+    _x = Math.random();
+    _y = Math.random();
+  }
 
-	/**
-	 * Returns a new point with the nearest greater non-fractional values to the
-	 * specified {@link #x} and {@link #y} values. The object itself is not
-	 * modified!
-	 *
-	 * @name Point#ceil
-	 * @function
-	 * @return {Point}
-	 *
-	 * @example
-	 * var point = new Point(10.2, 10.9);
-	 * var ceilPoint = point.ceil();
-	 * console.log(ceilPoint); // {x: 11, y: 11}
-	 */
+  /**
+   * {@grouptitle Math Functions}
+   *
+   * Returns a new point with rounded {@link #x} and {@link #y} values. The
+   * object itself is not modified!
+   *
+   * @name Point#round
+   * @function
+   * @return {Point}
+   *
+   * @example
+   * var point = new Point(10.2, 10.9);
+   * var roundPoint = point.round();
+   * print(roundPoint); // {x: 10, y: 11}
+   */
+  Point round() {
+    // TODO check if dart's round is the same as js
+    return new Point(x.round(), y.round());
+  }
 
-	/**
-	 * Returns a new point with the nearest smaller non-fractional values to the
-	 * specified {@link #x} and {@link #y} values. The object itself is not
-	 * modified!
-	 *
-	 * @name Point#floor
-	 * @function
-	 * @return {Point}
-	 *
-	 * @example
-	 * var point = new Point(10.2, 10.9);
-	 * var floorPoint = point.floor();
-	 * console.log(floorPoint); // {x: 10, y: 10}
-	 */
+  /**
+   * Returns a new point with the nearest greater non-fractional values to the
+   * specified {@link #x} and {@link #y} values. The object itself is not
+   * modified!
+   *
+   * @name Point#ceil
+   * @function
+   * @return {Point}
+   *
+   * @example
+   * var point = new Point(10.2, 10.9);
+   * var ceilPoint = point.ceil();
+   * print(ceilPoint); // {x: 11, y: 11}
+   */
+  Point ceil() {
+    return new Point(x.ceil(), y.ceil());
+  }
 
-	/**
-	 * Returns a new point with the absolute values of the specified {@link #x}
-	 * and {@link #y} values. The object itself is not modified!
-	 *
-	 * @name Point#abs
-	 * @function
-	 * @return {Point}
-	 *
-	 * @example
-	 * var point = new Point(-5, 10);
-	 * var absPoint = point.abs();
-	 * console.log(absPoint); // {x: 5, y: 10}
-	 */
+  /**
+   * Returns a new point with the nearest smaller non-fractional values to the
+   * specified {@link #x} and {@link #y} values. The object itself is not
+   * modified!
+   *
+   * @name Point#floor
+   * @function
+   * @return {Point}
+   *
+   * @example
+   * var point = new Point(10.2, 10.9);
+   * var floorPoint = point.floor();
+   * print(floorPoint); // {x: 10, y: 10}
+   */
+  Point floor() {
+    return new Point(x.floor(), y.floor());
+  }
 
-	return Base.each(['round', 'ceil', 'floor', 'abs'], function(name) {
-		var op = Math[name];
-		this[name] = function() {
-			return Point.create(op(this.x), op(this.y));
-		};
-	}, {});
-});
-
-/**
- * @name LinkedPoint
- *
- * @class An internal version of Point that notifies its owner of each change
- * through setting itself again on the setter that corresponds to the getter
- * that produced this LinkedPoint. See uses of LinkedPoint.create()
- * Note: This prototype is not exported.
- *
- * @ignore
- */
-var LinkedPoint = Point.extend({
-	set: function(x, y, dontNotify) {
-		this._x = x;
-		this._y = y;
-		if (!dontNotify)
-			this._owner[this._setter](this);
-		return this;
-	},
-
-	getX: function() {
-		return this._x;
-	},
-
-	setX: function(x) {
-		this._x = x;
-		this._owner[this._setter](this);
-	},
-
-	getY: function() {
-		return this._y;
-	},
-
-	setY: function(y) {
-		this._y = y;
-		this._owner[this._setter](this);
-	},
-
-	statics: {
-		create: function(owner, setter, x, y, dontLink) {
-			// Support creation of normal Points rather than LinkedPoints
-			// through an optional parameter that can be passed to the getters.
-			// See e.g. Rectangle#getPoint(true).
-			if (dontLink)
-				return Point.create(x, y);
-			var point = new LinkedPoint(LinkedPoint.dont);
-			point._x = x;
-			point._y = y;
-			point._owner = owner;
-			point._setter = setter;
-			return point;
-		}
-	}
-});
+  /**
+   * Returns a new point with the absolute values of the specified {@link #x}
+   * and {@link #y} values. The object itself is not modified!
+   *
+   * @name Point#abs
+   * @function
+   * @return {Point}
+   *
+   * @example
+   * var point = new Point(-5, 10);
+   * var absPoint = point.abs();
+   * print(absPoint); // {x: 5, y: 10}
+   */
+  Point abs() {
+    return new Point(x.abs(), y.abs());
+  }
+}
