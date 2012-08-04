@@ -233,6 +233,7 @@ class Matrix {
    * @type Number
    */
   num get a() => _a;
+  num get scaleX() => _a;
 
   /**
    * The scaling factor in the y-direction ({@code d}).
@@ -241,6 +242,7 @@ class Matrix {
    * @type Number
    */
   num get d() => _d;
+  num get scaleY() => _d;
 
   /**
    * @return {Number} The shear factor in the x-direction ({@code b}).
@@ -249,6 +251,7 @@ class Matrix {
    * @type Number
    */
   num get b() => _b;
+  num get shearX() => _b;
 
   /**
    * @return {Number} The shear factor in the y-direction ({@code c}).
@@ -257,6 +260,7 @@ class Matrix {
    * @type Number
    */
   num get c() => _c;
+  num get shearY() => _c;
 
   /**
    * The translation in the x-direction ({@code tx}).
@@ -265,6 +269,7 @@ class Matrix {
    * @type Number
    */
   num get tx() => _tx;
+  num get translateX() => _tx;
 
   /**
    * The translation in the y-direction ({@code ty}).
@@ -273,6 +278,7 @@ class Matrix {
    * @type Number
    */
   num get ty() => _ty;
+  num get translateY() => _ty;
 
   /**
    * The transform values as an array, in the same sequence as they are passed
@@ -284,6 +290,7 @@ class Matrix {
   List<num> getValues() {
     return [ _a, _c, _b, _d, _tx, _ty ];
   }
+  List<num> get values() => getValues();
 
   /**
    * Concatenates an affine transform to this transform.
@@ -351,118 +358,118 @@ class Matrix {
    * @param {Number} numPts The number of points to tranform
    * @return {Number[]} The dst array, containing the transformed coordinates.
    */
-  transform: function(/* point | */ src, srcOff, dst, dstOff, numPts) {
-    return arguments.length < 5
+  transform(/* point | */ src, [srcOff, dst, dstOff, numPts]) {
+    return numPts == null
       // TODO: Check for rectangle and use _tranformBounds?
-      ? this._transformPoint(Point.read(arguments))
+      ? this._transformPoint(src)
       : this._transformCoordinates(src, srcOff, dst, dstOff, numPts);
-  },
+  }
 
   /**
    * A faster version of transform that only takes one point and does not
    * attempt to convert it.
    */
-  _transformPoint: function(point, dest, dontNotify) {
-    var x = point.x,
-      y = point.y;
-    if (!dest)
-      dest = new Point(Point.dont);
+  Point _transformPoint(Point point, [Point dest]) {
+    num x = point.x;
+    num y = point.y;
+    if (dest == null)
+      dest = new Point();
     return dest.set(
       x * this._a + y * this._b + this._tx,
       x * this._c + y * this._d + this._ty,
-      dontNotify
     );
-  },
+  }
 
-  _transformCoordinates: function(src, srcOff, dst, dstOff, numPts) {
-    var i = srcOff, j = dstOff,
-      srcEnd = srcOff + 2 * numPts;
+  List _transformCoordinates(List src, int srcOff, List dst, int dstOff, int numPts) {
+    int i = srcOff;
+    int j = dstOff;
+    int srcEnd = srcOff + 2 * numPts;
     while (i < srcEnd) {
-      var x = src[i++];
-      var y = src[i++];
-      dst[j++] = x * this._a + y * this._b + this._tx;
-      dst[j++] = x * this._c + y * this._d + this._ty;
+      num x = src[i++];
+      num y = src[i++];
+      dst[j++] = x * _a + y * _b + _tx;
+      dst[j++] = x * _c + y * _d + _ty;
     }
     return dst;
-  },
+  }
 
-  _transformCorners: function(rect) {
-    var x1 = rect.x,
-      y1 = rect.y,
-      x2 = x1 + rect.width,
-      y2 = y1 + rect.height,
-      coords = [ x1, y1, x2, y1, x2, y2, x1, y2 ];
-    return this._transformCoordinates(coords, 0, coords, 0, 4);
-  },
+  List _transformCorners(Rectangle rect) {
+    num x1 = rect.x;
+    num y1 = rect.y;
+    num x2 = x1 + rect.width;
+    num y2 = y1 + rect.height;
+    List coords = [ x1, y1, x2, y1, x2, y2, x1, y2 ];
+    return new this._transformCoordinates(coords, 0, coords, 0, 4);
+  }
 
   /**
    * Returns the 'transformed' bounds rectangle by transforming each corner
    * point and finding the new bounding box to these points. This is not
    * really the transformed reactangle!
    */
-  _transformBounds: function(bounds, dest, dontNotify) {
-    var coords = this._transformCorners(bounds),
-      min = coords.slice(0, 2),
-      max = coords.slice(0);
+  Rectangle _transformBounds(Rectangle bounds, [Rectangle dest]) {
+    List coords = this._transformCorners(bounds);
+    // TODO check these
+    List min = coords.getRange(0,2);
+    List max = new List.from(coords);
     for (var i = 2; i < 8; i++) {
-      var val = coords[i],
-        j = i & 1;
+      int val = coords[i];
+      int j = i & 1;
       if (val < min[j])
         min[j] = val;
       else if (val > max[j])
         max[j] = val;
     }
-    if (!dest)
-      dest = new Rectangle(Rectangle.dont);
-    return dest.set(min[0], min[1], max[0] - min[0], max[1] - min[1],
-        dontNotify);
-  },
+    if (dest == null)
+      dest = new Rectangle();
+    return dest.set(min[0], min[1], max[0] - min[0], max[1] - min[1]);
+  }
 
   /**
    * Inverse transforms a point and returns the result.
    *
    * @param {Point} point The point to be transformed
    */
-  inverseTransform: function(point) {
-    return this._inverseTransform(Point.read(arguments));
-  },
+  Point inverseTransform(Point point) {
+    return _inverseTransform(point);
+  }
 
   /**
    * Returns the determinant of this transform, but only if the matrix is
    * reversible, null otherwise.
    */
-  _getDeterminant: function() {
-    var det = this._a * this._d - this._b * this._c;
+  num _getDeterminant() {
+    var det = _a * _d - _b * _c;
     return isFinite(det) && Math.abs(det) > Numerical.EPSILON
-        && isFinite(this._tx) && isFinite(this._ty)
+        && isFinite(_tx) && isFinite(_ty)
         ? det : null;
-  },
+  }
 
-  _inverseTransform: function(point, dest, dontNotify) {
-    var det = this._getDeterminant();
-    if (!det)
+  Point _inverseTransform(Point point, [Point dest]) {
+    var det = _getDeterminant();
+    if (det == null)
       return null;
-    var x = point.x - this._tx,
-      y = point.y - this._ty;
-    if (!dest)
-      dest = new Point(Point.dont);
+    var x = point.x - _tx,
+      y = point.y - _ty;
+    if (dest == null)
+      dest = new Point();
     return dest.set(
-      (x * this._d - y * this._b) / det,
-      (y * this._a - x * this._c) / det,
-      dontNotify
+      (x * _d - y * _b) / det,
+      (y * _a - x * _c) / det
     );
-  },
+  }
 
-  getTranslation: function() {
-    return Point.create(this._tx, this._ty);
-  },
+  Point getTranslation() {
+    return new Point(_tx, _ty);
+  }
 
-  getScaling: function() {
-    var hor = Math.sqrt(this._a * this._a + this._c * this._c),
-      ver = Math.sqrt(this._b * this._b + this._d * this._d);
-    return Point.create(this._a < 0 ? -hor : hor, this._b < 0 ? -ver : ver);
-  },
+  Point getScaling() {
+    num hor = Math.sqrt(_a * _a + _c * _c);
+    num ver = Math.sqrt(_b * _b + _d * _d);
+    return new Point(_a < 0 ? -hor : hor, _b < 0 ? -ver : ver);
+  }
 
+  // TODO: find out what beans are. I think they make properties
   /**
    * The rotation angle of the matrix. If a non-uniform rotation is applied as
    * a result of a shear() or scale() command, undefined is returned, as the
@@ -471,12 +478,12 @@ class Matrix {
    * @type Number
    * @bean
    */
-  getRotation: function() {
-    var angle1 = -Math.atan2(this._b, this._d),
-      angle2 = Math.atan2(this._c, this._a);
+  num getRotation() {
+    num angle1 = -Math.atan2(_b, _d);
+    num angle2 = Math.atan2(_c, _a);
     return Math.abs(angle1 - angle2) < Numerical.TOLERANCE
-        ? angle1 * 180 / Math.PI : undefined;
-  },
+        ? angle1 * 180 / Math.PI : null;
+  }
 
   /**
    * Checks whether the two matrices describe the same transformation.
@@ -484,18 +491,22 @@ class Matrix {
    * @param {Matrix} matrix the matrix to compare this matrix to
    * @return {Boolean} {@true if the matrices are equal}
    */
-  equals: function(mx) {
-    return this._a == mx._a && this._b == mx._b && this._c == mx._c
-        && this._d == mx._d && this._tx == mx._tx && this._ty == mx._ty;
-  },
+  bool equals(Matrix mx) {
+    return _a == mx._a && _b == mx._b && _c == mx._c
+        && _d == mx._d && _tx == mx._tx && _ty == mx._ty;
+  }
+  // operator version
+  bool operator == (Matrix mx) {
+    return this.equales(mx);
+  }
 
   /**
    * @return {Boolean} Whether this transform is the identity transform
    */
-  isIdentity: function() {
-    return this._a == 1 && this._c == 0 && this._b == 0 && this._d == 1
-        && this._tx == 0 && this._ty == 0;
-  },
+  bool isIdentity() {
+    return _a == 1 && _c == 0 && _b == 0 && _d == 1
+        && _tx == 0 && _ty == 0;
+  }
 
   /**
    * Returns whether the transform is invertible. A transform is not
@@ -503,9 +514,9 @@ class Matrix {
    *
    * @return {Boolean} Whether the transform is invertible
    */
-  isInvertible: function() {
-    return !!this._getDeterminant();
-  },
+  bool isInvertible() {
+    return _getDeterminant() != null;
+  }
 
   /**
    * Checks whether the matrix is singular or not. Singular matrices cannot be
@@ -513,9 +524,9 @@ class Matrix {
    *
    * @return {Boolean} Whether the matrix is singular
    */
-  isSingular: function() {
-    return !this._getDeterminant();
-  },
+  bool isSingular() {
+    return _getDeterminant() == null;
+  }
 
   /**
    * Inverts the transformation of the matrix. If the matrix is not invertible
@@ -525,20 +536,21 @@ class Matrix {
    * @return {Matrix} The inverted matrix, or {@code null }, if the matrix is
    *         singular
    */
-  createInverse: function() {
-    var det = this._getDeterminant();
-    return det && Matrix.create(
-        this._d / det,
-        -this._c / det,
-        -this._b / det,
-        this._a / det,
-        (this._b * this._ty - this._d * this._tx) / det,
-        (this._c * this._tx - this._a * this._ty) / det);
-  },
+  Matrix createInverse() {
+    var det = _getDeterminant();
+    if(det == null) return null;
+    return new Matrix(
+        _d / det,
+        -_c / det,
+        -_b / det,
+        _a / det,
+        (_b * _ty - _d * _tx) / det,
+        (_c * _tx - _a * _ty) / det);
+  }
 
-  createShiftless: function() {
-    return Matrix.create(this._a, this._c, this._b, this._d, 0, 0);
-  },
+  Matrix createShiftless() {
+    return new Matrix(_a, _c, _b, _d, 0, 0);
+  }
 
   /**
    * Sets this transform to a scaling transformation.
@@ -547,9 +559,9 @@ class Matrix {
    * @param {Number} ver The vertical scaling factor
    * @return {Matrix} This affine transform
    */
-  setToScale: function(hor, ver) {
-    return this.set(hor, 0, 0, ver, 0, 0);
-  },
+  Matrix setToScale(num hor, num ver) {
+    return set(hor, 0, 0, ver, 0, 0);
+  }
 
   /**
    * Sets this transform to a translation transformation.
@@ -558,10 +570,15 @@ class Matrix {
    * @param {Number} dy The distance to translate in the y direction
    * @return {Matrix} This affine transform
    */
-  setToTranslation: function(delta) {
-    delta = Point.read(arguments);
-    return this.set(1, 0, 0, 1, delta.x, delta.y);
-  },
+  // TODO what input types to accept?
+  Matrix setToTranslation(delta, [num y]) {
+    num x = delta;
+    if(delta is Point) {
+      x = delta.x;
+      y = delta.y;
+    }
+    return this.set(1, 0, 0, 1, x, y);
+  }
 
   /**
    * Sets this transform to a shearing transformation.
@@ -570,9 +587,9 @@ class Matrix {
    * @param {Number} ver The vertical shear factor
    * @return {Matrix} This affine transform
    */
-  setToShear: function(hor, ver) {
-    return this.set(1, ver, hor, 1, 0, 0);
-  },
+  Matrix setToShear(num hor, num ver) {
+    return set(1, ver, hor, 1, 0, 0);
+  }
 
   /**
    * Sets this transform to a rotation transformation.
@@ -582,17 +599,16 @@ class Matrix {
    * @param {Number} y The y coordinate of the anchor point
    * @return {Matrix} This affine transform
    */
-  setToRotation: function(angle, center) {
-    center = Point.read(arguments, 1);
+  Matrix setToRotation(num angle, Point center) {
     angle = angle * Math.PI / 180;
-    var x = center.x,
-      y = center.y,
-      cos = Math.cos(angle),
-      sin = Math.sin(angle);
-    return this.set(cos, sin, -sin, cos,
+    num x = center.x;
+    num y = center.y;
+    num cos = Math.cos(angle);
+    num sin = Math.sin(angle);
+    return set(cos, sin, -sin, cos,
         x - x * cos + y * sin,
         y - x * sin - y * cos);
-  },
+  }
 
   /**
    * Applies this matrix to the specified Canvas Context.
@@ -600,84 +616,57 @@ class Matrix {
    * @param {CanvasRenderingContext2D} ctx
    * @param {Boolean} [reset=false]
    */
-  applyToContext: function(ctx, reset) {
+  // TODO context type?
+  Matrix applyToContext(ctx, [bool reset]) {
     ctx[reset ? 'setTransform' : 'transform'](
-        this._a, this._c, this._b, this._d, this._tx, this._ty);
+        _a, _c, _b, _d, _tx, _ty);
     return this;
-  },
-
-  statics: /** @lends Matrix */{
-    // See Point.create()
-    create: function(a, c, b, d, tx, ty) {
-      return new Matrix(Matrix.dont).set(a, c, b, d, tx, ty);
-    },
-
-    /**
-     * Creates a transform representing a scaling transformation.
-     *
-     * @param {Number} hor The horizontal scaling factor
-     * @param {Number} ver The vertical scaling factor
-     * @return {Matrix} A transform representing a scaling
-     *         transformation
-     */
-    getScaleInstance: function(hor, ver) {
-      var mx = new Matrix();
-      return mx.setToScale.apply(mx, arguments);
-    },
-
-    /**
-     * Creates a transform representing a translation transformation.
-     *
-     * @param {Number} dx The distance to translate in the x direction
-     * @param {Number} dy The distance to translate in the y direction
-     * @return {Matrix} A transform representing a translation
-     *         transformation
-     */
-    getTranslateInstance: function(delta) {
-      var mx = new Matrix();
-      return mx.setToTranslation.apply(mx, arguments);
-    },
-
-    /**
-     * Creates a transform representing a shearing transformation.
-     *
-     * @param {Number} hor The horizontal shear factor
-     * @param {Number} ver The vertical shear factor
-     * @return {Matrix} A transform representing a shearing transformation
-     */
-    getShearInstance: function(hor, ver, center) {
-      var mx = new Matrix();
-      return mx.setToShear.apply(mx, arguments);
-    },
-
-    /**
-     * Creates a transform representing a rotation transformation.
-     *
-     * @param {Number} angle The angle of rotation measured in degrees
-     * @param {Number} x The x coordinate of the anchor point
-     * @param {Number} y The y coordinate of the anchor point
-     * @return {Matrix} A transform representing a rotation transformation
-     */
-    getRotateInstance: function(angle, center) {
-      var mx = new Matrix();
-      return mx.setToRotation.apply(mx, arguments);
-    }
   }
-}, new function() {
-  return Base.each({
-    scaleX: '_a',
-    scaleY: '_d',
-    translateX: '_tx',
-    translateY: '_ty',
-    shearX: '_b',
-    shearY: '_c'
-  }, function(prop, name) {
-    name = Base.capitalize(name);
-    this['get' + name] = function() {
-      return this[prop];
-    };
-    this['set' + name] = function(value) {
-      this[prop] = value;
-    };
-  }, {});
-});
+
+  /**
+   * Creates a transform representing a scaling transformation.
+   *
+   * @param {Number} hor The horizontal scaling factor
+   * @param {Number} ver The vertical scaling factor
+   * @return {Matrix} A transform representing a scaling
+   *         transformation
+   */
+  Matrix.getScaleInstance(num hor, num ver) {
+    this.setToScale(hor, ver);
+  }
+
+  /**
+   * Creates a transform representing a translation transformation.
+   *
+   * @param {Number} dx The distance to translate in the x direction
+   * @param {Number} dy The distance to translate in the y direction
+   * @return {Matrix} A transform representing a translation
+   *         transformation
+   */
+  Matrix.getTranslateInstance(delta, [num y]) {
+    this.setToTranslation(delta, y);
+  }
+
+  /**
+   * Creates a transform representing a shearing transformation.
+   *
+   * @param {Number} hor The horizontal shear factor
+   * @param {Number} ver The vertical shear factor
+   * @return {Matrix} A transform representing a shearing transformation
+   */
+  Matrix.getShearInstance(num hor, num ver, [Point center]) {
+    this.setToShear(hort, ver, center);
+  }
+
+  /**
+   * Creates a transform representing a rotation transformation.
+   *
+   * @param {Number} angle The angle of rotation measured in degrees
+   * @param {Number} x The x coordinate of the anchor point
+   * @param {Number} y The y coordinate of the anchor point
+   * @return {Matrix} A transform representing a rotation transformation
+   */
+  Matrix.getRotateInstance(num angle, [Point center]) {
+    this.setToRotation(angle, center);
+  }
+}
