@@ -1,6 +1,6 @@
-# Paper.js - The Swiss Army Knife of Vector Graphics Scripting
+# Paper.dart - The [Dart port of the] Swiss Army Knife of Vector Graphics Scripting
 
-If you want to work with Paper.js, simply download the latest "stable" version from [http://paperjs.org/download/](http://paperjs.org/download/)
+If you want to work with Paper.dart, you can't yet. Try paper.js instead for now. Simply download the latest "stable" version from [http://paperjs.org/download/](http://paperjs.org/download/)
 
 - Website: <http://paperjs.org/>
 - Discussion forum: <http://groups.google.com/group/paperjs>
