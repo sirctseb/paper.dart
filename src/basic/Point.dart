@@ -14,6 +14,8 @@
  * All rights reserved.
  */
 
+ #library("Point.dart");
+
 /**
  * @name Point
  *
