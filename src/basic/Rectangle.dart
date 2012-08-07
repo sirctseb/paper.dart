@@ -21,7 +21,8 @@
  * point (x, y), its width, and its height. It should not be confused with a
  * rectangular path, it is not an item.
  */
-var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
+class Rectangle {
+  num _x, _y, _width, _height;
   /**
    * Creates a Rectangle object.
    *
@@ -53,50 +54,43 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @name Rectangle#initialize
    * @param {Rectangle} rt
    */
-  initialize: function(arg0, arg1, arg2, arg3) {
-    if (arguments.length == 4) {
-      // new Rectangle(x, y, width, height)
-      this.x = arg0;
-      this.y = arg1;
-      this.width = arg2;
-      this.height = arg3;
-    } else if (arguments.length == 2) {
-      if (arg1 && arg1.x !== undefined) {
-        // new Rectangle(point1, point2)
-        var point1 = Point.read(arguments, 0, 1);
-        var point2 = Point.read(arguments, 1, 1);
-        this.x = point1.x;
-        this.y = point1.y;
-        this.width = point2.x - point1.x;
-        this.height = point2.y - point1.y;
-        if (this.width < 0) {
-          this.x = point2.x;
-          this.width = -this.width;
-        }
-        if (this.height < 0) {
-          this.y = point2.y;
-          this.height = -this.height;
-        }
-      } else {
-        // new Rectangle(point, size)
-        var point = Point.read(arguments, 0, 1);
-        var size = Size.read(arguments, 1, 1);
-        this.x = point.x;
-        this.y = point.y;
-        this.width = size.width;
-        this.height = size.height;
+  Rectangle([arg0, arg1, arg2, arg3]) {
+    if(arg3 is num) {
+      // Rectangle(x, y, width, height)
+      _x = arg0;
+      _y = arg1;
+      _width = arg2;
+      _height = arg3;
+    } else if(arg1 is Point) {
+      // Rectangle(Point, Point)
+      _x = arg0.x;
+      _y = arg0.y;
+      _width = arg1.x - arg0.x;
+      _height = arg1.y - arg0.y;
+      if(_width < 0) {
+        _x = arg1.x;
+        _width = -_width;
       }
-    } else if (arg0) {
-      // Use 0 as defaults, in case we're reading from a Point or Size
-      this.x = arg0.x || 0;
-      this.y = arg0.y || 0;
-      this.width = arg0.width || 0;
-      this.height = arg0.height || 0;
+      if(_height < 0) {
+        _y = arg1.y;
+        _width = -_width;
+      }
+    } else if(arg1 is Size) {
+      // Rectangle(Point, Size);
+      _x = arg0.x;
+      _y = arg0.y;
+      _width = arg1.width;
+      _height = arg2.height;
+    } else if(arg0 is Rectangle) {
+      // Rectangle(Rectangle)
+      _x = arg0.x;
+      _y = arg0.y;
+      _width = arg0.width;
+      _height = arg0.height;
     } else {
-      // new Rectangle()
-      this.x = this.y = this.width = this.height = 0;
+      _x = _y = _width = _height = 0;
     }
-  },
+  }
 
   /**
    * The x position of the rectangle.
@@ -104,6 +98,7 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @name Rectangle#x
    * @type Number
    */
+  num get x() => _x;
 
   /**
    * The y position of the rectangle.
@@ -111,6 +106,7 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @name Rectangle#y
    * @type Number
    */
+  num get y() => _y;
 
   /**
    * The width of the rectangle.
@@ -118,6 +114,7 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @name Rectangle#width
    * @type Number
    */
+  num get width() => _width;
 
   /**
    * The height of the rectangle.
@@ -125,18 +122,19 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @name Rectangle#height
    * @type Number
    */
+  num get height() => _height;
 
   // DOCS: why does jsdocs document this function, when there are no comments?
   /**
    * @ignore
    */
-  set: function(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  Rectangle set(num x, num y, num width, num height) {
+    _x = x;
+    _y = y;
+    _width = width;
+    _height = height;
     return this;
-  },
+  }
 
   /**
    * The top-left point of the rectangle
@@ -144,19 +142,24 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Point
    * @bean
    */
-  getPoint: function(/* dontLink */) {
+  // TODO ohhhhhh, this is what linked points are for
+  // TODO yeah, we will have to implement that
+  Point getPoint([dontLink]) {
     // Pass on the optional argument dontLink which tells LinkedPoint to
     // produce a normal point instead. Used internally for speed reasons.
-    return LinkedPoint.create(this, 'setPoint', this.x, this.y,
-        arguments[0]);
-  },
+    return new LinkedPoint(this, 'setPoint', x, y,
+        dontlink);
+  }
+  // point property
+  Point get point() => getPoint();
 
-  setPoint: function(point) {
-    point = Point.read(arguments);
-    this.x = point.x;
-    this.y = point.y;
+  Rectangle setPoint(Point point) {
+    x = point.x;
+    y = point.y;
     return this;
-  },
+  }
+  // TODO does js version have this setter?
+  Point set point(Point value) => setPoint(value);
 
   /**
    * The size of the rectangle
@@ -164,18 +167,19 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Size
    * @bean
    */
-  getSize: function(/* dontLink */) {
+  Size getSize([dontLink]) {
     // See Rectangle#getPoint() about arguments[0]
-    return LinkedSize.create(this, 'setSize', this.width, this.height,
-        arguments[0]);
-  },
+    return new LinkedSize(this, 'setSize', width, height,
+        dontLink);
+  }
 
-  setSize: function(size) {
-    size = Size.read(arguments);
-    this.width = size.width;
-    this.height = size.height;
+  Rectangle setSize(Size size) {
+    width = size.width;
+    height = size.height;
     return this;
-  },
+  }
+  // TODO does js version have this setter?
+  Size set size(Size value) => setSize(value);
 
   /**
    * {@grouptitle Side Positions}
@@ -186,15 +190,19 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Number
    * @bean
    */
-  getLeft: function() {
-    return this.x;
-  },
+  num getLeft() {
+    return x;
+  }
+  // property
+  num get left() => x;
 
-  setLeft: function(left) {
-    this.width -= left - this.x;
-    this.x = left;
+  Rectangle setLeft(num left) {
+    width -= left - x;
+    x = left;
     return this;
-  },
+  }
+  // property
+  num set left(value) => setLeft(value);
 
   /**
    * The top coordinate of the rectangle. Note that this doesn't move the
@@ -203,15 +211,19 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Number
    * @bean
    */
-  getTop: function() {
-    return this.y;
-  },
+  num getTop() {
+    return y;
+  }
+  // property
+  num get top() => y;
 
-  setTop: function(top) {
-    this.height -= top - this.y;
-    this.y = top;
+  Rectangle setTop(num top) {
+    height -= top - y;
+    y = top;
     return this;
-  },
+  }
+  // property
+  num set top(num value) => setTop(value);
 
   /**
    * The position of the right hand side of the rectangle. Note that this
@@ -220,14 +232,18 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Number
    * @bean
    */
-  getRight: function() {
-    return this.x + this.width;
-  },
+  num getRight() {
+    return x + width;
+  }
+  // property
+  num get right() => getRight();
 
-  setRight: function(right) {
-    this.width = right - this.x;
+  Rectangle setRight(num right) {
+    width = right - x;
     return this;
-  },
+  }
+  // property
+  num set right(num value) => setRight(value);
 
   /**
    * The bottom coordinate of the rectangle. Note that this doesn't move the
@@ -236,14 +252,18 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @type Number
    * @bean
    */
-  getBottom: function() {
-    return this.y + this.height;
-  },
+  num getBottom() {
+    return y + height;
+  }
+  // property
+  num get bottom() => getBottom();
 
-  setBottom: function(bottom) {
-    this.height = bottom - this.y;
+  Rectangle setBottom(num bottom) {
+    height = bottom - y;
     return this;
-  },
+  }
+  // property
+  num set bottom(num value) => setBottom(value);
 
   /**
    * The center-x coordinate of the rectangle.
@@ -252,14 +272,18 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @bean
    * @ignore
    */
-  getCenterX: function() {
-    return this.x + this.width * 0.5;
-  },
+  num getCenterX() {
+    return x + width * 0.5;
+  }
+  // property
+  num get centerX() => getCenterX();
 
-  setCenterX: function(x) {
-    this.x = x - this.width * 0.5;
+  Rectangle setCenterX(num x) {
+    this.x = x - width * 0.5;
     return this;
-  },
+  }
+  // property
+  num set centerX(num value) => setCenterX(value);
 
   /**
    * The center-y coordinate of the rectangle.
@@ -268,9 +292,9 @@ var Rectangle = this.Rectangle = Base.extend(/** @lends Rectangle# */{
    * @bean
    * @ignore
    */
-  getCenterY: function() {
+  num getCenterY() {
     return this.y + this.height * 0.5;
-  },
+  }
 
   setCenterY: function(y) {
     this.y = y - this.height * 0.5;
@@ -787,4 +811,4 @@ var LinkedRectangle = Rectangle.extend({
       };
     }, {})
   );
-});
+}
