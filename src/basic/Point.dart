@@ -206,10 +206,10 @@ class Point {
   /**
    * @return {String} A string representation of the point.
    */
-  Point toString() {
+  String toString() {
     // TODO formatting
     //var format = Base.formatNumber;
-    return '{ x: ' + x + ', y: ' + y + ' }';
+    return '{ x: ${x}, y: ${y} }';
   }
 
   // TODO support adding scalar?
