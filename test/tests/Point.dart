@@ -14,82 +14,88 @@
  * All rights reserved.
  */
 
-void PointTests() {
-  test('new Point(10, 20)', function() {
-    var point = new Point(10, 20);
-    equals(point.toString(), '{ x: 10, y: 20 }');
-  });
+ void PointTests() {
+  group('Point Tests', () {
+    test('new Point(10, 20)', () {
+      var point = new Point(10, 20);
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
+      });
 
-  test('new Point([10, 20])', function() {
-    var point = new Point([10, 20]);
-    equals(point.toString(), '{ x: 10, y: 20 }');
-  });
+    test('new Point([10, 20])', () {
+      var point = new Point([10, 20]);
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
+      });
 
-  test('new Point({x: 10, y: 20})', function() {
-    var point = new Point({x: 10, y: 20});
-    equals(point.toString(), '{ x: 10, y: 20 }');
-  });
+    test('new Point({x: 10, y: 20})', () {
+      var point = new Point({"x": 10, "y": 20});
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
+      });
 
-  test('new Point(new Size(10, 20))', function() {
-    var point = new Point(new Size(10, 20));
-    equals(point.toString(), '{ x: 10, y: 20 }');
-  });
+    test('new Point(new Size(10, 20))', () {
+      // TODO until Size ported
+      var point = new Point();//new Size(10, 20));
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
+      });
 
-  test('new Point({ width: 10, height: 20})', function() {
-    var point = new Point({width: 10, height: 20});
-    equals(point.toString(), '{ x: 10, y: 20 }');
-  });
+    test('new Point({ width: 10, height: 20})', () {
+      var point = new Point({"width": 10, "height": 20});
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
+      });
 
-  test('new Point({ angle: 45, length: 20})', function() {
-    var point = new Point({angle: 40, length: 20});
-    equals(point.toString(), '{ x: 15.32089, y: 12.85575 }');
-  });
+    test('new Point({ angle: 45, length: 20})', () {
+      var point = new Point({"angle": 40, "length": 20});
+      expect(point.toString(), equals('{ x: 15.32089, y: 12.85575 }'));
+      });
 
-  module('Point vector operations');
+    // TODO make another group?
+    //module('Point vector operations');
 
-  test('normalize(length)', function() {
-    var point = new Point(0, 10).normalize(20)
-    equals(point.toString(), '{ x: 0, y: 20 }');
-  });
+    test('normalize(length)', () {
+      // TODO fix and submit pull request on paper.js for missing semicolon
+      var point = new Point(0, 10).normalize(20);
+      expect(point.toString(), equals('{ x: 0, y: 20 }'));
+      });
 
-  test('set length', function() {
-    var point = new Point(0, 10);
-    point.length = 20;
-    equals(point.toString(), '{ x: 0, y: 20 }');
-  });
+    test('set length', () {
+      var point = new Point(0, 10);
+      point.length = 20;
+      expect(point.toString(), equals('{ x: 0, y: 20 }'));
+      });
 
-  test('get angle', function() {
-    var angle = new Point(0, 10).angle;
-      equals(angle, 90);
-  });
+    test('get angle', () {
+      var angle = new Point(0, 10).angle;
+      expect(angle, equals(90));
+      });
 
-  test('getAngle(point)', function() {
-    var angle = new Point(0, 10).getAngle([10, 10]);
-      equals(Math.round(angle), 45);
-  });
+    test('getAngle(point)', () {
+      var angle = new Point(0, 10).getAngle([10, 10]);
+      expect(angle.round(), equals(45));
+      });
 
-  test('rotate(degrees)', function() {
-    var point = new Point(100, 50).rotate(90);
-    equals(point.toString(), '{ x: -50, y: 100 }');
-  });
+    test('rotate(degrees)', () {
+      var point = new Point(100, 50).rotate(90);
+      expect(point.toString(), equals('{ x: -50, y: 100 }'));
+      });
 
-  test('set angle', function() {
-    var point = new Point(10, 20);
-    point.angle = 92;
-      equals(point.angle, 92);
-  });
+    test('set angle', () {
+      var point = new Point(10, 20);
+      point.angle = 92;
+      expect(point.angle, equals(92));
+      });
 
-  test('getDirectedAngle(point)', function() {
-    var angle = new Point(10, 10).getDirectedAngle(new Point(1, 0));
-    equals(angle, -45);
+    test('getDirectedAngle(point)', () {
+      var angle = new Point(10, 10).getDirectedAngle(new Point(1, 0));
+      expect(angle, equals(-45));
 
-    var angle = new Point(-10, 10).getDirectedAngle(new Point(1, 0));
-    equals(angle, -135);
+      angle = new Point(-10, 10).getDirectedAngle(new Point(1, 0));
+      expect(angle, equals(-135));
 
-    var angle = new Point(-10, -10).getDirectedAngle(new Point(1, 0));
-    equals(angle, 135);
+      angle = new Point(-10, -10).getDirectedAngle(new Point(1, 0));
+      expect(angle, equals(135));
 
-    var angle = new Point(10, -10).getDirectedAngle(new Point(1, 0));
-    equals(angle, 45);
-  });
+      angle = new Point(10, -10).getDirectedAngle(new Point(1, 0));
+      expect(angle, equals(45));
+      });
+    });
+    // TODO submit for this semicolon also
 }
