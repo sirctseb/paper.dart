@@ -30,6 +30,8 @@
  * print(point.y); // 5
  */
 class Point {
+  num _x;
+  num _y;
   // TODO try to support different constructor in the default?
   //Point(var first, [var second = null]) {
     //check types, etc.
