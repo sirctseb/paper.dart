@@ -329,7 +329,7 @@ class Point {
     }
     // scalar multiplication
     return new Point(x * value, y * value);
-  };
+  }
   // operator version
   // TODO NOTE: this does dot product for Point argument, instead of component-wise like above
   Object operator * (value) {
@@ -438,7 +438,7 @@ class Point {
   Point transform(Matrix matrix) {
     // TODO operator for matrix-point multiplication?
     return matrix ? matrix.transformPoint(this) : this;
-  },
+  }
 
   /**
    * {@grouptitle Distance & Length}
@@ -766,7 +766,7 @@ class Point {
    */
   num dot(Point point) {
     return x * point.x + y * point.y;
-  },
+  }
 
   /**
    * Returns the cross product of the point and another point.
@@ -776,7 +776,7 @@ class Point {
    */
   num cross(Point point) {
     return x * point.y - y * point.x;
-  },
+  }
 
   /**
    * Returns the projection of the point on another point.
