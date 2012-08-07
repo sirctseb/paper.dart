@@ -473,7 +473,7 @@ class Point {
     // squared length should be returned. Hide it so it produces a bean
     // property called #length.
     var l = x * x + y * y;
-    return (arguments.length && arguments[0]) ? l : Math.sqrt(l);
+    return square ? l : Math.sqrt(l);
   }
   // property getter for length
   num get length() => Math.sqrt(x*x + y*y);
