@@ -13,8 +13,8 @@
  *
  * All rights reserved.
  */
-
- #library("Point.dart");
+#import("dart:math");
+#library("Point.dart");
 
 /**
  * @name Point
