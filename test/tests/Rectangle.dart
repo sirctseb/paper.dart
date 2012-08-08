@@ -16,224 +16,200 @@
 
 void RectangleTests() {
   group('Rectangle Tests', () {
-    test('new Rectangle(new Point(10, 20), new Size(30, 40));', function() {
+    test('new Rectangle(new Point(10, 20), new Size(30, 40));', () {
       var rect = new Rectangle(new Point(10, 20), new Size(30, 40));
-      equals(rect.toString(), '{ x: 10, y: 20, width: 30, height: 40 }');
+      expect(rect.toString(), equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
 
-    test('new Rectangle([10, 20], [30, 40]);', function() {
+    test('new Rectangle([10, 20], [30, 40]);', () {
       var rect = new Rectangle([10, 20], [30, 40]);
-      equals(rect.toString(), '{ x: 10, y: 20, width: 30, height: 40 }');
+      expect(rect.toString(), equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
 
-    test('new Rectangle(new Point(10, 20), new Point(30, 40));', function() {
+    test('new Rectangle(new Point(10, 20), new Point(30, 40));', () {
       var rect = new Rectangle(new Point(10, 20), new Point(30, 40));
-      equals(rect.toString(), '{ x: 10, y: 20, width: 20, height: 20 }');
+      expect(rect.toString(), equals('{ x: 10, y: 20, width: 20, height: 20 }'));
     });
 
-    test('new Rectangle(10, 20, 30, 40);', function() {
+    test('new Rectangle(10, 20, 30, 40);', () {
       var rect = new Rectangle(10, 20, 30, 40);
-      equals(rect.toString(), '{ x: 10, y: 20, width: 30, height: 40 }');
+      expect(rect.toString(), equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
 
-    test('new Rectangle({x: 10, y: 20, width: 30, height: 40});', function() {
+    test('new Rectangle({x: 10, y: 20, width: 30, height: 40});', () {
       var rect = new Rectangle({x: 10, y: 20, width: 30, height: 40});
-      equals(rect.toString(), '{ x: 10, y: 20, width: 30, height: 40 }');
+      expect(rect.toString(), equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
 
-    test('get size', function() {
+    test('get size', () {
       var rect = new Rectangle(10, 10, 20, 30);
-      equals(function() {
-        return rect.size.equals([20, 30]);
-      }, true);
+      expect(rect.size.equals([20, equals(30])));
     });
 
-    test('set size', function() {
+    test('set size', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.size = new Size(30, 30);
-      equals(rect.toString(), '{ x: 10, y: 10, width: 30, height: 30 }');
+      expect(rect.toString(), equals('{ x: 10, y: 10, width: 30, height: 30 }'));
     });
 
-    test('topLeft', function() {
+    test('topLeft', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.topLeft;
-      equals(point.toString(), '{ x: 10, y: 10 }');
+      expect(point.toString(), equals('{ x: 10, y: 10 }'));
     });
 
-    test('set topLeft', function() {
+    test('set topLeft', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.topLeft = [10, 15];
       var point = rect.topLeft;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get topRight', function() {
+    test('get topRight', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.topRight;
-      equals(point.toString(), '{ x: 30, y: 10 }');
+      expect(point.toString(), equals('{ x: 30, y: 10 }'));
     });
 
-    test('set topRight', function() {
+    test('set topRight', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.topRight = [10, 15];
       var point = rect.topRight;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get bottomLeft', function() {
+    test('get bottomLeft', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.bottomLeft;
-      equals(point.toString(), '{ x: 10, y: 30 }');
+      expect(point.toString(), equals('{ x: 10, y: 30 }'));
     });
 
-    test('set bottomLeft', function() {
+    test('set bottomLeft', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.bottomLeft = [10, 15];
       var point = rect.bottomLeft;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get bottomRight', function() {
+    test('get bottomRight', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.bottomRight;
-      equals(point.toString(), '{ x: 30, y: 30 }');
+      expect(point.toString(), equals('{ x: 30, y: 30 }'));
     });
 
-    test('set bottomRight', function() {
+    test('set bottomRight', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.bottomRight = [10, 15];
       var point = rect.bottomRight;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get bottomCenter', function() {
+    test('get bottomCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.bottomCenter;
-      equals(point.toString(), '{ x: 20, y: 30 }');
+      expect(point.toString(), equals('{ x: 20, y: 30 }'));
     });
 
-    test('set bottomCenter', function() {
+    test('set bottomCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.bottomCenter = [10, 15];
       var point = rect.bottomCenter;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get topCenter', function() {
+    test('get topCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.topCenter;
-      equals(point.toString(), '{ x: 20, y: 10 }');
+      expect(point.toString(), equals('{ x: 20, y: 10 }'));
     });
 
-    test('set topCenter', function() {
+    test('set topCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.topCenter = [10, 15];
       var point = rect.topCenter;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get leftCenter', function() {
+    test('get leftCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.leftCenter;
-      equals(point.toString(), '{ x: 10, y: 20 }');
+      expect(point.toString(), equals('{ x: 10, y: 20 }'));
     });
 
-    test('set leftCenter', function() {
+    test('set leftCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.leftCenter = [10, 15];
       var point = rect.leftCenter;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('get rightCenter', function() {
+    test('get rightCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       var point = rect.rightCenter;
-      equals(point.toString(), '{ x: 30, y: 20 }');
+      expect(point.toString(), equals('{ x: 30, y: 20 }'));
     });
 
-    test('set rightCenter', function() {
+    test('set rightCenter', () {
       var rect = new Rectangle(10, 10, 20, 20);
       rect.rightCenter = [10, 15];
       var point = rect.rightCenter;
-      equals(point.toString(), '{ x: 10, y: 15 }');
+      expect(point.toString(), equals('{ x: 10, y: 15 }'));
     });
 
-    test('intersects(rect)', function() {
+    test('intersects(rect)', () {
       var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       var rect2 = { x: 195, y: 301, width: 19, height: 19 };
-      equals(function() {
-        return rect1.intersects(rect2);
-      }, false);
+      expect(!rect1.intersects(rect2));
       rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
-      equals(function() {
-        return rect1.intersects(rect2);
-      }, true);
+      expect(rect1.intersects(rect2));
     });
 
-    test('contains(rect)', function() {
+    test('contains(rect)', () {
       var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       var rect2 = { x: 195, y: 301, width: 19, height: 19 };
-      equals(function() {
-        return rect1.contains(rect2);
-      }, false);
+      expect(!rect1.contains(rect2));
       rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       rect2 = new Rectangle({ x: 170.5, y: 280.5, width: 19, height: 19 });
-      equals(function() {
-        return rect1.contains(rect2);
-      }, false);
+      expect(!rect1.contains(rect2));
 
       rect1 = new Rectangle({ x: 299, y: 161, width: 137, height: 129 });
       rect2 = new Rectangle({ x: 340, y: 197, width: 61, height: 61 });
-      equals(function() {
-        return rect1.contains(rect2);
-      }, true);
-      equals(function() {
-        return rect2.contains(rect1);
-      }, false);
+      expect(rect1.contains(rect2));
+      expect(!rect2.contains(rect1));
     });
 
-    test('contains(point)', function() {
+    test('contains(point)', () {
       var rect = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       var point = new Point(166, 280);
-      equals(function() {
-        return rect.contains(point);
-      }, true);
+      expect(rect.contains(point));
       var point = new Point(30, 30);
-      equals(function() {
-        return rect.contains(point);
-      }, false);
+      expect(rect.contains(point));
     });
 
-    test('intersect(rect)', function() {
+    test('intersect(rect)', () {
       var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       var rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
       var intersected = rect1.intersect(rect2);
-      equals(function() {
-        return intersected.equals({ x: 170.5, y: 280.5, width: 9.5, height: 9.5 });
-      }, true);
+      expect(intersected.equals({ x: 170.5, equals(y: 280.5, width: 9.5, height: 9.5 })));
     });
 
-    test('unite(rect)', function() {
+    test('unite(rect)', () {
       var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
       var rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
       var united = rect1.unite(rect2);
-      equals(function() {
-        return united.equals({ x: 160, y: 270, width: 29.5, height: 29.5 });
-      }, true);
+      expect(united.equals({ x: 160, equals(y: 270, width: 29.5, height: 29.5 })));
     });
 
-    test('include(point)', function() {
+    test('include(point)', () {
       var rect1 = new Rectangle({ x: 95, y: 151, width: 20, height: 20 });
       var included = rect1.include([50, 50]);
-      equals(function() {
-        return included.equals({ x: 50, y: 50, width: 65, height: 121 });
-      }, true);
+      expect(included.equals({ x: 50, equals(y: 50, width: 65, height: 121 })));
     });
 
-    test('toString()', function() {
+    test('toString()', () {
       var string = new Rectangle(10, 20, 30, 40).toString();
-      equals(string, '{ x: 10, y: 20, width: 30, height: 40 }');
+      expect(string, equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
   }
 }
