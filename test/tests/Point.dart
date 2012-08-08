@@ -22,14 +22,12 @@
       });
 
     test('new Point.fromList([10, 20])', () {
-      // TODO support list in default constructor
-      var point = new Point.fromList([10, 20]);
+      var point = new Point([10, 20]);
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
     test('new Point.fromMap({x: 10, y: 20})', () {
-      // TODO support map in default constructor
-      var point = new Point.fromMap({"x": 10, "y": 20});
+      var point = new Point({"x": 10, "y": 20});
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
@@ -40,8 +38,7 @@
       });
 
     test('new Point.fromMap({ width: 10, height: 20})', () {
-      // TODO support in default constructor
-      var point = new Point.fromMap({"width": 10, "height": 20});
+      var point = new Point({"width": 10, "height": 20});
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
