@@ -26,7 +26,8 @@
  * console.log(size.width); // 10
  * console.log(size.height); // 5
  */
-var Size = this.Size = Base.extend(/** @lends Size# */{
+class Size {
+  num _width, _height;
   // DOCS: improve Size class description
   /**
    * Creates a Size object with the given width and height values.
@@ -90,40 +91,38 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * console.log(size.width); // 50
    * console.log(size.height); // 50
    */
-  initialize: function(arg0, arg1) {
-    if (arg1 !== undefined) {
-      this.width = arg0;
-      this.height = arg1;
-    } else if (arg0 !== undefined) {
-      if (arg0 == null) {
-        this.width = this.height = 0;
-      } else if (arg0.width !== undefined) {
-        this.width = arg0.width;
-        this.height = arg0.height;
-      } else if (arg0.x !== undefined) {
-        this.width = arg0.x;
-        this.height = arg0.y;
-      } else if (Array.isArray(arg0)) {
-        this.width = arg0[0];
-        this.height = arg0.length > 1 ? arg0[1] : arg0[0];
-      } else if (typeof arg0 === 'number') {
-        this.width = this.height = arg0;
-      } else {
-        this.width = this.height = 0;
+  Size([arg0, arg1]) {
+    if(arg1 == null) {
+      _width = arg0;
+      _height = arg1;
+    } else if(arg0 != null) {
+      if(arg0 is Map) {
+        if(arg0.containsKey("width")) {
+          _width = arg0["width"];
+          _height = arg1["height"];
+        }
+      } else if(arg0 is Point) {
+        _width = arg0.x;
+        _height = arg0.y;
+      } else if(arg0 is List) {
+        _width = arg0[0];
+        _height = arg0.length > 1 ? arg0[1] : arg0[0];
+      } else if(arg0 is num) {
+        _width = _height = arg0;
       }
     } else {
-      this.width = this.height = 0;
+      _width = _height = 0;
     }
-  },
+  }
 
   /**
    * @return {String} A string representation of the size.
    */
-  toString: function() {
+  String toString() {
     var format = Base.formatNumber;
-    return '{ width: ' + format(this.width)
-        + ', height: ' + format(this.height) + ' }';
-  },
+    return '{ width: ${format(this.width)}'
+           ', height: ${format(this.height)} }';
+  }
 
   /**
    * The width of the size
@@ -131,6 +130,8 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * @name Size#width
    * @type Number
    */
+  num get width() => _width;
+      set width(num value) => _width = value;
 
   /**
    * The height of the size
@@ -138,19 +139,21 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * @name Size#height
    * @type Number
    */
+  num get height() => _height;
+      set height(num value) => _height = value;
 
-  set: function(width, height) {
+  Size set(num width, num height) {
     this.width = width;
     this.height = height;
     return this;
-  },
+  }
 
   /**
    * Returns a copy of the size.
    */
-  clone: function() {
-    return Size.create(this.width, this.height);
-  },
+  Size clone() {
+    return new Size.create(width, height);
+  }
 
   /**
    * Returns the addition of the supplied value to the width and height of the
@@ -181,10 +184,13 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var result = size1 + size2;
    * console.log(result); // {width: 15, height: 30}
    */
-  add: function(size) {
-    size = Size.read(arguments);
-    return Size.create(this.width + size.width, this.height + size.height);
-  },
+  // TODO support first version with read
+  Size add(Size size) {
+    //size = Size.read(arguments);
+    return new Size.create(width + size.width, height + size.height);
+  }
+  // operator
+  Size operator + (Size size) => add(size);
 
   /**
    * Returns the subtraction of the supplied value from the width and height
@@ -216,10 +222,13 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var result = firstSize - secondSize;
    * console.log(result); // {width: 5, height: 15}
    */
-  subtract: function(size) {
-    size = Size.read(arguments);
-    return Size.create(this.width - size.width, this.height - size.height);
-  },
+  // TODO support first version with read
+  Size subtract(Size size) {
+    //size = Size.read(arguments);
+    return new Size.create(width - size.width, height - size.height);
+  }
+  // operator
+  Size operator - (Size size) => subtract(size);
 
   /**
    * Returns the multiplication of the supplied value with the width and
@@ -250,10 +259,13 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var result = firstSize * secondSize;
    * console.log(result); // {width: 20, height: 20}
    */
-  multiply: function(size) {
-    size = Size.read(arguments);
-    return Size.create(this.width * size.width, this.height * size.height);
-  },
+  // TODO support first version with read
+  Size multiply(Size size) {
+    //size = Size.read(arguments);
+    return new Size.create(width * size.width, height * size.height);
+  }
+  // operator
+  Size operator * (Size size) => multiply(size);
 
   /**
    * Returns the division of the supplied value by the width and height of the
@@ -284,10 +296,13 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var result = firstSize / secondSize;
    * console.log(result); // {width: 4, height: 2}
    */
-  divide: function(size) {
-    size = Size.read(arguments);
-    return Size.create(this.width / size.width, this.height / size.height);
-  },
+  // TODO support first version with read
+  Size divide(Size size) {
+    //size = Size.read(arguments);
+    return new Size.create(width / size.width, height / size.height);
+  }
+  // operator
+  Size operator / (Size size) => divide(size);
 
   /**
    * The modulo operator returns the integer remainders of dividing the size
@@ -317,14 +332,19 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var size = new Size(12, 6);
    * console.log(size % new Size(5, 2)); // {width: 2, height: 0}
    */
-  modulo: function(size) {
-    size = Size.read(arguments);
-    return Size.create(this.width % size.width, this.height % size.height);
-  },
+  // TODO support first version with read
+  Size modulo(Size size) {
+    //size = Size.read(arguments);
+    return new Size.create(width % size.width, height % size.height);
+  }
+  // operator
+  Size operator % (Size size) => modulo(size);
 
-  negate: function() {
-    return Size.create(-this.width, -this.height);
-  },
+  Size negate() {
+    return new Size.create(-this.width, -this.height);
+  }
+  // operator
+  Size operator - () => negate();
 
   /**
    * Checks whether the width and height of the size are equal to those of the
@@ -339,10 +359,12 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * console.log(size == new Size(1, 1)); // false
    * console.log(size != new Size(1, 1)); // true
    */
-  equals: function(size) {
-    size = Size.read(arguments);
-    return this.width == size.width && this.height == size.height;
-  },
+  bool equals(Size size) {
+    //size = Size.read(arguments);
+    return width == size.width && height == size.height;
+  }
+  // operator
+  bool operator == (Size size) => equals(size);
 
   /**
    * {@grouptitle Tests}
@@ -350,84 +372,80 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    *
    * @return {Boolean} {@true both width and height are 0}
    */
-  isZero: function() {
-    return this.width == 0 && this.height == 0;
-  },
+  bool isZero() {
+    return width == 0 && height == 0;
+  }
 
   /**
    * Checks if the width or the height of the size are NaN.
    *
    * @return {Boolean} {@true if the width or height of the size are NaN}
    */
-  isNaN: function() {
-    return isNaN(this.width) || isNaN(this.height);
-  },
-
-  statics: /** @lends Size */{
-    // See Point.create()
-    create: function(width, height) {
-      return new Size(Size.dont).set(width, height);
-    },
-
-    /**
-     * Returns a new size object with the smallest {@link #width} and
-     * {@link #height} of the supplied sizes.
-     *
-     * @static
-     * @param {Size} size1
-     * @param {Size} size2
-     * @returns {Size} The newly created size object
-     *
-     * @example
-     * var size1 = new Size(10, 100);
-     * var size2 = new Size(200, 5);
-     * var minSize = Size.min(size1, size2);
-     * console.log(minSize); // {width: 10, height: 5}
-     */
-    min: function(size1, size2) {
-      return Size.create(
-        Math.min(size1.width, size2.width),
-        Math.min(size1.height, size2.height));
-    },
-
-    /**
-     * Returns a new size object with the largest {@link #width} and
-     * {@link #height} of the supplied sizes.
-     *
-     * @static
-     * @param {Size} size1
-     * @param {Size} size2
-     * @returns {Size} The newly created size object
-     *
-     * @example
-     * var size1 = new Size(10, 100);
-     * var size2 = new Size(200, 5);
-     * var maxSize = Size.max(size1, size2);
-     * console.log(maxSize); // {width: 200, height: 100}
-     */
-    max: function(size1, size2) {
-      return Size.create(
-        Math.max(size1.width, size2.width),
-        Math.max(size1.height, size2.height));
-    },
-
-    /**
-     * Returns a size object with random {@link #width} and {@link #height}
-     * values between {@code 0} and {@code 1}.
-     *
-     * @returns {Size} The newly created size object
-     * @static
-     *
-     * @example
-     * var maxSize = new Size(100, 100);
-     * var randomSize = Size.random();
-     * var size = maxSize * randomSize;
-     */
-    random: function() {
-      return Size.create(Math.random(), Math.random());
-    }
+  bool isNaN() {
+    return isNaN(width) || isNaN(height);
   }
-}, new function() { // Scope for injecting round, ceil, floor, abs:
+
+  Size.create(num width, num height) {
+    this.set(width, height);
+  }
+
+  /**
+   * Returns a new size object with the smallest {@link #width} and
+   * {@link #height} of the supplied sizes.
+   *
+   * @static
+   * @param {Size} size1
+   * @param {Size} size2
+   * @returns {Size} The newly created size object
+   *
+   * @example
+   * var size1 = new Size(10, 100);
+   * var size2 = new Size(200, 5);
+   * var minSize = Size.min(size1, size2);
+   * console.log(minSize); // {width: 10, height: 5}
+   */
+  static Size min(Size size1, Size size2) {
+    return new Size.create(
+      Math.min(size1.width, size2.width),
+      Math.min(size1.height, size2.height));
+  }
+
+  /**
+   * Returns a new size object with the largest {@link #width} and
+   * {@link #height} of the supplied sizes.
+   *
+   * @static
+   * @param {Size} size1
+   * @param {Size} size2
+   * @returns {Size} The newly created size object
+   *
+   * @example
+   * var size1 = new Size(10, 100);
+   * var size2 = new Size(200, 5);
+   * var maxSize = Size.max(size1, size2);
+   * console.log(maxSize); // {width: 200, height: 100}
+   */
+  static Size max(Size size1, Size size2) {
+    return new Size.create(
+      Math.max(size1.width, size2.width),
+      Math.max(size1.height, size2.height));
+  }
+
+  /**
+   * Returns a size object with random {@link #width} and {@link #height}
+   * values between {@code 0} and {@code 1}.
+   *
+   * @returns {Size} The newly created size object
+   * @static
+   *
+   * @example
+   * var maxSize = new Size(100, 100);
+   * var randomSize = Size.random();
+   * var size = maxSize * randomSize;
+   */
+  Size.random() {
+    this.set(Math.random(), Math.random());
+  }
 
   /**
    * {@grouptitle Math Functions}
@@ -444,6 +462,10 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var roundSize = size.round();
    * console.log(roundSize); // {x: 10, y: 11}
    */
+   Size round() {
+    // TODO check if dart's round is the same as js
+    returns new Size.create(width.round(), height.round());
+   }
 
   /**
    * Returns a new size with the nearest greater non-fractional values to the
@@ -459,6 +481,9 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var ceilSize = size.ceil();
    * console.log(ceilSize); // {x: 11, y: 11}
    */
+   Size ceil() {
+    return new Size.create(width.ceil(), height.ceil());
+   }
 
   /**
    * Returns a new size with the nearest smaller non-fractional values to the
@@ -474,6 +499,9 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var floorSize = size.floor();
    * console.log(floorSize); // {x: 10, y: 10}
    */
+   Size floor() {
+    return new Size.create(width.floor(), height.floor());
+   }
 
   /**
    * Returns a new size with the absolute values of the specified {@link #width}
@@ -488,14 +516,10 @@ var Size = this.Size = Base.extend(/** @lends Size# */{
    * var absSize = size.abs();
    * console.log(absSize); // {x: 5, y: 10}
    */
-
-  return Base.each(['round', 'ceil', 'floor', 'abs'], function(name) {
-    var op = Math[name];
-    this[name] = function() {
-      return Size.create(op(this.width), op(this.height));
-    };
-  }, {});
-});
+   Size abs() {
+    return new Size.create(width.abs(), height.abs());
+   }
+}
 
 /**
  * @name LinkedSize
