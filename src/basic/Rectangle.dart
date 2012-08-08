@@ -803,66 +803,201 @@ class Rectangle {
  *
  * @private
  */
-var LinkedRectangle = Rectangle.extend({
-  set: function(x, y, width, height, dontNotify) {
+class LinkedRectangle extends Rectangle {
+  bool _dontNotify;
+
+  LinkedRectangle set(num x, num y, num width, num height, [bool dontNotify = false]) {
     this._x = x;
     this._y = y;
     this._width = width;
     this._height = height;
     if (!dontNotify)
-      this._owner[this._setter](this);
+      _setter(this);
+      //this._owner[this._setter](this);
     return this;
-  },
-
-  statics: {
-    /**
-     * Provide a faster creator for Points out of two coordinates that
-     * does not rely on Point#initialize at all. This speeds up all math
-     * operations a lot.
-     *
-     * @ignore
-     */
-    create: function(owner, setter, x, y, width, height) {
-      var rect = new LinkedRectangle(LinkedRectangle.dont).set(
-          x, y, width, height, true);
-      rect._owner = owner;
-      rect._setter = setter;
-      return rect;
-    }
   }
-}, new function() {
-  var proto = Rectangle.prototype;
 
-  return Base.each(['x', 'y', 'width', 'height'], function(key) {
-    var part = Base.capitalize(key);
-    var internal = '_' + key;
-    this['get' + part] = function() {
-      return this[internal];
-    };
+  // TODO submit fixed comment to paper.js
+  /**
+   * Provide a faster creator for Points out of two coordinates that
+   * does not rely on Point#initialize at all. This speeds up all math
+   * operations a lot.
+   *
+   * @ignore
+   */
+  LinkedRectangle.create(Object owner, setter, num x, num y, num width, num height) {
+    this.set(x,y,width, height, true);
+    _owner = owner;
+    _setter = setter;
+    _dontNotify = false;
+    return rect;
+  }
 
-    this['set' + part] = function(value) {
-      this[internal] = value;
-      // Check if this setter is called from another one which sets
-      // _dontNotify, as it will notify itself
-      if (!this._dontNotify)
-        this._owner[this._setter](this);
-    };
-  }, Base.each(['Point', 'Size', 'Center',
-      'Left', 'Top', 'Right', 'Bottom', 'CenterX', 'CenterY',
-      'TopLeft', 'TopRight', 'BottomLeft', 'BottomRight',
-      'LeftCenter', 'TopCenter', 'RightCenter', 'BottomCenter'],
-    function(key) {
-      var name = 'set' + key;
-      this[name] = function(value) {
-        // Make sure the above setters of x, y, width, height do not
-        // each notify the owner, as we're going to take care of this
-        // afterwards here, only once per change.
-        this._dontNotify = true;
-        proto[name].apply(this, arguments);
-        delete this._dontNotify;
-        this._owner[this._setter](this);
-        return this;
-      };
-    }, {})
-  );
+  // Notifying accessors
+  Rectangle setX(num x) {
+    super.setX(value);
+    if(!_dontNotify) _setter(this);
+    return this;
+  }
+  set x(num value) => setX(value);
+
+  Rectangle setY(num y) {
+    super.setY(value);
+    if(!_dontNotify) _setter(this);
+    return this;
+  }
+  set y(num value) => setY(value);
+
+  Rectangle setPoint(Point point) {
+    _dontNotify = true;
+    super.setPoint(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set point(Point value) => setPoint(value);
+
+  Rectangle setSize(Point point) {
+    _dontNotify = true;
+    super.setSize(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set size(Point value) => setSize(value);
+
+  Rectangle setCenter(Point point) {
+    _dontNotify = true;
+    super.setCenter(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set center(Point value) => setCenter(value);
+
+  Rectangle setLeft(Point point) {
+    _dontNotify = true;
+    super.setLeft(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set left(Point value) => setLeft(value);
+
+  Rectangle setTop(Point point) {
+    _dontNotify = true;
+    super.setTop(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set top(Point value) => setTop(value);
+
+  Rectangle setRight(Point point) {
+    _dontNotify = true;
+    super.setRight(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set right(Point value) => setRight(value);
+
+  Rectangle setBottom(Point point) {
+    _dontNotify = true;
+    super.setBottom(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set bottom(Point value) => setBottom(value);
+
+  Rectangle setCenterX(Point point) {
+    _dontNotify = true;
+    super.setCenterX(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set centerX(Point value) => setCenterX(value);
+
+  Rectangle setCenterY(Point point) {
+    _dontNotify = true;
+    super.setCenterY(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set centerY(Point value) => setCenterY(value);
+
+  Rectangle setTopLeft(Point point) {
+    _dontNotify = true;
+    super.setTopLeft(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set topLeft(Point value) => setTopLeft(value);
+
+  Rectangle setTopRight(Point point) {
+    _dontNotify = true;
+    super.setTopRight(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set topRight(Point value) => setTopRight(value);
+
+  Rectangle setBottomLeft(Point point) {
+    _dontNotify = true;
+    super.setBottomLeft(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set bottomLeft(Point value) => setBottomLeft(value);
+
+  Rectangle setBottomRight(Point point) {
+    _dontNotify = true;
+    super.setBottomRight(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set bottomRight(Point value) => setBottomRight(value);
+
+  Rectangle setLeftCenter(Point point) {
+    _dontNotify = true;
+    super.setLeftCenter(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set leftCenter(Point value) => setLeftCenter(value);
+
+  Rectangle setTopCenter(Point point) {
+    _dontNotify = true;
+    super.setTopCenter(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set topCenter(Point value) => setTopCenter(value);
+
+  Rectangle setRightCenter(Point point) {
+    _dontNotify = true;
+    super.setRightCenter(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set rightCenter(Point value) => setRightCenter(value);
+
+  Rectangle setBottomCenter(Point point) {
+    _dontNotify = true;
+    super.setBottomCenter(point);
+    _dontNotify = false;
+    _setter(this);
+    return this;
+  }
+  set bottomCenter(Point value) => setBottomCenter(value);
 }
