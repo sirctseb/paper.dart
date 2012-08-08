@@ -36,6 +36,35 @@ class Point {
   //Point(var first, [var second = null]) {
     //check types, etc.
   //}
+  // unified constructor
+  Point([arg0, arg1]) {
+    if(arg1 != null) {
+      _x = arg0;
+      _y = arg1;
+    } else {
+      if(arg0 == null) {
+        _x = 0;
+        _y = 0;
+      } else if(arg0 is Map) {
+        if(arg0.containsKey("x")) {
+          _x = arg0["x"];
+          _y = arg0["y"];
+        } else if(arg0.containsKey("width")) {
+          _x = arg0["width"];
+          _y = arg0["height"];
+        } else if(arg0.containsKey("angle")) {
+          _x = arg0["length"];
+          _y = 0;
+          setAngle(arg0["angle"]);
+        }
+      } else if(arg0 is List) {
+        _x = arg0[0];
+        _y = arg0.length > 1 ? arg0[1] : arg0[0];
+      } else if(arg0 is num) {
+        _x = _y = arg0;
+      }
+    }
+  }
 
   /**
    * Creates a Point object with the given x and y coordinates.
@@ -50,8 +79,7 @@ class Point {
    * print(point.x); // 10
    * print(point.y); // 5
    */
-  // TODO can you do Point(this.x, this.y) if they are setters?
-  Point([num x = 0, num y = 0]) {
+  Point.fromXY(num x = 0, num y = 0) {
     _x = x;
     _y = y;
   }
