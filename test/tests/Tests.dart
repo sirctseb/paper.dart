@@ -3,8 +3,10 @@
 #import("../../src/basic/Point.dart");
 #source("./Point.dart");
 #source("./Rectangle.dart");
+#source("./Size.dart");
 
 void main() {
 	PointTests();
 	RectangleTests();
+	SizeTests();
 }
