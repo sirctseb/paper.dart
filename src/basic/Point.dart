@@ -79,7 +79,13 @@ class Point {
    * print(point.x); // 10
    * print(point.y); // 5
    */
-  Point.fromXY(num x = 0, num y = 0) {
+  /**
+   * Provide a faster creator for Points out of two coordinates that
+   * does not rely on Point#Point at all. This speeds up all math operations a lot
+   *
+   * @ignore
+   */
+  Point.create(num x = 0, num y = 0) {
     _x = x;
     _y = y;
   }
@@ -230,7 +236,7 @@ class Point {
    * @returns {Point} the cloned point
    */
   Point clone() {
-    return new Point(x, y);
+    return new Point.create(_x, _y);
   }
 
   /**
@@ -275,7 +281,7 @@ class Point {
    * print(result); // {x: 15, y: 30}
    */
   Point add(Point point) {
-    return new Point(x + point.x, y + point.y);
+    return new Point.create(x + point.x, y + point.y);
   }
   // operator version
   Point operator + (Point point) {
@@ -314,7 +320,7 @@ class Point {
    * print(result); // {x: 5, y: 15}
    */
   Point subtract(Point point) {
-    return new Point(x - point.x, y - point.y);
+    return new Point.create(x - point.x, y - point.y);
   }
   // operator version
   Point operator - (Point point) {
@@ -355,10 +361,10 @@ class Point {
   Point multiply(value) {
     // component-wise multiplication
     if(value is Point) {
-      return new Point(x * value.x, y * value.y);
+      return new Point.create(x * value.x, y * value.y);
     }
     // scalar multiplication
-    return new Point(x * value, y * value);
+    return new Point.create(x * value, y * value);
   }
   // operator version
   // TODO NOTE: this does dot product for Point argument, instead of component-wise like above
@@ -366,7 +372,7 @@ class Point {
     if(value is Point) {
       return x * value.x + y * value.y;
     }
-    return new Point(x * value, y * value);
+    return new Point.create(x * value, y * value);
   }
 
   /**
@@ -403,10 +409,10 @@ class Point {
   Point divide(value) {
     // component-wise division
     if(value is Point) {
-      return new Point(x / value.x, y / value.y);
+      return new Point.create(x / value.x, y / value.y);
     }
     // division by scalar
-    return new Point(x / value, y / value);
+    return new Point.create(x / value, y / value);
   }
   // operator version
   Point operator / (value) {
@@ -443,9 +449,9 @@ class Point {
    */
   Point modulo(value) {
     if(value is Point) {
-      return new Point(x % value.x, y % value.y);
+      return new Point.create(x % value.x, y % value.y);
     }
-    return new Point(x % value, y % value);
+    return new Point.create(x % value, y % value);
   }
   // operator version
   Point operator % (value) {
@@ -454,7 +460,7 @@ class Point {
 
   // depending on the language version, this may already be the operator
   Point negate() {
-    return new Point(-x, -y);
+    return new Point.create(-x, -y);
   }
   // TODO implement operator version once they push the language changes
 
@@ -697,7 +703,7 @@ class Point {
     Point point = center == null ? this - center : this;
     num s = Math.sin(angle);
     num c = Math.cos(angle);
-    point = new Point(
+    point = new Point.create(
       point.x * c - point.y * s,
       point.y * c + point.x * s
     );
@@ -817,10 +823,10 @@ class Point {
    */
   Point project(Point point) {
     if (point.isZero()) {
-      return new Point(0, 0);
+      return new Point.create(0, 0);
     } else {
       num scale = dot(point) / point.dot(point);
-      return new Point(
+      return new Point.create(
         point.x * scale,
         point.y * scale
       );
@@ -854,7 +860,7 @@ class Point {
    * print(minPoint); // {x: 10, y: 5}
    */
   static Point min(Point point1, Point point2) {
-    return new Point(
+    return new Point.create(
       Math.min(point1.x, point2.x),
       Math.min(point1.y, point2.y)
     );
@@ -918,7 +924,7 @@ class Point {
    */
   Point round() {
     // TODO check if dart's round is the same as js
-    return new Point(x.round(), y.round());
+    return new Point.create(x.round(), y.round());
   }
 
   /**
@@ -936,7 +942,7 @@ class Point {
    * print(ceilPoint); // {x: 11, y: 11}
    */
   Point ceil() {
-    return new Point(x.ceil(), y.ceil());
+    return new Point.create(x.ceil(), y.ceil());
   }
 
   /**
@@ -954,7 +960,7 @@ class Point {
    * print(floorPoint); // {x: 10, y: 10}
    */
   Point floor() {
-    return new Point(x.floor(), y.floor());
+    return new Point.create(x.floor(), y.floor());
   }
 
   /**
@@ -971,6 +977,6 @@ class Point {
    * print(absPoint); // {x: 5, y: 10}
    */
   Point abs() {
-    return new Point(x.abs(), y.abs());
+    return new Point.create(x.abs(), y.abs());
   }
 }
