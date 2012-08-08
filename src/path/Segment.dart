@@ -26,7 +26,8 @@
  * {@link Segment#handleOut}), describing the tangents of the two {@link Curve}
  * objects that are connected by this segment.
  */
-var Segment = this.Segment = Base.extend(/** @lends Segment# */{
+class Segment {
+  Path _path;
   /**
    * Creates a new Segment object.
    *
@@ -51,43 +52,38 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * var path = new Path(firstSegment, secondSegment);
    * path.strokeColor = 'black';
    */
-  initialize: function(arg0, arg1, arg2, arg3, arg4, arg5) {
-    var count = arguments.length,
-      createPoint = SegmentPoint.create,
-      point, handleIn, handleOut;
-    if (count == 0) {
-      // Nothing
-    } else if (count == 1) {
-      // TODO: If beans are not activated, this won't copy from existing
-      // segments. OK?
-      if (arg0.point) {
-        point = arg0.point;
-        handleIn = arg0.handleIn;
-        handleOut = arg0.handleOut;
+  Segment([arg0, arg1, arg2, arg3, arg4, arg5]) {
+    Point point, handleIn, handleOut;
+    if(arg0 != null) {
+      if(arg1 == null) {
+        if(arg0 is Map && arg0.containsKey("point")) {
+          point = arg0["point"];
+          handleIn = arg0["handleIn"];
+          handleOut = arg0["handleOut"];
+        } else {
+          point = arg0;
+        }
+      } else if(arg5 == null) {
+        if(arg3 == null) { 
+          point = new Point(arg0, arg1);
+        } else {
+          point = arg0;
+          handleIn = arg1;
+          handleOut = arg2;
+        }
       } else {
-        point = arg0;
+        point = new Point(arg0, arg1);
+        handleIn = new Point(arg2, arg3);
+        handleOut = new Point(arg4, arg5);
       }
-    } else if (count < 6) {
-      if (count == 2 && arg1.x === undefined) {
-        point = [ arg0, arg1 ];
-      } else {
-        point = arg0;
-        // Doesn't matter if these arguments exist, SegmentPointcreate
-        // produces creates points with (0, 0) otherwise
-        handleIn = arg1;
-        handleOut = arg2;
-      }
-    } else if (count == 6) {
-      point = [ arg0, arg1 ];
-      handleIn = [ arg2, arg3 ];
-      handleOut = [ arg4, arg5 ];
     }
-    createPoint(this, '_point', point);
-    createPoint(this, '_handleIn', handleIn);
-    createPoint(this, '_handleOut', handleOut);
-  },
+    SegmentPoint.create(this, "_point", point);
+    SegmentPoint.create(this, "_handleIn", handleIn);
+    SegmentPoint.create(this, "_handleOut", handleOut);
+  }
 
-  _changed: function(point) {
+  // TODO I have no idea what is going on in this function
+  _changed(Point point) {
     if (!this._path)
       return;
     // Delegate changes to affected curves if they exist
@@ -98,8 +94,8 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
       // _point or _handleIn changing when this segment is _segment1 of
       // the curve, for all other cases it's the next (e.g. _handleOut
       // when this segment is _segment2)
-      if (other = (curve[point == this._point
-          || point == this._handleIn && curve._segment1 == this
+      if (other = (curve[point === this._point
+          || point === this._handleIn && curve._segment1 === this
           ? 'getPrevious' : 'getNext']())) {
         other._changed();
       }
@@ -113,16 +109,20 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Point
    * @bean
    */
-  getPoint: function() {
-    return this._point;
-  },
+  Point getPoint() {
+    return _point;
+  }
+  // property
+  Point get point() => getPoint();
 
-  setPoint: function(point) {
-    point = Point.read(arguments);
+  setPoint(Point point) {
+    //point = Point.read(arguments);
     // Do not replace the internal object but update it instead, so
     // references to it are kept alive.
-    this._point.set(point.x, point.y);
-  },
+    _point.set(point.x, point.y);
+  }
+  // property
+  set point(Point value) => setPoint(value);
 
   /**
    * The handle point relative to the anchor point of the segment that
@@ -131,17 +131,22 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Point
    * @bean
    */
-  getHandleIn: function() {
-    return this._handleIn;
-  },
+  Point getHandleIn() {
+    return _handleIn;
+  }
+  // property
+  Point get handleIn() => getHandleIn();
 
-  setHandleIn: function(point) {
-    point = Point.read(arguments);
+  setHandleIn(Point point) {
+    //point = Point.read(arguments);
     // See #setPoint:
-    this._handleIn.set(point.x, point.y);
+    _handleIn.set(point.x, point.y);
     // Update corner accordingly
     // this.corner = !this._handleIn.isColinear(this._handleOut);
-  },
+    // TODO I didn't comment the above line out, paper.js did
+  }
+  // property
+  set handleIn(Point value) => setHandleIn(value);
 
   /**
    * The handle point relative to the anchor point of the segment that
@@ -150,44 +155,51 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Point
    * @bean
    */
-  getHandleOut: function() {
-    return this._handleOut;
-  },
+  Point getHandleOut() {
+    return _handleOut;
+  }
+  // property
+  Point get handleOut() => getHandleOut();
 
-  setHandleOut: function(point) {
-    point = Point.read(arguments);
+  setHandleOut(Point point) {
+    //point = Point.read(arguments);
     // See #setPoint:
-    this._handleOut.set(point.x, point.y);
+    _handleOut.set(point.x, point.y);
     // Update corner accordingly
     // this.corner = !this._handleIn.isColinear(this._handleOut);
-  },
+    // TODO I didn't comment the above line out, paper.js did
+  }
+  // property
+  set handleOut(Point value) => setHandleOut(value);
 
-  _isSelected: function(point) {
+  bool _isSelected(Point point) {
     var state = this._selectionState;
-    return point == this._point ? !!(state & SelectionState.POINT)
-      : point == this._handleIn ? !!(state & SelectionState.HANDLE_IN)
-      : point == this._handleOut ? !!(state & SelectionState.HANDLE_OUT)
+    // TODO check operator precedence
+    return point === _point ? (state & SelectionState.POINT) != 0
+      : point === _handleIn ? (state & SelectionState.HANDLE_IN) != 0
+      : point === _handleOut ? (state & SelectionState.HANDLE_OUT) != 0
       : false;
   },
 
-  _setSelected: function(point, selected) {
-    var path = this._path,
-      selected = !!selected, // convert to boolean
-      state = this._selectionState || 0,
-      // For performance reasons use array indices to access the various
-      // selection states: 0 = point, 1 = handleIn, 2 = handleOut
-      selection = [
-        !!(state & SelectionState.POINT),
-        !!(state & SelectionState.HANDLE_IN),
-        !!(state & SelectionState.HANDLE_OUT)
-      ];
-    if (point == this._point) {
+  _setSelected(Point point, bool selected) {
+    var path = this._path;
+    // TODO does anything call this with a non-bool?
+    //selected = !!selected, // convert to boolean
+    int state = _selectionState;
+    // For performance reasons use array indices to access the various
+    // selection states: 0 = point, 1 = handleIn, 2 = handleOut
+    selection = [
+      (state & SelectionState.POINT) != 0,
+      (state & SelectionState.HANDLE_IN) != 0,
+      (state & SelectionState.HANDLE_OUT) != 0
+    ];
+    if (point === this._point) {
       if (selected) {
         // We're selecting point, deselect the handles
         selection[1] = selection[2] = false;
       } else {
-        var previous = this.getPrevious(),
-          next = this.getNext();
+        var previous = getPrevious();
+        var next = getNext();
         // When deselecting a point, the handles get selected instead
         // depending on the selection state of their neighbors.
         selection[1] = previous && (previous._point.isSelected()
@@ -197,7 +209,7 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
       }
       selection[0] = selected;
     } else {
-      var index = point == this._handleIn ? 1 : 2;
+      var index = point === this._handleIn ? 1 : 2;
       if (selection[index] != selected) {
         // When selecting handles, the point get deselected.
         if (selected)
@@ -214,9 +226,9 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
     // If the selection state of the segment has changed, we need to let
     // it's path know and possibly add or remove it from
     // project._selectedItems
-    if (path && state != this._selectionState)
+    if (path != null && state != this._selectionState)
       path._updateSelection(this, state, this._selectionState);
-  },
+  }
 
 
 
@@ -225,13 +237,17 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Boolean
    * @bean
    */
-  isSelected: function() {
-    return this._isSelected(this._point);
-  },
+  bool isSelected() {
+    return _isSelected(_point);
+  }
+  // property
+  bool get selected() => isSelected();
 
-  setSelected: function(selected) {
-    this._setSelected(this._point, selected);
-  },
+  setSelected(bool selected) {
+    _setSelected(_point, selected);
+  }
+  // property
+  set selected(bool value) => setSelected(value);
 
   /**
    * {@grouptitle Hierarchy}
@@ -242,9 +258,11 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Number
    * @bean
    */
-  getIndex: function() {
-    return this._index !== undefined ? this._index : null;
-  },
+  int getIndex() {
+    return _index;
+  }
+  // property
+  int get index() => getIndex();
 
   /**
    * The path that the segment belongs to.
@@ -252,9 +270,11 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Path
    * @bean
    */
-  getPath: function() {
-    return this._path || null;
-  },
+  Path getPath() {
+    return this._path;
+  }
+  // property
+  Path get path() => getPath();
 
   /**
    * The curve that the segment belongs to.
@@ -262,16 +282,19 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Curve
    * @bean
    */
-  getCurve: function() {
-    if (this._path) {
-      var index = this._index;
+  Curve getCurve() {
+    if (_path != null) {
+      var index = _index;
       // The last segment of an open path belongs to the last curve
       if (!this._path._closed && index == this._path._segments.length - 1)
         index--;
-      return this._path.getCurves()[index] || null;
+      // TODO check list length?
+      return _path.getCurves()[index];
     }
     return null;
-  },
+  }
+  // property
+  Curve get curve() => getCurve();
 
   /**
    * {@grouptitle Sibling Segments}
@@ -283,11 +306,21 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @type Segment
    * @bean
    */
-  getNext: function() {
-    var segments = this._path && this._path._segments;
-    return segments && (segments[this._index + 1]
-        || this._path._closed && segments[0]) || null;
-  },
+  Segment getNext() {
+    if(_path != null) {
+      var segments = _path._segments;
+      if(segments != null) {
+        if(segments.length > _index + 1) {
+          return segments[_index + 1];
+        } else {
+          if(_path.closed) {
+            return segments[0];
+          }
+        }
+      }
+    }
+    return null;
+  }
 
   /**
    * The previous segment in the {@link Path#segments} array that the
@@ -298,82 +331,97 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
    * @bean
    */
   getPrevious: function() {
-    var segments = this._path && this._path._segments;
-    return segments && (segments[this._index - 1]
-        || this._path._closed && segments[segments.length - 1]) || null;
-  },
+    if(_path != null) {
+      var segments = _path._segments;
+      if(segments != null) {
+        if(_index - 1 >= 0) {
+          return segments[_index - 1];
+        } else if(_path.closed) {
+          return segements[segments.length - 1];
+        }
+      }
+    }
+    return null;
+  }
 
   /**
    * Returns the reversed the segment, without modifying the segment itself.
    * @return {Segment} the reversed segment
    */
-  reverse: function() {
+  Segment reverse() {
     return new Segment(this._point, this._handleOut, this._handleIn);
   },
 
   /**
    * Removes the segment from the path that it belongs to.
    */
-  remove: function() {
-    return this._path ? !!this._path.removeSegment(this._index) : false;
-  },
+  bool remove() {
+    // TODO does Path.removeSegment return a bool?
+    return _path != null ? _path.removeSegment(_index) : false;
+  }
 
-  clone: function() {
-    return new Segment(this._point, this._handleIn, this._handleOut);
-  },
+  Segment clone() {
+    return new Segment(_point, _handleIn, _handleOut);
+  }
 
-  equals: function(segment) {
-    return segment == this || segment
-        && this._point.equals(segment._point)
-        && this._handleIn.equals(segment._handleIn)
-        && this._handleOut.equals(segment._handleOut);
-  },
+  bool equals(Segment segment) {
+    return _point.equals(segment._point)
+        && _handleIn.equals(segment._handleIn)
+        && _handleOut.equals(segment._handleOut);
+  }
+  // operator
+  bool operator == (Segment segment) => equals(segment);
 
   /**
    * @return {String} A string representation of the segment.
    */
-  toString: function() {
-    var parts = [ 'point: ' + this._point ];
-    if (!this._handleIn.isZero())
-      parts.push('handleIn: ' + this._handleIn);
-    if (!this._handleOut.isZero())
-      parts.push('handleOut: ' + this._handleOut);
-    return '{ ' + parts.join(', ') + ' }';
-  },
+  String toString() {
+    var sb = new StringBuffer();
+    sb.add("{ point: ${_point}");
+    if(!_handleIn.isZero()) {
+      sb.add(", handleIn: ${_handleIn}");
+    }
+    if(!_handleOut.isZero()) {
+      sb.add(", handleOut: ${_handleOut}");
+    }
+    sb.add(" }");
+    return sb.toString();
+  }
 
-  _transformCoordinates: function(matrix, coords, change) {
+  _transformCoordinates(Matrix matrix, coords, bool change) {
     // Use matrix.transform version() that takes arrays of multiple
     // points for largely improved performance, as no calls to
     // Point.read() and Point constructors are necessary.
-    var point = this._point,
-      // If change is true, only transform handles if they are set, as
-      // _transformCoordinates is called only to change the segment, no
-      // to receive the coords.
-      // This saves some computation time. If change is false, always
-      // use the real handles, as we just want to receive a filled
-      // coords array for getBounds().
-      handleIn =  !change || !this._handleIn.isZero()
-          ? this._handleIn : null,
-      handleOut = !change || !this._handleOut.isZero()
-          ? this._handleOut : null,
-      x = point._x,
-      y = point._y,
-      i = 2;
+    Point point = this._point;
+    // If change is true, only transform handles if they are set, as
+    // _transformCoordinates is called only to change the segment, no
+    // to receive the coords.
+    // This saves some computation time. If change is false, always
+    // use the real handles, as we just want to receive a filled
+    // coords array for getBounds().
+    Point handleIn =  !change || !this._handleIn.isZero()
+        ? this._handleIn : null;
+    Point handleOut = !change || !this._handleOut.isZero()
+        ? this._handleOut : null;
+    num x = point._x;
+    num y = point._y;
+    num i = 2;
     coords[0] = x;
     coords[1] = y;
     // We need to convert handles to absolute coordinates in order
     // to transform them.
-    if (handleIn) {
+    if (handleIn != null) {
       coords[i++] = handleIn._x + x;
       coords[i++] = handleIn._y + y;
     }
-    if (handleOut) {
+    if (handleOut != null) {
       coords[i++] = handleOut._x + x;
       coords[i++] = handleOut._y + y;
     }
+    // TODO submit typod "previded" fix to paper.js
     // If no matrix was previded, this was just called to get the coords and
     // we are done now.
-    if (!matrix)
+    if (matrix == null)
       return;
     matrix._transformCoordinates(coords, 0, coords, 0, i / 2);
     x = coords[0];
@@ -382,23 +430,24 @@ var Segment = this.Segment = Base.extend(/** @lends Segment# */{
       // If change is true, we need to set the new values back
       point._x = x;
       point._y = y;
-      i  = 2;
-      if (handleIn) {
+      // TODO submit fix for extra space to paper.js
+      i = 2;
+      if (handleIn != null) {
         handleIn._x = coords[i++] - x;
         handleIn._y = coords[i++] - y;
       }
-      if (handleOut) {
+      if (handleOut != null) {
         handleOut._x = coords[i++] - x;
         handleOut._y = coords[i++] - y;
       }
     } else {
       // We want to receive the results in coords, so make sure
       // handleIn and out are defined too, even if they're 0
-      if (!handleIn) {
+      if (handleIn == null) {
         coords[i++] = x;
         coords[i++] = y;
       }
-      if (!handleOut) {
+      if (handleOut == null) {
         coords[i++] = x;
         coords[i++] = y;
       }
