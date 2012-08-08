@@ -1,5 +1,7 @@
+// TODO I am just porting these as the other test files that I'm porting use them
+
 // Override equals to convert functions to message and execute them as tests()
-function equals(actual, expected, message) {
+/*function equals(actual, expected, message) {
   if (typeof actual === 'function') {
     if (!message) {
       message = actual.toString().match(
@@ -16,32 +18,32 @@ function equals(actual, expected, message) {
   }
   // Let's be strict
   return strictEqual(actual, expected, message);
-}
+}*/
 
-function test(testName, expected) {
+/*function test(testName, expected) {
   return QUnit.test(testName, function() {
     var project = new Project();
     expected();
     project.remove();
   });
-}
+}*/
 
-function compareNumbers(number1, number2, message) {
+compareNumbers(num number1, num number2, [String message]) {
   if (number1 !== 0)
     number1 = Math.round(number1 * 100) / 100;
   if (number2 !== 0)
     number2 = Math.round(number2 * 100) / 100;
-  equals(number1, number2, message);
+  expect(number1, equals(number2), message);
 }
 
-function comparePoints(point1, point2, message) {
+/*function comparePoints(point1, point2, message) {
   compareNumbers(point1.x, point2.x,
       (message || '') + ' x');
   compareNumbers(point1.y, point2.y,
       (message || '') + ' y');
-}
+}*/
 
-function compareRectangles(rect1, rect2, message) {
+/*function compareRectangles(rect1, rect2, message) {
   compareNumbers(rect1.x, rect2.x,
       (message || '') + ' x');
   compareNumbers(rect1.y, rect2.y,
@@ -50,34 +52,34 @@ function compareRectangles(rect1, rect2, message) {
       (message || '') + ' width');
   compareNumbers(rect1.height, rect2.height,
       (message || '') + ' height');
-}
+}*/
 
-function compareRgbColors(color1, color2, message) {
+compareRgbColors(Color color1, Color color2, [String message]) {
   color1 = new RgbColor(color1);
   color2 = new RgbColor(color2);
 
-  compareNumbers(color1.red, color2.red,
-      (message || '') + ' red');
+  compareNumbers(color1.red, color2.red, 
+      '$message red');
   compareNumbers(color1.green, color2.green,
-      (message || '') + ' green');
+      '$message green');
   compareNumbers(color1.blue, color2.blue,
-      (message || '') + ' blue');
+      '$message blue');
   compareNumbers(color1.alpha, color2.alpha,
-      (message || '') + ' alpha');
+      '$message alpha');
 }
 
-function compareHsbColors(color1, color2, message) {
+compareHsbColors(Color color1, Color color2, message) {
   color1 = new HsbColor(color1);
   color2 = new HsbColor(color2);
 
   compareNumbers(color1.hue, color2.hue,
-      (message || '') + ' hue');
+      '$message hue');
   compareNumbers(color1.saturation, color2.saturation,
-      (message || '') + ' saturation');
+      '$message saturation');
   compareNumbers(color1.brightness, color2.brightness,
-      (message || '') + ' brightness');
+      '$message brightness');
   compareNumbers(color1.alpha, color2.alpha,
-      (message || '') + ' alpha');
+      '$message alpha');
 }
 
 function compareGrayColors(color1, color2, message) {
@@ -85,9 +87,9 @@ function compareGrayColors(color1, color2, message) {
   color2 = new GrayColor(color2);
 
   compareNumbers(color1.gray, color2.gray,
-      (message || '') + ' gray');
+      '$message gray');
 }
-
+/*
 function compareGradientColors(gradientColor, gradientColor2, checkIdentity) {
   Base.each(['origin', 'destination', 'hilite'], function(key) {
     if (checkIdentity) {
@@ -335,3 +337,4 @@ function compareItems(item, item2, checkIdentity) {
     }
   }
 }
+*/
