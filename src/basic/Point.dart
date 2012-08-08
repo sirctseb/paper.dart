@@ -513,10 +513,9 @@ class Point {
   num get length() => Math.sqrt(x*x + y*y);
 
   Point setLength(length) {
-    // Whenever setting x/y, use #set() instead of direct assignment,
+    // TODO: Whenever setting x/y, use #set() instead of direct assignment,
     // so LinkedPoint does not report changes twice.
     if (isZero()) {
-      // TODO declare _angle and get/set
       num angle = this.angle;
       x = Math.cos(angle) * length;
       y = Math.cos(angle) * length;
@@ -591,7 +590,7 @@ class Point {
     angle = this._angle = angle * Math.PI / 180;
     if (!isZero()) {
       var length = this.getLength();
-      // Use #set() instead of direct assignment of x/y, so LinkedPoint
+      // TODO Use #set() instead of direct assignment of x/y, so LinkedPoint
       // does not report changes twice.
       _x = Math.cos(angle) * length;
       _y = Math.sin(angle) * length;
