@@ -142,13 +142,11 @@ class Rectangle {
    * @type Point
    * @bean
    */
-  // TODO ohhhhhh, this is what linked points are for
-  // TODO yeah, we will have to implement that
-  Point getPoint([dontLink]) {
+  Point getPoint([dontLink = false]) {
     // Pass on the optional argument dontLink which tells LinkedPoint to
     // produce a normal point instead. Used internally for speed reasons.
-    return new LinkedPoint(this, 'setPoint', x, y,
-        dontlink);
+    return new LinkedPoint(this, setPoint, x, y,
+        dontLink);
   }
   // point property
   Point get point() => getPoint();
@@ -314,8 +312,8 @@ class Rectangle {
    * @bean
    */
   Point getCenter([dontLink]) {
-    return LinkedPoint.create(this, 'setCenter',
-        this.getCenterX(), this.getCenterY(), dontLink);
+    return new LinkedPoint.create(this, setCenter,
+        getCenterX(), getCenterY(), dontLink);
   }
   // property
   Point get center() => getCenter();
@@ -323,6 +321,8 @@ class Rectangle {
   Rectangle setCenter(point) {
     return setCenterX(point.x).setCenterY(point.y);
   }
+  // property
+  set center(Point value) => setCenter(value);
 
   /**
    * The top-left point of the rectangle.
@@ -330,6 +330,17 @@ class Rectangle {
    * @name Rectangle#topLeft
    * @type Point
    */
+  Point getTopLeft([dontLink = false]) {
+    return new LinkedPoint.create(this, setTopLeft, getLeft(), getTop(), dontLink);
+  }
+  // property
+  Point get topLeft() => getTopLeft();
+
+  Rectangle setTopLeft(Point point) {
+    return setLeft(point.x).setTop(point.y);
+  }
+  // property
+  set topLeft(Point value) => setTopLeft(value);
 
   /**
    * The top-right point of the rectangle.
@@ -337,6 +348,17 @@ class Rectangle {
    * @name Rectangle#topRight
    * @type Point
    */
+  Point getTopRight([dontLink = false]) {
+    return new LinkedPoint.create(this, setTopRight, getRight(), getTop(), dontLink);
+  }
+  // property
+  Point get topRight() => getTopRight();
+
+  Rectangle setTopRight(Point point) {
+    return setRight(point.x).setTop(point.y);
+  }
+  // property
+  set topRight(Point value) => setTopRight(value);
 
   /**
    * The bottom-left point of the rectangle.
@@ -344,6 +366,17 @@ class Rectangle {
    * @name Rectangle#bottomLeft
    * @type Point
    */
+  Point getBottomLeft([dontLink = false]) {
+    return new LinkedPoint.create(this, setBottomLeft, getLeft(), getBottom(), dontLink);
+  }
+  // property
+  Point get bottomLeft() => getBottomLeft();
+
+  Rectangle setBottomLeft(Point point) {
+    return setLeft(point.x).setBottom(point.y);
+  }
+  // property
+  set bottomLeft(Point value) => setBottomLeft(value);
 
   /**
    * The bottom-right point of the rectangle.
@@ -351,6 +384,17 @@ class Rectangle {
    * @name Rectangle#bottomRight
    * @type Point
    */
+  Point getBottomRight([dontLink = false]) {
+    return new LinkedPoint.create(this, setBottomRight, getRight(), getBottom(), dontLink);
+  }
+  // property
+  Point get bottomRight() => getBottomRight();
+
+  Rectangle setBottomRight(Point point) {
+    return setRight(point.x).setBottom(point.y);
+  }
+  // property
+  set bottomRight(Point value) => setBottomRight(value);
 
   /**
    * The left-center point of the rectangle.
@@ -358,6 +402,17 @@ class Rectangle {
    * @name Rectangle#leftCenter
    * @type Point
    */
+  Point getLeftCenter([dontLink = false]) {
+    return new LinkedPoint.create(this, setLeftCenter, getLeft(), getCenterY(), dontLink);
+  }
+  // property
+  Point get leftCenter() => getLeftCenter();
+
+  Rectangle setLeftCenter(Point point) {
+    return setCenterY(point.y).setLeft(point.x);
+  }
+  // property
+  set leftCenter(Point value) => setLeftCenter(value);
 
   /**
    * The top-center point of the rectangle.
@@ -365,6 +420,17 @@ class Rectangle {
    * @name Rectangle#topCenter
    * @type Point
    */
+  Point getTopCenter([dontLink = false]) {
+    return new LinkedPoint.create(this, setTopCenter, getCenterX(), getTop(), dontLink);
+  }
+  // property
+  Point get topCenter() => getTopCenter();
+
+  Rectangle setTopCenter(Point point) {
+    return setCenter(point.x).setTop(point.y);
+  }
+  // property
+  set topCenter(Point value) => setTopCenter(value);
 
   /**
    * The right-center point of the rectangle.
@@ -372,6 +438,17 @@ class Rectangle {
    * @name Rectangle#rightCenter
    * @type Point
    */
+  Point getRightCenter([dontLink = false]) {
+    return new LinkedPoint.create(this, setRightCenter, getRight(), getCenterY(), dontLink);
+  }
+  // property
+  Point get rightCenter() => getRightCenter();
+
+  Rectangle setRightCenter(Point point) {
+    return setCenter(point.y).setRight(point.x);
+  }
+  // property
+  set rightCenter(Point value) => setRightCenter(value);
 
   /**
    * The bottom-center point of the rectangle.
@@ -379,6 +456,16 @@ class Rectangle {
    * @name Rectangle#bottomCenter
    * @type Point
    */
+  Point getBottomCenter([dontLink = false]) {
+   return new LinkedPoint.create(this, setBottomCenter, getCenterX(), getBottom(), dontLink);
+  }
+  // property
+  Point get bottomCenter() => getBottomCenter();
+    Rectangle setBottomCenter(Point point) {
+    return setCenter(point.x).setBottom(point.y);
+  }
+  // property
+  set bottomCenter(Point value) => setBottomCenter(value);
 
   /**
    * Checks whether the coordinates and size of the rectangle are equal to
