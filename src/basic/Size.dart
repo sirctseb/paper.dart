@@ -531,35 +531,42 @@ class Size {
  *
  * @private
  */
-var LinkedSize = Size.extend({
-  set: function(width, height, dontNotify) {
-    this._width = width;
-    this._height = height;
+class LinkedSize extends Size {
+  Object _owner;
+  var _setter;
+
+  LinkedSize set(num width, num height, [dontNotify = false]) {
+    _width = width;
+    _height = height;
     if (!dontNotify)
-      this._owner[this._setter](this);
+      //this._owner[this._setter](this);
+      _setter(this);
     return this;
-  },
+  }
 
-  getWidth: function() {
-    return this._width;
-  },
+  // TODO Size should already have this
+//  num getWidth() {
+//    return _width;
+//  }
 
-  setWidth: function(width) {
+  setWidth(num width) {
     this._width = width;
-    this._owner[this._setter](this);
-  },
+    //this._owner[this._setter](this);
+    _setter(this);
+  }
 
-  getHeight: function() {
-    return this._height;
-  },
+  // TODO Size should already have this
+//  num getHeight() {
+//    return _height;
+//  }
 
-  setHeight: function(height) {
-    this._height = height;
-    this._owner[this._setter](this);
-  },
+  setHeight(num height) {
+    _height = height;
+    //this._owner[this._setter](this);
+    _setter(this);
+  }
 
-  statics: {
-    create: function(owner, setter, width, height, dontLink) {
+  factory LinkedSize.create(Object owner, setter, num width, num height, [bool dontLink = false]) {
       // See LinkedPoint.create() for an explanation about dontLink.
       if (dontLink)
         return Size.create(width, height);
@@ -571,4 +578,4 @@ var LinkedSize = Size.extend({
       return size;
     }
   }
-});
+}
