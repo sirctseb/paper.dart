@@ -474,30 +474,30 @@ class Rectangle {
    * @param {Rectangle} rect
    * @return {Boolean} {@true if the rectangles are equal}
    */
-  equals: function(rect) {
-    rect = Rectangle.read(arguments);
+  bool equals(Rectangle rect) {
     return this.x == rect.x && this.y == rect.y
         && this.width == rect.width && this.height == rect.height;
-  },
+  }
+  // operator
+  bool operator ==(Rectangle rect) => return equals(rect);
 
   /**
    * @return {Boolean} {@true the rectangle is empty}
    */
-  isEmpty: function() {
-    return this.width == 0 || this.height == 0;
-  },
+  bool isEmpty() {
+    return width == 0 || height == 0;
+  }
 
   /**
    * @return {String} A string representation of this rectangle.
    */
-  toString: function() {
+  String toString() {
     var format = Base.formatNumber;
-    return '{ x: ' + format(this.x)
-        + ', y: ' + format(this.y)
-        + ', width: ' + format(this.width)
-        + ', height: ' + format(this.height)
-        + ' }';
-  },
+    return '{ x: ${format(this.x)}'
+           ', y: ${format(this.y)}'
+           ', width: ${format(this.width)}'
+           ', height: ${format(this.height)} }';
+  }
 
   /**
    * {@grouptitle Geometric Tests}
@@ -575,31 +575,33 @@ class Rectangle {
    *   }
    * }
    */
-  contains: function(arg) {
+  bool contains(arg) {
     // Detect rectangles either by checking for 'width' on the passed object
     // or by looking at the amount of elements in the arguments list,
     // or the passed array:
-    return arg && arg.width !== undefined
-        || (Array.isArray(arg) ? arg : arguments).length == 4
-        ? this._containsRectangle(Rectangle.read(arguments))
-        : this._containsPoint(Point.read(arguments));
-  },
+//    return arg && arg.width !== undefined
+//        || (Array.isArray(arg) ? arg : arguments).length == 4
+//        ? this._containsRectangle(Rectangle.read(arguments))
+//        : this._containsPoint(Point.read(arguments));
+    if(arg is Rectangle) return _containsRectangle(arg);
+    return _containsPoint(arg);
+  }
 
-  _containsPoint: function(point) {
-    var x = point.x,
-      y = point.y;
+  bool _containsPoint(Point point) {
+    num x = point.x;
+    num y = point.y;
     return x >= this.x && y >= this.y
         && x <= this.x + this.width
         && y <= this.y + this.height;
-  },
+  }
 
-  _containsRectangle: function(rect) {
-    var x = rect.x,
-      y = rect.y;
+  bool _containsRectangle(Rectangle rect) {
+    num x = rect.x;
+    num y = rect.y;
     return x >= this.x && y >= this.y
         && x + rect.width <= this.x + this.width
         && y + rect.height <= this.y + this.height;
-  },
+  }
 
   /**
    * Tests if the interior of this rectangle intersects the interior of
@@ -644,13 +646,12 @@ class Rectangle {
    *   }
    * }
    */
-  intersects: function(rect) {
-    rect = Rectangle.read(arguments);
+  bool intersects(Rectangle rect) {
     return rect.x + rect.width > this.x
         && rect.y + rect.height > this.y
         && rect.x < this.x + this.width
         && rect.y < this.y + this.height;
-  },
+  }
 
   /**
    * {@grouptitle Boolean Operations}
@@ -693,14 +694,13 @@ class Rectangle {
    * var intersectionPath = new Path.Rectangle(intersected);
    * intersectionPath.fillColor = 'red';
    */
-  intersect: function(rect) {
-    rect = Rectangle.read(arguments);
-    var x1 = Math.max(this.x, rect.x),
-      y1 = Math.max(this.y, rect.y),
-      x2 = Math.min(this.x + this.width, rect.x + rect.width),
-      y2 = Math.min(this.y + this.height, rect.y + rect.height);
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
-  },
+  Rectangle intersect(Rectangle rect) {
+    num x1 = Math.max(this.x, rect.x);
+    num y1 = Math.max(this.y, rect.y);
+    num x2 = Math.min(this.x + this.width, rect.x + rect.width);
+    num y2 = Math.min(this.y + this.height, rect.y + rect.height);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+  }
 
   /**
    * Returns a new rectangle representing the union of this rectangle with the
@@ -710,14 +710,13 @@ class Rectangle {
    * @return {Rectangle} the smallest rectangle containing both the specified
    *                     rectangle and this rectangle.
    */
-  unite: function(rect) {
-    rect = Rectangle.read(arguments);
-    var x1 = Math.min(this.x, rect.x),
-      y1 = Math.min(this.y, rect.y),
-      x2 = Math.max(this.x + this.width, rect.x + rect.width),
-      y2 = Math.max(this.y + this.height, rect.y + rect.height);
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
-  },
+  Rectangle unite(Rectangle rect) {
+    num x1 = Math.min(this.x, rect.x);
+    num y1 = Math.min(this.y, rect.y);
+    num x2 = Math.max(this.x + this.width, rect.x + rect.width);
+    num y2 = Math.max(this.y + this.height, rect.y + rect.height);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+  }
 
   /**
    * Adds a point to this rectangle. The resulting rectangle is the
@@ -733,14 +732,13 @@ class Rectangle {
    *
    * @param {Point} point
    */
-  include: function(point) {
-    point = Point.read(arguments);
-    var x1 = Math.min(this.x, point.x),
-      y1 = Math.min(this.y, point.y),
-      x2 = Math.max(this.x + this.width, point.x),
-      y2 = Math.max(this.y + this.height, point.y);
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
-  },
+  Rectangle include(Point point) {
+    num x1 = Math.min(this.x, point.x);
+    num y1 = Math.min(this.y, point.y);
+    num x2 = Math.max(this.x + this.width, point.x);
+    num y2 = Math.max(this.y + this.height, point.y);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+  }
 
   /**
    * Expands the rectangle by the specified amount in both horizontal and
@@ -760,12 +758,12 @@ class Rectangle {
    * @param {Number} hor
    * @param {Number} ver
    */
-  expand: function(hor, ver) {
-    if (ver === undefined)
+  Rectangle expand(num hor, [num ver]) {
+    if (ver === null)
       ver = hor;
-    return Rectangle.create(this.x - hor / 2, this.y - ver / 2,
+    return new Rectangle.create(this.x - hor / 2, this.y - ver / 2,
         this.width + hor, this.height + ver);
-  },
+  }
 
   /**
    * Scales the rectangle by the specified amount from its center.
@@ -784,51 +782,15 @@ class Rectangle {
    * @param {Number} hor
    * @param {Number} ver
    */
-  scale: function(hor, ver) {
+  Rectangle scale(num hor, [num ver]) {
     return this.expand(this.width * hor - this.width,
-        this.height * (ver === undefined ? hor : ver) - this.height);
-  },
-
-  statics: {
-    // See Point.create()
-    create: function(x, y, width, height) {
-      return new Rectangle(Rectangle.dont).set(x, y, width, height);
-    }
+        this.height * (ver === null ? hor : ver) - this.height);
   }
-}, new function() {
-  return Base.each([
-      ['Top', 'Left'], ['Top', 'Right'],
-      ['Bottom', 'Left'], ['Bottom', 'Right'],
-      ['Left', 'Center'], ['Top', 'Center'],
-      ['Right', 'Center'], ['Bottom', 'Center']
-    ],
-    function(parts, index) {
-      var part = parts.join('');
-      // find out if the first of the pair is an x or y property,
-      // by checking the first character for [R]ight or [L]eft;
-      var xFirst = /^[RL]/.test(part);
-      // Rename Center to CenterX or CenterY:
-      if (index >= 4)
-        parts[1] += xFirst ? 'Y' : 'X';
-      var x = parts[xFirst ? 0 : 1],
-        y = parts[xFirst ? 1 : 0],
-        getX = 'get' + x,
-        getY = 'get' + y,
-        setX = 'set' + x,
-        setY = 'set' + y,
-        get = 'get' + part,
-        set = 'set' + part;
-      this[get] = function(/* dontLink */) {
-        return LinkedPoint.create(this, set,
-            this[getX](), this[getY](), arguments[0]);
-      };
-      this[set] = function(point) {
-        point = Point.read(arguments);
-        // Note: call chaining happens here.
-        return this[setX](point.x)[setY](point.y);
-      };
-    }, {});
-});
+
+  Rectangle.create(num x, num y, num width, num height) {
+    this.set(x,y,width,height);
+  }
+}
 
 /**
  * @name LinkedRectangle
