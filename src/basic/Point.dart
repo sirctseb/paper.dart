@@ -1013,6 +1013,7 @@ class LinkedPoint extends Point {
     //_owner[_setter](this);
     _setter(this);
   }
+  num set x(num value) => setX(value);
 
   // TODO Point should already have this method
   //num getY() {
@@ -1024,6 +1025,7 @@ class LinkedPoint extends Point {
     //_owner[_setter](this);
     _setter(this);
   }
+  num set y(num value) => setY(value);
 
   factory LinkedPoint.create(owner, setter, x, y, [dontLink = false])
   {
