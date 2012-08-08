@@ -19,7 +19,7 @@
 // used to see if all segments are fully selected, meaning they are set to
 // SelectionState.POINT.
 var SelectionState = {
-	HANDLE_IN: 1,
-	HANDLE_OUT: 2,
-	POINT: 4
+  HANDLE_IN: 1,
+  HANDLE_OUT: 2,
+  POINT: 4
 };
