@@ -293,13 +293,17 @@ class Rectangle {
    * @ignore
    */
   num getCenterY() {
-    return this.y + this.height * 0.5;
+    return y + height * 0.5;
   }
+  // property
+  num get centerY() => getCenterY();
 
-  setCenterY: function(y) {
-    this.y = y - this.height * 0.5;
+  Rectangle setCenterY(y) {
+    this.y = y - height * 0.5;
     return this;
-  },
+  }
+  // property
+  num set centerY(num value) => setCenterY(value);
 
   /**
    * {@grouptitle Corner and Center Point Positions}
@@ -309,15 +313,16 @@ class Rectangle {
    * @type Point
    * @bean
    */
-  getCenter: function(/* dontLink */) {
+  Point getCenter([dontLink]) {
     return LinkedPoint.create(this, 'setCenter',
-        this.getCenterX(), this.getCenterY(), arguments[0]);
-  },
+        this.getCenterX(), this.getCenterY(), dontLink);
+  }
+  // property
+  Point get center() => getCenter();
 
-  setCenter: function(point) {
-    point = Point.read(arguments);
-    return this.setCenterX(point.x).setCenterY(point.y);
-  },
+  Rectangle setCenter(point) {
+    return setCenterX(point.x).setCenterY(point.y);
+  }
 
   /**
    * The top-left point of the rectangle.
