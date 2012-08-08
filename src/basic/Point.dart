@@ -980,3 +980,63 @@ class Point {
     return new Point.create(x.abs(), y.abs());
   }
 }
+
+/**
+ * @name LinkedPoint
+ *
+ * @class An internal version of Point that notifies its owner of each change
+ * through setting itself again on the setter that corresponds to the getter
+ * that produced this LinkedPoint. See uses of LinkedPoint.create()
+ * Note: This prototype is not exported.
+ *
+ * @ignore
+ */
+// TODO I think this implementation doesn't require storing the owner
+// separately from the setter
+class LinkedPoint extends Point {
+  LinkedPoint set(num x, num y, [dontNotify = false]) {
+    _x = x;
+    _y = y;
+    if (!dontNotify)
+      _setter(this);
+      //this._owner[this._setter](this);
+    return this;
+  }
+
+  // TODO Point should already have this method
+  /*num getX() {
+    return _x;
+  }*/
+
+  void setX(num x) {
+    _x = x;
+    //_owner[_setter](this);
+    _setter(this);
+  }
+
+  // TODO Point should already have this method
+  //num getY() {
+  //  return _y;
+  //}
+
+  void setY(num y) {
+    _y = y;
+    //_owner[_setter](this);
+    _setter(this);
+  }
+
+  factory LinkedPoint.create(owner, setter, x, y, [dontLink = false])
+  {
+    // Support creation of normal Points rather than LinkedPoints
+    // through an optional parameter that can be passed to the getters.
+    // See e.g. Rectangle#getPoint(true).
+    if (dontLink)
+      return new Point.create(x, y);
+    var point = new LinkedPoint(LinkedPoint.dont);
+    point._x = x;
+    point._y = y;
+    point._owner = owner;
+    point._setter = setter;
+    return point;
+  }
+}
