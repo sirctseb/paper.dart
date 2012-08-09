@@ -368,6 +368,7 @@ class Size {
    * console.log(size != new Size(1, 1)); // true
    */
   bool equals(Size size) {
+    if(size == null) return false;
     //size = Size.read(arguments);
     return width == size.width && height == size.height;
   }
