@@ -705,7 +705,7 @@ class Point {
    */
   Point rotate(num angle, [Point center = null]) {
     angle = angle * Math.PI / 180;
-    Point point = center == null ? this - center : this;
+    Point point = center != null ? this - center : this;
     num s = Math.sin(angle);
     num c = Math.cos(angle);
     point = new Point.create(
