@@ -83,7 +83,7 @@ class Rectangle {
       _x = arg0.x;
       _y = arg0.y;
       _width = arg1.width;
-      _height = arg2.height;
+      _height = arg1.height;
     } else if(arg0 is Rectangle) {
       // Rectangle(Rectangle)
       _x = arg0.x;
