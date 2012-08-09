@@ -15,6 +15,7 @@
  */
 
  #library("Size.dart");
+ #import("Point.dart");
 
 /**
  * @name Size
