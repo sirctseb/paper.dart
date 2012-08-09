@@ -62,6 +62,9 @@ class Point {
         _y = arg0.length > 1 ? arg0[1] : arg0[0];
       } else if(arg0 is num) {
         _x = _y = arg0;
+      } else if(arg0 is Size) {
+        _x = arg0.width;
+        _y = arg0.height;
       }
     }
   }
