@@ -113,7 +113,7 @@ class Matrix {
    * @return {Matrix} This affine transform
    */
   // Concatenate this transform with a scaling transformation
-  Matrix scale(num hor, num vert, [Vector2 center = null]) {
+  Matrix scale(num hor, num vert, [Point center = null]) {
     // TODO allow only one scaling factor plus a center
 
     // do translate if center supplied
@@ -151,7 +151,7 @@ class Matrix {
    * @param {Number} dy The distance to translate in the y direction
    * @return {Matrix} This affine transform
    */
-  Matrix translate(Vector2 point) {
+  Matrix translate(Point point) {
     _tx += point.x * _a + point.y * _b;
     _ty += point.x * _c + point.y * _d;
     return this;
@@ -178,7 +178,7 @@ class Matrix {
    * @param {Number} y The y coordinate of the anchor point
    * @return {Matrix} This affine transform
    */
-  Matrix rotate(num angle, [Vector2 center = null]) {
+  Matrix rotate(num angle, [Point center = null]) {
     concatenate(new Matrix.fromRotation(angle, center));
   }
 
