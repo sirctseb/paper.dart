@@ -83,7 +83,7 @@ class Rectangle {
     } else if(arg1 != null) {
       // Rectangle(Point, Size);
       var point1 = Point.read(arg0);
-      var point2 = Point.read(arg1);
+      var point2 = Size.read(arg1);
       _x = point1.x;
       _y = point1.y;
       _width = point2.width;
@@ -197,7 +197,8 @@ class Rectangle {
   // property
   Size get size() => getSize();
 
-  Rectangle setSize(Size size) {
+  Rectangle setSize(/*Size*/ size) {
+    size = Size.read(size);
     width = size.width;
     height = size.height;
     return this;
