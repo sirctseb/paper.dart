@@ -121,6 +121,14 @@ class Size {
     }
   }
 
+  // generate a Size from a Size-like object
+  static Size read(arg) {
+    if(arg is Size) {
+      return arg;
+    }
+    return new Size(arg);
+  }
+
   /**
    * @return {String} A string representation of the size.
    */
