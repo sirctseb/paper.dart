@@ -211,6 +211,7 @@ class Point {
    * @type Number
    */
   num get x() => _x;
+      set x(num value) => _x = value;
 
   /**
    * The y coordinate of the point
@@ -219,6 +220,7 @@ class Point {
    * @type Number
    */
   num get y() => _y;
+      set y(num value) => _y = value;
 
   Point set(num x, num y) {
     _x = x;
