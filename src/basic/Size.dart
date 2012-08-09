@@ -14,6 +14,8 @@
  * All rights reserved.
  */
 
+ #library("Size.dart");
+
 /**
  * @name Size
  *
