@@ -104,6 +104,13 @@ class Rectangle {
     }
   }
 
+  // generate Rectangles from Rectangle-like things
+  // TODO make a factory constructor
+  static Rectangle read(arg) {
+    if(arg is Rectangle) return arg;
+    return new Rectangle(arg);
+  }
+
   /**
    * The x position of the rectangle.
    *
