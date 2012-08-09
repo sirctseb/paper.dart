@@ -14,12 +14,14 @@
  * All rights reserved.
  */
 
+#library("Numerical.dart");
+
 class Numerical {
 
   // Lookup tables for abscissas and weights with values for n = 2 .. 16.
   // As values are symetric, only store half of them and addapt algorithm
   // to factor in symetry.
-  var _abscissas = [
+  static var _abscissas = [
     [  0.5773502691896257645091488],
     [0,0.7745966692414833770358531],
     [  0.3399810435848562648026658,0.8611363115940525752239465],
@@ -37,7 +39,7 @@ class Numerical {
     [  0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]
   ];
 
-  var _weights = [
+  static var _weights = [
     [1],
     [0.8888888888888888888888889,0.5555555555555555555555556],
     [0.6521451548625461426269361,0.3478548451374538573730639],
@@ -58,7 +60,7 @@ class Numerical {
   static final double TOLERANCE = 10e-6;
   // Precision when comparing against 0
   // TODO: Find a good value
-  static final double EPSILON = 10e-12,
+  static final double EPSILON = 10e-12;
 
   /**
    * Gauss-Legendre Numerical Integration
