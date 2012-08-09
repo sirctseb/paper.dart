@@ -107,6 +107,7 @@ class Rectangle {
    * @type Number
    */
   num get x() => _x;
+      set x(num value) => _x = value;
 
   /**
    * The y position of the rectangle.
@@ -115,6 +116,7 @@ class Rectangle {
    * @type Number
    */
   num get y() => _y;
+      set y(num value) => _y = value;
 
   /**
    * The width of the rectangle.
@@ -123,6 +125,7 @@ class Rectangle {
    * @type Number
    */
   num get width() => _width;
+      set width(num value) => _width = value;
 
   /**
    * The height of the rectangle.
@@ -131,6 +134,7 @@ class Rectangle {
    * @type Number
    */
   num get height() => _height;
+      set height(num value) => _height = value;
 
   // DOCS: why does jsdocs document this function, when there are no comments?
   /**
