@@ -14,6 +14,9 @@
  * All rights reserved.
  */
 
+// TODO this will change once we actually organize
+ #library("Line.dart");
+
 /**
  * @name Line
  *
@@ -89,7 +92,7 @@ class Line /** @lends Line# */ {
     return (this.infinite || 0 <= t1 && t1 <= 1)
         && (line.infinite || 0 <= t2 && t2 <= 1)
       ? this.point + (this.vector * t1) : null;
-  },
+  }
 
   // DOCS: document Line#getSide(point)
   /**
