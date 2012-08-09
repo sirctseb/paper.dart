@@ -729,6 +729,7 @@ class Point {
    * print(point != new Point(1, 1)); // true
    */
   bool equals(Point point) {
+    if(point == null) return false;
     return x == point.x && y == point.y;
   }
   // operator version
