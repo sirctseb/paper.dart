@@ -32,7 +32,7 @@
       });
 
     test('new Point(new Size(10, 20))', () {
-      var point = new Size(10, 20);
+      var point = new Point(new Size(10, 20));
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
