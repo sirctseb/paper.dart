@@ -37,7 +37,7 @@ void RectangleTests() {
     });
 
     test('new Rectangle({x: 10, y: 20, width: 30, height: 40});', () {
-      var rect = new Rectangle({x: 10, y: 20, width: 30, height: 40});
+      var rect = new Rectangle({ "x":10, "y":20, "width":30, "height":40});
       expect(rect.toString(), equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
 
@@ -157,30 +157,30 @@ void RectangleTests() {
     });
 
     test('intersects(rect)', () {
-      var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      var rect2 = { x: 195, y: 301, width: 19, height: 19 };
+      var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      var rect2 = { "x":195, "y":301, "width":19, "height":19 };
       expect(!rect1.intersects(rect2));
-      rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
+      rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      rect2 = { "x":170.5, "y":280.5, "width":19, "height":19 };
       expect(rect1.intersects(rect2));
     });
 
     test('contains(rect)', () {
-      var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      var rect2 = { x: 195, y: 301, width: 19, height: 19 };
+      var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      var rect2 = { "x":195, "y":301, "width":19, "height":19 };
       expect(!rect1.contains(rect2));
-      rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      rect2 = new Rectangle({ x: 170.5, y: 280.5, width: 19, height: 19 });
+      rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      rect2 = new Rectangle({ "x":170.5, "y":280.5, "width":19, "height":19 });
       expect(!rect1.contains(rect2));
 
-      rect1 = new Rectangle({ x: 299, y: 161, width: 137, height: 129 });
-      rect2 = new Rectangle({ x: 340, y: 197, width: 61, height: 61 });
+      rect1 = new Rectangle({ "x":299, "y":161, "width":137, "height":129 });
+      rect2 = new Rectangle({ "x":340, "y":197, "width":61, "height":61 });
       expect(rect1.contains(rect2));
       expect(!rect2.contains(rect1));
     });
 
     test('contains(point)', () {
-      var rect = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
+      var rect = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
       var point = new Point(166, 280);
       expect(rect.contains(point));
       var point = new Point(30, 30);
@@ -188,23 +188,23 @@ void RectangleTests() {
     });
 
     test('intersect(rect)', () {
-      var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      var rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
+      var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      var rect2 = { "x":170.5, "y":280.5, "width":19, "height":19 };
       var intersected = rect1.intersect(rect2);
-      expect(intersected.equals({ x: 170.5, equals(y: 280.5, width: 9.5, height: 9.5 })));
+      expect(intersected.equals({ "x":170.5, "equals(y":280.5, "width":9.5, "height":9.5 })));
     });
 
     test('unite(rect)', () {
-      var rect1 = new Rectangle({ x: 160, y: 270, width: 20, height: 20 });
-      var rect2 = { x: 170.5, y: 280.5, width: 19, height: 19 };
+      var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
+      var rect2 = { "x":170.5, "y":280.5, "width":19, "height":19 };
       var united = rect1.unite(rect2);
-      expect(united.equals({ x: 160, equals(y: 270, width: 29.5, height: 29.5 })));
+      expect(united.equals({ "x":160, "equals(y":270, "width":29.5, "height":29.5 })));
     });
 
     test('include(point)', () {
-      var rect1 = new Rectangle({ x: 95, y: 151, width: 20, height: 20 });
+      var rect1 = new Rectangle({ "x":95, "y":151, "width":20, "height":20 });
       var included = rect1.include([50, 50]);
-      expect(included.equals({ x: 50, equals(y: 50, width: 65, height: 121 })));
+      expect(included.equals({ "x":50, "equals(y":50, "width":65, "height":121 })));
     });
 
     test('toString()', () {
