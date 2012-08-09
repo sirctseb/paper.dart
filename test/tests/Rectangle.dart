@@ -43,7 +43,7 @@ void RectangleTests() {
 
     test('get size', () {
       var rect = new Rectangle(10, 10, 20, 30);
-      expect(rect.size.equals([20, equals(30])));
+      expect(rect.size.equals([20, 30]));
     });
 
     test('set size', () {
