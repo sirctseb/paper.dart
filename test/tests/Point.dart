@@ -21,12 +21,12 @@
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
-    test('new Point.fromList([10, 20])', () {
+    test('new Point([10, 20])', () {
       var point = new Point([10, 20]);
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
-    test('new Point.fromMap({x: 10, y: 20})', () {
+    test('new Point({x: 10, y: 20})', () {
       var point = new Point({"x": 10, "y": 20});
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
@@ -36,13 +36,13 @@
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
-    test('new Point.fromMap({ width: 10, height: 20})', () {
+    test('new Point({ width: 10, height: 20})', () {
       var point = new Point({"width": 10, "height": 20});
       expect(point.toString(), equals('{ x: 10, y: 20 }'));
       });
 
-    test('new Point.fromMap({ angle: 45, length: 20})', () {
-      var point = new Point.fromMap({"angle": 40, "length": 20});
+    test('new Point({ angle: 45, length: 20})', () {
+      var point = new Point({"angle": 40, "length": 20});
       expect(point.toString(), equals('{ x: 15.32089, y: 12.85575 }'));
       });
 
