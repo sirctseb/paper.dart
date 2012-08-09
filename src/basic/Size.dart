@@ -121,9 +121,13 @@ class Size {
    * @return {String} A string representation of the size.
    */
   String toString() {
-    var format = Base.formatNumber;
-    return '{ width: ${format(this.width)}'
-           ', height: ${format(this.height)} }';
+    // TODO restore when format implemented
+    //var format = Base.formatNumber;
+    /*return '{ width: ${format(this.width)}'
+           ', height: ${format(this.height)} }';*/
+    return '{ width: ${width}'
+           ', height: ${height} }';
+    
   }
 
   /**
