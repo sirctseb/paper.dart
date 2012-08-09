@@ -380,7 +380,7 @@ class Size {
    */
   bool equals(/*Size*/ size) {
     if(size == null) return false;
-    size = Size.read(arguments);
+    size = Size.read(size);
     return width == size.width && height == size.height;
   }
   // operator
