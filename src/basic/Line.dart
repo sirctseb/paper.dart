@@ -128,4 +128,4 @@ class Line /** @lends Line# */ {
         point.getDistance(this.point),
         point.getDistance(this.point + this.vector));
   }
-});
+}
