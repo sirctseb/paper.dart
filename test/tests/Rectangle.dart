@@ -211,5 +211,5 @@ void RectangleTests() {
       var string = new Rectangle(10, 20, 30, 40).toString();
       expect(string, equals('{ x: 10, y: 20, width: 30, height: 40 }'));
     });
-  }
+  });
 }
