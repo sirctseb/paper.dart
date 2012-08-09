@@ -14,9 +14,6 @@
  * All rights reserved.
  */
 
- #library("Size.dart");
- #import("Point.dart");
-
 /**
  * @name Size
  *

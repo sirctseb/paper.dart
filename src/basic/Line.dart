@@ -14,12 +14,6 @@
  * All rights reserved.
  */
 
-// TODO this will change once we actually organize
- #library("Line.dart");
- #import("Point.dart");
- #import("dart:math");
- #import("../util/Numerical.dart");
-
 /**
  * @name Line
  *

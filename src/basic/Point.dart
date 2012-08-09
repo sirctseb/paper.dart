@@ -13,10 +13,6 @@
  *
  * All rights reserved.
  */
-#library("Point.dart");
-#import("dart:math");
-#import("Size.dart");
-#import("../core/Base.dart");
 
 /**
  * @name Point

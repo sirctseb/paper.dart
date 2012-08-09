@@ -13,9 +13,6 @@
  *
  * All rights reserved.
  */
- #library("Rectangle.dart");
- #import("Point.dart");
- #import("Size.dart");
 
 /**
  * @name Rectangle
