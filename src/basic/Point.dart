@@ -16,6 +16,7 @@
 #library("Point.dart");
 #import("dart:math");
 #import("Size.dart");
+#import("../core/Base.dart");
 
 /**
  * @name Point
@@ -256,9 +257,8 @@ class Point {
    * @return {String} A string representation of the point.
    */
   String toString() {
-    // TODO formatting
-    //var format = Base.formatNumber;
-    return '{ x: ${x}, y: ${y} }';
+    var format = Base.formatNumber;
+    return '{ x: ${format(x)}, y: ${format(y)} }';
   }
 
   // TODO support adding scalar?
