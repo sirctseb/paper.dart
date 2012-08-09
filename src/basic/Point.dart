@@ -712,7 +712,7 @@ class Point {
       point.x * c - point.y * s,
       point.y * c + point.x * s
     );
-    return center == null ? point + center : point;
+    return center != null ? point + center : point;
   }
 
   /**
