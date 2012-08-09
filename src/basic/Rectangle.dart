@@ -876,147 +876,147 @@ class LinkedRectangle extends Rectangle {
   }
   set point(Point value) => setPoint(value);
 
-  Rectangle setSize(Point point) {
+  Rectangle setSize(/*Size*/ size) {
     _dontNotify = true;
-    super.setSize(point);
+    super.setSize(size);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set size(Point value) => setSize(value);
+  set size(/*Size*/ value) => setSize(value);
 
-  Rectangle setCenter(Point point) {
+  Rectangle setCenter(/*Point*/ point) {
     _dontNotify = true;
     super.setCenter(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set center(Point value) => setCenter(value);
+  set center(/*Point*/ value) => setCenter(value);
 
-  Rectangle setLeft(Point point) {
+  Rectangle setLeft(num left) {
     _dontNotify = true;
-    super.setLeft(point);
+    super.setLeft(left);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set left(Point value) => setLeft(value);
+  set left(num value) => setLeft(value);
 
-  Rectangle setTop(Point point) {
+  Rectangle setTop(num top) {
     _dontNotify = true;
-    super.setTop(point);
+    super.setTop(top);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set top(Point value) => setTop(value);
+  set top(num value) => setTop(value);
 
-  Rectangle setRight(Point point) {
+  Rectangle setRight(num right) {
     _dontNotify = true;
-    super.setRight(point);
+    super.setRight(right);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set right(Point value) => setRight(value);
+  set right(num value) => setRight(value);
 
-  Rectangle setBottom(Point point) {
+  Rectangle setBottom(num bottom) {
     _dontNotify = true;
-    super.setBottom(point);
+    super.setBottom(bottom);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set bottom(Point value) => setBottom(value);
+  set bottom(num value) => setBottom(value);
 
-  Rectangle setCenterX(Point point) {
+  Rectangle setCenterX(num centerX) {
     _dontNotify = true;
-    super.setCenterX(point);
+    super.setCenterX(centerX);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set centerX(Point value) => setCenterX(value);
+  set centerX(num value) => setCenterX(value);
 
-  Rectangle setCenterY(Point point) {
+  Rectangle setCenterY(num centerY) {
     _dontNotify = true;
-    super.setCenterY(point);
+    super.setCenterY(centerY);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set centerY(Point value) => setCenterY(value);
+  set centerY(num value) => setCenterY(value);
 
-  Rectangle setTopLeft(Point point) {
+  Rectangle setTopLeft(/*Point*/ point) {
     _dontNotify = true;
     super.setTopLeft(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set topLeft(Point value) => setTopLeft(value);
+  set topLeft(/*Point*/ value) => setTopLeft(value);
 
-  Rectangle setTopRight(Point point) {
+  Rectangle setTopRight(/*Point*/ point) {
     _dontNotify = true;
     super.setTopRight(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set topRight(Point value) => setTopRight(value);
+  set topRight(/*Point*/ value) => setTopRight(value);
 
-  Rectangle setBottomLeft(Point point) {
+  Rectangle setBottomLeft(/*Point*/ point) {
     _dontNotify = true;
     super.setBottomLeft(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set bottomLeft(Point value) => setBottomLeft(value);
+  set bottomLeft(/*Point*/ value) => setBottomLeft(value);
 
-  Rectangle setBottomRight(Point point) {
+  Rectangle setBottomRight(/*Point*/ point) {
     _dontNotify = true;
     super.setBottomRight(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set bottomRight(Point value) => setBottomRight(value);
+  set bottomRight(/*Point*/ value) => setBottomRight(value);
 
-  Rectangle setLeftCenter(Point point) {
+  Rectangle setLeftCenter(/*Point*/ point) {
     _dontNotify = true;
     super.setLeftCenter(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set leftCenter(Point value) => setLeftCenter(value);
+  set leftCenter(/*Point*/ value) => setLeftCenter(value);
 
-  Rectangle setTopCenter(Point point) {
+  Rectangle setTopCenter(/*Point*/ point) {
     _dontNotify = true;
     super.setTopCenter(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set topCenter(Point value) => setTopCenter(value);
+  set topCenter(/*Point*/ value) => setTopCenter(value);
 
-  Rectangle setRightCenter(Point point) {
+  Rectangle setRightCenter(/*Point*/ point) {
     _dontNotify = true;
     super.setRightCenter(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set rightCenter(Point value) => setRightCenter(value);
+  set rightCenter(/*Point*/ value) => setRightCenter(value);
 
-  Rectangle setBottomCenter(Point point) {
+  Rectangle setBottomCenter(/*Point*/ point) {
     _dontNotify = true;
     super.setBottomCenter(point);
     _dontNotify = false;
     _setter(this);
     return this;
   }
-  set bottomCenter(Point value) => setBottomCenter(value);
+  set bottomCenter(/*Point*/ value) => setBottomCenter(value);
 }
