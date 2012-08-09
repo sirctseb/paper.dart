@@ -480,7 +480,7 @@ class Rectangle {
         && this.width == rect.width && this.height == rect.height;
   }
   // operator
-  bool operator ==(Rectangle rect) => return equals(rect);
+  bool operator ==(Rectangle rect) => equals(rect);
 
   /**
    * @return {Boolean} {@true the rectangle is empty}
