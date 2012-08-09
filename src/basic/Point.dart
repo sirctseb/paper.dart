@@ -626,13 +626,14 @@ class Point {
    * @bean
    * @type Number
    */
-  num getAngleInRadians([Point point = null]) {
+  num getAngleInRadians([/*Point*/ point]) {
     // Hide parameters from Bootstrap so it injects bean too
     if (point == null) {
       if (_angle == null)
         _angle = Math.atan2(y, x);
       return _angle;
     } else {
+      point = Point.read(point);
       num div = getLength() * point.getLength();
       if (div == 0) {
         return NaN;
