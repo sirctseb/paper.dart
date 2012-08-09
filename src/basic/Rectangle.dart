@@ -66,24 +66,28 @@ class Rectangle {
       _height = arg3;
     } else if(arg1 is Point) {
       // Rectangle(Point, Point)
-      _x = arg0.x;
-      _y = arg0.y;
-      _width = arg1.x - arg0.x;
-      _height = arg1.y - arg0.y;
+      var point1 = Point.read(arg0);
+      var point2 = Point.read(arg1);
+      _x = point1.x;
+      _y = point1.y;
+      _width = point2.x - point1.x;
+      _height = point2.y - point1.y;
       if(_width < 0) {
-        _x = arg1.x;
+        _x = point2.x;
         _width = -_width;
       }
       if(_height < 0) {
-        _y = arg1.y;
-        _width = -_width;
+        _y = point2.y;
+        _height = -_height;
       }
-    } else if(arg1 is Size) {
+    } else if(arg1 != null) {
       // Rectangle(Point, Size);
-      _x = arg0.x;
-      _y = arg0.y;
-      _width = arg1.width;
-      _height = arg1.height;
+      var point1 = Point.read(arg0);
+      var point2 = Point.read(arg1);
+      _x = point1.x;
+      _y = point1.y;
+      _width = point2.width;
+      _height = point2.height;
     } else if(arg0 is Rectangle) {
       // Rectangle(Rectangle)
       _x = arg0.x;
@@ -163,7 +167,8 @@ class Rectangle {
   // point property
   Point get point() => getPoint();
 
-  Rectangle setPoint(Point point) {
+  Rectangle setPoint(/*Point*/ point) {
+    point = Point.read(point);
     x = point.x;
     y = point.y;
     return this;
@@ -332,7 +337,8 @@ class Rectangle {
   // property
   Point get center() => getCenter();
 
-  Rectangle setCenter(point) {
+  Rectangle setCenter(/*Point*/ point) {
+    point = Point.read(point);
     return setCenterX(point.x).setCenterY(point.y);
   }
   // property
@@ -350,7 +356,8 @@ class Rectangle {
   // property
   Point get topLeft() => getTopLeft();
 
-  Rectangle setTopLeft(Point point) {
+  Rectangle setTopLeft(/*Point*/ point) {
+    point = Point.read(point);
     return setLeft(point.x).setTop(point.y);
   }
   // property
@@ -368,7 +375,8 @@ class Rectangle {
   // property
   Point get topRight() => getTopRight();
 
-  Rectangle setTopRight(Point point) {
+  Rectangle setTopRight(/*Point*/ point) {
+    point = Point.read(point);
     return setRight(point.x).setTop(point.y);
   }
   // property
@@ -386,7 +394,8 @@ class Rectangle {
   // property
   Point get bottomLeft() => getBottomLeft();
 
-  Rectangle setBottomLeft(Point point) {
+  Rectangle setBottomLeft(/*Point*/ point) {
+    point = Point.read(point);
     return setLeft(point.x).setBottom(point.y);
   }
   // property
@@ -404,7 +413,8 @@ class Rectangle {
   // property
   Point get bottomRight() => getBottomRight();
 
-  Rectangle setBottomRight(Point point) {
+  Rectangle setBottomRight(/*Point*/ point) {
+    point = Point.read(point);
     return setRight(point.x).setBottom(point.y);
   }
   // property
@@ -422,7 +432,8 @@ class Rectangle {
   // property
   Point get leftCenter() => getLeftCenter();
 
-  Rectangle setLeftCenter(Point point) {
+  Rectangle setLeftCenter(/*Point*/ point) {
+    point = Point.read(point);
     return setCenterY(point.y).setLeft(point.x);
   }
   // property
@@ -440,7 +451,8 @@ class Rectangle {
   // property
   Point get topCenter() => getTopCenter();
 
-  Rectangle setTopCenter(Point point) {
+  Rectangle setTopCenter(/*Point*/ point) {
+    point = Point.read(point);
     return setCenter(point.x).setTop(point.y);
   }
   // property
@@ -458,7 +470,8 @@ class Rectangle {
   // property
   Point get rightCenter() => getRightCenter();
 
-  Rectangle setRightCenter(Point point) {
+  Rectangle setRightCenter(/*Point*/ point) {
+    point = Point.read(point);
     return setCenter(point.y).setRight(point.x);
   }
   // property
@@ -475,7 +488,9 @@ class Rectangle {
   }
   // property
   Point get bottomCenter() => getBottomCenter();
-    Rectangle setBottomCenter(Point point) {
+  
+  Rectangle setBottomCenter(/*Point*/ point) {
+    point = Point.read(point);
     return setCenter(point.x).setBottom(point.y);
   }
   // property
@@ -603,7 +618,7 @@ class Rectangle {
 //        ? this._containsRectangle(Rectangle.read(arguments))
 //        : this._containsPoint(Point.read(arguments));
     if(arg is Rectangle) return _containsRectangle(arg);
-    return _containsPoint(arg);
+    return _containsPoint(Point.read(arg));
   }
 
   bool _containsPoint(Point point) {
@@ -752,6 +767,7 @@ class Rectangle {
    * @param {Point} point
    */
   Rectangle include(Point point) {
+    point = Point.read(point);
     num x1 = Math.min(this.x, point.x);
     num y1 = Math.min(this.y, point.y);
     num x2 = Math.max(this.x + this.width, point.x);
