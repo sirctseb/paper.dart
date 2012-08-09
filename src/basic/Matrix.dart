@@ -113,8 +113,14 @@ class Matrix {
    * @return {Matrix} This affine transform
    */
   // Concatenate this transform with a scaling transformation
-  Matrix scale(num hor, num vert, [Point center = null]) {
-    // TODO allow only one scaling factor plus a center
+  Matrix scale(num hor, /*num or Point*/ vert, [/*Point*/ center = null]) {
+
+    if(vert !is num) {
+      center = Point.read(vert);
+      vert= hor;
+    } else {
+      center = Point.read(center);
+    }
 
     // do translate if center supplied
     if(center != null) {
@@ -151,7 +157,8 @@ class Matrix {
    * @param {Number} dy The distance to translate in the y direction
    * @return {Matrix} This affine transform
    */
-  Matrix translate(Point point) {
+  Matrix translate(/*Point*/ point) {
+    point = Point.read(point);
     _tx += point.x * _a + point.y * _b;
     _ty += point.x * _c + point.y * _d;
     return this;
@@ -201,8 +208,13 @@ class Matrix {
    * @param {Point} [center] The center for the shear transformation
    * @return {Matrix} This affine transform
    */
-  Matrix shear(num hor, [num ver = null, Point center = null]) {
-    if(ver == null) ver = hor;
+  Matrix shear(num hor, [/*num or Point*/ ver, /*Point*/ center]) {
+    if(ver !is num) {
+      center = Point.read(ver);
+      ver = hor;
+    } else {
+      center = Point.read(center);
+    }
 
     if(center != null)
       this.translate(center);
@@ -361,7 +373,7 @@ class Matrix {
   transform(/* point | */ src, [srcOff, dst, dstOff, numPts]) {
     return numPts == null
       // TODO: Check for rectangle and use _tranformBounds?
-      ? this._transformPoint(src)
+      ? this._transformPoint(Point.read(src))
       : this._transformCoordinates(src, srcOff, dst, dstOff, numPts);
   }
 
@@ -430,8 +442,8 @@ class Matrix {
    *
    * @param {Point} point The point to be transformed
    */
-  Point inverseTransform(Point point) {
-    return _inverseTransform(point);
+  Point inverseTransform(/*Point*/ point) {
+    return _inverseTransform(Point.read(point));
   }
 
   /**
@@ -572,10 +584,13 @@ class Matrix {
    */
   // TODO what input types to accept?
   Matrix setToTranslation(delta, [num y]) {
-    num x = delta;
-    if(delta is Point) {
+    num x;
+    if(delta !is num) {
+      delta = Point.read(delta);
       x = delta.x;
       y = delta.y;
+    } else {
+      x = delta;
     }
     return this.set(1, 0, 0, 1, x, y);
   }
@@ -599,7 +614,8 @@ class Matrix {
    * @param {Number} y The y coordinate of the anchor point
    * @return {Matrix} This affine transform
    */
-  Matrix setToRotation(num angle, Point center) {
+  Matrix setToRotation(num angle, /*Point*/ center) {
+    center = Point.read(center);
     angle = angle * Math.PI / 180;
     num x = center.x;
     num y = center.y;
