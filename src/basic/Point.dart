@@ -1026,6 +1026,8 @@ class LinkedPoint extends Point {
   }
   num set y(num value) => setY(value);
 
+  LinkedPoint._construct() {}
+
   factory LinkedPoint.create(owner, setter, x, y, [dontLink = false])
   {
     // Support creation of normal Points rather than LinkedPoints
@@ -1033,7 +1035,7 @@ class LinkedPoint extends Point {
     // See e.g. Rectangle#getPoint(true).
     if (dontLink)
       return new Point.create(x, y);
-    var point = new LinkedPoint(LinkedPoint.dont);
+    var point = new LinkedPoint._construct();
     point._x = x;
     point._y = y;
     point._owner = owner;
