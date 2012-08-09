@@ -175,9 +175,11 @@ class Rectangle {
    */
   Size getSize([dontLink]) {
     // See Rectangle#getPoint() about arguments[0]
-    return new LinkedSize(this, 'setSize', width, height,
+    return new LinkedSize.create(this, 'setSize', width, height,
         dontLink);
   }
+  // property
+  Size get size() => getSize();
 
   Rectangle setSize(Size size) {
     width = size.width;
