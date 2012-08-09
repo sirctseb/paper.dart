@@ -90,6 +90,11 @@ class Rectangle {
       _y = arg0.y;
       _width = arg0.width;
       _height = arg0.height;
+    } else if(arg0 is Map && arg0.containsKey("width")) {
+      _x = arg0["x"];
+      _y = arg0["y"];
+      _width = arg0["width"];
+      _height = arg0["height"];
     } else {
       _x = _y = _width = _height = 0;
     }
