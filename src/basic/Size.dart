@@ -102,7 +102,7 @@ class Size {
       if(arg0 is Map) {
         if(arg0.containsKey("width")) {
           _width = arg0["width"];
-          _height = arg1["height"];
+          _height = arg0["height"];
         }
       } else if(arg0 is Point) {
         _width = arg0.x;
