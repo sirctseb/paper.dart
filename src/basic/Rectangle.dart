@@ -510,7 +510,8 @@ class Rectangle {
    * @param {Rectangle} rect
    * @return {Boolean} {@true if the rectangles are equal}
    */
-  bool equals(Rectangle rect) {
+  bool equals(/*Rectangle*/ rect) {
+    rect = Rectangle.read(rect);
     return this.x == rect.x && this.y == rect.y
         && this.width == rect.width && this.height == rect.height;
   }
@@ -624,6 +625,7 @@ class Rectangle {
 //        || (Array.isArray(arg) ? arg : arguments).length == 4
 //        ? this._containsRectangle(Rectangle.read(arguments))
 //        : this._containsPoint(Point.read(arguments));
+    // TODO to what extent can we accept Rectangle-like and Point-like objects in the same argument?
     if(arg is Rectangle) return _containsRectangle(arg);
     return _containsPoint(Point.read(arg));
   }
@@ -687,7 +689,8 @@ class Rectangle {
    *   }
    * }
    */
-  bool intersects(Rectangle rect) {
+  bool intersects(/*Rectangle*/ rect) {
+    rect = Rectangle.read(rect);
     return rect.x + rect.width > this.x
         && rect.y + rect.height > this.y
         && rect.x < this.x + this.width
@@ -735,7 +738,8 @@ class Rectangle {
    * var intersectionPath = new Path.Rectangle(intersected);
    * intersectionPath.fillColor = 'red';
    */
-  Rectangle intersect(Rectangle rect) {
+  Rectangle intersect(/*Rectangle*/ rect) {
+    rect = Rectangle.read(rect);
     num x1 = Math.max(this.x, rect.x);
     num y1 = Math.max(this.y, rect.y);
     num x2 = Math.min(this.x + this.width, rect.x + rect.width);
@@ -751,7 +755,8 @@ class Rectangle {
    * @return {Rectangle} the smallest rectangle containing both the specified
    *                     rectangle and this rectangle.
    */
-  Rectangle unite(Rectangle rect) {
+  Rectangle unite(/*Rectangle*/ rect) {
+    rect = Rectangle.read(rect);
     num x1 = Math.min(this.x, rect.x);
     num y1 = Math.min(this.y, rect.y);
     num x2 = Math.max(this.x + this.width, rect.x + rect.width);
