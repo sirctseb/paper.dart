@@ -183,7 +183,7 @@ void RectangleTests() {
       var rect = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
       var point = new Point(166, 280);
       expect(rect.contains(point));
-      var point = new Point(30, 30);
+      point = new Point(30, 30);
       expect(rect.contains(point));
     });
 
