@@ -493,11 +493,16 @@ class Rectangle {
    * @return {String} A string representation of this rectangle.
    */
   String toString() {
-    var format = Base.formatNumber;
-    return '{ x: ${format(this.x)}'
+    // TODO restore when format implemented
+    //var format = Base.formatNumber;
+    /*return '{ x: ${format(this.x)}'
            ', y: ${format(this.y)}'
            ', width: ${format(this.width)}'
-           ', height: ${format(this.height)} }';
+           ', height: ${format(this.height)} }';*/
+    return '{ x: ${x}'
+           ', y: ${y}'
+           ', width: ${width}'
+           ', height: ${height} }';
   }
 
   /**
