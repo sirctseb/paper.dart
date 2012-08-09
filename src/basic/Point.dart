@@ -1000,6 +1000,9 @@ class Point {
 // TODO I think this implementation doesn't require storing the owner
 // separately from the setter
 class LinkedPoint extends Point {
+  Object _owner;
+  var _setter;
+  
   LinkedPoint set(num x, num y, [dontNotify = false]) {
     _x = x;
     _y = y;
