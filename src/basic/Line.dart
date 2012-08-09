@@ -16,6 +16,8 @@
 
 // TODO this will change once we actually organize
  #library("Line.dart");
+ #import("Point.dart");
+ #import("dart:math");
 
 /**
  * @name Line
@@ -36,7 +38,7 @@ class Line /** @lends Line# */ {
     _point1 = Point.read(point1);
     _point2 = Point.read(point2);
     _infinite = infinite;
-    _vector = point2 - point1;
+    _vector = _point2 - _point1;
   }
 
   Line.fromVector(Point point, Point vector) {
@@ -82,7 +84,7 @@ class Line /** @lends Line# */ {
   Point intersect(Line line) {
     num cross = this.vector.cross(line.vector);
     // Avoid divisions by 0, and errors when getting too close to 0
-    if (Math.abs(cross) <= Numerical.EPSILON)
+    if (cross.abs() <= Numerical.EPSILON)
       return null;
     Point v = line.point - this.point;
     num t1 = v.cross(line.vector) / cross;
@@ -123,7 +125,7 @@ class Line /** @lends Line# */ {
     num m = this.vector.y / this.vector.x; // slope
     num b = this.point.y - (m * this.point.x); // y offset
     // Distance to the linear equation
-    num dist = Math.abs(point.y - (m * point.x) - b) / Math.sqrt(m * m + 1);
+    num dist = (point.y - (m * point.x) - b).abs() / Math.sqrt(m * m + 1);
     return infinite ? dist : Math.min(dist,
         point.getDistance(this.point),
         point.getDistance(this.point + this.vector));
