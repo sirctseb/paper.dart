@@ -13,6 +13,7 @@
  *
  * All rights reserved.
  */
+ #library("Rectangle.dart");
 
 /**
  * @name Rectangle
