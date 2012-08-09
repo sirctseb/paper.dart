@@ -579,6 +579,5 @@ class LinkedSize extends Size {
       size._owner = owner;
       size._setter = setter;
       return size;
-    }
   }
 }
