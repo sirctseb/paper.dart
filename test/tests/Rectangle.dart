@@ -191,20 +191,20 @@ void RectangleTests() {
       var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
       var rect2 = { "x":170.5, "y":280.5, "width":19, "height":19 };
       var intersected = rect1.intersect(rect2);
-      expect(intersected.equals({ "x":170.5, "equals(y":280.5, "width":9.5, "height":9.5 })));
+      expect(intersected.equals({ "x":170.5, "y":280.5, "width":9.5, "height":9.5 }));
     });
 
     test('unite(rect)', () {
       var rect1 = new Rectangle({ "x":160, "y":270, "width":20, "height":20 });
       var rect2 = { "x":170.5, "y":280.5, "width":19, "height":19 };
       var united = rect1.unite(rect2);
-      expect(united.equals({ "x":160, "equals(y":270, "width":29.5, "height":29.5 })));
+      expect(united.equals({ "x":160, "y":270, "width":29.5, "height":29.5 }));
     });
 
     test('include(point)', () {
       var rect1 = new Rectangle({ "x":95, "y":151, "width":20, "height":20 });
       var included = rect1.include([50, 50]);
-      expect(included.equals({ "x":50, "equals(y":50, "width":65, "height":121 })));
+      expect(included.equals({ "x":50, "y":50, "width":65, "height":121 }));
     });
 
     test('toString()', () {
