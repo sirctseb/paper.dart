@@ -35,11 +35,16 @@ class Line /** @lends Line# */ {
   * @param {Point} point2
   * @param {Boolean} [infinite=true]
   */
-  Line(/*Point*/ point1, /*Point*/ point2, [bool infinite = true]) {
+  Line(/*Point*/ point1, /*Point*/ point2, [bool infinite]) {
     _point1 = Point.read(point1);
-    _point2 = Point.read(point2);
-    _infinite = infinite;
-    _vector = _point2 - _point1;
+    point2 = Point.read(point2);
+    if(infinite == null) {
+      _infinite = true;
+      _vector = point2;
+    } else {
+      _infinite = infinite;
+      _vector = point2 - _point1;
+    }
   }
 
   Line.fromVector(Point point, Point vector) {
@@ -50,7 +55,6 @@ class Line /** @lends Line# */ {
 
 
   Point _point1;
-  Point _point2;
   Point _vector;
   bool _infinite;
 
