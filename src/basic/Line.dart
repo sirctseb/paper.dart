@@ -112,7 +112,7 @@ class Line /** @lends Line# */ {
       }
     }
     return ccw < 0 ? -1 : ccw > 0 ? 1 : 0;
-  },
+  }
 
   // DOCS: document Line#getDistance(point)
   /**
