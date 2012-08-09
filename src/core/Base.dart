@@ -169,6 +169,6 @@ class Base {
    * up to 5 fractional digits.
    */
   static String formatNumber(num number) {
-    return (Math.round(number * 100000) / 100000).toString();
+    return ((number * 100000).round() / 100000).toString();
   }
 }
