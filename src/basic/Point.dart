@@ -13,8 +13,8 @@
  *
  * All rights reserved.
  */
-#import("dart:math");
 #library("Point.dart");
+#import("dart:math");
 
 /**
  * @name Point
@@ -85,7 +85,7 @@ class Point {
    *
    * @ignore
    */
-  Point.create(num x = 0, num y = 0) {
+  Point.create([num x = 0, num y = 0]) {
     _x = x;
     _y = y;
   }
