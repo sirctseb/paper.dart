@@ -115,8 +115,8 @@ class Segment {
   // property
   Point get point() => getPoint();
 
-  setPoint(Point point) {
-    //point = Point.read(arguments);
+  setPoint(/*Point*/ point) {
+    point = Point.read(point);
     // Do not replace the internal object but update it instead, so
     // references to it are kept alive.
     _point.set(point.x, point.y);
@@ -137,8 +137,8 @@ class Segment {
   // property
   Point get handleIn() => getHandleIn();
 
-  setHandleIn(Point point) {
-    //point = Point.read(arguments);
+  setHandleIn(/*Point*/ point) {
+    point = Point.read(arguments);
     // See #setPoint:
     _handleIn.set(point.x, point.y);
     // Update corner accordingly
@@ -161,8 +161,8 @@ class Segment {
   // property
   Point get handleOut() => getHandleOut();
 
-  setHandleOut(Point point) {
-    //point = Point.read(arguments);
+  setHandleOut(/*Point*/ point) {
+    point = Point.read(arguments);
     // See #setPoint:
     _handleOut.set(point.x, point.y);
     // Update corner accordingly
