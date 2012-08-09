@@ -346,7 +346,8 @@ class Size {
     return new Size.create(-this.width, -this.height);
   }
   // operator
-  Size operator - () => negate();
+  // TODO uncomment once they support this
+  //Size operator - () => negate();
 
   /**
    * Checks whether the width and height of the size are equal to those of the
