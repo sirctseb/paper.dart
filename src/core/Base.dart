@@ -14,6 +14,9 @@
  * All rights reserved.
  */
 
+ #library("Base.dart");
+ #import("dart:math");
+
 /**
  * @name Base
  * @class
@@ -21,6 +24,8 @@
  */
 // Extend Base with utility functions used across the library. Also set
 // this.Base on the injection scope, since bootstrap.js ommits that.
+// TODO I am just porting things we need as we go.
+// I think a significant part of this will not be used
 class Base {
   // Have generics versions of #clone() and #toString():
   //generics: true,
@@ -57,7 +62,7 @@ class Base {
    * all basic types (Point, Size, Rectangle) and also higher classes such
    * as Color and Segment.
    */
-  read: function(list, start, length) {
+  /*read: function(list, start, length) {
     var start = start || 0,
       length = length || list.length - start;
     var obj = list[start];
@@ -70,13 +75,13 @@ class Base {
     return obj.initialize.apply(obj, start > 0 || length < list.length
       ? Array.prototype.slice.call(list, start, start + length)
       : list) || obj;
-  },
+  },*/
 
   /**
    * Reads all readable arguments from the list, handling nested arrays
    * seperately.
    */
-  readAll: function(list, start) {
+  /*readAll: function(list, start) {
     var res = [], entry;
     for (var i = start || 0, l = list.length; i < l; i++) {
       res.push(Array.isArray(entry = list[i])
@@ -84,14 +89,14 @@ class Base {
         : this.read(list, i, 1));
     }
     return res;
-  },
+  },*/
 
   /**
    * Utility function for adding and removing items from a list of which
    * each entry keeps a reference to its index in the list in the private
    * _index property. Used for PaperScope#projects and Item#children.
    */
-  splice: function(list, items, index, remove) {
+  /*splice: function(list, items, index, remove) {
     var amount = items && items.length,
       append = index === undefined;
     index = append ? list.length : index;
@@ -117,53 +122,53 @@ class Base {
         list[i]._index = i;
       return removed;
     }
-  },
+  },*/
 
   /**
    * Merge all passed hash objects into a newly creted Base object.
    */
-  merge: function() {
+  /*merge: function() {
     return Base.each(arguments, function(hash) {
       Base.each(hash, function(value, key) {
         this[key] = value;
       }, this);
     }, new Base(), true); // Pass true for asArray, as arguments is none
-  },
+  },*/
 
   /**
    * Capitalizes the passed string: hello world -> Hello World
    */
-  capitalize: function(str) {
+  /*capitalize: function(str) {
     return str.replace(/\b[a-z]/g, function(match) {
       return match.toUpperCase();
     });
-  },
+  },*/
 
   /**
    * Camelizes the passed hyphenated string: caps-lock -> capsLock
    */
-  camelize: function(str) {
+  /*camelize: function(str) {
     return str.replace(/-(\w)/g, function(all, chr) {
       return chr.toUpperCase();
     });
-  },
+  },*/
 
   /**
    * Converst camelized strings to hyphenated ones: CapsLock -> caps-lock
    */
-  hyphenate: function(str) {
+  /*hyphenate: function(str) {
     return str.replace(/[a-z][A-Z0-9]|[0-9][a-zA-Z]|[A-Z]{2}[a-z]/g,
       function(match) {
         return match.charAt(0) + '-' + match.substring(1);
       }
     ).toLowerCase();
-  },
+  },*/
 
   /**
    * Utility function for rendering numbers to strings at a precision of
    * up to 5 fractional digits.
    */
-  formatNumber: function(num) {
-    return (Math.round(num * 100000) / 100000).toString();
+  static String formatNumber(num number) {
+    return (Math.round(number * 100000) / 100000).toString();
   }
-});
+}
