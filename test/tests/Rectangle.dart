@@ -184,7 +184,7 @@ void RectangleTests() {
       var point = new Point(166, 280);
       expect(rect.contains(point));
       point = new Point(30, 30);
-      expect(rect.contains(point));
+      expect(!rect.contains(point));
     });
 
     test('intersect(rect)', () {
