@@ -70,6 +70,13 @@ class Point {
     }
   }
 
+  // screen Point-like objects
+  // TODO turn this into a factory constructor
+  static Point read(arg) {
+    if(arg is Point) return arg;
+    return new Point(arg);
+  }
+
   /**
    * Creates a Point object with the given x and y coordinates.
    *
@@ -286,11 +293,12 @@ class Point {
    * var result = point1 + point2;
    * print(result); // {x: 15, y: 30}
    */
-  Point add(Point point) {
+  Point add(/*Point*/ point) {
+    point = Point.read(point);
     return new Point.create(x + point.x, y + point.y);
   }
   // operator version
-  Point operator + (Point point) {
+  Point operator + (/*Point*/ point) {
     return add(point);
   }
 
@@ -325,11 +333,12 @@ class Point {
    * var result = firstPoint - secondPoint;
    * print(result); // {x: 5, y: 15}
    */
-  Point subtract(Point point) {
+  Point subtract(/*Point*/ point) {
+    point = Point.read(point);
     return new Point.create(x - point.x, y - point.y);
   }
   // operator version
-  Point operator - (Point point) {
+  Point operator - (/*Point*/ point) {
     return subtract(point);
   }
 
@@ -364,21 +373,18 @@ class Point {
    * var result = firstPoint * secondPoint;
    * print(result); // {x: 20, y: 20}
    */
-  Point multiply(value) {
-    // component-wise multiplication
-    if(value is Point) {
-      return new Point.create(x * value.x, y * value.y);
-    }
-    // scalar multiplication
-    return new Point.create(x * value, y * value);
+  Point multiply(/*Point*/ point) {
+    point = Point.read(point);
+    return new Point.create(x * point.x, y * point.y);
   }
   // operator version
   // TODO NOTE: this does dot product for Point argument, instead of component-wise like above
-  Object operator * (value) {
-    if(value is Point) {
-      return x * value.x + y * value.y;
+  Object operator * (/*Point*/ value) {
+    if(value is num) {
+      return new Point.create(x * value, y * value);
     }
-    return new Point.create(x * value, y * value);
+    value = Point.read(value);
+    return x * value.x + y * value.y;
   }
 
   /**
@@ -412,17 +418,13 @@ class Point {
    * var result = firstPoint / secondPoint;
    * print(result); // {x: 4, y: 2}
    */
-  Point divide(value) {
-    // component-wise division
-    if(value is Point) {
-      return new Point.create(x / value.x, y / value.y);
-    }
-    // division by scalar
-    return new Point.create(x / value, y / value);
+  Point divide(/*Point*/ point) {
+    point = Point.read(point);
+    return new Point.create(x / value.x, y / value.y);
   }
   // operator version
-  Point operator / (value) {
-    return divide(value);
+  Point operator / (/*Point*/ point) {
+    return divide(point);
   }
 
   /**
@@ -453,15 +455,13 @@ class Point {
    * var point = new Point(12, 6);
    * print(point % new Point(5, 2)); // {x: 2, y: 0}
    */
-  Point modulo(value) {
-    if(value is Point) {
-      return new Point.create(x % value.x, y % value.y);
-    }
-    return new Point.create(x % value, y % value);
+  Point modulo(/*Point*/ point) {
+    point = Point.read(point);
+    return new Point.create(x % value.x, y % value.y);
   }
   // operator version
-  Point operator % (value) {
-    return modulo(value);
+  Point operator % (/*Point*/ point) {
+    return modulo(point);
   }
 
   // depending on the language version, this may already be the operator
@@ -492,7 +492,8 @@ class Point {
    *        squared, or its square root should be calculated.
    * @return {Number}
    */
-  num getDistance(Point point, [bool squared = false]) {
+  num getDistance(/*Point*/ point, [bool squared = false]) {
+    point = Point.read(point);
     num x = point.x - this.x;
     num y = point.y - this.y;
     num d = x * x + y * y;
@@ -518,7 +519,7 @@ class Point {
   // property getter for length
   num get length() => Math.sqrt(x*x + y*y);
 
-  Point setLength(length) {
+  Point setLength(num length) {
     // TODO: Whenever setting x/y, use #set() instead of direct assignment,
     // so LinkedPoint does not report changes twice.
     if (isZero()) {
@@ -537,7 +538,7 @@ class Point {
     return this;
   }
   // property setter for length
-  num set length(value) => setLength(value);
+  num set length(num value) => setLength(value);
 
   /**
    * Normalize modifies the {@link #length} of the vector to {@code 1} without
@@ -688,7 +689,8 @@ class Point {
    * @param {Point} point
    * @return {Number} the angle between the two vectors
    */
-  num getDirectedAngle(Point point) {
+  num getDirectedAngle(/*Point*/ point) {
+    point = Point.read(point);
     return Math.atan2(cross(point), dot(point)) * 180 / Math.PI;
   }
 
@@ -728,8 +730,9 @@ class Point {
    * print(point == new Point(1, 1)); // false
    * print(point != new Point(1, 1)); // true
    */
-  bool equals(Point point) {
+  bool equals(/*Point*/ point) {
     if(point == null) return false;
+    point = Point.read(point);
     return x == point.x && y == point.y;
   }
   // operator version
@@ -747,6 +750,7 @@ class Point {
     return rect.contains(this);
   }
 
+  // TODO why not accept Point-like things in the is* methods below?
   /**
    * Checks if the point is within a given distance of another point.
    *
@@ -806,7 +810,8 @@ class Point {
    * @param {Point} point
    * @returns {Number} the dot product of the two points
    */
-  num dot(Point point) {
+  num dot(/*Point*/ point) {
+    point = Point.read(point);
     return x * point.x + y * point.y;
   }
 
@@ -816,7 +821,8 @@ class Point {
    * @param {Point} point
    * @returns {Number} the cross product of the two points
    */
-  num cross(Point point) {
+  num cross(/*Point*/ point) {
+    point = Point.read(point);
     return x * point.y - y * point.x;
   }
 
@@ -827,7 +833,8 @@ class Point {
    * @param {Point} point
    * @returns {Point} the projection of the point on another point
    */
-  Point project(Point point) {
+  Point project(/*Point*/ point) {
+    point = Point.read(point);
     if (point.isZero()) {
       return new Point.create(0, 0);
     } else {
@@ -865,7 +872,9 @@ class Point {
    * var minPoint = Point.min(point1, point2);
    * print(minPoint); // {x: 10, y: 5}
    */
-  static Point min(Point point1, Point point2) {
+  static Point min(/*Point*/ point1, /*Point*/ point2) {
+    point1 = Point.read(point1);
+    point2 = Point.read(point2);
     return new Point.create(
       Math.min(point1.x, point2.x),
       Math.min(point1.y, point2.y)
@@ -887,7 +896,9 @@ class Point {
    * var maxPoint = Point.max(point1, point2);
    * print(maxPoint); // {x: 200, y: 100}
    */
-  static Point max(Point point1, Point point2) {
+  static Point max(/*Point*/ point1, /*Point*/ point2) {
+    point1 = Point.read(point1);
+    point2 = Point.read(point2);
     return Point.create(
       Math.max(point1.x, point2.x),
       Math.max(point1.y, point2.y)
@@ -1002,7 +1013,7 @@ class Point {
 class LinkedPoint extends Point {
   Object _owner;
   var _setter;
-  
+
   LinkedPoint set(num x, num y, [dontNotify = false]) {
     _x = x;
     _y = y;
