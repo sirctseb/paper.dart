@@ -73,7 +73,7 @@ class SegmentPoint extends Point {
     return _owner._isSelected(this);
   }
 
-  SegmentPoint.create(Segment segment, key, [point]) {
+  SegmentPoint.create(Segment segment, key, [/*Point*/ point]) {
     var x, y, selected;
     if(point == null) {
       x = y = 0;
@@ -83,6 +83,7 @@ class SegmentPoint extends Point {
     } else {
       // TODO read point from other arguments
       // If not Point-link already, read Point from pt = 3rd argument
+      point = Point.read(point);
       x = point.x;
       y = point.y;
       selected = point.selected;
