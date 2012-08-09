@@ -578,7 +578,7 @@ class LinkedSize extends Size {
   factory LinkedSize.create(Object owner, setter, num width, num height, [bool dontLink = false]) {
       // See LinkedPoint.create() for an explanation about dontLink.
       if (dontLink)
-        return Size.create(width, height);
+        return new Size.create(width, height);
       var size = new LinkedSize(LinkedSize.dont);
       size._width = width;
       size._height = height;
