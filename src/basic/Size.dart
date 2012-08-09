@@ -203,8 +203,8 @@ class Size {
    * console.log(result); // {width: 15, height: 30}
    */
   // TODO support first version with read
-  Size add(Size size) {
-    //size = Size.read(arguments);
+  Size add(/*Size*/ size) {
+    size = Size.read(arguments);
     return new Size.create(width + size.width, height + size.height);
   }
   // operator
@@ -241,8 +241,8 @@ class Size {
    * console.log(result); // {width: 5, height: 15}
    */
   // TODO support first version with read
-  Size subtract(Size size) {
-    //size = Size.read(arguments);
+  Size subtract(/*Size*/ size) {
+    size = Size.read(arguments);
     return new Size.create(width - size.width, height - size.height);
   }
   // operator
@@ -278,8 +278,8 @@ class Size {
    * console.log(result); // {width: 20, height: 20}
    */
   // TODO support first version with read
-  Size multiply(Size size) {
-    //size = Size.read(arguments);
+  Size multiply(/*Size*/ size) {
+    size = Size.read(arguments);
     return new Size.create(width * size.width, height * size.height);
   }
   // operator
@@ -315,8 +315,8 @@ class Size {
    * console.log(result); // {width: 4, height: 2}
    */
   // TODO support first version with read
-  Size divide(Size size) {
-    //size = Size.read(arguments);
+  Size divide(/*Size*/ size) {
+    size = Size.read(arguments);
     return new Size.create(width / size.width, height / size.height);
   }
   // operator
@@ -351,8 +351,8 @@ class Size {
    * console.log(size % new Size(5, 2)); // {width: 2, height: 0}
    */
   // TODO support first version with read
-  Size modulo(Size size) {
-    //size = Size.read(arguments);
+  Size modulo(/*Size*/ size) {
+    size = Size.read(arguments);
     return new Size.create(width % size.width, height % size.height);
   }
   // operator
@@ -378,9 +378,9 @@ class Size {
    * console.log(size == new Size(1, 1)); // false
    * console.log(size != new Size(1, 1)); // true
    */
-  bool equals(Size size) {
+  bool equals(/*Size*/ size) {
     if(size == null) return false;
-    //size = Size.read(arguments);
+    size = Size.read(arguments);
     return width == size.width && height == size.height;
   }
   // operator
