@@ -67,7 +67,9 @@
       });
 
     test('getAngle(point)', () {
-      var angle = new Point(0, 10).getAngle([10, 10]);
+      // TODO add support for passing Point-like things around
+      //var angle = new Point(0, 10).getAngle([10, 10]);
+      var angle = new Point(0, 10).getAngle(new Point([10, 10]));
       expect(angle.round(), equals(45));
       });
 
