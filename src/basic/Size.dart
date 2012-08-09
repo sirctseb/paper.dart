@@ -103,6 +103,9 @@ class Size {
         if(arg0.containsKey("width")) {
           _width = arg0["width"];
           _height = arg0["height"];
+        } else if(arg0.containsKey("x")) {
+          _width = arg0["x"];
+          _height = arg0["y"];
         }
       } else if(arg0 is Point) {
         _width = arg0.x;
