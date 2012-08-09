@@ -85,13 +85,13 @@ class Matrix {
     _tx = tx;
     _ty = ty;
     return this;
-  },
+  }
 
   Matrix setIdentity() {
     _a = _d = 1;
     _c = _b = _tx = _ty = 0;
     return this;
-  },
+  }
 
   /**
    * Concatentates this transform with a scaling transformation.
@@ -227,7 +227,7 @@ class Matrix {
     if(center != null)
       translate(center.negate());
     return this;
-  },
+  }
 
   /**
    * @return {String} A string representation of this transform.
@@ -236,7 +236,7 @@ class Matrix {
     // TODO formatting numbers
     //var format = Base.formatNumber;
     return '[[ $_a, $_b, $_tx, $_c, $_d, $_ty ]]';
-  },
+  }
 
   /**
    * The scaling factor in the x-direction ({@code a}).
