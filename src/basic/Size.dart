@@ -95,7 +95,7 @@ class Size {
    * console.log(size.height); // 50
    */
   Size([arg0, arg1]) {
-    if(arg1 == null) {
+    if(arg1 != null) {
       _width = arg0;
       _height = arg1;
     } else if(arg0 != null) {
