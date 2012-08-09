@@ -45,24 +45,25 @@
  * // converted to an RgbColor.
  * circle.fillColor = '#ff0000';
  */
-var Color = this.Color = Base.extend(new function() {
+class Color {
 
-  var components = {
-    gray: ['gray'],
-    rgb: ['red', 'green', 'blue'],
-    hsb: ['hue', 'saturation', 'brightness'],
-    hsl: ['hue', 'saturation', 'lightness']
+  static var components = {
+    "gray": ['gray'],
+    "rgb": ['red', 'green', 'blue'],
+    "hsb": ['hue', 'saturation', 'brightness'],
+    "hsl": ['hue', 'saturation', 'lightness']
   };
 
-  var colorCache = {},
-    colorContext;
+  static var colorCache = {};
+  static var colorContext;
 
-  function nameToRgbColor(name) {
+  static _nameToRgbColor(String name) {
     var color = colorCache[name];
-    if (color)
+    if (color != null)
       return color.clone();
     // Use a canvas to draw to with the given name and then retrieve rgb
     // values from. Build a cache for all the used colors.
+    // TODO woah! this should be interesting
     if (!colorContext) {
       var canvas = CanvasProvider.getCanvas(Size.create(1, 1));
       colorContext = canvas.getContext('2d');
@@ -81,7 +82,7 @@ var Color = this.Color = Base.extend(new function() {
     return (colorCache[name] = RgbColor.read(rgb)).clone();
   }
 
-  function hexToRgbColor(string) {
+  static _hexToRgbColor(String string) {
     var hex = string.match(/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/);
     if (hex.length >= 4) {
       var rgb = new Array(3);
@@ -96,7 +97,7 @@ var Color = this.Color = Base.extend(new function() {
 
   // For hsb-rgb conversion, used to lookup the right parameters in the
   // values array.
-  var hsbIndices = [
+  static var _hsbIndices = [
     [0, 3, 1], // 0
     [2, 0, 1], // 1
     [1, 0, 3], // 2
@@ -105,8 +106,8 @@ var Color = this.Color = Base.extend(new function() {
     [0, 1, 2]  // 5
   ];
 
-  var converters = {
-    'rgb-hsb': function(color) {
+  var _converters = {
+    'rgb-hsb': (color) {
       var r = color._red,
         g = color._green,
         b = color._blue,
@@ -122,11 +123,11 @@ var Color = this.Color = Base.extend(new function() {
       return new HsbColor(h, s, v, color._alpha);
     },
 
-    'hsb-rgb': function(color) {
+    'hsb-rgb': (color) {
       var h = (color._hue / 60) % 6, // Scale to 0..6
         s = color._saturation,
         b = color._brightness,
-        i = Math.floor(h), // 0..5
+        i = h.floor(), // 0..5
         f = h - i,
         i = hsbIndices[i],
         v = [
@@ -140,7 +141,7 @@ var Color = this.Color = Base.extend(new function() {
 
     // HSL code is based on:
     // http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
-    'rgb-hsl': function(color) {
+    'rgb-hsl': (color) {
       var r = color._red,
         g = color._green,
         b = color._blue,
@@ -159,7 +160,7 @@ var Color = this.Color = Base.extend(new function() {
       return new HslColor(h, s, l, color._alpha);
     },
 
-    'hsl-rgb': function(color) {
+    'hsl-rgb': (color) {
       var s = color._saturation,
         h = color._hue / 360,
         l = color._lightness,
@@ -185,7 +186,7 @@ var Color = this.Color = Base.extend(new function() {
       return new RgbColor(c[0], c[1], c[2], color._alpha);
     },
 
-    'rgb-gray': function(color) {
+    'rgb-gray': (color) {
       // Using the standard NTSC conversion formula that is used for
       // calculating the effective luminance of an RGB color:
       // http://www.mathworks.com/support/solutions/en/data/1-1ASCU/index.html?solution=1-1ASCU
@@ -193,102 +194,116 @@ var Color = this.Color = Base.extend(new function() {
           + color._blue * 0.114), color._alpha);
     },
 
-    'gray-rgb': function(color) {
+    'gray-rgb': (color) {
       var comp = 1 - color._gray;
       return new RgbColor(comp, comp, comp, color._alpha);
     },
 
-    'gray-hsb': function(color) {
+    'gray-hsb': (color) {
       return new HsbColor(0, 0, 1 - color._gray, color._alpha);
     },
 
-    'gray-hsl': function(color) {
+    'gray-hsl': (color) {
       return new HslColor(0, 0, 1 - color._gray, color._alpha);
     }
   };
 
-  var fields = /** @lends Color# */{
-    _readNull: true,
+//  var fields = /** @lends Color# */{
+  bool _readNull;
 
-    initialize: function(arg) {
-      var isArray = Array.isArray(arg),
-        type = this._colorType;
-      if (typeof arg === 'object' && !isArray) {
-        if (!type) {
-          // Called on the abstract Color class. Guess color type
-          // from arg
-          return arg.red !== undefined
-            ? new RgbColor(arg.red, arg.green, arg.blue, arg.alpha)
-            : arg.gray !== undefined
-            ? new GrayColor(arg.gray, arg.alpha)
-            : arg.lightness !== undefined
-            ? new HslColor(arg.hue, arg.saturation, arg.lightness,
-                arg.alpha)
-            : arg.hue !== undefined
-            ? new HsbColor(arg.hue, arg.saturation, arg.brightness,
-                arg.alpha)
-            : new RgbColor(); // Fallback
-        } else {
-          // Called on a subclass instance. Return the converted
-          // color.
-          return Color.read(arguments).convert(type);
-        }
-      } else if (typeof arg === 'string') {
-        var rgbColor = arg.match(/^#[0-9a-f]{3,6}$/i)
-            ? hexToRgbColor(arg)
-            : nameToRgbColor(arg);
-        return type
-            ? rgbColor.convert(type)
-            : rgbColor;
+  //initialize: function(arg) {
+  Color(arg) {
+    bool isArray = arg is List;//Array.isArray(arg),
+    String type = _colorType;
+
+    if (arg is Map) {
+      if (type == null) {
+        // Called on the abstract Color class. Guess color type
+        // from arg
+        //return arg.red !== undefined
+        return arg.containsKey("red")
+          ? new RgbColor(arg["red"], arg["green"], arg["blue"], arg["alpha"])
+          //: arg.gray !== undefined
+          : arg.containsKey("gray")
+          ? new GrayColor(arg["gray"], arg["alpha"])
+          //: arg.lightness !== undefined
+          : arg.containsKey("lightness")
+          ? new HslColor(arg["hue"], arg["saturation"], arg["lightness"],
+              arg["alpha"])
+          //: arg.hue !== undefined
+          arg.contiansKey("hue")
+          ? new HsbColor(arg["hue"], arg["saturation"], arg["brightness"],
+              arg["alpha"])
+          : new RgbColor(); // Fallback
       } else {
-        var components = isArray ? arg
-            : Array.prototype.slice.call(arguments);
-        if (!type) {
-          // Called on the abstract Color class. Guess color type
-          // from arg
-          //if (components.length >= 4)
-          //  return new CmykColor(components);
-          if (components.length >= 3)
-            return new RgbColor(components);
-          return new GrayColor(components);
-        } else {
-          // Called on a subclass instance. Just copy over
-          // components.
-          Base.each(this._components,
-            function(name, i) {
-              var value = components[i];
-              // Set internal propery directly
-              this['_' + name] = value !== undefined
-                  ? value : null;
-            },
-          this);
-        }
+        // Called on a subclass instance. Return the converted
+        // color.
+        // TODO figure out what this is doing
+        return Color.read(arguments).convert(type);
       }
-    },
-
-    /**
-     * @return {RgbColor|GrayColor|HsbColor} a copy of the color object
-     */
-    clone: function() {
-      var ctor = this.constructor,
-        copy = new ctor(ctor.dont),
-        components = this._components;
-      for (var i = 0, l = components.length; i < l; i++) {
-        var key = '_' + components[i];
-        copy[key] = this[key];
+    } else if (arg is String) {
+      //var rgbColor = arg.match(/^#[0-9a-f]{3,6}$/i)
+      var rgbColor = RegExp(@"^#[0-9a-f]{3,6}$)", false, true).hasMatch(arg)
+          ? _hexToRgbColor(arg)
+          : _nameToRgbColor(arg);
+      return type
+          ? rgbColor.convert(type)
+          : rgbColor;
+    } else {
+      // TODO support params to array
+      /*var components = isArray ? arg
+          : Array.prototype.slice.call(arguments);*/
+      var components = arg;
+      if (type == null) {
+        // Called on the abstract Color class. Guess color type
+        // from arg
+        //if (components.length >= 4)
+        //  return new CmykColor(components);
+        if (components.length >= 3)
+          return new RgbColor(components);
+        return new GrayColor(components);
+      } else {
+        // Called on a subclass instance. Just copy over
+        // components.
+        // TODO whoops! we can not do this at all
+        // TODO why would you have to though?
+        Base.each(this._components,
+          function(name, i) {
+            var value = components[i];
+            // Set internal propery directly
+            this['_' + name] = value !== undefined
+                ? value : null;
+          },
+        this);
       }
-      return copy;
-    },
+    }
+  }
 
-    convert: function(type) {
-      var converter;
-      return this._colorType == type
-          ? this.clone()
-          : (converter = converters[this._colorType + '-' + type])
-            ? converter(this)
-            : converters['rgb-' + type](
-                converters[this._colorType + '-rgb'](this));
-    },
+  /**
+   * @return {RgbColor|GrayColor|HsbColor} a copy of the color object
+   */
+  // TODO we can do this either
+  // TODO I think a lot of this should go in subclasses
+  clone() {
+    var ctor = this.constructor,
+      copy = new ctor(ctor.dont),
+      components = this._components;
+    for (var i = 0, l = components.length; i < l; i++) {
+      var key = '_' + components[i];
+      copy[key] = this[key];
+    }
+    return copy;
+  }
+
+  convert(type) {
+    var converter;
+    return this._colorType == type
+        ? this.clone()
+        : (converter = converters[this._colorType + '-' + type])
+          ? converter(this)
+          : converters['rgb-' + type](
+              converters[this._colorType + '-rgb'](this));
+  }
 
     statics: /** @lends Color */{
       /**
