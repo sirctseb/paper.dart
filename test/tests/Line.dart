@@ -16,15 +16,15 @@
 
 void LineTests() {
   group('Line Tests', () {
-    test('new Line(new Point(10,10), [20,40])', () {
-      var line = new Line(new Point(10,10), [20, 40]);
+    test('new Line(new Point(10,10), [20,40], true)', () {
+      var line = new Line(new Point(10,10), [20, 40], true);
       expect(line.point.toString(), '{ x: 10, y: 10 }', ' get point');
       expect(line.vector.toString(), '{ x: 10, y: 30 }', ' get vector');
     });
 
     test('new Line([10,10], [20, 20]).intersect(new Line([14, 15], [21, 10]))', () {
       Point intersection = new Line([10, 10], [20, 20]).intersect(new Line([14, 15], [21, 10]));
-      expect(intersection.toString(), '{ x: 15.90909, y: 15.90909');
+      expect(intersection.toString(), '{ x: 15.90909, y: 15.90909 }');
     });
 
     test('new Line([10, 10], [20, 20]).getSide(new Point(15, 15))', () {
