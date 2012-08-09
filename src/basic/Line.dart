@@ -29,9 +29,9 @@ class Line /** @lends Line# */ {
   * @param {Point} point2
   * @param {Boolean} [infinite=true]
   */
-  Line(Point point1, Point point2, [bool infinite = true]) {
-    _point1 = point1;
-    _point2 = point2;
+  Line(/*Point*/ point1, /*Point*/ point2, [bool infinite = true]) {
+    _point1 = Point.read(point1);
+    _point2 = Point.read(point2);
     _infinite = infinite;
     _vector = point2 - point1;
   }
