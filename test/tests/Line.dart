@@ -27,12 +27,12 @@ void LineTests() {
       expect(intersection.toString(), '{ x: 15.90909, y: 15.90909');
     });
 
-    test('new Line([10, 10], [20, 20]).getSide(new Point(15, 15))' () {
+    test('new Line([10, 10], [20, 20]).getSide(new Point(15, 15))', () {
       num side = new Line([10, 10], [20, 20]).getSide(new Point(15, 15));
       expect(side, 0);
     });
 
-    test('new Line([10,10], [20, 20]).getDistance(new Point(64, 21))' () {
+    test('new Line([10,10], [20, 20]).getDistance(new Point(64, 21))', () {
       num dist = new Line([10,10], [20, 20]).getDistance(new Point(64, 21));
       expect(dist, 30.40559159102154);
     });
