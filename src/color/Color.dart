@@ -342,7 +342,7 @@ class Color {
     [0, 1, 2]  // 5
   ];
 
-  var _converters = {
+  static var _converters = {
     'rgb-hsb': (color) {
       var r = color._red,
         g = color._green,
@@ -403,9 +403,9 @@ class Color {
         t1, t2, c;
       if (s == 0)
         return new RgbColor(l, l, l, color._alpha);
-      var t3s = [ h + 1 / 3, h, h - 1 / 3 ],
-        t2 = l < 0.5 ? l * (1 + s) : l + s - l * s,
-        t1 = 2 * l - t2,
+      var t3s = [ h + 1 / 3, h, h - 1 / 3 ];
+        t2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        t1 = 2 * l - t2;
         c = [];
       for (var i = 0; i < 3; i++) {
         var t3 = t3s[i];
