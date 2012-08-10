@@ -6,6 +6,7 @@
 #source("./Rectangle.dart");
 #source("./Size.dart");
 #source("./Line.dart");
+#source("../lib/helpers.dart");
 #source("./Color.dart");
 
 void main() {
