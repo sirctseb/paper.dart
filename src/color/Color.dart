@@ -450,9 +450,6 @@ class Color {
 
   //initialize: function(arg) {
   Color(arg, [arg1, arg2, arg3]) {
-    bool isArray = arg is List;//Array.isArray(arg),
-    String type = _colorType;
-
     if (arg is Map) {
       // Called on the abstract Color class. Guess color type
       // from arg
