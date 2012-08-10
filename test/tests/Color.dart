@@ -17,41 +17,59 @@
 ColorTests() {
   group("Color Tests", () {
     test('Set named color', () {
-      var path = new Path();
-      path.fillColor = 'red';
-      compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
-      expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      //var path = new Path();
+      //path.fillColor = 'red';
+      Color color = new Color("red");
+      //compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
+      compareRgbColors(color, new RgbColor(1,0,0));
+      //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      expect(color.toCssString(), equals('rgba(255, 0, 0, 1)'));
     });
 
     test('Set color to hex', () {
-      var path = new Path();
-      path.fillColor = '#ff0000';
-      compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
-      expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      //var path = new Path();
+      //path.fillColor = '#ff0000';
+      //compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
+      //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      Color color = new Color("#ff0000");
+      compareRgbColors(color, new RgbColor(1,0,0));
+      expect(color.toCssString(), equals('rgba(255, 0, 0, 1)'));
 
-      var path = new Path();
-      path.fillColor = '#f00';
-      compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
-      expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      //var path = new Path();
+      //path.fillColor = '#f00';
+      //compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
+      //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      color = new Color("f00");
+      compateRgbColors(color, new RgbColor(1, 0, 0));
+      expect(color.toCssString(), equals('rgba(255, 0, 0, 1)'));
     });
 
     test('Set color to object', () {
-      var path = new Path();
-      path.fillColor = { "red": 1, "green": 0, "blue": 1};
-      compareRgbColors(path.fillColor, new RgbColor(1, 0, 1));
-      expect(path.fillColor.toCssString(), equals('rgba(255, 0, 255, 1)'));
+      //var path = new Path();
+      //path.fillColor = { "red": 1, "green": 0, "blue": 1};
+      //compareRgbColors(path.fillColor, new RgbColor(1, 0, 1));
+      //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 255, 1)'));
+      Color color = new Color({"red": 1, "green": 0, "blue": 1});
+      compareRgbColors(color, new RgbColor(1, 0, 1));
+      expect(color.toCssString(), equals('rgba(255, 0, 200, 1)'));
 
-      var path = new Path();
-      path.fillColor = { "gray": 0.2 };
-      compareRgbColors(path.fillColor, new RgbColor(0.8, 0.8, 0.8));
-      expect(path.fillColor.toCssString(), equals('rgba(204, 204, 204, 1)'));
+      //var path = new Path();
+      //path.fillColor = { "gray": 0.2 };
+      //compareRgbColors(path.fillColor, new RgbColor(0.8, 0.8, 0.8));
+      //expect(path.fillColor.toCssString(), equals('rgba(204, 204, 204, 1)'));
+      color = new Color({"gray": 0.2});
+      compareRgbColors(color, new RgbColor(0.8, 0.8, 0.8));
+      expect(color.toCssString(), equals('rgba(204, 204, 204, 1)'));
     });
 
     test('Set color to array', () {
-      var path = new Path();
-      path.fillColor = [1, 0, 0];
-      compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
-      expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      //var path = new Path();
+      //path.fillColor = [1, 0, 0];
+      //compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
+      //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
+      Color color = new Color([1, 0, 0]);
+      compareRgbColors(color, new RgbColor(1, 0, 0));
+      expect(color.toCssString(), equals('rgba(255, 0, 0, 1)'));
     });
 
     test('Creating colors', () {
