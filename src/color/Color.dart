@@ -360,13 +360,13 @@ class Color {
     },
 
     'hsb-rgb': (color) {
-      var h = (color._hue / 60) % 6, // Scale to 0..6
-        s = color._saturation,
-        b = color._brightness,
-        i = h.floor(), // 0..5
-        f = h - i,
-        i = _hsbIndices[i],
-        v = [
+      var h = (color._hue / 60) % 6; // Scale to 0..6
+      var s = color._saturation;
+      var b = color._brightness;
+      var i = h.floor(); // 0..5
+      var f = h - i;
+      i = _hsbIndices[i];
+      var v = [
           b,            // b, index 0
           b * (1 - s),      // p, index 1
           b * (1 - s * f),    // q, index 2
