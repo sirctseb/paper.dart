@@ -858,8 +858,8 @@ class RgbColor extends Color {
    * // 100% red, 0% blue, 50% blue:
    * circle.fillColor = new RgbColor(1, 0, 0.5);
    */
-   RgbColor(num red, num green, num blue, [num alpha])
-    : super({"red": red, "green": green, "blue": blue, "alpha": alpha}) {}
+   RgbColor(/*num*/ red, [num green, num blue, num alpha])
+    : super(red is num ? {"red": red, "green": green, "blue": blue, "alpha": alpha} : red) {}
 
   /**
    * The amount of red in the color as a value between {@code 0} and
@@ -950,8 +950,8 @@ class HsbColor extends Color {
    * // 100% and a brightness of 100%:
    * circle.fillColor = new HsbColor(90, 1, 1);
    */
-  HsbColor(num hue, num saturation, num brightness, [num alpha])
-    : super({"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha}) {}
+  HsbColor(/*num*/ hue, [num saturation, num brightness, num alpha])
+    : super(hue is num ? {"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha} : hue) {}
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -1031,8 +1031,8 @@ class HslColor extends Color {
    * // 100% and a lightness of 50%:
    * circle.fillColor = new HslColor(90, 1, 0.5);
    */
-  HslColor(num hue, num saturation, num lightness, [num alpha])
-    : super({"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha});
+  HslColor(/*num*/ hue, [num saturation, num lightness, num alpha])
+    : super(hue is num ? {"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha} : hue);
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
