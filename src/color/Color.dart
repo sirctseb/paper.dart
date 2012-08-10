@@ -47,6 +47,241 @@
  */
 class Color {
 
+  // gray components
+  num _gray;
+
+  // Rgb components
+  num _red, _green, _blue;
+
+  // hsb components
+  num _hue, _saturation, _brightness;
+
+  // hsl components
+  num _lightness;
+
+  // remembers which components are currently definitive
+  String _type;
+
+  // Items that use this color object for styling
+  List<Item> _owners;
+
+  num _alpha;
+
+  // accessors
+  // helper functions for validating input
+  num _clampUnit(num input) {
+    return Math.max(0, Math.min(1, input));
+  }
+  num _modDegrees(num input) {
+    return ((input % 360) + 360) % 360;
+  }
+
+  // Gray accessors
+  num get gray() {
+    // if we don't have gray ready, compute it
+    if(_gray == null) {
+      GrayColor color = this.convert("gray");
+      _gray = color.gray;
+    }
+    return _gray;
+  }
+  set gray(num value) {
+    if(value != _gray) {
+      _type = "gray";
+      _gray = _clampUnit(value);
+      // nullify other properties
+      _red = _green = _blue = _hue = _saturation = _brightness = _lightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  // helper function to set rgb values from whatever the color currently is
+  void _updateRgb() {
+      RgbColor color = this.convert("rgb");
+      _red = color.red;
+      _blue = color.blue;
+      _green = color.green;
+  }
+  // Rgb accessors
+  num get red() {
+    if(_red == null) {
+      _updateRgb();
+    }
+    return _red;
+  }
+  set red(num value) {
+    // update if changed
+    if(value != _red) {
+      if(_type != "rgb") {
+        _updateRgb();
+        _type = "rgb";
+      }
+      _red = _clampUnit(value);
+      // nullify other properties
+      _gray = _hue = _saturation = _brightness = _lightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+  num get blue() {
+    if(_blue == null) {
+      _updateRgb();
+    }
+    return _blue;
+  }
+  set blue(num value) {
+    // update if changed
+    if(value != _blue) {
+      if(_type != "rgb") {
+        _updateRgb();
+        _type = "rgb";
+      }
+      _blue = _clampUnit(value);
+      // nullify other properties
+      _gray = _hue = _saturation = _brightness = _lightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  num get green() {
+    if(_green == null) {
+      _updateRgb();
+    }
+    return _green;
+  }
+  set green(num value) {
+    // update if changed
+    if(value != _green) {
+      if(_type != "rgb") {
+        _updateRgb();
+        _type = "rgb";
+      }
+      _green = _clampUnit(value);
+      // nullify other properties
+      _gray = _hue = _saturation = _brightness = _lightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  // helper function to set hsb values from whatever the color currently is
+  void _updateHsb() {
+    HsbColor color = this.convert("hsb");
+    _hue = color.hue;
+    _saturation = color.saturation;
+    _brightness = color.brightness;
+  }
+
+  // hsb accessors
+  num get hue() {
+    if(_hue == null) {
+      _updateHsb();
+    }
+    return _hue;
+  }
+  set hue(num value) {
+    if(value != _hue) {
+      if(_type != "hsb" && _type != "hsl") {
+        _updateHsb();
+        _type = "hsb";
+      }
+      _hue = _modDegrees(value);
+      // nullify other properties
+      _gray = _red = _green = _blue = null;
+      if(_type != "hsl") _lightness = null;
+      if(_type != "hsb") _brightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  num get saturation() {
+    if(_saturation == null) {
+      _updateHsb();
+    }
+    return _saturation;
+  }
+  set saturation(num value) {
+    if(value != _saturation) {
+      // TODO now this has the weird property that if you
+      // construct an hsl class, set a red property, then
+      // the saturation is hsb. i think this weirdness is manfiest
+      // other ways too
+      if(_type != "hsb" && _type != "hsl") {
+        _updateHsb();
+        _type = "hsb";
+      }
+      _saturation = _clampUnit(value);
+      // nullify other properties
+      _gray = _red = _green = _blue = null;
+      if(_type != "hsl") _lightness = null;
+      if(_type != "hsb") _brightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  num get brightness() {
+    if(_brightness == null) {
+      _updateHsb();
+    }
+    return _brightness;
+  }
+  set brightness(num value) {
+    if(value != _brightness) {
+      if(_type != "hsb") {
+        _updateHsb();
+        _type = "hsb";
+      }
+      _brightness = _clampUnit(value);
+      // nullify other properties
+      _gray = _red = _green = _blue = _lightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  // helper function to set hsl values from whatever color currently is
+  void _updateHsl() {
+    HslColor color = this.convert("hsl");
+    _hue = color.hue;
+    _saturation = color.saturation;
+    _lightness = color.lightness;
+  }
+  // hsl accessors
+  num get lightness() {
+    if(_lightness == null) {
+      _updateHsl();
+      return _lightness;
+    }
+  }
+  set lightness(num value) {
+    if(value != _lightness) {
+      if(_type != "hsl") {
+        _updateHsl();
+        _type = "hsl";
+      }
+      _lightness = _clampUnit(value);
+      // nullify other properties
+      _gray = _red = _green = _blue = _brightness = null;
+      _cssString = null;
+      _changed();
+    }
+  }
+
+  // alpha accessors
+  num get alpha() => _alpha == null ? 1 : _alpha;
+  set alpha(num value) {
+    _alpha = value == null ? null : _clampUnit(value);
+    _cssString = null;
+    _changed();
+  }
+  // TODO why do we need this if we return a valid value always?
+  bool hasAlpha() => _alpha != null;
+
+
   static var components = {
     "gray": ['gray'],
     "rgb": ['red', 'green', 'blue'],
@@ -212,35 +447,28 @@ class Color {
   bool _readNull;
 
   //initialize: function(arg) {
-  Color(arg) {
+  Color(arg, [arg1, arg2, arg3]) {
     bool isArray = arg is List;//Array.isArray(arg),
     String type = _colorType;
 
     if (arg is Map) {
-      if (type == null) {
-        // Called on the abstract Color class. Guess color type
-        // from arg
-        //return arg.red !== undefined
-        return arg.containsKey("red")
-          ? new RgbColor(arg["red"], arg["green"], arg["blue"], arg["alpha"])
-          //: arg.gray !== undefined
-          : arg.containsKey("gray")
-          ? new GrayColor(arg["gray"], arg["alpha"])
-          //: arg.lightness !== undefined
-          : arg.containsKey("lightness")
-          ? new HslColor(arg["hue"], arg["saturation"], arg["lightness"],
-              arg["alpha"])
-          //: arg.hue !== undefined
-          arg.contiansKey("hue")
-          ? new HsbColor(arg["hue"], arg["saturation"], arg["brightness"],
-              arg["alpha"])
-          : new RgbColor(); // Fallback
-      } else {
-        // Called on a subclass instance. Return the converted
-        // color.
-        // TODO figure out what this is doing
-        return Color.read(arguments).convert(type);
-      }
+      // Called on the abstract Color class. Guess color type
+      // from arg
+      //return arg.red !== undefined
+      return arg.containsKey("red")
+        ? new RgbColor(arg["red"], arg["green"], arg["blue"], arg["alpha"])
+        //: arg.gray !== undefined
+        : arg.containsKey("gray")
+        ? new GrayColor(arg["gray"], arg["alpha"])
+        //: arg.lightness !== undefined
+        : arg.containsKey("lightness")
+        ? new HslColor(arg["hue"], arg["saturation"], arg["lightness"],
+            arg["alpha"])
+        //: arg.hue !== undefined
+        : arg.containsKey("hue")
+        ? new HsbColor(arg["hue"], arg["saturation"], arg["brightness"],
+            arg["alpha"])
+        : new RgbColor(); // Fallback
     } else if (arg is String) {
       //var rgbColor = arg.match(/^#[0-9a-f]{3,6}$/i)
       var rgbColor = RegExp(@"^#[0-9a-f]{3,6}$)", false, true).hasMatch(arg)
@@ -251,145 +479,64 @@ class Color {
           : rgbColor;
     } else {
       // TODO support params to array
-      /*var components = isArray ? arg
-          : Array.prototype.slice.call(arguments);*/
-      var components = arg;
-      if (type == null) {
-        // Called on the abstract Color class. Guess color type
-        // from arg
-        //if (components.length >= 4)
-        //  return new CmykColor(components);
-        if (components.length >= 3)
-          return new RgbColor(components);
-        return new GrayColor(components);
-      } else {
-        // Called on a subclass instance. Just copy over
-        // components.
-        // TODO whoops! we can not do this at all
-        // TODO why would you have to though?
-        Base.each(this._components,
-          function(name, i) {
-            var value = components[i];
-            // Set internal propery directly
-            this['_' + name] = value !== undefined
-                ? value : null;
-          },
-        this);
-      }
+      var components = arg is List ? arg : [arg, arg1, arg2, arg3];
+      // Called on the abstract Color class. Guess color type
+      // from arg
+      //if (components.length >= 4)
+      //  return new CmykColor(components);
+      if (components.length >= 3)
+        return new RgbColor(components);
+      return new GrayColor(components);
     }
   }
 
   /**
    * @return {RgbColor|GrayColor|HsbColor} a copy of the color object
    */
-  // TODO we can do this either
-  // TODO I think a lot of this should go in subclasses
-  clone() {
-    var ctor = this.constructor,
-      copy = new ctor(ctor.dont),
-      components = this._components;
-    for (var i = 0, l = components.length; i < l; i++) {
-      var key = '_' + components[i];
-      copy[key] = this[key];
-    }
+  Color clone() {
+    Color copy = new Color();
+    copy._gray = _gray;
+    copy._red = _red;
+    copy._green = _green;
+    copy._blue = _blue;
+    copy._hue = _hue;
+    copy._saturation = _saturation;
+    copy._brightness = _brightness;
+    copy._lightness = _lightness;
     return copy;
   }
 
-  convert(type) {
+  Color convert(String type) {
     var converter;
     return this._colorType == type
         ? this.clone()
-        : (converter = converters[this._colorType + '-' + type])
+        : (converter = converters['${_type}-${type}']) != null
           ? converter(this)
-          : converters['rgb-' + type](
-              converters[this._colorType + '-rgb'](this));
+          : converters['rgb-$type'](
+              converters['${_type}-rgb'](this));
   }
-
-    statics: /** @lends Color */{
-      /**
-       * Override Color.extend() to produce getters and setters based
-       * on the component types defined in _components.
-       *
-       * @ignore
-       */
-      extend: function(src) {
-        if (src._colorType) {
-          var comps = components[src._colorType];
-          // Automatically produce the _components field, adding alpha
-          src._components = comps.concat(['alpha']);
-          Base.each(comps, function(name) {
-            var isHue = name === 'hue',
-              part = Base.capitalize(name),
-              name = '_' + name;
-            this['get' + part] = function() {
-              return this[name];
-            };
-            this['set' + part] = function(value) {
-              this[name] = isHue
-                // Keep negative values within modulo 360 too:
-                ? ((value % 360) + 360) % 360
-                // All other values are 0..1
-                : Math.min(Math.max(value, 0), 1);
-              this._changed();
-              return this;
-            };
-          }, src);
-        }
-        return this.base(src);
-      }
-    }
-  };
-
-  // Produce conversion methods for the various color components known by the
-  // possible color types. Requesting any of these components on any color
-  // internally converts the color to the required type and then returns its
-  // component, using bean access.
-  Base.each(components, function(comps, type) {
-    Base.each(comps, function(component) {
-      var part = Base.capitalize(component);
-      fields['get' + part] = function() {
-        // convert to the type that has that component and get the component from that
-        return this.convert(type)[component];
-      };
-      fields['set' + part] = function(value) {
-        // convert to the type we want to set to
-        var color = this.convert(type);
-        // set the value on that
-        color[component] = value;
-        // convert the resulting color back to this type
-        color = color.convert(this._colorType);
-        // then copy all the components to this
-        for (var i = 0, l = this._components.length; i < l; i++) {
-          var key = this._components[i];
-          this[key] = color[key];
-        }
-      };
-    });
-  });
-
-  return fields;
-}, /** @lends Color# */{
 
   /**
    * Called by various setters whenever a color value changes
    */
-  _changed: function() {
-    this._cssString = null;
+  void _changed() {
+    _cssString = null;
     // Loop through the items that use this color and notify them about
     // the style change, so they can redraw.
-    for (var i = 0, l = this._owners && this._owners.length; i < l; i++)
-      this._owners[i]._changed(Change.STYLE);
-  },
+    for(var owner in _owners)
+      owner._changed(Change.STYLE);
+  }
 
   /**
    * Called by PathStyle whenever this color is used to define an item's style
    * This is required to pass on _changed() notifications to the _owners.
    */
-  _addOwner: function(item) {
+   // TODO I think we will have to make this public
+  void _addOwner(item) {
     if (!this._owners)
-      this._owners = [];
-    this._owners.push(item);
-  },
+      _owners = [];
+    _owners.add(item);
+  }
 
   /**
    * Called by PathStyle whenever this color stops being used to define an
@@ -397,14 +544,10 @@ class Color {
    * TODO: Should we remove owners that are not used anymore for good, e.g.
    * in an Item#destroy() method?
    */
-  _removeOwner: function(item) {
-    var index = this._owners ? this._owners.indexOf(item) : -1;
-    if (index != -1) {
-      this._owners.splice(index, 1);
-      if (this._owners.length == 0)
-        delete this._owners;
-    }
-  },
+  void _removeOwner(Item item) {
+    var index = _owners.indexOf(item);
+    if(index != -1) _owners.removeRange(index, 1);
+  }
 
   /**
    * Returns the type of the color as a string.
@@ -416,17 +559,18 @@ class Color {
    * var color = new RgbColor(1, 0, 0);
    * console.log(color.type); // 'rgb'
    */
-  getType: function() {
-    return this._colorType;
-  },
+  getType() {
+    return this._type;
+  }
 
-  getComponents: function() {
+  // TODO do we need this?
+  /*getComponents: function() {
     var length = this._components.length;
     var comps = new Array(length);
     for (var i = 0; i < length; i++)
       comps[i] = this['_' + this._components[i]];
     return comps;
-  },
+  },*/
 
   /**
    * The color's alpha value as a number between {@code 0} and {@code 1}. All
@@ -449,24 +593,21 @@ class Color {
    * // Make the stroke half transparent:
    * circle.strokeColor.alpha = 0.5;
    */
-  getAlpha: function() {
-    return this._alpha != null ? this._alpha : 1;
-  },
+  num getAlpha() {
+    return alpha;
+  }
 
-  setAlpha: function(alpha) {
-    this._alpha = alpha == null ? null : Math.min(Math.max(alpha, 0), 1);
-    this._changed();
+  void setAlpha(num alpha) {
+    this.alpha = alpha;
     return this;
-  },
+  }
 
   /**
    * Checks if the color has an alpha value.
    *
    * @return {Boolean} {@true if the color has an alpha value}
    */
-  hasAlpha: function() {
-    return this._alpha != null;
-  },
+  // TODO put implementation down here
 
   /**
    * Checks if the component color values of the color are the
@@ -475,54 +616,50 @@ class Color {
    * @param {Color} color the color to compare with
    * @return {Boolean} {@true if the colors are the same}
    */
-  equals: function(color) {
-    if (color && color._colorType === this._colorType) {
-      for (var i = 0, l = this._components.length; i < l; i++) {
-        var component = '_' + this._components[i];
-        if (this[component] !== color[component])
-          return false;
+  bool equals(Color color) {
+    // TODO why not consider them equal when they don't have the same type?
+    // TODO we may cause problems with this when we change _type in setters
+    if (color && color._type === this._type) {
+      switch(_type) {
+        case "gray": return _gray == color._gray;
+        case "rgb" : return _red == color._red && _green == color._green && _blue == color._blue;
+        case "hsb" : return _hue == color._hue && _saturation == color._saturation && _brightness == color._brightness;
+        case "hsl" : return _hue == color._hue && _saturation == color._saturation && _lightness == color._lightness;
+        default: return false;
       }
-      return true;
     }
     return false;
-  },
+  }
+  // operator version
+  bool operator == (Color color) => equals(color);
 
   /**
    * {@grouptitle String Representations}
    * @return {String} A string representation of the color.
    */
-  toString: function() {
-    var parts = [],
-      format = Base.formatNumber;
-    for (var i = 0, l = this._components.length; i < l; i++) {
-      var component = this._components[i],
-        value = this['_' + component];
-      if (component === 'alpha' && value == null)
-        value = 1;
-      parts.push(component + ': ' + format(value));
+  String toString() {
+    var format = Base.formatNumber;
+    String alpha_component = "${_alpha == null ? '' : ', alpha: $_alpha'}";
+    switch(_type) {
+      case "gray": return "{ gray: ${_gray}$alpha_component }";
+      case "rgb": return "{ red: $_red, green: $_green, blue: $_blue$alpha_component }";
+      case "hsb": return "{ hue: $_hue, saturation: $_saturation, brightness: $_brightness$alpha_component }";
+      case "hsl": return "{ hue: $_hue, saturation: $_saturation, lightness: $_lightness$alpha_component }";
+      default: "";
     }
-    return '{ ' + parts.join(', ') + ' }';
-  },
+  }
 
   /**
    * @return {String} A css string representation of the color.
    */
-  toCssString: function() {
-    if (!this._cssString) {
-      var color = this.convert('rgb'),
-        alpha = color.getAlpha(),
-        components = [
-          Math.round(color._red * 255),
-          Math.round(color._green * 255),
-          Math.round(color._blue * 255),
-          alpha != null ? alpha : 1
-        ];
-      this._cssString = 'rgba(' + components.join(', ') + ')';
+  String toCssString() {
+    if (_cssString == null) {
+        _cssString = "rgba(${(red*255).round()}, ${(green*255).round()}, ${(blue*255).round()}, alpha)";
     }
     return this._cssString;
-  },
+  }
 
-  getCanvasStyle: function() {
+  String getCanvasStyle() {
     return this.toCssString();
   }
 
@@ -648,14 +785,14 @@ class Color {
    * @property
    * @type Number
    */
-});
+}
 
 /**
  * @name GrayColor
  * @class A GrayColor object is used to represent any gray color value.
  * @extends Color
  */
-var GrayColor = this.GrayColor = Color.extend(/** @lends GrayColor# */{
+class GrayColor extends Color {
   /**
    * Creates a GrayColor object
    *
@@ -675,6 +812,7 @@ var GrayColor = this.GrayColor = Color.extend(/** @lends GrayColor# */{
    * // Create a GrayColor with 50% gray:
    * circle.fillColor = new GrayColor(0.5);
    */
+   GrayColor(num gray, [num alpha]) : Color({"gray": gray, "alpha": alpha}) {}
 
   /**
    * The amount of gray in the color as a value between {@code 0} and
@@ -685,8 +823,7 @@ var GrayColor = this.GrayColor = Color.extend(/** @lends GrayColor# */{
    * @type Number
    */
 
-  _colorType: 'gray'
-});
+}
 
 /**
  * @name RgbColor
@@ -694,7 +831,8 @@ var GrayColor = this.GrayColor = Color.extend(/** @lends GrayColor# */{
  * @extends Color
  */
 // RGBColor references RgbColor inside PaperScopes for backward compatibility
-var RgbColor = this.RgbColor = this.RGBColor = Color.extend(/** @lends RgbColor# */{
+// TODO how about this RGB stuff?
+class RgbColor extends Color {
   /**
    * Creates an RgbColor object
    *
@@ -718,6 +856,8 @@ var RgbColor = this.RgbColor = this.RGBColor = Color.extend(/** @lends RgbColor#
    * // 100% red, 0% blue, 50% blue:
    * circle.fillColor = new RgbColor(1, 0, 0.5);
    */
+   RgbColor(num red, num green, num blue, [num alpha])
+    : Color({"red": red, "green": green, "blue": blue, "alpha": alpha}) {}
 
   /**
    * The amount of red in the color as a value between {@code 0} and
@@ -774,8 +914,7 @@ var RgbColor = this.RgbColor = this.RGBColor = Color.extend(/** @lends RgbColor#
    * circle.fillColor.blue = 1;
    */
 
-  _colorType: 'rgb'
-});
+}
 
 /**
  * @name HsbColor
@@ -783,7 +922,8 @@ var RgbColor = this.RgbColor = this.RGBColor = Color.extend(/** @lends RgbColor#
  * @extends Color
  */
 // HSBColor references HsbColor inside PaperScopes for backward compatibility
-var HsbColor = this.HsbColor = this.HSBColor = Color.extend(/** @lends HsbColor# */{
+// TODO how about this HSBColor stuff?
+class HsbColor extends Color {
   /**
    * Creates an HsbColor object
    *
@@ -808,6 +948,8 @@ var HsbColor = this.HsbColor = this.HSBColor = Color.extend(/** @lends HsbColor#
    * // 100% and a brightness of 100%:
    * circle.fillColor = new HsbColor(90, 1, 1);
    */
+  HsbColor(num hue, num saturation, num brightness, [num alpha])
+    : Color({"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha}) {}
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -852,8 +994,7 @@ var HsbColor = this.HsbColor = this.HSBColor = Color.extend(/** @lends HsbColor#
    * @type Number
    */
 
-  _colorType: 'hsb'
-});
+}
 
 
 /**
@@ -862,7 +1003,8 @@ var HsbColor = this.HsbColor = this.HSBColor = Color.extend(/** @lends HsbColor#
  * @extends Color
  */
 // HSLColor references HslColor inside PaperScopes for backward compatibility
-var HslColor = this.HslColor = this.HSLColor = Color.extend(/** @lends HslColor# */{
+// TODO how about this HSLColor stuff
+class HslColor extends Color {
   /**
    * Creates an HslColor object
    *
@@ -887,6 +1029,8 @@ var HslColor = this.HslColor = this.HSLColor = Color.extend(/** @lends HslColor#
    * // 100% and a lightness of 50%:
    * circle.fillColor = new HslColor(90, 1, 0.5);
    */
+  HslColor(num hue, num saturation, num lightness, [num alpha])
+    : Color({"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha});
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -913,5 +1057,4 @@ var HslColor = this.HslColor = this.HSLColor = Color.extend(/** @lends HslColor#
    * @type Number
    */
 
-  _colorType: 'hsl'
-});
+}
