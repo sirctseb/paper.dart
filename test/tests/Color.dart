@@ -190,8 +190,10 @@ ColorTests() {
     });
 
     test('Color.read(channels)', () {
-      var color = Color.read([0, 0, 1]);
-      compareRgbColors(color, [0, 0, 1, 1]);
+      // TODO fix
+      //var color = Color.read([0, 0, 1]);
+      //compareRgbColors(color, [0, 0, 1, 1]);
+      expect(false);
     });
 
     test('Cloning colors', () {
