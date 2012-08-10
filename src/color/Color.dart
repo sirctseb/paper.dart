@@ -14,6 +14,7 @@
  * All rights reserved.
  */
  #library("Color.dart");
+ #import("../core/Base.dart");
 
 /**
  * @name Color
