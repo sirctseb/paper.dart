@@ -30,9 +30,9 @@
 
 compareNumbers(num number1, num number2, [String message]) {
   if (number1 !== 0)
-    number1 = Math.round(number1 * 100) / 100;
+    number1 = (number1 * 100).round() / 100;
   if (number2 !== 0)
-    number2 = Math.round(number2 * 100) / 100;
+    number2 = (number2 * 100).round() / 100;
   expect(number1, equals(number2), message);
 }
 
