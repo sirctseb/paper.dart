@@ -664,7 +664,7 @@ class Color {
       case "rgb": return "{ red: $_red, green: $_green, blue: $_blue$alpha_component }";
       case "hsb": return "{ hue: $_hue, saturation: $_saturation, brightness: $_brightness$alpha_component }";
       case "hsl": return "{ hue: $_hue, saturation: $_saturation, lightness: $_lightness$alpha_component }";
-      default: "";
+      default: return "";
     }
   }
 
