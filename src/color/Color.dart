@@ -449,7 +449,7 @@ class Color {
   bool _readNull;
 
   //initialize: function(arg) {
-  Color(arg, [arg1, arg2, arg3]) {
+  Color([arg, arg1, arg2, arg3]) {
     if (arg is Map) {
       // Called on the abstract Color class. Guess color type
       // from arg
@@ -484,6 +484,9 @@ class Color {
       _red = rgbColor.red;
       _green = rgbColor.green;
       _blue = rgbColor.blue;
+      _type = "rgb";
+    } else if(arg == null) {
+      _red = _blue = _green = 0;
       _type = "rgb";
     } else {
       // TODO support params to array
