@@ -348,12 +348,17 @@ class Color {
     Base.each(comps, function(component) {
       var part = Base.capitalize(component);
       fields['get' + part] = function() {
+        // convert to the type that has that component and get the component from that
         return this.convert(type)[component];
       };
       fields['set' + part] = function(value) {
+        // convert to the type we want to set to
         var color = this.convert(type);
+        // set the value on that
         color[component] = value;
+        // convert the resulting color back to this type
         color = color.convert(this._colorType);
+        // then copy all the components to this
         for (var i = 0, l = this._components.length; i < l; i++) {
           var key = this._components[i];
           this[key] = color[key];
