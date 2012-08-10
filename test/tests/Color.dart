@@ -40,7 +40,7 @@ ColorTests() {
       //compareRgbColors(path.fillColor, new RgbColor(1, 0, 0));
       //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 0, 1)'));
       color = new Color("f00");
-      compateRgbColors(color, new RgbColor(1, 0, 0));
+      compareRgbColors(color, new RgbColor(1, 0, 0));
       expect(color.toCssString(), equals('rgba(255, 0, 0, 1)'));
     });
 
