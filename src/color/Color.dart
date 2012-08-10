@@ -365,7 +365,7 @@ class Color {
         b = color._brightness,
         i = h.floor(), // 0..5
         f = h - i,
-        i = hsbIndices[i],
+        i = _hsbIndices[i],
         v = [
           b,            // b, index 0
           b * (1 - s),      // p, index 1
