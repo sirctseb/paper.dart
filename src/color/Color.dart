@@ -13,6 +13,7 @@
  *
  * All rights reserved.
  */
+ #library("Color.dart");
 
 /**
  * @name Color
