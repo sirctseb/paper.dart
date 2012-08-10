@@ -124,7 +124,7 @@ ColorTests() {
       var color = new RgbColor(1, 0.5, 0.2);
       compareNumbers(color.gray, 0.38458251953125);
 
-      var color = new RgbColor(0.5, 0.2, 0.1);
+      color = new RgbColor(0.5, 0.2, 0.1);
       compareNumbers(color.gray, 0.72137451171875);
     });
 
@@ -161,13 +161,13 @@ ColorTests() {
       compareNumbers(new GrayColor(rgbColor).gray, 0.38299560546875);
 
       var grayColor = new GrayColor(0.2);
-      var rgbColor = new RgbColor(grayColor);
+      rgbColor = new RgbColor(grayColor);
       compareRgbColors(rgbColor, [ 0.8, 0.8, 0.8, 1]);
 
       var hsbColor = new HsbColor(grayColor);
       compareHsbColors(hsbColor, [ 0, 0, 0.8, 1]);
 
-      var rgbColor = new RgbColor(1, 0, 0);
+      rgbColor = new RgbColor(1, 0, 0);
       compareHsbColors(new HsbColor(rgbColor), [0, 1, 1, 1]);
     });
 
