@@ -455,29 +455,38 @@ class Color {
     if (arg is Map) {
       // Called on the abstract Color class. Guess color type
       // from arg
-      //return arg.red !== undefined
-      return arg.containsKey("red")
-        ? new RgbColor(arg["red"], arg["green"], arg["blue"], arg["alpha"])
-        //: arg.gray !== undefined
-        : arg.containsKey("gray")
-        ? new GrayColor(arg["gray"], arg["alpha"])
-        //: arg.lightness !== undefined
-        : arg.containsKey("lightness")
-        ? new HslColor(arg["hue"], arg["saturation"], arg["lightness"],
-            arg["alpha"])
-        //: arg.hue !== undefined
-        : arg.containsKey("hue")
-        ? new HsbColor(arg["hue"], arg["saturation"], arg["brightness"],
-            arg["alpha"])
-        : new RgbColor(); // Fallback
+      if(arg.containsKey("red")) {
+        _red = arg["red"];
+        _green = arg["green"];
+        _blue = arg["blue"];
+        _alpha = arg["alpha"];
+        _type = "rgb";
+      } else if(arg.containsKey("gray")) {
+        _gray = arg["gray"];
+        _alpha = arg["alpha"];
+        _type = "gray";
+      } else if(arg.containsKey("lightness")) {
+        _hue = arg["hue"];
+        _saturation = arg["saturation"];
+        _brightness = arg["brightness"];
+        _alpha = arg["alpha"];
+        _type = "hsl";
+      } else if(arg.containsKey("hue")) {
+        _hue = arg["hue"];
+        _saturation = arg["saturation"];
+        _lightness = arg["lightness"];
+        _alpha = arg["alpha"];
+        _type = "hsb";
+      } else {
+        _red = _blue = _green = 0;
+        _type = "rgb";
+      }
     } else if (arg is String) {
-      //var rgbColor = arg.match(/^#[0-9a-f]{3,6}$/i)
-      var rgbColor = RegExp(@"^#[0-9a-f]{3,6}$)", false, true).hasMatch(arg)
-          ? _hexToRgbColor(arg)
-          : _nameToRgbColor(arg);
-      return type
-          ? rgbColor.convert(type)
-          : rgbColor;
+      var rgbColor = new RegExp(@"^#[0-9a-f]{3,6}$)", false, true).hasMatch(arg);
+      _red = rgbColor.red;
+      _green = rgbColor.green;
+      _blue = rgbColor.blue;
+      _type = "rgb";
     } else {
       // TODO support params to array
       var components = arg is List ? arg : [arg, arg1, arg2, arg3];
@@ -485,9 +494,17 @@ class Color {
       // from arg
       //if (components.length >= 4)
       //  return new CmykColor(components);
-      if (components.length >= 3)
-        return new RgbColor(components);
-      return new GrayColor(components);
+      if (arg3 != null) {
+        _red = components[0];
+        _green = components[1];
+        _blue = components[2];
+        _alpha = components[3];
+        _type = "rgb";
+      } else {
+        _gray = components[0];
+        _alpha = components[1];
+        _type = "gray";
+      }
     }
   }
 
