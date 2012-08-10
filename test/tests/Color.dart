@@ -122,10 +122,10 @@ ColorTests() {
 
     test('get gray from rgbcolor', () {
       var color = new RgbColor(1, 0.5, 0.2);
-      comparenumbers(color.gray, 0.38458251953125);
+      compareNumbers(color.gray, 0.38458251953125);
 
       var color = new RgbColor(0.5, 0.2, 0.1);
-      comparenumbers(color.gray, 0.72137451171875);
+      compareNumbers(color.gray, 0.72137451171875);
     });
 
     test('Get gray from HsbColor', () {
