@@ -15,7 +15,7 @@
  */
 
 ColorTests() {
-  group("Color Tests" () {
+  group("Color Tests", () {
     test('Set named color', () {
       var path = new Path();
       path.fillColor = 'red';
