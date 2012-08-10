@@ -318,7 +318,7 @@ class Color {
   }
 
   static _hexToRgbColor(String string) {
-    var hex = string.match(/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/);
+    var hex = RexExp(@"/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/").firstMatch(string);
     if (hex.length >= 4) {
       var rgb = new Array(3);
       for (var i = 0; i < 3; i++) {
@@ -812,7 +812,8 @@ class GrayColor extends Color {
    * // Create a GrayColor with 50% gray:
    * circle.fillColor = new GrayColor(0.5);
    */
-   GrayColor(num gray, [num alpha]) : Color({"gray": gray, "alpha": alpha}) {}
+  GrayColor(num gray, [num alpha])
+    : super({"gray": gray, "alpha": alpha}) {}
 
   /**
    * The amount of gray in the color as a value between {@code 0} and
@@ -857,7 +858,7 @@ class RgbColor extends Color {
    * circle.fillColor = new RgbColor(1, 0, 0.5);
    */
    RgbColor(num red, num green, num blue, [num alpha])
-    : Color({"red": red, "green": green, "blue": blue, "alpha": alpha}) {}
+    : super({"red": red, "green": green, "blue": blue, "alpha": alpha}) {}
 
   /**
    * The amount of red in the color as a value between {@code 0} and
@@ -949,7 +950,7 @@ class HsbColor extends Color {
    * circle.fillColor = new HsbColor(90, 1, 1);
    */
   HsbColor(num hue, num saturation, num brightness, [num alpha])
-    : Color({"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha}) {}
+    : super({"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha}) {}
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -1030,7 +1031,7 @@ class HslColor extends Color {
    * circle.fillColor = new HslColor(90, 1, 0.5);
    */
   HslColor(num hue, num saturation, num lightness, [num alpha])
-    : Color({"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha});
+    : super({"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha});
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
