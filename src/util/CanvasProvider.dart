@@ -13,17 +13,20 @@
  *
  * All rights reserved.
  */
+ #library("CanvasProvider.dart");
+ #import("../basic/Basic.dart");
+ #import("dart:html");
 
 // TODO: It might be better to make a ContextProvider class, since you
 // can always find the canvas through context.canvas. This saves code and
 // speed by not having to do canvas.getContext('2d')
 // TODO: Run through the canvas array to find a canvas with the requested
 // width / height, so we don't need to resize it?
-var CanvasProvider = {
-  canvases: [],
-  getCanvas: function(size) {
-    if (this.canvases.length) {
-      var canvas = this.canvases.pop();
+class CanvasProvider {
+  static var canvases = [];
+  static getCanvas(Size size) {
+    if (canvases.length) {
+      var canvas = canvases.pop();
       // If they are not the same size, we don't need to clear them
       // using clearRect and visa versa.
       if ((canvas.width != size.width)
@@ -37,6 +40,11 @@ var CanvasProvider = {
       }
       return canvas;
     } else {
+      var canvas = new CanvasElement();
+      canvas.width = size.width;
+      canvas.height = size.height;
+      return canvas;
+      // TODO what about this stuff below?
 /*#*/ if (options.browser) {
       var canvas = document.createElement('canvas');
       canvas.width = size.width;
@@ -46,9 +54,9 @@ var CanvasProvider = {
       return new Canvas(size.width, size.height);
 /*#*/ } // !options.browser
     }
-  },
-
-  returnCanvas: function(canvas) {
-    this.canvases.push(canvas);
   }
-};
+
+  void returnCanvas(canvas) {
+    canvases.add(canvas);
+  }
+}
