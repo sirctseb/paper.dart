@@ -14,7 +14,9 @@
  * All rights reserved.
  */
  #library("Color.dart");
+ #import("../basic/Basic.dart");
  #import("../core/Base.dart");
+ #import("../util/CanvasProvider.dart");
 
 /**
  * @name Color
@@ -291,7 +293,7 @@ class Color {
     "hsl": ['hue', 'saturation', 'lightness']
   };
 
-  static var colorCache = {};
+  static var colorCache = const {};
   static var colorContext;
 
   static _nameToRgbColor(String name) {
@@ -302,7 +304,7 @@ class Color {
     // values from. Build a cache for all the used colors.
     // TODO woah! this should be interesting
     if (!colorContext) {
-      var canvas = CanvasProvider.getCanvas(Size.create(1, 1));
+      var canvas = CanvasProvider.getCanvas(new Size.create(1, 1));
       colorContext = canvas.getContext('2d');
       colorContext.globalCompositeOperation = 'copy';
     }
@@ -316,7 +318,7 @@ class Color {
     colorContext.fillRect(0, 0, 1, 1);
     var data = colorContext.getImageData(0, 0, 1, 1).data,
       rgb = [data[0] / 255, data[1] / 255, data[2] / 255];
-    return (colorCache[name] = RgbColor.read(rgb)).clone();
+    return (colorCache[name] = new RgbColor(rgb)).clone();
   }
 
   static _hexToRgbColor(String string) {
