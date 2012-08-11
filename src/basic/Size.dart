@@ -585,9 +585,13 @@ class LinkedSize extends Size {
 
   LinkedSize._construct() {}
 
-  factory LinkedSize.create(Object owner, setter, num width, num height, [bool dontLink = false]) {
+  // TODO this can't be a factory constructor because it can return a Size
+  // instead of a LinkedSize. Therefore we don't use new and it is different
+  // than the create of other classes. We should make those static methods
+  // for consistency
+  static Size create(Object owner, setter, num width, num height, [bool dontLink = false]) {
       // See LinkedPoint.create() for an explanation about dontLink.
-      if (dontLink)
+      if (dontLink == false)
         return new Size.create(width, height);
       var size = new LinkedSize._construct();
       size._width = width;
