@@ -366,7 +366,7 @@ class Rectangle {
     return setLeft(point.x).setTop(point.y);
   }
   // property
-  set topLeft(Point value) => setTopLeft(value);
+  set topLeft(/*Point*/ value) => setTopLeft(value);
 
   /**
    * The top-right point of the rectangle.
@@ -385,7 +385,7 @@ class Rectangle {
     return setRight(point.x).setTop(point.y);
   }
   // property
-  set topRight(Point value) => setTopRight(value);
+  set topRight(/*Point*/ value) => setTopRight(value);
 
   /**
    * The bottom-left point of the rectangle.
@@ -404,7 +404,7 @@ class Rectangle {
     return setLeft(point.x).setBottom(point.y);
   }
   // property
-  set bottomLeft(Point value) => setBottomLeft(value);
+  set bottomLeft(/*Point*/ value) => setBottomLeft(value);
 
   /**
    * The bottom-right point of the rectangle.
@@ -423,7 +423,7 @@ class Rectangle {
     return setRight(point.x).setBottom(point.y);
   }
   // property
-  set bottomRight(Point value) => setBottomRight(value);
+  set bottomRight(/*Point*/ value) => setBottomRight(value);
 
   /**
    * The left-center point of the rectangle.
@@ -442,7 +442,7 @@ class Rectangle {
     return setCenterY(point.y).setLeft(point.x);
   }
   // property
-  set leftCenter(Point value) => setLeftCenter(value);
+  set leftCenter(/*Point*/ value) => setLeftCenter(value);
 
   /**
    * The top-center point of the rectangle.
@@ -461,7 +461,7 @@ class Rectangle {
     return setCenter(point.x).setTop(point.y);
   }
   // property
-  set topCenter(Point value) => setTopCenter(value);
+  set topCenter(/*Point*/ value) => setTopCenter(value);
 
   /**
    * The right-center point of the rectangle.
@@ -480,7 +480,7 @@ class Rectangle {
     return setCenter(point.y).setRight(point.x);
   }
   // property
-  set rightCenter(Point value) => setRightCenter(value);
+  set rightCenter(/*Point*/ value) => setRightCenter(value);
 
   /**
    * The bottom-center point of the rectangle.
@@ -499,7 +499,7 @@ class Rectangle {
     return setCenter(point.x).setBottom(point.y);
   }
   // property
-  set bottomCenter(Point value) => setBottomCenter(value);
+  set bottomCenter(/*Point*/ value) => setBottomCenter(value);
 
   /**
    * Checks whether the coordinates and size of the rectangle are equal to
