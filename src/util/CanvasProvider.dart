@@ -40,19 +40,19 @@ class CanvasProvider {
       }
       return canvas;
     } else {
-      var canvas = new CanvasElement();
+      var canvas = new HTML.CanvasElement();
       canvas.width = size.width;
       canvas.height = size.height;
       return canvas;
       // TODO what about this stuff below?
-/*#*/ if (options.browser) {
-      var canvas = document.createElement('canvas');
-      canvas.width = size.width;
-      canvas.height = size.height;
-      return canvas;
-/*#*/ } else { // !options.browser
-      return new Canvas(size.width, size.height);
-/*#*/ } // !options.browser
+///*#*/ if (options.browser) {
+//      var canvas = document.createElement('canvas');
+//      canvas.width = size.width;
+//      canvas.height = size.height;
+//      return canvas;
+///*#*/ } else { // !options.browser
+//      return new Canvas(size.width, size.height);
+///*#*/ } // !options.browser
     }
   }
 
