@@ -304,7 +304,7 @@ class Color {
     // Use a canvas to draw to with the given name and then retrieve rgb
     // values from. Build a cache for all the used colors.
     // TODO woah! this should be interesting
-    if (!colorContext) {
+    if (colorContext == null) {
       var canvas = CanvasProvider.getCanvas(new Size.create(1, 1));
       colorContext = canvas.getContext('2d');
       colorContext.globalCompositeOperation = 'copy';
