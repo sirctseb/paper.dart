@@ -17,6 +17,7 @@
  #import("../basic/Basic.dart");
  #import("../core/Base.dart");
  #import("../util/CanvasProvider.dart");
+ #import("dart:core");
 
 /**
  * @name Color
