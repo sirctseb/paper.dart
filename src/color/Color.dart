@@ -532,7 +532,7 @@ class Color {
 
   Color convert(String type) {
     var converter;
-    return this._colorType == type
+    return _type == type
         ? this.clone()
         : (converter = converters['${_type}-${type}']) != null
           ? converter(this)
