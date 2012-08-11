@@ -201,7 +201,7 @@ class Rectangle {
     return this;
   }
   // TODO does js version have this setter?
-   setsize(Size value) => setSize(value);
+  set size(Size value) => setSize(value);
 
   /**
    * {@grouptitle Side Positions}
@@ -224,7 +224,7 @@ class Rectangle {
     return this;
   }
   // property
-   setleft(value) => setLeft(value);
+  set left(value) => setLeft(value);
 
   /**
    * The top coordinate of the rectangle. Note that this doesn't move the
@@ -245,7 +245,7 @@ class Rectangle {
     return this;
   }
   // property
-   settop(num value) => setTop(value);
+  set top(num value) => setTop(value);
 
   /**
    * The position of the right hand side of the rectangle. Note that this
@@ -265,7 +265,7 @@ class Rectangle {
     return this;
   }
   // property
-   setright(num value) => setRight(value);
+  set right(num value) => setRight(value);
 
   /**
    * The bottom coordinate of the rectangle. Note that this doesn't move the
@@ -285,7 +285,7 @@ class Rectangle {
     return this;
   }
   // property
-   setbottom(num value) => setBottom(value);
+  set bottom(num value) => setBottom(value);
 
   /**
    * The center-x coordinate of the rectangle.
@@ -305,7 +305,7 @@ class Rectangle {
     return this;
   }
   // property
-   setcenterX(num value) => setCenterX(value);
+  set centerX(num value) => setCenterX(value);
 
   /**
    * The center-y coordinate of the rectangle.
@@ -325,7 +325,7 @@ class Rectangle {
     return this;
   }
   // property
-   setcenterY(num value) => setCenterY(value);
+  set centerY(num value) => setCenterY(value);
 
   /**
    * {@grouptitle Corner and Center Point Positions}
