@@ -15,7 +15,7 @@
  */
  #library("CanvasProvider.dart");
  #import("../basic/Basic.dart");
- #import("dart:html");
+ #import("dart:html", prefix: "HTML");
 
 // TODO: It might be better to make a ContextProvider class, since you
 // can always find the canvas through context.canvas. This saves code and
