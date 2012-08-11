@@ -1,0 +1,9 @@
+src/path/SelectionState.dart
+src/util/Numerical.dart
+src/util/CanvasProvider.dart
+src/path/Segment.dart
+src/basic/Basic.dart
+src/path/SegmentPoint.dart
+src/color/Color.dart
+src/core/Base.dart
+test/tests/Tests.dart
