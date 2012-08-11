@@ -776,7 +776,7 @@ class Rectangle {
    *
    * @param {Point} point
    */
-  Rectangle include(Point point) {
+  Rectangle include(/*Point*/ point) {
     point = Point.read(point);
     num x1 = Math.min(this.x, point.x);
     num y1 = Math.min(this.y, point.y);
