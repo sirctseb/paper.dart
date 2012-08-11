@@ -534,7 +534,7 @@ class Point {
     return this;
   }
   // property setter for length
-  num set length(num value) => setLength(value);
+  set length(num value) => setLength(value);
 
   /**
    * Normalize modifies the {@link #length} of the vector to {@code 1} without
