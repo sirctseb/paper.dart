@@ -579,7 +579,7 @@ class Point {
    * @bean
    * @type Number
    */
-  num getAngle([Point point = null]) {
+  num getAngle([/*Point*/ point]) {
     // Hide parameters from Bootstrap so it injects bean too
     _angle = getAngleInRadians(point) * 180 / Math.PI;
     return _angle;
