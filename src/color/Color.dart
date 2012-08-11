@@ -323,7 +323,7 @@ class Color {
   }
 
   static _hexToRgbColor(String string) {
-    var hex = RexExp(@"/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/").firstMatch(string);
+    var hex = new RegExp(@"/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/").firstMatch(string);
     if (hex.length >= 4) {
       var rgb = new Array(3);
       for (var i = 0; i < 3; i++) {
