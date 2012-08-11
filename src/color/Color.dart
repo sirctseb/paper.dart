@@ -294,10 +294,11 @@ class Color {
     "hsl": ['hue', 'saturation', 'lightness']
   };
 
-  static var colorCache = const {};
+  static var colorCache;
   static var colorContext;
 
   static _nameToRgbColor(String name) {
+    if(colorCache == null) colorCache = {};
     var color = colorCache[name];
     if (color != null)
       return color.clone();
