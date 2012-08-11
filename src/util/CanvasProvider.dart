@@ -23,9 +23,9 @@
 // TODO: Run through the canvas array to find a canvas with the requested
 // width / height, so we don't need to resize it?
 class CanvasProvider {
-  static var canvases = [];
+  static var canvases = const [];
   static getCanvas(Size size) {
-    if (canvases.length) {
+    if (canvases.length > 0) {
       var canvas = canvases.pop();
       // If they are not the same size, we don't need to clear them
       // using clearRect and visa versa.
