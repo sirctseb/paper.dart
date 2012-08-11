@@ -186,7 +186,7 @@ class Rectangle {
    * @type Size
    * @bean
    */
-  Size getSize([dontLink]) {
+  Size getSize([dontLink = false]) {
     // See Rectangle#getPoint() about arguments[0]
     return new LinkedSize.create(this, 'setSize', width, height,
         dontLink);
