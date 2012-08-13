@@ -325,14 +325,30 @@ class Color {
     return (colorCache[name] = new RgbColor(rgb)).clone();
   }
 
+  // TODO use Math.parseInt(..., 16) once they implement it
+  static int parseHex(String hex) {
+    int result = 0;
+    for(int i = hex.length - 1; i >= 0; i--) {
+      result += hex[i] == "a" ? 10 << i * 4 :
+                hex[i] == "b" ? 11 << i * 4 :
+                hex[i] == "c" ? 12 << i * 4 :
+                hex[i] == "d" ? 13 << i * 4 :
+                hex[i] == "e" ? 14 << i * 4 :
+                hex[i] == "f" ? 15 << i * 4 :
+                Math.parseInt(hex[i]) << i * 4;
+    }
+    return result;
+  }
   static _hexToRgbColor(String string) {
-    var hex = new RegExp(@"/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/").firstMatch(string);
-    if (hex.length >= 4) {
+    var hex = new RegExp(@"^#?(\w{1,2})(\w{1,2})(\w{1,2})$").firstMatch(string);
+    if (hex.groupCount() >= 4) {
       var rgb = new List(3);
       for (var i = 0; i < 3; i++) {
         var channel = hex[i + 1];
-        rgb[i] = Math.parseInt(channel.length == 1
-            ? "$channel$channel" : "$channel", 16) / 255;
+        rgb[i] = parseHex(channel.length == 1
+                ? "$channel$channel" : "$channel") / 255;
+        //rgb[i] = Math.parseInt(channel.length == 1
+        //    ? "$channel$channel" : "$channel", 16) / 255;
       }
       return new RgbColor(rgb[0], rgb[1], rgb[2]);
     }
@@ -357,8 +373,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
+        max = Math.max(r, Math.max(g, b)),
+        min = Math.min(r, Math.max(g, b)),
         delta = max - min,
         h = delta == 0 ? 0
           :   ( max == r ? (g - b) / delta + (g < b ? 6 : 0)
@@ -391,8 +407,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
+        max = Math.max(r, Math.max(g, b)),
+        min = Math.min(r, Math.max(g, b)),
         delta = max - min,
         achromatic = delta == 0,
         h = achromatic ? 0
@@ -499,6 +515,17 @@ class Color {
     } else if(arg == null) {
       _red = _blue = _green = 0;
       _type = "rgb";
+    } else if(arg is Color) {
+      _red = arg._red;
+      _green = arg._green;
+      _blue = arg._blue;
+      _gray = arg._gray;
+      _hue = arg._hue;
+      _saturation = arg._saturation;
+      _brightness = arg._brightness;
+      _lightness = arg._lightness;
+      _alpha = arg._alpha;
+      _type = arg._type;
     } else {
       // TODO support params to array
       var components = arg is List ? arg : [arg, arg1, arg2, arg3];
@@ -506,11 +533,11 @@ class Color {
       // from arg
       //if (components.length >= 4)
       //  return new CmykColor(components);
-      if (arg3 != null) {
+      if (components.length >= 2) {
         _red = components[0];
         _green = components[1];
         _blue = components[2];
-        _alpha = components[3];
+        _alpha = components.length > 3 ? components[3] : null;
         _type = "rgb";
       } else {
         _gray = components[0];
@@ -533,6 +560,8 @@ class Color {
     copy._saturation = _saturation;
     copy._brightness = _brightness;
     copy._lightness = _lightness;
+    copy._alpha = _alpha;
+    copy._type = _type;
     return copy;
   }
 
@@ -685,7 +714,7 @@ class Color {
    */
   String toCssString() {
     if (_cssString == null) {
-        _cssString = "rgba(${(red*255).round()}, ${(green*255).round()}, ${(blue*255).round()}, alpha)";
+        _cssString = "rgba(${(red*255).round().toInt()}, ${(green*255).round().toInt()}, ${(blue*255).round().toInt()}, $alpha)";
     }
     return this._cssString;
   }
@@ -981,7 +1010,9 @@ class HsbColor extends Color {
    * circle.fillColor = new HsbColor(90, 1, 1);
    */
   HsbColor(/*num*/ hue, [num saturation, num brightness, num alpha])
-    : super(hue is num ? {"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha} : hue) {}
+    : super(hue is num ? {"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha} :
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "brightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue) {}
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -1062,7 +1093,9 @@ class HslColor extends Color {
    * circle.fillColor = new HslColor(90, 1, 0.5);
    */
   HslColor(/*num*/ hue, [num saturation, num lightness, num alpha])
-    : super(hue is num ? {"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha} : hue);
+    : super(hue is num ? {"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha} :
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "lightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue) {}
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
