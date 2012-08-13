@@ -201,7 +201,7 @@ class Size {
    */
   // TODO support first version with read
   Size add(/*Size*/ size) {
-    size = Size.read(arguments);
+    size = Size.read(size);
     return new Size.create(width + size.width, height + size.height);
   }
   // operator
@@ -239,7 +239,7 @@ class Size {
    */
   // TODO support first version with read
   Size subtract(/*Size*/ size) {
-    size = Size.read(arguments);
+    size = Size.read(size);
     return new Size.create(width - size.width, height - size.height);
   }
   // operator
@@ -276,7 +276,7 @@ class Size {
    */
   // TODO support first version with read
   Size multiply(/*Size*/ size) {
-    size = Size.read(arguments);
+    size = Size.read(size);
     return new Size.create(width * size.width, height * size.height);
   }
   // operator
@@ -313,7 +313,7 @@ class Size {
    */
   // TODO support first version with read
   Size divide(/*Size*/ size) {
-    size = Size.read(arguments);
+    size = Size.read(size);
     return new Size.create(width / size.width, height / size.height);
   }
   // operator
@@ -349,7 +349,7 @@ class Size {
    */
   // TODO support first version with read
   Size modulo(/*Size*/ size) {
-    size = Size.read(arguments);
+    size = Size.read(size);
     return new Size.create(width % size.width, height % size.height);
   }
   // operator
@@ -399,7 +399,7 @@ class Size {
    * @return {Boolean} {@true if the width or height of the size are NaN}
    */
   bool isNaN() {
-    return isNaN(width) || isNaN(height);
+    return width.isNaN() || height.isNaN();
   }
 
   Size.create(num width, num height) {
@@ -481,7 +481,7 @@ class Size {
    */
    Size round() {
     // TODO check if dart's round is the same as js
-    returns new Size.create(width.round(), height.round());
+    return new Size.create(width.round(), height.round());
    }
 
   /**

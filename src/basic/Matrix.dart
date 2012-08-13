@@ -42,6 +42,7 @@
  * matrix multiplication).
  */
 class Matrix {
+  num _a, _b, _c, _d, _tx, _ty;
   /**
    * Creates a 2D affine transform.
    *
@@ -63,7 +64,7 @@ class Matrix {
    * @return {Matrix} A copy of this transform.
    */
   Matrix clone() {
-    return new Matrix.create(_a, _c, _b, _d, _tx, _ty);
+    return new Matrix(_a, _c, _b, _d, _tx, _ty);
   }
 
   /**
@@ -115,7 +116,7 @@ class Matrix {
   // Concatenate this transform with a scaling transformation
   Matrix scale(num hor, /*num or Point*/ vert, [/*Point*/ center = null]) {
 
-    if(vert !is num) {
+    if(vert is! num) {
       center = Point.read(vert);
       vert= hor;
     } else {
@@ -129,8 +130,8 @@ class Matrix {
 
     _a *= hor;
     _c *= hor;
-    _b *= ver;
-    _d *= ver;
+    _b *= vert;
+    _d *= vert;
 
     // undo translate if center supplied   
     if(center != null) {
@@ -209,7 +210,7 @@ class Matrix {
    * @return {Matrix} This affine transform
    */
   Matrix shear(num hor, [/*num or Point*/ ver, /*Point*/ center]) {
-    if(ver !is num) {
+    if(ver is! num) {
       center = Point.read(ver);
       ver = hor;
     } else {
@@ -373,7 +374,7 @@ class Matrix {
   transform(/* point | */ src, [srcOff, dst, dstOff, numPts]) {
     return numPts == null
       // TODO: Check for rectangle and use _tranformBounds?
-      ? this._transformPoint(Point.read(src))
+      ? this.transformPoint(Point.read(src))
       : this._transformCoordinates(src, srcOff, dst, dstOff, numPts);
   }
 
@@ -381,14 +382,14 @@ class Matrix {
    * A faster version of transform that only takes one point and does not
    * attempt to convert it.
    */
-  Point _transformPoint(Point point, [Point dest]) {
+  Point transformPoint(Point point, [Point dest]) {
     num x = point.x;
     num y = point.y;
     if (dest == null)
       dest = new Point();
     return dest.set(
       x * this._a + y * this._b + this._tx,
-      x * this._c + y * this._d + this._ty,
+      x * this._c + y * this._d + this._ty
     );
   }
 
@@ -411,7 +412,7 @@ class Matrix {
     num x2 = x1 + rect.width;
     num y2 = y1 + rect.height;
     List coords = [ x1, y1, x2, y1, x2, y2, x1, y2 ];
-    return new this._transformCoordinates(coords, 0, coords, 0, 4);
+    return this._transformCoordinates(coords, 0, coords, 0, 4);
   }
 
   /**
@@ -452,7 +453,7 @@ class Matrix {
    */
   num _getDeterminant() {
     var det = _a * _d - _b * _c;
-    return isFinite(det) && Math.abs(det) > Numerical.EPSILON
+    return isFinite(det) && det.abs() > Numerical.EPSILON
         && isFinite(_tx) && isFinite(_ty)
         ? det : null;
   }
@@ -493,7 +494,7 @@ class Matrix {
   num getRotation() {
     num angle1 = -Math.atan2(_b, _d);
     num angle2 = Math.atan2(_c, _a);
-    return Math.abs(angle1 - angle2) < Numerical.TOLERANCE
+    return (angle1 - angle2).abs() < Numerical.TOLERANCE
         ? angle1 * 180 / Math.PI : null;
   }
 
@@ -509,7 +510,7 @@ class Matrix {
   }
   // operator version
   bool operator == (Matrix mx) {
-    return this.equales(mx);
+    return equals(mx);
   }
 
   /**
@@ -585,7 +586,7 @@ class Matrix {
   // TODO what input types to accept?
   Matrix setToTranslation(delta, [num y]) {
     num x;
-    if(delta !is num) {
+    if(delta is! num) {
       delta = Point.read(delta);
       x = delta.x;
       y = delta.y;
@@ -671,7 +672,7 @@ class Matrix {
    * @return {Matrix} A transform representing a shearing transformation
    */
   Matrix.getShearInstance(num hor, num ver, [Point center]) {
-    this.setToShear(hort, ver, center);
+    this.setToShear(hor, ver, center);
   }
 
   /**

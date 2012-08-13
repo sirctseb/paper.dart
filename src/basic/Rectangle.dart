@@ -114,6 +114,7 @@ class Rectangle {
    * @name Rectangle#x
    * @type Number
    */
+  void setX(num value) { _x = value; }
   num get x() => _x;
       set x(num value) => _x = value;
 
@@ -123,6 +124,7 @@ class Rectangle {
    * @name Rectangle#y
    * @type Number
    */
+  void setY(num value) { _y = value; }
   num get y() => _y;
       set y(num value) => _y = value;
 
@@ -165,7 +167,7 @@ class Rectangle {
   Point getPoint([dontLink = false]) {
     // Pass on the optional argument dontLink which tells LinkedPoint to
     // produce a normal point instead. Used internally for speed reasons.
-    return new LinkedPoint(this, setPoint, x, y,
+    return new LinkedPoint.create(this, setPoint, x, y,
         dontLink);
   }
   // point property
@@ -850,6 +852,7 @@ class Rectangle {
  */
 class LinkedRectangle extends Rectangle {
   bool _dontNotify;
+  var _owner, _setter;
 
   LinkedRectangle set(num x, num y, num width, num height, [bool dontNotify = false]) {
     this._x = x;
@@ -875,19 +878,19 @@ class LinkedRectangle extends Rectangle {
     _owner = owner;
     _setter = setter;
     _dontNotify = false;
-    return rect;
+    //return rect;
   }
 
   // Notifying accessors
   Rectangle setX(num x) {
-    super.setX(value);
+    super.setX(x);
     if(!_dontNotify) _setter(this);
     return this;
   }
   set x(num value) => setX(value);
 
   Rectangle setY(num y) {
-    super.setY(value);
+    super.setY(y);
     if(!_dontNotify) _setter(this);
     return this;
   }

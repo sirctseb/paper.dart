@@ -13,11 +13,11 @@
  *
  * All rights reserved.
  */
- #library("Color.dart");
- #import("../basic/Basic.dart");
- #import("../core/Base.dart");
- #import("../util/CanvasProvider.dart");
- #import("dart:core");
+#library("Color.dart");
+#import("../basic/Basic.dart");
+#import("../core/Base.dart");
+#import("../util/CanvasProvider.dart");
+#import("dart:core");
 
 /**
  * @name Color
@@ -68,9 +68,11 @@ class Color {
   String _type;
 
   // Items that use this color object for styling
-  List<Item> _owners;
+  List _owners;
 
   num _alpha;
+  
+  String _cssString;
 
   // accessors
   // helper functions for validating input
@@ -103,7 +105,7 @@ class Color {
 
   // helper function to set rgb values from whatever the color currently is
   void _updateRgb() {
-      RgbColor color = this.convert("rgb");
+      Color color = this.convert("rgb");
       _red = color.red;
       _blue = color.blue;
       _green = color.green;
@@ -287,12 +289,12 @@ class Color {
   bool hasAlpha() => _alpha != null;
 
 
-  static var components = {
-    "gray": ['gray'],
-    "rgb": ['red', 'green', 'blue'],
-    "hsb": ['hue', 'saturation', 'brightness'],
-    "hsl": ['hue', 'saturation', 'lightness']
-  };
+  /*static var components = const {
+    "gray": const ['gray'],
+    "rgb": const ['red', 'green', 'blue'],
+    "hsb": const ['hue', 'saturation', 'brightness'],
+    "hsl": const ['hue', 'saturation', 'lightness']
+  };*/
 
   static var colorCache;
   static var colorContext;
@@ -326,28 +328,31 @@ class Color {
   static _hexToRgbColor(String string) {
     var hex = new RegExp(@"/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/").firstMatch(string);
     if (hex.length >= 4) {
-      var rgb = new Array(3);
+      var rgb = new List(3);
       for (var i = 0; i < 3; i++) {
         var channel = hex[i + 1];
-        rgb[i] = parseInt(channel.length == 1
-            ? channel + channel : channel, 16) / 255;
+        rgb[i] = Math.parseInt(channel.length == 1
+            ? "$channel$channel" : "$channel", 16) / 255;
       }
-      return RgbColor.read(rgb);
+      return new RgbColor(rgb[0], rgb[1], rgb[2]);
     }
   }
 
   // For hsb-rgb conversion, used to lookup the right parameters in the
   // values array.
-  static var _hsbIndices = [
-    [0, 3, 1], // 0
-    [2, 0, 1], // 1
-    [1, 0, 3], // 2
-    [1, 2, 0], // 3
-    [3, 1, 0], // 4
-    [0, 1, 2]  // 5
+  static var _hsbIndices = const [
+    const [0, 3, 1], // 0
+    const [2, 0, 1], // 1
+    const [1, 0, 3], // 2
+    const [1, 2, 0], // 3
+    const [3, 1, 0], // 4
+    const [0, 1, 2]  // 5
   ];
 
-  static var _converters = {
+  static Map _converters;
+  static _initconverters () {
+    if(_converters == null)
+      _converters = {
     'rgb-hsb': (color) {
       var r = color._red,
         g = color._green,
@@ -448,6 +453,7 @@ class Color {
       return new HslColor(0, 0, 1 - color._gray, color._alpha);
     }
   };
+  }
 
 //  var fields = /** @lends Color# */{
   bool _readNull;
@@ -531,13 +537,14 @@ class Color {
   }
 
   Color convert(String type) {
+    _initconverters();
     var converter;
     return _type == type
         ? this.clone()
-        : (converter = converters['${_type}-${type}']) != null
+        : (converter = _converters['${_type}-${type}']) != null
           ? converter(this)
-          : converters['rgb-$type'](
-              converters['${_type}-rgb'](this));
+          : _converters['rgb-$type'](
+              _converters['${_type}-rgb'](this));
   }
 
   /**
@@ -557,7 +564,7 @@ class Color {
    */
    // TODO I think we will have to make this public
   void _addOwner(item) {
-    if (!this._owners)
+    if (this._owners == null)
       _owners = [];
     _owners.add(item);
   }
@@ -568,7 +575,7 @@ class Color {
    * TODO: Should we remove owners that are not used anymore for good, e.g.
    * in an Item#destroy() method?
    */
-  void _removeOwner(Item item) {
+  void _removeOwner(/*Item*/ item) {
     var index = _owners.indexOf(item);
     if(index != -1) _owners.removeRange(index, 1);
   }
@@ -621,7 +628,7 @@ class Color {
     return alpha;
   }
 
-  void setAlpha(num alpha) {
+  Color setAlpha(num alpha) {
     this.alpha = alpha;
     return this;
   }
@@ -643,7 +650,7 @@ class Color {
   bool equals(Color color) {
     // TODO why not consider them equal when they don't have the same type?
     // TODO we may cause problems with this when we change _type in setters
-    if (color && color._type === this._type) {
+    if (color != null && color._type === this._type) {
       switch(_type) {
         case "gray": return _gray == color._gray;
         case "rgb" : return _red == color._red && _green == color._green && _blue == color._blue;
@@ -836,7 +843,7 @@ class GrayColor extends Color {
    * // Create a GrayColor with 50% gray:
    * circle.fillColor = new GrayColor(0.5);
    */
-  GrayColor(num gray, [num alpha])
+  GrayColor(/*num*/ gray, [num alpha])
     : super({"gray": gray, "alpha": alpha}) {}
 
   /**

@@ -150,10 +150,10 @@ ColorTests() {
       compareNumbers(color.red, 0);
 
       color.red = 0.5;
-      compareNumbers(color.gray, '0.84999');
+      compareNumbers(color.gray, 0.84999);
 
       color.green = 0.2;
-      compareNumbers(color.gray, '0.82051');
+      compareNumbers(color.gray, 0.82051);
     });
 
     test('Converting Colors', () {
@@ -162,10 +162,10 @@ ColorTests() {
 
       var grayColor = new GrayColor(0.2);
       rgbColor = new RgbColor(grayColor);
-      compareRgbColors(rgbColor, [ 0.8, 0.8, 0.8, 1]);
+      compareRgbColors(rgbColor, new Color([ 0.8, 0.8, 0.8, 1]));
 
       var hsbColor = new HsbColor(grayColor);
-      compareHsbColors(hsbColor, [ 0, 0, 0.8, 1]);
+      compareHsbColors(hsbColor, new HsbColor([ 0, 0, 0.8, 1]));
 
       rgbColor = new RgbColor(1, 0, 0);
       compareHsbColors(new HsbColor(rgbColor), [0, 1, 1, 1]);

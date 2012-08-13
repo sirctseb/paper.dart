@@ -54,7 +54,7 @@ compareNumbers(num number1, num number2, [String message]) {
       (message || '') + ' height');
 }*/
 
-compareRgbColors(Color color1, Color color2, [String message]) {
+compareRgbColors(/*Color*/ color1, /*Color*/ color2, [String message]) {
   color1 = new RgbColor(color1);
   color2 = new RgbColor(color2);
 
@@ -68,7 +68,7 @@ compareRgbColors(Color color1, Color color2, [String message]) {
       '$message alpha');
 }
 
-compareHsbColors(Color color1, Color color2, message) {
+compareHsbColors(/*Color*/ color1, /*Color*/ color2, [message = ""]) {
   color1 = new HsbColor(color1);
   color2 = new HsbColor(color2);
 
@@ -82,7 +82,7 @@ compareHsbColors(Color color1, Color color2, message) {
       '$message alpha');
 }
 
-function compareGrayColors(color1, color2, message) {
+compareGrayColors(color1, color2, [message = ""]) {
   color1 = new GrayColor(color1);
   color2 = new GrayColor(color2);
 

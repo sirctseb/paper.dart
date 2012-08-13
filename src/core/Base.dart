@@ -14,8 +14,8 @@
  * All rights reserved.
  */
 
- #library("Base.dart");
- #import("dart:math");
+#library("Base.dart");
+#import("dart:math");
 
 /**
  * @name Base

@@ -125,8 +125,8 @@ class Line /** @lends Line# */ {
     num b = this.point.y - (m * this.point.x); // y offset
     // Distance to the linear equation
     num dist = (point.y - (m * point.x) - b).abs() / Math.sqrt(m * m + 1);
-    return infinite ? dist : Math.min(dist,
+    return infinite ? dist : Math.min(dist, Math.min(
         point.getDistance(this.point),
-        point.getDistance(this.point + this.vector));
+        point.getDistance(this.point + this.vector)));
   }
 }

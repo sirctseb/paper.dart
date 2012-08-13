@@ -416,7 +416,7 @@ class Point {
    */
   Point divide(/*Point*/ point) {
     point = Point.read(point);
-    return new Point.create(x / value.x, y / value.y);
+    return new Point.create(x / point.x, y / point.y);
   }
   // operator version
   Point operator / (/*Point*/ point) {
@@ -453,7 +453,7 @@ class Point {
    */
   Point modulo(/*Point*/ point) {
     point = Point.read(point);
-    return new Point.create(x % value.x, y % value.y);
+    return new Point.create(x % point.x, y % point.y);
   }
   // operator version
   Point operator % (/*Point*/ point) {
@@ -475,7 +475,7 @@ class Point {
    */
   Point transform(Matrix matrix) {
     // TODO operator for matrix-point multiplication?
-    return matrix ? matrix.transformPoint(this) : this;
+    return matrix != null ? matrix.transformPoint(this) : this;
   }
 
   /**
@@ -632,7 +632,7 @@ class Point {
       point = Point.read(point);
       num div = getLength() * point.getLength();
       if (div == 0) {
-        return NaN;
+        return double.NAN;
       } else {
         return Math.acos(this.dot(point) / div);
       }
@@ -797,7 +797,7 @@ class Point {
    * @returns {Boolean} {@true if either x or y are not a number}
    */
   bool isNaN() {
-    return isNaN(x) || isNaN(y);
+    return x.isNaN() || y.isNaN();
   }
 
   /**
@@ -896,7 +896,7 @@ class Point {
   static Point max(/*Point*/ point1, /*Point*/ point2) {
     point1 = Point.read(point1);
     point2 = Point.read(point2);
-    return Point.create(
+    return new Point.create(
       Math.max(point1.x, point2.x),
       Math.max(point1.y, point2.y)
     );
@@ -1030,7 +1030,7 @@ class LinkedPoint extends Point {
     //_owner[_setter](this);
     _setter(this);
   }
-  num set x(num value) => setX(value);
+  set x(num value) => setX(value);
 
   // TODO Point should already have this method
   //num getY() {
@@ -1042,7 +1042,7 @@ class LinkedPoint extends Point {
     //_owner[_setter](this);
     _setter(this);
   }
-  num set y(num value) => setY(value);
+  set y(num value) => setY(value);
 
   LinkedPoint._construct() {}
 
