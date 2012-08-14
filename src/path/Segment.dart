@@ -183,7 +183,7 @@ class Segment {
 
   int _selectionState;
   bool _isSelected(SegmentPoint point) {
-    var state = this._selectionState;
+    int state = _selectionState == null ? 0 : _selectionState;
     // TODO check operator precedence
     return point === _point ? (state & SelectionState.POINT) != 0
       : point === _handleIn ? (state & SelectionState.HANDLE_IN) != 0
