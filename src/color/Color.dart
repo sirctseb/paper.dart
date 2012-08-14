@@ -983,7 +983,7 @@ class HsbColor extends Color {
    */
   HsbColor(/*num*/ hue, [num saturation, num brightness, num alpha])
     : super(hue is num ? {"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha} :
-            hue is List ? {"hue": hue[0], "saturation": hue[1], "brightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "brightness": hue[2], "alpha": hue.length > 3 ? hue[3] : null} :
             hue is Color ? null : hue) {
     if(hue is Color) {
       setComponents(hue.convert("hsb"));
@@ -1071,7 +1071,7 @@ class HslColor extends Color {
    */
   HslColor(/*num*/ hue, [num saturation, num lightness, num alpha])
     : super(hue is num ? {"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha} :
-            hue is List ? {"hue": hue[0], "saturation": hue[1], "lightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "lightness": hue[2], "alpha": hue.length > 3 ? hue[3] : null} :
             hue is Color ? null : hue) {
     if(hue is Color) {
       setComponents(hue.convert("hsl"));
