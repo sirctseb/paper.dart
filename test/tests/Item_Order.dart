@@ -17,7 +17,7 @@
 ItemOrderTests() {
   group("Item Order Tests", () {
 
-    test('Item Order', function() {
+    test('Item Order', () {
       var line = new Path();
       line.add([0, 0], [100, 100]);
       line.name = 'line';
@@ -28,79 +28,79 @@ ItemOrderTests() {
       var group = new Group([circle]);
       group.name = 'group';
 
-      equals(function() {
+      equals(() {
         return circle.isAbove(line);
         }, true);
-      equals(function() {
+      equals(() {
         return line.isBelow(circle);
         }, true);
 
-      equals(function() {
+      equals(() {
         return group.isAbove(line);
         }, true);
-      equals(function() {
+      equals(() {
         return line.isBelow(group);
         }, true);
 
 
-      equals(function() {
+      equals(() {
         return group.isAncestor(circle);
         }, true);
 
-      equals(function() {
+      equals(() {
         return circle.isDescendant(group);
         }, true);
 
 
-      equals(function() {
+      equals(() {
         return group.isAbove(circle);
         }, false);
 
-      equals(function() {
+      equals(() {
         return group.isBelow(circle);
         }, false);
     });
 
-    test('Item#moveAbove(item) / Item#moveBelow(item)', function() {
+    test('Item#moveAbove(item) / Item#moveBelow(item)', () {
       var item0, item1, item2;
-      var testMove = function(command, indexes) {
+      var testMove = (command, indexes) {
         paper.project.activeLayer.remove();
         new Layer();
         item0 = new Group();
         item1 = new Group();
         item2 = new Group();
         command();
-        equals(function() {
+        equals(() {
           return item0.index;
           }, indexes[0], command.toString());
-        equals(function() {
+        equals(() {
           return item1.index;
           }, indexes[1]);
-        equals(function() {
+        equals(() {
           return item2.index;
           }, indexes[2]);
       }
 
-      testMove(function() { item0.moveBelow(item0) }, [0,1,2]);
-      testMove(function() { item0.moveBelow(item1) }, [0,1,2]);
-      testMove(function() { item0.moveBelow(item2) }, [1,0,2]);
-      testMove(function() { item1.moveBelow(item0) }, [1,0,2]);
-      testMove(function() { item1.moveBelow(item1) }, [0,1,2]);
-      testMove(function() { item1.moveBelow(item2) }, [0,1,2]);
+      testMove(() { item0.moveBelow(item0) }, [0,1,2]);
+      testMove(() { item0.moveBelow(item1) }, [0,1,2]);
+      testMove(() { item0.moveBelow(item2) }, [1,0,2]);
+      testMove(() { item1.moveBelow(item0) }, [1,0,2]);
+      testMove(() { item1.moveBelow(item1) }, [0,1,2]);
+      testMove(() { item1.moveBelow(item2) }, [0,1,2]);
 
-      testMove(function() { item2.moveBelow(item0) }, [1,2,0]);
-      testMove(function() { item2.moveBelow(item1) }, [0,2,1]);
-      testMove(function() { item2.moveBelow(item2) }, [0,1,2]);
+      testMove(() { item2.moveBelow(item0) }, [1,2,0]);
+      testMove(() { item2.moveBelow(item1) }, [0,2,1]);
+      testMove(() { item2.moveBelow(item2) }, [0,1,2]);
 
-      testMove(function() { item0.moveAbove(item0) }, [0,1,2]);
-      testMove(function() { item0.moveAbove(item1) }, [1,0,2]);
-      testMove(function() { item0.moveAbove(item2) }, [2,0,1]);
-      testMove(function() { item1.moveAbove(item0) }, [0,1,2]);
-      testMove(function() { item1.moveAbove(item1) }, [0,1,2]);
-      testMove(function() { item1.moveAbove(item2) }, [0,2,1]);
-      testMove(function() { item2.moveAbove(item0) }, [0,2,1]);
-      testMove(function() { item2.moveAbove(item1) }, [0,1,2]);
-      testMove(function() { item2.moveAbove(item2) }, [0,1,2]);
+      testMove(() { item0.moveAbove(item0) }, [0,1,2]);
+      testMove(() { item0.moveAbove(item1) }, [1,0,2]);
+      testMove(() { item0.moveAbove(item2) }, [2,0,1]);
+      testMove(() { item1.moveAbove(item0) }, [0,1,2]);
+      testMove(() { item1.moveAbove(item1) }, [0,1,2]);
+      testMove(() { item1.moveAbove(item2) }, [0,2,1]);
+      testMove(() { item2.moveAbove(item0) }, [0,2,1]);
+      testMove(() { item2.moveAbove(item1) }, [0,1,2]);
+      testMove(() { item2.moveAbove(item2) }, [0,1,2]);
     });
   });
 }
