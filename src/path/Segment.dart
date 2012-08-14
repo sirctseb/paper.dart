@@ -382,6 +382,14 @@ class Segment {
   }
   // operator
   bool operator == (Segment segment) => equals(segment);
+  
+  // access the properties by key
+  Point operator[] (String key) {
+    if(key == "point") return _point;
+    if(key == "handleIn") return _handleIn;
+    if(key == "handleOut") return _handleOut;
+    return null;
+  }
 
   /**
    * @return {String} A string representation of the segment.
@@ -389,10 +397,10 @@ class Segment {
   String toString() {
     var sb = new StringBuffer();
     sb.add("{ point: ${_point}");
-    if(!_handleIn.isZero()) {
+    if(_handleIn != null && !_handleIn.isZero()) {
       sb.add(", handleIn: ${_handleIn}");
     }
-    if(!_handleOut.isZero()) {
+    if(_handleOut != null && !_handleOut.isZero()) {
       sb.add(", handleOut: ${_handleOut}");
     }
     sb.add(" }");
