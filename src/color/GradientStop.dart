@@ -20,7 +20,7 @@
  *
  * @class The GradientStop object.
  */
-var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
+class GradientStop {
   /**
    * Creates a GradientStop object.
    *
@@ -28,7 +28,7 @@ var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
    * @param {Number} [rampPoint=0] the position of the stop on the gradient
    *                               ramp {@default 0}
    */
-  initialize: function(arg0, arg1) {
+  GradientStop(arg0, arg1) {
     if (arg1 === undefined && Array.isArray(arg0)) {
       // [color, rampPoint]
       this.setColor(arg0[0]);
@@ -42,48 +42,48 @@ var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
       this.setColor(arg0);
       this.setRampPoint(arg1);
     }
-  },
+  }
 
   // TODO: Do we really need to also clone the color here?
   /**
    * @return {GradientColor} a copy of the gradient-stop
    */
-  clone: function() {
+  GradientStop clone() {
     return new GradientStop(this._color.clone(), this._rampPoint);
-  },
+  }
 
   /**
    * Called by various setters whenever a value changes
    */
-  _changed: function() {
+  _changed() {
     // Loop through the gradients that use this stop and notify them about
     // the change, so they can notify their gradient colors, which in turn
     // will notify the items they are used in:
     for (var i = 0, l = this._owners && this._owners.length; i < l; i++)
       this._owners[i]._changed(Change.STYLE);
-  },
+  }
 
   /**
    * Called by Gradient whenever this stop is used. This is required to pass 
    * on _changed() notifications to the _owners.
    */
-  _addOwner: function(gradient) {
+  void _addOwner(gradient) {
     if (!this._owners)
       this._owners = [];
     this._owners.push(gradient);
-  },
+  }
 
   /**
    * Called by Gradient whenever this GradientStop is no longer used by it.
    */
-  _removeOwner: function(gradient) {
+  void _removeOwner(gradient) {
     var index = this._owners ? this._owners.indexOf(gradient) : -1;
     if (index != -1) {
       this._owners.splice(index, 1);
       if (this._owners.length == 0)
         delete this._owners;
     }
-  },
+  }
 
 
   /**
@@ -120,15 +120,20 @@ var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
    *   redStop.rampPoint = Math.sin(event.time * 3) * 0.1 + 0.3;
    * }
    */
-  getRampPoint: function() {
-    return this._rampPoint;
-  },
+  num _rampPoint;
+  num getRampPoint() {
+    return _rampPoint;
+  }
+  // property
+  num get rampPoint() => _rampPoint;
 
-  setRampPoint: function(rampPoint) {
-    this._defaultRamp = rampPoint == null;
-    this._rampPoint = rampPoint || 0;
-    this._changed();
-  },
+  void setRampPoint(rampPoint) {
+    _defaultRamp = rampPoint == null;
+    _rampPoint = rampPoint || 0;
+    _changed();
+  }
+  // property
+  set rampPoint(num value) => setRampPoint(value);
 
   /**
    * The color of the gradient stop.
@@ -160,11 +165,11 @@ var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
    *   gradient.stops[0].color.hue += 1;
    * }
    */
-  getColor: function() {
-    return this._color;
-  },
+  Colo getColor() {
+    return _color;
+  }
 
-  setColor: function(color) {
+  void setColor(Color color) {
     // If the stop already contained a color,
     // remove it as an owner:
     if (this._color)
@@ -172,11 +177,11 @@ var GradientStop = this.GradientStop = Base.extend(/** @lends GradientStop# */{
     this._color = Color.read(arguments);
     this._color._addOwner(this);
     this._changed();
-  },
+  }
 
-  equals: function(stop) {
+  bool equals(GradientStop stop) {
     return stop == this || stop instanceof GradientStop
         && this._color.equals(stop._color)
         && this._rampPoint == stop._rampPoint;
   }
-});
+}
