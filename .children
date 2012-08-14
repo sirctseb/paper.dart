@@ -2,6 +2,7 @@ src/path/Segment.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
+test/tests/Item_Order.dart
 src/basic/Basic.dart
 src/color/Color.dart
 src/core/Base.dart
