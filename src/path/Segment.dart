@@ -81,9 +81,9 @@ class Segment {
         handleOut = new Point(arg4, arg5);
       }
     }
-    new SegmentPoint.create(this, "_point", point);
-    new SegmentPoint.create(this, "_handleIn", handleIn);
-    new SegmentPoint.create(this, "_handleOut", handleOut);
+    new SegmentPoint.create(this, "point", point);
+    new SegmentPoint.create(this, "handleIn", handleIn);
+    new SegmentPoint.create(this, "handleOut", handleOut);
   }
 
   // TODO I have no idea what is going on in this function
@@ -390,10 +390,12 @@ class Segment {
     if(key == "handleOut") return _handleOut;
     return null;
   }
-  void operator[]= (String key, Point point) {
-    if(key == "point") _point.setFromPoint(point);
-    if(key == "handleIn") _handleIn.setFromPoint(point);
-    if(key == "handleOut") _handleOut.setFromPoint(point);
+  // TODO this requires a SegmentPoint now
+  // we should allow a Point (or Point-like) and build a SegmentPoint if we need to
+  void operator[]= (String key, SegmentPoint point) {
+    if(key == "point") _point = point;
+    if(key == "handleIn") _handleIn = point;
+    if(key == "handleOut") _handleOut = point;
   }
   
 
