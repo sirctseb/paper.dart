@@ -506,6 +506,11 @@ class Color {
       }
     }
   }
+  
+  static Color read([arg0, arg1, arg2, arg3]) {
+    if(arg0 is Color) return arg0;
+    return new Color(arg0, arg1, arg2, arg3);
+  }
 
   /**
    * @return {RgbColor|GrayColor|HsbColor} a copy of the color object
