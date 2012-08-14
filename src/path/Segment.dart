@@ -57,7 +57,7 @@ class Segment {
    * path.strokeColor = 'black';
    */
   Segment([arg0, arg1, arg2, arg3, arg4, arg5]) {
-    Point point, handleIn, handleOut;
+    var point, handleIn, handleOut;
     if(arg0 != null) {
       if(arg1 == null) {
         if(arg0 is Map && arg0.containsKey("point")) {
