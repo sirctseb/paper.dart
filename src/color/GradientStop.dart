@@ -131,13 +131,15 @@ class GradientStop {
   num get rampPoint() => _rampPoint;
 
   void setRampPoint([num rampPoint]) {
-    // TODO this is unused in the paper.js version
-    // TODO fix and submit a pull request
+    _defaultRamp = rampPoint == null;
     _rampPoint = rampPoint == null ? 0 : rampPoint;
     _changed();
   }
   // property
   set rampPoint(num value) => setRampPoint(value);
+  
+  bool _defaultRamp;
+  bool get defaultRamp() => _defaultRamp;
 
   /**
    * The color of the gradient stop.
