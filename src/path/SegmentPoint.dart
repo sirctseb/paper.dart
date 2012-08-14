@@ -90,8 +90,8 @@ class SegmentPoint extends Point {
       y = point.y;
       selected = point.selected;
     }
-    _x = x;
-    _y = y;
+    this.x = x;
+    this.y = y;
     _owner = segment;
     // We need to set the point on the segment before copying over the
     // selected state, as otherwise this won't actually select it.
