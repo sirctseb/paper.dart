@@ -22,13 +22,12 @@
  * @private
  */
 class SegmentPoint extends Point {
-  Object _owner;
+  Segment _owner;
 
   SegmentPoint set(num x, num y) {
-    this._x = x;
-    this._y = y;
-    _changed(this);
-    //this._owner._changed(this);
+    super.setX(x);
+    super.setY(y);
+    _owner._changed(this);
     return this;
   }
 
@@ -38,10 +37,11 @@ class SegmentPoint extends Point {
 //  }
 
   setX(num x) {
-    _x = x;
+    super.setX(x);
     //this._owner._changed(this);
-    _changed(this);
+    _owner._changed(this);
   }
+  set x(num value) => setX(value);
 
   // TODO Point should already have this
 //  getY: function() {
@@ -49,19 +49,21 @@ class SegmentPoint extends Point {
 //  }
 
   setY(num y) {
-    _y = y;
+    super.setY(y);
     //this._owner._changed(this);
-    _changed(this);
+    _owner._changed(this);
   }
 
-  bool isZero() {
+  // TODO we don't have access to _x and _y from here
+  // Point.isZero does it this way anyway
+  /*bool isZero() {
     // Provide our own version of Point#isZero() that does not use the x / y
     // accessors but the internal properties directly, for performance
     // reasons, since it is used a lot internally.
 
     // TODO why not just make normal implementation work this way?
     return _x == 0 && _y == 0;
-  }
+  }*/
 
   setSelected(bool selected) {
     // TODO I don't think we can access _setSelected on the owner from here
