@@ -51,18 +51,36 @@
  * circle.fillColor = '#ff0000';
  */
 class Color {
+  
+  // color components
+  Map<String, num> _components;
 
   // gray components
-  num _gray;
-
+  num get _gray() => _components["gray"];
+  set _gray(num value) => _components["gray"] = value;
+  
   // Rgb components
-  num _red, _green, _blue;
+  //num _red, _green, _blue;
+  num get _red() => _components["red"];
+  set _red(num value) => _components["red"] = value;
+  num get _green() => _components["green"];
+  set _green(num value) => _components["green"] = value;
+  num get _blue() => _components["blue"];
+  set _blue(num value) => _components["blue"] = value;
 
   // hsb components
-  num _hue, _saturation, _brightness;
+  //num _hue, _saturation, _brightness;
+  num get _hue() => _components["hue"];
+  set _hue(num value) => _components["hue"] = value;
+  num get _saturation() => _components["saturation"];
+  set _saturation(num value) => _components["saturation"] = value;
+  num get _brightness() => _components["brightness"];
+  set _brightness(num value) => _components["brightness"] = value;
 
   // hsl components
-  num _lightness;
+  //num _lightness;
+  num get _lightness() => _components["lightness"];
+  set _lightness(num value) => _components["lightness"] = value;
 
   // remembers which components are currently definitive
   String _type;
@@ -83,6 +101,26 @@ class Color {
     return ((input % 360) + 360) % 360;
   }
 
+  setValue(String component, String type, num value, [bool isHue = false]) {
+    if(value != _components[component]) {
+      // if the current color type has the component we're setting,
+      // we can simply set the value
+      if(components[_type].indexOf(component) != -1) {
+        _components[component] = isHue ? _modDegrees(value) : _clampUnit(value);
+        // set other properties, which may have been computed and stored, to null
+        for(String other_comp in other_components[_type]) {
+          _components[component] = null;
+        }
+      } else {
+        Color color = convert(type);
+        color._components[component] = value;
+        setComponents(color.convert(_type));
+      }
+      _cssString = null;
+      _changed();
+    }
+  }
+  
   // Gray accessors
   num get gray() {
     // if we don't have gray ready, compute it
@@ -93,20 +131,7 @@ class Color {
     return _gray;
   }
   set gray(num value) {
-    if(value != _gray) {
-      if(_type == "gray") {
-        _gray = _clampUnit(value);
-
-        // nullify other properties
-        _red = _green = _blue = _hue = _saturation = _brightness = _lightness = null;
-      } else {
-        GrayColor grayColor = this.convert("gray");
-        grayColor.gray = value;
-        setComponents(grayColor.convert(_type));
-      }
-      _cssString = null;
-      _changed();
-    }
+    setValue("gray", "gray", value);
   }
 
   // helper function to set rgb values from whatever the color currently is
@@ -124,18 +149,7 @@ class Color {
     return _red;
   }
   set red(num value) {
-    // update if changed
-    if(value != _red) {
-      if(_type != "rgb") {
-        _updateRgb();
-        _type = "rgb";
-      }
-      _red = _clampUnit(value);
-      // nullify other properties
-      _gray = _hue = _saturation = _brightness = _lightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("red", "rgb", value);
   }
   num get blue() {
     if(_blue == null) {
@@ -144,18 +158,7 @@ class Color {
     return _blue;
   }
   set blue(num value) {
-    // update if changed
-    if(value != _blue) {
-      if(_type != "rgb") {
-        _updateRgb();
-        _type = "rgb";
-      }
-      _blue = _clampUnit(value);
-      // nullify other properties
-      _gray = _hue = _saturation = _brightness = _lightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("blue", "rgb", value);
   }
 
   num get green() {
@@ -165,18 +168,7 @@ class Color {
     return _green;
   }
   set green(num value) {
-    // update if changed
-    if(value != _green) {
-      if(_type != "rgb") {
-        _updateRgb();
-        _type = "rgb";
-      }
-      _green = _clampUnit(value);
-      // nullify other properties
-      _gray = _hue = _saturation = _brightness = _lightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("green", "rgb", value);
   }
 
   // helper function to set hsb values from whatever the color currently is
@@ -195,19 +187,7 @@ class Color {
     return _hue;
   }
   set hue(num value) {
-    if(value != _hue) {
-      if(_type != "hsb" && _type != "hsl") {
-        _updateHsb();
-        _type = "hsb";
-      }
-      _hue = _modDegrees(value);
-      // nullify other properties
-      _gray = _red = _green = _blue = null;
-      if(_type != "hsl") _lightness = null;
-      if(_type != "hsb") _brightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("hue", "hsb", value, true);
   }
 
   num get saturation() {
@@ -217,23 +197,7 @@ class Color {
     return _saturation;
   }
   set saturation(num value) {
-    if(value != _saturation) {
-      // TODO now this has the weird property that if you
-      // construct an hsl class, set a red property, then
-      // the saturation is hsb. i think this weirdness is manfiest
-      // other ways too
-      if(_type != "hsb" && _type != "hsl") {
-        _updateHsb();
-        _type = "hsb";
-      }
-      _saturation = _clampUnit(value);
-      // nullify other properties
-      _gray = _red = _green = _blue = null;
-      if(_type != "hsl") _lightness = null;
-      if(_type != "hsb") _brightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("saturation", _type == "hsl" ? "hsl" : "hsb", value);
   }
 
   num get brightness() {
@@ -243,17 +207,7 @@ class Color {
     return _brightness;
   }
   set brightness(num value) {
-    if(value != _brightness) {
-      if(_type != "hsb") {
-        _updateHsb();
-        _type = "hsb";
-      }
-      _brightness = _clampUnit(value);
-      // nullify other properties
-      _gray = _red = _green = _blue = _lightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("brightness", "hsb", value);
   }
 
   // helper function to set hsl values from whatever color currently is
@@ -271,17 +225,7 @@ class Color {
     }
   }
   set lightness(num value) {
-    if(value != _lightness) {
-      if(_type != "hsl") {
-        _updateHsl();
-        _type = "hsl";
-      }
-      _lightness = _clampUnit(value);
-      // nullify other properties
-      _gray = _red = _green = _blue = _brightness = null;
-      _cssString = null;
-      _changed();
-    }
+    setValue("lightness", "hsl", value);
   }
 
   // alpha accessors
@@ -306,12 +250,18 @@ class Color {
   }
 
 
-  /*static var components = const {
+  static var components = const {
     "gray": const ['gray'],
     "rgb": const ['red', 'green', 'blue'],
     "hsb": const ['hue', 'saturation', 'brightness'],
     "hsl": const ['hue', 'saturation', 'lightness']
-  };*/
+  };
+  static var other_components = const {
+    "gray": const ['red', 'green', 'blue', 'hue', 'saturation', 'brightness', 'lightness'],
+    "rgb": const ['gray', 'hue', 'saturation', 'brightness', 'lightness'],
+    "hsb": const ['gray', 'red', 'green', 'blue', 'lightness'],
+    "hsl": const ['gray', 'red', 'green', 'blue', 'brightness']
+  };
 
   static var colorCache;
   static var colorContext;
@@ -493,6 +443,9 @@ class Color {
 
   //initialize: function(arg) {
   Color([arg, arg1, arg2, arg3]) {
+
+    _components = new Map<String, num>();
+    
     if (arg is Map) {
       // Called on the abstract Color class. Guess color type
       // from arg
@@ -532,17 +485,6 @@ class Color {
     } else if(arg == null) {
       _red = _blue = _green = 0;
       _type = "rgb";
-    } else if(arg is Color) {
-      _red = arg._red;
-      _green = arg._green;
-      _blue = arg._blue;
-      _gray = arg._gray;
-      _hue = arg._hue;
-      _saturation = arg._saturation;
-      _brightness = arg._brightness;
-      _lightness = arg._lightness;
-      _alpha = arg._alpha;
-      _type = arg._type;
     } else {
       // TODO support params to array
       var components = arg is List ? arg : [arg, arg1, arg2, arg3];
@@ -891,7 +833,13 @@ class GrayColor extends Color {
    * circle.fillColor = new GrayColor(0.5);
    */
   GrayColor(/*num*/ gray, [num alpha])
-    : super(gray is num ? {"gray": gray, "alpha": alpha} : gray) {}
+    : super(gray is num ? {"gray": gray, "alpha": alpha} :
+            gray is Color ? null : gray) {
+    if(gray is Color) {
+      setComponents(gray.convert("gray"));
+      _type = "gray";
+    }
+  }
 
   /**
    * The amount of gray in the color as a value between {@code 0} and
@@ -936,7 +884,13 @@ class RgbColor extends Color {
    * circle.fillColor = new RgbColor(1, 0, 0.5);
    */
    RgbColor(/*num*/ red, [num green, num blue, num alpha])
-    : super(red is num ? {"red": red, "green": green, "blue": blue, "alpha": alpha} : red) {}
+    : super(red is num ? {"red": red, "green": green, "blue": blue, "alpha": alpha} :
+            red is Color ? null : red) {
+     if(red is Color) {
+       setComponents(red.convert("rgb"));
+       _type = "rgb";
+     }
+   }
 
   /**
    * The amount of red in the color as a value between {@code 0} and
@@ -1029,8 +983,13 @@ class HsbColor extends Color {
    */
   HsbColor(/*num*/ hue, [num saturation, num brightness, num alpha])
     : super(hue is num ? {"hue": hue, "saturation": saturation, "brightness": brightness, "alpha": alpha} :
-            hue is List ? {"hue": hue[0], "saturation": hue[1], "brightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
-            hue) {}
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "brightness": hue[2], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue is Color ? null : hue) {
+    if(hue is Color) {
+      setComponents(hue.convert("hsb"));
+      _type = "hsb";
+    }
+  }
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
@@ -1112,8 +1071,13 @@ class HslColor extends Color {
    */
   HslColor(/*num*/ hue, [num saturation, num lightness, num alpha])
     : super(hue is num ? {"hue": hue, "saturation": saturation, "lightness": lightness, "alpha": alpha} :
-            hue is List ? {"hue": hue[0], "saturation": hue[1], "lightness": hue[1], "alpha": hue.length > 3 ? hue[3] : null} :
-            hue) {}
+            hue is List ? {"hue": hue[0], "saturation": hue[1], "lightness": hue[2], "alpha": hue.length > 3 ? hue[3] : null} :
+            hue is Color ? null : hue) {
+    if(hue is Color) {
+      setComponents(hue.convert("hsl"));
+      _type = "hsl";
+    }
+  }
 
   /**
    * The hue of the color as a value in degrees between {@code 0} and
