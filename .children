@@ -3,6 +3,5 @@ test/tests/Tests.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
-test/tests/Item_Cloning.dart
 src/color/Color.dart
 src/core/Base.dart

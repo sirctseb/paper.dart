@@ -15,6 +15,7 @@
 #source("CompoundPath.dart");
 #source("Item.dart");
 #source("Item_Bounds.dart");
+#source("Item_Cloning.dart");
 
 void main() {
 	PointTests();
