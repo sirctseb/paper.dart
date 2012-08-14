@@ -27,7 +27,7 @@ SegmentTests() {
     });
     
     test('new Segment(object)', () {
-      var segment = new Segment({ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } });
+      var segment = new Segment({ "point": { "x": 10, "y": 10 }, "handleIn": { "x": 5, "y": 5 }, "handleOut": { "x": 15, "y": 15 } });
       equals(segment.toString(), '{ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } }');
     });
     
