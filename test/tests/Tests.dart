@@ -13,6 +13,7 @@
 #source("Group.dart");
 #source("HitResult.dart");
 #source("CompoundPath.dart");
+#source("Item.dart");
 
 void main() {
 	PointTests();
