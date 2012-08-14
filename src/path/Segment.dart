@@ -57,7 +57,7 @@ class Segment {
    * path.strokeColor = 'black';
    */
   Segment([arg0, arg1, arg2, arg3, arg4, arg5]) {
-    Point point, handleIn, handleOut;
+    SegmentPoint point, handleIn, handleOut;
     if(arg0 != null) {
       if(arg1 == null) {
         if(arg0 is Map && arg0.containsKey("point")) {
@@ -113,12 +113,12 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point _point;
-  Point getPoint() {
+  SegmentPoint _point;
+  SegmentPoint getPoint() {
     return _point;
   }
   // property
-  Point get point() => getPoint();
+  SegmentPoint get point() => getPoint();
 
   setPoint(/*Point*/ point) {
     point = Point.read(point);
@@ -136,12 +136,12 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point _handleIn;
-  Point getHandleIn() {
+  SegmentPoint _handleIn;
+  SegmentPoint getHandleIn() {
     return _handleIn;
   }
   // property
-  Point get handleIn() => getHandleIn();
+  SegmentPoint get handleIn() => getHandleIn();
 
   setHandleIn(/*Point*/ point) {
     point = Point.read(point);
@@ -161,12 +161,12 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point _handleOut;
-  Point getHandleOut() {
+  SegmentPoint _handleOut;
+  SegmentPoint getHandleOut() {
     return _handleOut;
   }
   // property
-  Point get handleOut() => getHandleOut();
+  SegmentPoint get handleOut() => getHandleOut();
 
   setHandleOut(/*Point*/ point) {
     point = Point.read(point);
@@ -180,7 +180,7 @@ class Segment {
   set handleOut(Point value) => setHandleOut(value);
 
   int _selectionState;
-  bool _isSelected(Point point) {
+  bool _isSelected(SegmentPoint point) {
     var state = this._selectionState;
     // TODO check operator precedence
     return point === _point ? (state & SelectionState.POINT) != 0
@@ -189,7 +189,7 @@ class Segment {
       : false;
   }
 
-  _setSelected(Point point, bool selected) {
+  _setSelected(SegmentPoint point, bool selected) {
     var path = this._path;
     // TODO does anything call this with a non-bool?
     //selected = !!selected, // convert to boolean
