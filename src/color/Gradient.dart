@@ -19,7 +19,7 @@
  *
  * @class The Gradient object.
  */
-var Gradient = this.Gradient = Base.extend(/** @lends Gradient# */{
+class Gradient {
   // TODO: Should type here be called 'radial' and have it receive a
   // boolean value?
   /**
@@ -28,53 +28,53 @@ var Gradient = this.Gradient = Base.extend(/** @lends Gradient# */{
    * @param {GradientStop[]} stops
    * @param {String} [type='linear'] 'linear' or 'radial'
    */
-  initialize: function(stops, type) {
-    this.setStops(stops || ['white', 'black']);
-    this.type = type || 'linear';
-  },
+  Gradient(stops, type) {
+    setStops(stops || ['white', 'black']);
+    type = type || 'linear';
+  }
 
   /**
    * Called by various setters whenever a gradient value changes
    */
-  _changed: function() {
+  void _changed() {
     // Loop through the gradient-colors that use this gradient and notify
     // them, so they can notify the items they belong to.
     for (var i = 0, l = this._owners && this._owners.length; i < l; i++)
       this._owners[i]._changed();
-  },
+  }
 
   /**
    * Called by GradientColor#initialize
    * This is required to pass on _changed() notifications to the _owners.
    */
-  _addOwner: function(color) {
-    if (!this._owners)
-      this._owners = [];
-    this._owners.push(color);
-  },
+  void _addOwner(color) {
+    if (!_owners)
+      _owners = [];
+    _owners.push(color);
+  }
 
   // TODO: Where and when should this be called:
   /**
    * Called by GradientColor whenever this gradient stops being used.
    */
-  _removeOwner: function(color) {
-    var index = this._owners ? this._owners.indexOf(color) : -1;
+  void _removeOwner(color) {
+    var index = _owners ? _owners.indexOf(color) : -1;
     if (index != -1) {
-      this._owners.splice(index, 1);
-      if (this._owners.length == 0)
-        delete this._owners;
+      _owners.splice(index, 1);
+      if (_owners.length == 0)
+        delete _owners;
     }
-  },
+  }
 
   /**
    * @return {Gradient} a copy of the gradient
    */
-  clone: function() {
+  Gradient clone() {
     var stops = [];
-    for (var i = 0, l = this._stops.length; i < l; i++)
-      stops[i] = this._stops[i].clone();
-    return new Gradient(stops, this.type);
-  },
+    for (var i = 0, l = _stops.length; i < l; i++)
+      stops[i] = _stops[i].clone();
+    return new Gradient(stops, type);
+  }
 
   /**
    * The gradient stops on the gradient ramp.
@@ -82,31 +82,31 @@ var Gradient = this.Gradient = Base.extend(/** @lends Gradient# */{
    * @type GradientStop[]
    * @bean
    */
-  getStops: function() {
-    return this._stops;
-  },
+  List<GradientStop> getStops() {
+    return _stops;
+  }
 
-  setStops: function(stops) {
+  void setStops(List stops) {
     // If this gradient already contains stops, first remove
     // this gradient as their owner.
-    if (this.stops) {
-      for (var i = 0, l = this._stops.length; i < l; i++) {
-        this._stops[i]._removeOwner(this);
+    if (stops) {
+      for (var i = 0, l = _stops.length; i < l; i++) {
+        _stops[i]._removeOwner(this);
       }
     }
     if (stops.length < 2)
       throw new Error(
           'Gradient stop list needs to contain at least two stops.');
-    this._stops = GradientStop.readAll(stops);
+    _stops = GradientStop.readAll(stops);
     // Now reassign ramp points if they were not specified.
-    for (var i = 0, l = this._stops.length; i < l; i++) {
-      var stop = this._stops[i];
+    for (var i = 0, l = _stops.length; i < l; i++) {
+      var stop = _stops[i];
       stop._addOwner(this);
       if (stop._defaultRamp)
         stop.setRampPoint(i / (l - 1));
     }
-    this._changed();
-  },
+    _changed();
+  }
 
   /**
    * Checks whether the gradient is equal to the supplied gradient.
@@ -114,16 +114,16 @@ var Gradient = this.Gradient = Base.extend(/** @lends Gradient# */{
    * @param {Gradient} gradient
    * @return {Boolean} {@true they are equal}
    */
-  equals: function(gradient) {
-    if (gradient.type != this.type)
+  bool equals(Gradient gradient) {
+    if (gradient.type != type)
       return false;
-    if (this._stops.length == gradient._stops.length) {
-      for (var i = 0, l = this._stops.length; i < l; i++) {
-        if (!this._stops[i].equals(gradient._stops[i]))
+    if (_stops.length == gradient._stops.length) {
+      for (var i = 0, l = _stops.length; i < l; i++) {
+        if (!_stops[i].equals(gradient._stops[i]))
           return false;
       }
       return true;
     }
     return false;
   }
-});
+}
