@@ -7,3 +7,4 @@ src/path/SegmentPoint.dart
 src/color/Color.dart
 src/core/Base.dart
 test/tests/Tests.dart
+test/tests/Segment.dart
