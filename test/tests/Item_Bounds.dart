@@ -16,34 +16,34 @@
 
 ItemBoundsTests() {
   group("Item Bounds Tests", () {
-    test('item.bounds caching', function() {
+    test('item.bounds caching', () {
       var circle = new Path.Circle(new Point(100, 100), 50);
       var rectangle = new Path.Rectangle(new Point(75, 75), new Point(175, 175));
       var group = new Group([circle, rectangle]);
       compareRectangles(group.bounds, { x: 50, y: 50, width: 125, height: 125 }, 'group.bounds');
       rectangle.remove();
-      equals(function() {
+      equals(() {
         return group.children.length;
       }, 1);
       compareRectangles(group.bounds, { x: 50, y: 50, width: 100, height: 100 }, 'group.bounds without rectangle');
       group.addChild(rectangle);
-      equals(function() {
+      equals(() {
         return group.children.length;
       }, 2);
       compareRectangles(group.bounds, { x: 50, y: 50, width: 125, height: 125 }, 'group.bounds with rectangle');
       circle.remove();
-      equals(function() {
+      equals(() {
         return group.children.length;
       }, 1);
       compareRectangles(group.bounds, { x: 75, y: 75, width: 100, height: 100 }, 'group.bounds without circle');
       group.addChild(circle);
-      equals(function() {
+      equals(() {
         return group.children.length;
       }, 2);
       compareRectangles(group.bounds, { x: 50, y: 50, width: 125, height: 125 }, 'group.bounds with circle');
     });
 
-    test('group.bounds when group contains empty group', function() {
+    test('group.bounds when group contains empty group', () {
       var group = new Group();
       var rectangle = new Path.Rectangle(new Point(75, 75), new Point(175, 175));
       group.addChild(rectangle);
