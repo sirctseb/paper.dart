@@ -52,11 +52,15 @@ class SegmentPoint extends Point {
     // TODO I don't think we can access _setSelected on the owner from here
     _owner._setSelected(this, selected);
   }
+  // property
+  set selected(bool value) => setSelected(value);
 
   bool isSelected() {
     // TODO I don't think we can access _isSelected on the owner from here
     return _owner._isSelected(this);
   }
+  // property
+  bool get selected() => isSelected();
 
   SegmentPoint.create(Segment segment, key, [/*Point*/ point]) {
     num x, y;
