@@ -57,7 +57,7 @@ ItemOrderTests() {
         expect(item0.index, indexes[0], command.toString());
         expect(item1.index, indexes[1]);
         expect(item2.index, indexes[2]);
-      }
+      };
 
       testMove(() { item0.moveBelow(item0) }, [0,1,2]);
       testMove(() { item0.moveBelow(item1) }, [0,1,2]);
