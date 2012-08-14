@@ -18,8 +18,8 @@
 // As Path#_selectedSegmentState is the addition of all segment's states, and is
 // used to see if all segments are fully selected, meaning they are set to
 // SelectionState.POINT.
-class SelectionState = {
+class SelectionState {
   static final int HANDLE_IN = 1;
   static final int HANDLE_OUT = 2;
   static final int POINT = 4;
-};
+}
