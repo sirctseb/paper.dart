@@ -20,18 +20,12 @@ HitResultTests() {
       var path = new Path.Circle([50, 50], 50);
       
       var hitResult = path.hitTest([75, 75]);
-      equals(() {
-        return hitResult == null;
-      }, true, 'Since the path is not filled, the hit-test should return null');
+      expect(hitResult == null, true, 'Since the path is not filled, the hit-test should return null');
 
       path.fillColor = 'red';
       hitResult = path.hitTest([75, 75]);
-      equals(() {
-        return hitResult.type == 'fill';
-      }, true);
-      equals(() {
-        return hitResult.item == path;
-      }, true);
+      expect(hitResult.type == 'fill');
+      expect(hitResult.item == path);
     });
 
     test('the item on top should be returned', () {
@@ -42,9 +36,7 @@ HitResultTests() {
       var copy = path.clone();
 
       var hitResult = paper.project.hitTest([75, 75]);
-      equals(() {
-        return hitResult.item == copy;
-      }, true);
+      expect(hitResult.item == copy);
     });
 
     test('hitting a stroked path', () {
@@ -54,19 +46,14 @@ HitResultTests() {
       // of 10:
 
       var hitResult = paper.project.hitTest([25, 5]);
-      equals(() {
-        return hitResult == null;
-      }, true, 'Since the path is not stroked yet, the hit-test should return null');
+      expect(hitResult == null, true,
+        'Since the path is not stroked yet, the hit-test should return null');
 
       path.strokeColor = 'black';
       path.strokeWidth = 10;
       hitResult = path.hitTest([25, 5]);
-      equals(() {
-        return hitResult.type == 'stroke';
-      }, true);
-      equals(() {
-        return hitResult.item == path;
-      }, true);
+      expect(hitResult.type == 'stroke');
+      expect(hitResult.item == path);
     });
 
     test('hitting a selected path', () {
@@ -74,20 +61,15 @@ HitResultTests() {
       path.fillColor = 'red';
       
       var hitResult = paper.project.hitTest([75, 75], {
-        selected: true
+        "selected": true
       });
-      equals(() {
-        return hitResult == null;
-      }, true, 'Since the path is not selected, the hit-test should return null');
+      expect(hitResult == null, true,
+        'Since the path is not selected, the hit-test should return null');
 
       path.selected = true;
       hitResult = paper.project.hitTest([75, 75]);
-      equals(() {
-        return hitResult.type == 'fill';
-      }, true);
-      equals(() {
-        return hitResult.item == path;
-      }, true);
+      expect(hitResult.type == 'fill');
+      expect(hitResult.item == path);
     });
 
     test('hitting path segments', () {
@@ -95,18 +77,12 @@ HitResultTests() {
 
       var hitResult = paper.project.hitTest([10, 10]);
       
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned.');
+      expect(hitResult != null, true, 'A HitResult should be returned.');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'segment');
+        expect(hitResult.type, 'segment');
       
-        equals(() {
-          return hitResult.item == path;
-        }, true);
+        expect(hitResult.item == path);
       }
     });
 
@@ -118,25 +94,16 @@ HitResultTests() {
         center: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned.');
+      expect(hitResult != null, true, 'A HitResult should be returned.');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.point.toString();
-        }, path.position.toString());
+        expect(hitResult.point.toString(), path.position.toString());
 
-        equals(() {
-          return hitResult.type;
-        }, 'center');
-        equals(() {
-          return hitResult.item !== paper.project.activeLayer;
-        }, true, 'We should not be hitting the active layer.');
+        expect(hitResult.type, 'center');
+        expect(hitResult.item !== paper.project.activeLayer, true,
+          'We should not be hitting the active layer.');
 
-        equals(() {
-          return hitResult.item == path;
-        }, true, 'We should be hitting the path.');
+        expect(hitResult.item == path, true, 'We should be hitting the path.');
       }
     });
 
@@ -147,32 +114,21 @@ HitResultTests() {
         center: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned.');
+      expect(hitResult != null, true, 'A HitResult should be returned.');
       
       if (hitResult) {
-        equals(() {
-          return !!hitResult.point;
-        }, true, 'HitResult#point should not be empty');
+        expect(hitResult.point != null, true, 'HitResult#point should not be empty');
         
         if (hitResult.point) {
-          equals(() {
-            return hitResult.point.toString();
-          }, path.position.toString());
+          expect(hitResult.point.toString(), path.position.toString());
         }
 
-        equals(() {
-          return hitResult.type;
-        }, 'center');
+        expect(hitResult.type, 'center');
 
-        equals(() {
-          return hitResult.item !== paper.project.activeLayer;
-        }, true, 'We should not be hitting the active layer.');
+        expect(hitResult.item !== paper.project.activeLayer, true,
+          'We should not be hitting the active layer.');
 
-        equals(() {
-          return hitResult.item == path;
-        }, true, 'We should be hitting the path.');
+        expect(hitResult.item == path, true, 'We should be hitting the path.');
       }
     });
 
@@ -185,36 +141,24 @@ HitResultTests() {
         handles: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (1)');
+      expect(hitResult != null, true, 'A HitResult should be returned (1)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'handle-out');
+        expect(hitResult.type, 'handle-out');
       
-        equals(() {
-          return hitResult.item == path;
-        }, true);
+        expect(hitResult.item == path);
       }
 
       var hitResult = paper.project.hitTest(firstPoint.add(-50, 0), {
         handles: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (2)');
+      expect(hitResult != null, true, 'A HitResult should be returned (2)');
 
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'handle-in');
+        expect(hitResult.type, 'handle-in');
 
-        equals(() {
-          return hitResult.item == path;
-        }, true);
+        expect(hitResult.item == path);
       }
     });
 
@@ -229,36 +173,24 @@ HitResultTests() {
         handles: true
       });
       
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (1)');
+      expect(hitResult != null, true, 'A HitResult should be returned (1)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'handle-out');
+        expect(hitResult.type, 'handle-out');
       
-        equals(() {
-          return hitResult.item == path;
-        }, true);
+        expect(hitResult.item == path);
       }
 
       var hitResult = paper.project.hitTest([-50, -50], {
         handles: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (2)');
+      expect(hitResult != null, true, 'A HitResult should be returned (2)');
 
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'handle-in');
+        expect(hitResult.type, 'handle-in');
 
-        equals(() {
-          return hitResult.item == path;
-        }, true);
+        expect(hitResult.item == path);
       }
     });
 
@@ -278,7 +210,7 @@ HitResultTests() {
       var description = 'This hit test should not throw an error';
       if (error)
         description += ': ' + error;
-      equals(error == null, true, description);
+      expect(error == null, true, description);
     });
 
     test('Hit testing a point that is extremely close to a curve', () {
@@ -296,18 +228,16 @@ HitResultTests() {
       var description = 'This hit test should not throw an error';
       if (error)
         description += ': ' + error;
-      equals(error == null, true, description);
+      expect(error == null, true, description);
     });
 
     test('hitting path ends', () {
       var path = new Path([0, 0], [50, 50], [100, 0]);
       path.closed = true;
 
-      equals(() {
-        return !paper.project.hitTest(path.firstSegment.point, {
-          ends: true
-        });
-      }, true, 'No hitresult should be returned, because the path is closed.');
+      expect(!paper.project.hitTest(path.firstSegment.point, {
+          "ends": true
+        }), true, 'No hitresult should be returned, because the path is closed.');
 
       path.closed = false;
 
@@ -315,25 +245,17 @@ HitResultTests() {
         ends: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (1)');
+      expect(hitResult != null, true, 'A HitResult should be returned (1)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'segment');
+        expect(hitResult.type, 'segment');
       
-        equals(() {
-          return hitResult.segment == path.lastSegment;
-        }, true);
+        expect(hitResult.segment == path.lastSegment);
       }
 
-      equals(() {
-        return !paper.project.hitTest(path.segments[1].point, {
-          ends: true
-        });
-      }, true, 'No HitResult should be returned, since the second segment is not an end');
+      expect(!paper.project.hitTest(path.segments[1].point, {
+          "ends": true
+        }), true, 'No HitResult should be returned, since the second segment is not an end');
     });
 
     test('When a path is closed, the end of a path cannot be hit.', () {
@@ -343,9 +265,8 @@ HitResultTests() {
       var hitResult = paper.project.hitTest([0, 0], {
         ends: true
       });
-      equals(() {
-        return !hitResult;
-      }, true, 'When a path is closed, the end of a path cannot be hit.');
+      expect(hitResult == null, true,
+        'When a path is closed, the end of a path cannot be hit.');
     });
 
     test('hitting path bounding box', () {
@@ -355,22 +276,14 @@ HitResultTests() {
         bounds: true
       });
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (1)');
+      expect(hitResult != null, true, 'A HitResult should be returned (1)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.type;
-        }, 'bounds');
+        expect(hitResult.type, 'bounds');
 
-        equals(() {
-          return hitResult.name;
-        }, 'top-left');
+        expect(hitResult.name, 'top-left');
 
-        equals(() {
-          return hitResult.point.toString();
-        }, path.bounds.topLeft.toString());
+        expect(hitResult.point.toString(), path.bounds.topLeft.toString());
       }
     });
 
@@ -382,14 +295,10 @@ HitResultTests() {
 
       var hitResult = paper.project.hitTest(path.position);
 
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (1)');
+      expect(hitResult != null, true, 'A HitResult should be returned (1)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.item == copy;
-        }, true, 'The copy is returned, because it is on top.');
+        expect(hitResult.item == copy, true, 'The copy is returned, because it is on top.');
       }
       
       path.guide = true;
@@ -399,14 +308,10 @@ HitResultTests() {
         fill: true
       });
       
-      equals(() {
-        return !!hitResult;
-      }, true, 'A HitResult should be returned (2)');
+      expect(hitResult != null, true, 'A HitResult should be returned (2)');
       
       if (hitResult) {
-        equals(() {
-          return hitResult.item == path;
-        }, true, 'The path is returned, because it is a guide.');
+        expect(hitResult.item == path, true, 'The path is returned, because it is a guide.');
       }
     });
 
@@ -418,18 +323,14 @@ HitResultTests() {
       
       var hitResult = paper.project.hitTest(new Point(160, 120));
 
-      equals(() {
-        return hitResult && hitResult.item == raster;
-      }, true, 'Hit raster item before moving');
+      expect(hitResult && hitResult.item == raster, true, 'Hit raster item before moving');
       
       // Move the raster:
       raster.translate(100, 100);
       
       var hitResult = paper.project.hitTest(new Point(160, 120));
 
-      equals(() {
-        return hitResult && hitResult.item == raster;
-      }, true, 'Hit raster item after moving');  
+      expect(hitResult && hitResult.item == raster, true, 'Hit raster item after moving');
     });
 
     test('hitting path with a text item in the project', () {
@@ -438,22 +339,16 @@ HitResultTests() {
       
       var hitResult = paper.project.hitTest(new Point(75, 75));
 
-      equals(() {
-        return hitResult && hitResult.item == path;
-      }, true, 'Hit path item before adding text item');
+      expect(hitResult && hitResult.item == path, true, 'Hit path item before adding text item');
 
       var text1 = new PointText(30, 30);
       text1.content = "Text 1";
 
       var hitResult = paper.project.hitTest(new Point(75, 75));
       
-      equals(() {
-        return !!hitResult;
-      }, true, 'A hitresult should be returned.');
+      expect(hitResult, true, 'A hitresult should be returned.');
 
-      equals(() {
-        return !!hitResult && hitResult.item == path;
-      }, true, 'We should have hit the path');
+      expect((hitResult != null) && hitResult.item == path, true, 'We should have hit the path');
       
     });
   });
