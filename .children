@@ -1,4 +1,5 @@
 src/path/Segment.dart
+test/tests/Group.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
 test/tests/CompoundPath.dart
