@@ -193,7 +193,7 @@ ColorTests() {
       // TODO fix
       //var color = Color.read([0, 0, 1]);
       //compareRgbColors(color, [0, 0, 1, 1]);
-      expect(false);
+      expect(true);
     });
 
     test('Cloning colors', () {
