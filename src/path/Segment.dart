@@ -68,7 +68,9 @@ class Segment {
           point = arg0;
         }
       } else if(arg5 == null) {
-        if(arg3 == null) { 
+        // TODO arg2 below was arg3 in paper.js, I'm pretty sure that's incorrect
+        // TODO fix and submit a pull request to paper.js
+        if(arg2 == null) { 
           point = new Point(arg0, arg1);
         } else {
           point = arg0;
