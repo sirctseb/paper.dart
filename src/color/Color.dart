@@ -389,7 +389,7 @@ class Color {
       var h = (color._hue / 60) % 6; // Scale to 0..6
       var s = color._saturation;
       var b = color._brightness;
-      var i = h.floor(); // 0..5
+      var i = h.floor().toInt(); // 0..5
       var f = h - i;
       i = _hsbIndices[i];
       var v = [
@@ -489,18 +489,18 @@ class Color {
         _gray = arg["gray"];
         _alpha = arg["alpha"];
         _type = "gray";
-      } else if(arg.containsKey("lightness")) {
+      } else if(arg.containsKey("brightness")) {
         _hue = arg["hue"];
         _saturation = arg["saturation"];
         _brightness = arg["brightness"];
         _alpha = arg["alpha"];
-        _type = "hsl";
+        _type = "hsb";
       } else if(arg.containsKey("hue")) {
         _hue = arg["hue"];
         _saturation = arg["saturation"];
         _lightness = arg["lightness"];
         _alpha = arg["alpha"];
-        _type = "hsb";
+        _type = "hsl";
       } else {
         _red = _blue = _green = 0;
         _type = "rgb";
@@ -541,7 +541,7 @@ class Color {
         _type = "rgb";
       } else {
         _gray = components[0];
-        _alpha = components[1];
+        _alpha = components.length > 1 ? components[1] : null;
         _type = "gray";
       }
     }
@@ -583,6 +583,7 @@ class Color {
     _cssString = null;
     // Loop through the items that use this color and notify them about
     // the style change, so they can redraw.
+    if(_owners == null) _owners = [];
     for(var owner in _owners)
       owner._changed(Change.STYLE);
   }
@@ -873,7 +874,7 @@ class GrayColor extends Color {
    * circle.fillColor = new GrayColor(0.5);
    */
   GrayColor(/*num*/ gray, [num alpha])
-    : super({"gray": gray, "alpha": alpha}) {}
+    : super(gray is num ? {"gray": gray, "alpha": alpha} : gray) {}
 
   /**
    * The amount of gray in the color as a value between {@code 0} and
