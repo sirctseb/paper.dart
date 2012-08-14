@@ -1,7 +1,8 @@
+src/path/Segment.dart
+test/tests/Tests.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
-src/path/Segment.dart
 src/basic/Basic.dart
+src/color/GradientColor.dart
 src/color/Color.dart
 src/core/Base.dart
-test/tests/Tests.dart
