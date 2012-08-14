@@ -13,6 +13,10 @@
  *
  * All rights reserved.
  */
+#library("Segment.dart");
+#import("../basic/Basic.dart");
+#source("SegmentPoint.dart");
+#source("SelectionState.dart");
 
 /**
  * @name Segment
