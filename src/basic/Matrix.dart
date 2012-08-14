@@ -375,7 +375,7 @@ class Matrix {
     return numPts == null
       // TODO: Check for rectangle and use _tranformBounds?
       ? this.transformPoint(Point.read(src))
-      : this._transformCoordinates(src, srcOff, dst, dstOff, numPts);
+      : this.transformCoordinates(src, srcOff, dst, dstOff, numPts);
   }
 
   /**
@@ -393,7 +393,7 @@ class Matrix {
     );
   }
 
-  List _transformCoordinates(List src, int srcOff, List dst, int dstOff, int numPts) {
+  List transformCoordinates(List src, int srcOff, List dst, int dstOff, int numPts) {
     int i = srcOff;
     int j = dstOff;
     int srcEnd = srcOff + 2 * numPts;

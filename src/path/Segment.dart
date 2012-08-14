@@ -13,6 +13,10 @@
  *
  * All rights reserved.
  */
+#library("Segment.dart");
+#import("../basic/Basic.dart");
+#source("SegmentPoint.dart");
+#source("SelectionState.dart");
 
 /**
  * @name Segment
@@ -53,7 +57,7 @@ class Segment {
    * path.strokeColor = 'black';
    */
   Segment([arg0, arg1, arg2, arg3, arg4, arg5]) {
-    Point point, handleIn, handleOut;
+    var point, handleIn, handleOut;
     if(arg0 != null) {
       if(arg1 == null) {
         if(arg0 is Map && arg0.containsKey("point")) {
@@ -64,7 +68,9 @@ class Segment {
           point = arg0;
         }
       } else if(arg5 == null) {
-        if(arg3 == null) { 
+        // TODO arg2 below was arg3 in paper.js, I'm pretty sure that's incorrect
+        // TODO fix and submit a pull request to paper.js
+        if(arg2 == null) { 
           point = new Point(arg0, arg1);
         } else {
           point = arg0;
@@ -77,9 +83,9 @@ class Segment {
         handleOut = new Point(arg4, arg5);
       }
     }
-    SegmentPoint.create(this, "_point", point);
-    SegmentPoint.create(this, "_handleIn", handleIn);
-    SegmentPoint.create(this, "_handleOut", handleOut);
+    new SegmentPoint.create(this, "point", point);
+    new SegmentPoint.create(this, "handleIn", handleIn);
+    new SegmentPoint.create(this, "handleOut", handleOut);
   }
 
   // TODO I have no idea what is going on in this function
@@ -101,7 +107,7 @@ class Segment {
       }
     }
     this._path._changed(Change.GEOMETRY);
-  },
+  }
 
   /**
    * The anchor point of the segment.
@@ -109,11 +115,12 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point getPoint() {
+  SegmentPoint _point;
+  SegmentPoint getPoint() {
     return _point;
   }
   // property
-  Point get point() => getPoint();
+  SegmentPoint get point() => getPoint();
 
   setPoint(/*Point*/ point) {
     point = Point.read(point);
@@ -131,14 +138,15 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point getHandleIn() {
+  SegmentPoint _handleIn;
+  SegmentPoint getHandleIn() {
     return _handleIn;
   }
   // property
-  Point get handleIn() => getHandleIn();
+  SegmentPoint get handleIn() => getHandleIn();
 
   setHandleIn(/*Point*/ point) {
-    point = Point.read(arguments);
+    point = Point.read(point);
     // See #setPoint:
     _handleIn.set(point.x, point.y);
     // Update corner accordingly
@@ -155,14 +163,15 @@ class Segment {
    * @type Point
    * @bean
    */
-  Point getHandleOut() {
+  SegmentPoint _handleOut;
+  SegmentPoint getHandleOut() {
     return _handleOut;
   }
   // property
-  Point get handleOut() => getHandleOut();
+  SegmentPoint get handleOut() => getHandleOut();
 
   setHandleOut(/*Point*/ point) {
-    point = Point.read(arguments);
+    point = Point.read(point);
     // See #setPoint:
     _handleOut.set(point.x, point.y);
     // Update corner accordingly
@@ -172,23 +181,25 @@ class Segment {
   // property
   set handleOut(Point value) => setHandleOut(value);
 
-  bool _isSelected(Point point) {
-    var state = this._selectionState;
+  int _selectionState;
+  bool _isSelected(SegmentPoint point) {
+    int state = _selectionState == null ? 0 : _selectionState;
     // TODO check operator precedence
     return point === _point ? (state & SelectionState.POINT) != 0
       : point === _handleIn ? (state & SelectionState.HANDLE_IN) != 0
       : point === _handleOut ? (state & SelectionState.HANDLE_OUT) != 0
       : false;
-  },
+  }
 
-  _setSelected(Point point, bool selected) {
+  _setSelected(SegmentPoint point, bool selected) {
     var path = this._path;
     // TODO does anything call this with a non-bool?
     //selected = !!selected, // convert to boolean
     int state = _selectionState;
     // For performance reasons use array indices to access the various
     // selection states: 0 = point, 1 = handleIn, 2 = handleOut
-    selection = [
+    // TODO fix missing var declaration and submit pull request on paper.js
+    var selection = [
       (state & SelectionState.POINT) != 0,
       (state & SelectionState.HANDLE_IN) != 0,
       (state & SelectionState.HANDLE_OUT) != 0
@@ -258,6 +269,7 @@ class Segment {
    * @type Number
    * @bean
    */
+  int _index;
   int getIndex() {
     return _index;
   }
@@ -330,14 +342,15 @@ class Segment {
    * @type Segment
    * @bean
    */
-  getPrevious: function() {
+  getPrevious() {
     if(_path != null) {
       var segments = _path._segments;
       if(segments != null) {
         if(_index - 1 >= 0) {
           return segments[_index - 1];
         } else if(_path.closed) {
-          return segements[segments.length - 1];
+          // TODO fix segements typo and submit pull request on paper.js
+          return segments[segments.length - 1];
         }
       }
     }
@@ -350,7 +363,7 @@ class Segment {
    */
   Segment reverse() {
     return new Segment(this._point, this._handleOut, this._handleIn);
-  },
+  }
 
   /**
    * Removes the segment from the path that it belongs to.
@@ -371,6 +384,22 @@ class Segment {
   }
   // operator
   bool operator == (Segment segment) => equals(segment);
+  
+  // access the properties by key
+  Point operator[] (String key) {
+    if(key == "point") return _point;
+    if(key == "handleIn") return _handleIn;
+    if(key == "handleOut") return _handleOut;
+    return null;
+  }
+  // TODO this requires a SegmentPoint now
+  // we should allow a Point (or Point-like) and build a SegmentPoint if we need to
+  void operator[]= (String key, SegmentPoint point) {
+    if(key == "point") _point = point;
+    if(key == "handleIn") _handleIn = point;
+    if(key == "handleOut") _handleOut = point;
+  }
+  
 
   /**
    * @return {String} A string representation of the segment.
@@ -378,10 +407,10 @@ class Segment {
   String toString() {
     var sb = new StringBuffer();
     sb.add("{ point: ${_point}");
-    if(!_handleIn.isZero()) {
+    if(_handleIn != null && !_handleIn.isZero()) {
       sb.add(", handleIn: ${_handleIn}");
     }
-    if(!_handleOut.isZero()) {
+    if(_handleOut != null && !_handleOut.isZero()) {
       sb.add(", handleOut: ${_handleOut}");
     }
     sb.add(" }");
@@ -423,7 +452,7 @@ class Segment {
     // we are done now.
     if (matrix == null)
       return;
-    matrix._transformCoordinates(coords, 0, coords, 0, i / 2);
+    matrix.transformCoordinates(coords, 0, coords, 0, (i / 2).toInt());
     x = coords[0];
     y = coords[1];
     if (change) {
@@ -453,4 +482,4 @@ class Segment {
       }
     }
   }
-});
+}

@@ -22,59 +22,49 @@
  * @private
  */
 class SegmentPoint extends Point {
-  Object _owner;
+  Segment _owner;
 
+  SegmentPoint setFromPoint(Point point) {
+    super.setX(point.x);
+    super.setY(point.y);
+    _owner._changed(this);
+    return this;
+  }
   SegmentPoint set(num x, num y) {
-    this._x = x;
-    this._y = y;
-    _changed(this);
-    //this._owner._changed(this);
+    super.setX(x);
+    super.setY(y);
+    _owner._changed(this);
     return this;
   }
 
-  // TODO Point should have this already
-//  getX: function() {
-//    return this._x;
-//  }
-
   setX(num x) {
-    _x = x;
-    //this._owner._changed(this);
-    _changed(this);
+    super.setX(x);
+    _owner._changed(this);
   }
-
-  // TODO Point should already have this
-//  getY: function() {
-//    return this._y;
-//  }
+  set x(num value) => setX(value);
 
   setY(num y) {
-    _y = y;
-    //this._owner._changed(this);
-    _changed(this);
-  }
-
-  bool isZero() {
-    // Provide our own version of Point#isZero() that does not use the x / y
-    // accessors but the internal properties directly, for performance
-    // reasons, since it is used a lot internally.
-
-    // TODO why not just make normal implementation work this way?
-    return _x == 0 && _y == 0;
+    super.setY(y);
+    _owner._changed(this);
   }
 
   setSelected(bool selected) {
     // TODO I don't think we can access _setSelected on the owner from here
     _owner._setSelected(this, selected);
   }
+  // property
+  set selected(bool value) => setSelected(value);
 
   bool isSelected() {
     // TODO I don't think we can access _isSelected on the owner from here
     return _owner._isSelected(this);
   }
+  // property
+  bool get selected() => isSelected();
 
   SegmentPoint.create(Segment segment, key, [/*Point*/ point]) {
-    var x, y, selected;
+    num x, y;
+    bool selected = false;
     if(point == null) {
       x = y = 0;
     } else if(point is List) {
@@ -82,14 +72,19 @@ class SegmentPoint extends Point {
       y = point[1];
     } else {
       // TODO read point from other arguments
-      // If not Point-link already, read Point from pt = 3rd argument
+      // If not Point-like already, read Point from pt = 3rd argument
       point = Point.read(point);
       x = point.x;
       y = point.y;
-      selected = point.selected;
+      // only get selected if it is a SegmentPoint
+      if(point is SegmentPoint) {
+        selected = point.selected;
+      } else {
+        selected = false;
+      }
     }
-    _x = x;
-    _y = y;
+    super.setX(x);
+    super.setY(y);
     _owner = segment;
     // We need to set the point on the segment before copying over the
     // selected state, as otherwise this won't actually select it.

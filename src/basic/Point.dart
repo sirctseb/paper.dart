@@ -216,6 +216,7 @@ class Point {
    */
   num get x() => _x;
       set x(num value) => _x = value;
+  setX(num value) => _x = value;
 
   /**
    * The y coordinate of the point
@@ -225,6 +226,7 @@ class Point {
    */
   num get y() => _y;
       set y(num value) => _y = value;
+  setY(num value) => _y = value;
 
   Point set(num x, num y) {
     _x = x;
@@ -787,7 +789,7 @@ class Point {
    * @returns {Boolean} {@true both x and y are 0}
    */
   bool isZero() {
-    return x == 0 && y == 0;
+    return _x == 0 && _y == 0;
   }
 
   /**

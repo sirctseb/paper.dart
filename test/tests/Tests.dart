@@ -2,12 +2,14 @@
 #import("../../../../../Desktop/dart/dart-sdk/lib/unittest/unittest.dart");
 #import("../../src/basic/Basic.dart");
 #import("../../src/color/Color.dart");
+#import("../../src/path/Segment.dart");
 #source("./Point.dart");
 #source("./Rectangle.dart");
 #source("./Size.dart");
 #source("./Line.dart");
 #source("../lib/helpers.dart");
 #source("./Color.dart");
+#source("./Segment.dart");
 
 void main() {
 	PointTests();
@@ -15,4 +17,5 @@ void main() {
 	SizeTests();
 	LineTests();
 	ColorTests();
+	SegmentTests();
 }
