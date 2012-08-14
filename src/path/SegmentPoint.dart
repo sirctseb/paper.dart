@@ -31,39 +31,16 @@ class SegmentPoint extends Point {
     return this;
   }
 
-  // TODO Point should have this already
-//  getX: function() {
-//    return this._x;
-//  }
-
   setX(num x) {
     super.setX(x);
-    //this._owner._changed(this);
     _owner._changed(this);
   }
   set x(num value) => setX(value);
 
-  // TODO Point should already have this
-//  getY: function() {
-//    return this._y;
-//  }
-
   setY(num y) {
     super.setY(y);
-    //this._owner._changed(this);
     _owner._changed(this);
   }
-
-  // TODO we don't have access to _x and _y from here
-  // Point.isZero does it this way anyway
-  /*bool isZero() {
-    // Provide our own version of Point#isZero() that does not use the x / y
-    // accessors but the internal properties directly, for performance
-    // reasons, since it is used a lot internally.
-
-    // TODO why not just make normal implementation work this way?
-    return _x == 0 && _y == 0;
-  }*/
 
   setSelected(bool selected) {
     // TODO I don't think we can access _setSelected on the owner from here
@@ -84,7 +61,7 @@ class SegmentPoint extends Point {
       y = point[1];
     } else {
       // TODO read point from other arguments
-      // If not Point-link already, read Point from pt = 3rd argument
+      // If not Point-like already, read Point from pt = 3rd argument
       point = Point.read(point);
       x = point.x;
       y = point.y;
