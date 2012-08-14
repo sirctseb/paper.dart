@@ -16,25 +16,25 @@
 
 module('Group');
 
-test('new Group()', function() {
+test('new Group()', () {
   var group = new Group();
-  equals(function() {
+  equals(() {
     return paper.project.activeLayer.children[0] == group;
   }, true);
 });
 
-test('new Group([item])', function() {
+test('new Group([item])', () {
   var path = new Path();
   var group = new Group([path]);
-  equals(function() {
+  equals(() {
     return paper.project.activeLayer.children.length;
   }, 1);
-  equals(function() {
+  equals(() {
     return group.children[0] == path;
   }, true);
 });
 
-test('Group bounds', function() {
+test('Group bounds', () {
   paper.project.currentStyle = {
     strokeWidth: 5,
     strokeColor: 'black'
