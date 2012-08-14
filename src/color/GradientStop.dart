@@ -28,7 +28,7 @@ class GradientStop {
    * @param {Number} [rampPoint=0] the position of the stop on the gradient
    *                               ramp {@default 0}
    */
-  GradientStop(arg0, arg1) {
+  GradientStop(arg0, [arg1]) {
     _owners = [];
     if (arg1 == null && arg0 is List) {
       // [color, rampPoint]
@@ -43,6 +43,18 @@ class GradientStop {
       setColor(arg0);
       setRampPoint(arg1);
     }
+  }
+  
+  List<GradientStop> readAll(List args) {
+    List result = [];
+    for(var gs in args) {
+      if(gs is GradientStop) {
+        result.add(gs);
+      } else {
+        result.add(new GradientStop(gs));
+      }
+    }
+    return result;
   }
 
   // TODO: Do we really need to also clone the color here?
