@@ -17,4 +17,5 @@ void main() {
 	SizeTests();
 	LineTests();
 	ColorTests();
+	SegmentTests();
 }
