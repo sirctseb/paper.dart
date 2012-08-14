@@ -43,16 +43,16 @@ compareNumbers(num number1, num number2, [String message]) {
       (message || '') + ' y');
 }*/
 
-/*function compareRectangles(rect1, rect2, message) {
+compareRectangles(rect1, rect2, message) {
   compareNumbers(rect1.x, rect2.x,
-      (message || '') + ' x');
+      "$message x");
   compareNumbers(rect1.y, rect2.y,
-      (message || '') + ' y');
+      "$message y");
   compareNumbers(rect1.width, rect2.width,
-      (message || '') + ' width');
+      "$message width");
   compareNumbers(rect1.height, rect2.height,
-      (message || '') + ' height');
-}*/
+      "$message height");
+}
 
 compareRgbColors(/*Color*/ color1, /*Color*/ color2, [String message]) {
   color1 = new RgbColor(color1);
