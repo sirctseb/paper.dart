@@ -1,5 +1,6 @@
 src/path/Segment.dart
 test/tests/Tests.dart
+test/tests/Item_Bounds.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
