@@ -149,7 +149,7 @@ HitResultTests() {
         expect(hitResult.item == path);
       }
 
-      var hitResult = paper.project.hitTest(firstPoint.add(-50, 0), {
+      hitResult = paper.project.hitTest(firstPoint.add(-50, 0), {
         "handles": true
       });
 
@@ -181,7 +181,7 @@ HitResultTests() {
         expect(hitResult.item == path);
       }
 
-      var hitResult = paper.project.hitTest([-50, -50], {
+      hitResult = paper.project.hitTest([-50, -50], {
         "handles": true
       });
 
@@ -303,7 +303,7 @@ HitResultTests() {
       
       path.guide = true;
       
-      var hitResult = paper.project.hitTest(path.position, {
+      hitResult = paper.project.hitTest(path.position, {
         "guides": true,
         "fill": true
       });
@@ -328,7 +328,7 @@ HitResultTests() {
       // Move the raster:
       raster.translate(100, 100);
       
-      var hitResult = paper.project.hitTest(new Point(160, 120));
+      hitResult = paper.project.hitTest(new Point(160, 120));
 
       expect(hitResult && hitResult.item == raster, true, 'Hit raster item after moving');
     });
@@ -344,7 +344,7 @@ HitResultTests() {
       var text1 = new PointText(30, 30);
       text1.content = "Text 1";
 
-      var hitResult = paper.project.hitTest(new Point(75, 75));
+      hitResult = paper.project.hitTest(new Point(75, 75));
       
       expect(hitResult, true, 'A hitresult should be returned.');
 
