@@ -14,6 +14,7 @@
 #source("HitResult.dart");
 #source("CompoundPath.dart");
 #source("Item.dart");
+#source("Item_Bounds.dart");
 
 void main() {
 	PointTests();
