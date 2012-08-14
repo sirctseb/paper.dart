@@ -33,9 +33,7 @@ CompoundPathTests() {
 
       path.fillColor = 'black';
 
-      equals(() {
-        return path.children.length;
-      }, 2);
+      expect(path.children.length, 2);
     });
 
     test('clockwise', () {
@@ -43,33 +41,17 @@ CompoundPathTests() {
       var path2 = new Path.Rectangle([50, 50], [200, 200]);
       var path3 = new Path.Rectangle([0, 0], [400, 400]);
 
-      equals(() {
-        return path1.clockwise;
-      }, true);
-      equals(() {
-        return path2.clockwise;
-      }, true);
-      equals(() {
-        return path3.clockwise;
-      }, true);
+      expect(path1.clockwise);
+      expect(path2.clockwise);
+      expect(path3.clockwise);
 
       var compound = new CompoundPath(path1, path2, path3);
 
-      equals(() {
-        return compound.lastChild == path3;
-      }, true);
-      equals(() {
-        return compound.firstChild == path1;
-      }, true);
-      equals(() {
-        return path1.clockwise;
-      }, true);
-      equals(() {
-        return path2.clockwise;
-      }, false);
-      equals(() {
-        return path3.clockwise;
-      }, false);
+      expect(compound.lastChild === path3);
+      expect(compound.firstChild === path1);
+      expect(path1.clockwise);
+      expect(!path2.clockwise);
+      expect(!path3.clockwise);
     });
   }
 }
