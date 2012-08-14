@@ -24,6 +24,12 @@
 class SegmentPoint extends Point {
   Segment _owner;
 
+  SegmentPoint setFromPoint(Point point) {
+    super.setX(point.x);
+    super.setY(point.y);
+    _owner._changed(this);
+    return this;
+  }
   SegmentPoint set(num x, num y) {
     super.setX(x);
     super.setY(y);
