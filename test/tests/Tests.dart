@@ -12,6 +12,7 @@
 #source("./Segment.dart");
 #source("Group.dart");
 #source("HitResult.dart");
+#source("CompoundPath.dart");
 
 void main() {
 	PointTests();

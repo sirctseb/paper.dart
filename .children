@@ -1,7 +1,7 @@
+test/tests/Item.dart
 src/path/Segment.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
-test/tests/CompoundPath.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
 src/color/Color.dart
