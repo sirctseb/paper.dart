@@ -390,6 +390,13 @@ class Segment {
     if(key == "handleOut") return _handleOut;
     return null;
   }
+  Point operator[]= (String key, Point point) {
+    if(key == "point") _point.setFromPoint(point); return _point;
+    if(key == "handleIn") _handleIn.setFromPoint(point); return _handleIn;
+    if(key == "handleOut") _handleOut.setFromPoint(point); return _handleOut;
+    return null;
+  }
+  
 
   /**
    * @return {String} A string representation of the segment.
