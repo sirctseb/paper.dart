@@ -15,7 +15,7 @@
  */
 
 CompoundPathTests() {
-  group("CompoundPath Tests") () {
+  group("CompoundPath Tests", () {
     test('moveTo / lineTo', () {
       var path = new CompoundPath();
 
@@ -53,5 +53,5 @@ CompoundPathTests() {
       expect(!path2.clockwise);
       expect(!path3.clockwise);
     });
-  }
+  });
 }
