@@ -28,10 +28,16 @@ class Gradient {
    * @param {GradientStop[]} stops
    * @param {String} [type='linear'] 'linear' or 'radial'
    */
-  Gradient(stops, type) {
-    setStops(stops || ['white', 'black']);
-    type = type || 'linear';
+  Gradient([List stops, type]) {
+    _owners = [];
+    setStops(stops == null ? ['white', 'black'] : stops);
+    _type = type == null ? 'linear' : type;
   }
+  
+  String _type;
+  // property
+  String get type() => _type;
+  set type(String value) => _type = value;
 
   /**
    * Called by various setters whenever a gradient value changes
@@ -39,18 +45,17 @@ class Gradient {
   void _changed() {
     // Loop through the gradient-colors that use this gradient and notify
     // them, so they can notify the items they belong to.
-    for (var i = 0, l = this._owners && this._owners.length; i < l; i++)
-      this._owners[i]._changed();
+    for(var owner in _owners)
+      owner._changed();
   }
 
+  List _owners;
   /**
    * Called by GradientColor#initialize
    * This is required to pass on _changed() notifications to the _owners.
    */
   void _addOwner(color) {
-    if (!_owners)
-      _owners = [];
-    _owners.push(color);
+    _owners.add(color);
   }
 
   // TODO: Where and when should this be called:
@@ -58,11 +63,9 @@ class Gradient {
    * Called by GradientColor whenever this gradient stops being used.
    */
   void _removeOwner(color) {
-    var index = _owners ? _owners.indexOf(color) : -1;
+    var index = _owners.indexOf(color);
     if (index != -1) {
-      _owners.splice(index, 1);
-      if (_owners.length == 0)
-        delete _owners;
+      _owners.removeRange(index, 1);
     }
   }
 
@@ -71,11 +74,13 @@ class Gradient {
    */
   Gradient clone() {
     var stops = [];
-    for (var i = 0, l = _stops.length; i < l; i++)
-      stops[i] = _stops[i].clone();
-    return new Gradient(stops, type);
+    for(var stop in _stops) {
+      stops.add(stop.clone());
+    }
+    return new Gradient(stops, _type);
   }
 
+  List<GradientStop> _stops;
   /**
    * The gradient stops on the gradient ramp.
    *
@@ -90,8 +95,8 @@ class Gradient {
     // If this gradient already contains stops, first remove
     // this gradient as their owner.
     if (stops) {
-      for (var i = 0, l = _stops.length; i < l; i++) {
-        _stops[i]._removeOwner(this);
+      for(var stop in _stops) {
+        stop._removeOwner(this);
       }
     }
     if (stops.length < 2)
@@ -99,8 +104,7 @@ class Gradient {
           'Gradient stop list needs to contain at least two stops.');
     _stops = GradientStop.readAll(stops);
     // Now reassign ramp points if they were not specified.
-    for (var i = 0, l = _stops.length; i < l; i++) {
-      var stop = _stops[i];
+    for(var stop in _stops) {
       stop._addOwner(this);
       if (stop._defaultRamp)
         stop.setRampPoint(i / (l - 1));
@@ -115,7 +119,7 @@ class Gradient {
    * @return {Boolean} {@true they are equal}
    */
   bool equals(Gradient gradient) {
-    if (gradient.type != type)
+    if (gradient._type != _type)
       return false;
     if (_stops.length == gradient._stops.length) {
       for (var i = 0, l = _stops.length; i < l; i++) {
