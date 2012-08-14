@@ -196,7 +196,8 @@ class Segment {
     int state = _selectionState;
     // For performance reasons use array indices to access the various
     // selection states: 0 = point, 1 = handleIn, 2 = handleOut
-    selection = [
+    // TODO fix missing var declaration and submit pull request on paper.js
+    var selection = [
       (state & SelectionState.POINT) != 0,
       (state & SelectionState.HANDLE_IN) != 0,
       (state & SelectionState.HANDLE_OUT) != 0
@@ -266,6 +267,7 @@ class Segment {
    * @type Number
    * @bean
    */
+  int _index;
   int getIndex() {
     return _index;
   }
