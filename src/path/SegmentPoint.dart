@@ -59,7 +59,8 @@ class SegmentPoint extends Point {
   }
 
   SegmentPoint.create(Segment segment, key, [/*Point*/ point]) {
-    var x, y, selected;
+    num x, y;
+    bool selected = false;
     if(point == null) {
       x = y = 0;
     } else if(point is List) {
