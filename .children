@@ -1,5 +1,6 @@
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
+src/color/GradientStop.dart
 src/path/Segment.dart
 src/basic/Basic.dart
 src/color/Color.dart
