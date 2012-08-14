@@ -81,9 +81,9 @@ class Segment {
         handleOut = new Point(arg4, arg5);
       }
     }
-    SegmentPoint.create(this, "_point", point);
-    SegmentPoint.create(this, "_handleIn", handleIn);
-    SegmentPoint.create(this, "_handleOut", handleOut);
+    new SegmentPoint.create(this, "_point", point);
+    new SegmentPoint.create(this, "_handleIn", handleIn);
+    new SegmentPoint.create(this, "_handleOut", handleOut);
   }
 
   // TODO I have no idea what is going on in this function
@@ -105,7 +105,7 @@ class Segment {
       }
     }
     this._path._changed(Change.GEOMETRY);
-  },
+  }
 
   /**
    * The anchor point of the segment.
@@ -113,6 +113,7 @@ class Segment {
    * @type Point
    * @bean
    */
+  Point _point;
   Point getPoint() {
     return _point;
   }
@@ -135,6 +136,7 @@ class Segment {
    * @type Point
    * @bean
    */
+  Point _handleIn;
   Point getHandleIn() {
     return _handleIn;
   }
@@ -142,7 +144,7 @@ class Segment {
   Point get handleIn() => getHandleIn();
 
   setHandleIn(/*Point*/ point) {
-    point = Point.read(arguments);
+    point = Point.read(point);
     // See #setPoint:
     _handleIn.set(point.x, point.y);
     // Update corner accordingly
@@ -159,6 +161,7 @@ class Segment {
    * @type Point
    * @bean
    */
+  Point _handleOut;
   Point getHandleOut() {
     return _handleOut;
   }
@@ -166,7 +169,7 @@ class Segment {
   Point get handleOut() => getHandleOut();
 
   setHandleOut(/*Point*/ point) {
-    point = Point.read(arguments);
+    point = Point.read(point);
     // See #setPoint:
     _handleOut.set(point.x, point.y);
     // Update corner accordingly
