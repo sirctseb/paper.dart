@@ -89,58 +89,49 @@ compareGrayColors(color1, color2, [message = ""]) {
   compareNumbers(color1.gray, color2.gray,
       '$message gray');
 }
-/*
-function compareGradientColors(gradientColor, gradientColor2, checkIdentity) {
-  Base.each(['origin', 'destination', 'hilite'], function(key) {
+
+compareGradientColors(gradientColor, gradientColor2, checkIdentity) {
+  for(var key in ['origin', 'destination', 'hilite']) {
     if (checkIdentity) {
-      equals(function() {
-        return gradientColor[key] != gradientColor2[key];
-      }, true, 'Strict compare GradientColor#' + key);
+      expect(gradientColor[key] != gradientColor2[key], true,
+        'Strict compare GradientColor#$key');
     }
     equals(gradientColor[key].toString(), gradientColor2[key].toString(),
-      'Compare GradientColor#' + key);
-  });
-  equals(function() {
-    return gradientColor.gradient.equals(gradientColor2.gradient);
-  }, true);
+      'Compare GradientColor#$key');
+  };
+  expect(gradientColor.gradient.equals(gradientColor2.gradient), true);
 }
 
-function comparePathStyles(style, style2, checkIdentity) {
+comparePathStyles(style, style2, checkIdentity) {
   if (checkIdentity) {
-    equals(function() {
-      return style != style2;
-    }, true);
+    expect(style != style2, true);
   }
-  Base.each(['fillColor', 'strokeColor'], function(key) {
+  for(var key in ['fillColor', 'strokeColor']) {
     if (style[key]) {
       // The color should not point to the same color object:
       if (checkIdentity) {
-        equals(function() {
-          return style[key] !== style2[key];
-        }, true, 'The ' + key + ' should not point to the same color object:');
+        expect(style[key] !== style2[key], true,
+          'The $key should not point to the same color object:');
       }
-      if (style[key] instanceof GradientColor) {
+      if (style[key] is GradientColor) {
         if (checkIdentity) {
-          equals(function() {
-            return style[key].gradient == style2[key].gradient;
-          }, true, 'The ' + key + '.gradient should point to the same object:');
+          expect(style[key].gradient == style2[key].gradient, true,
+            'The $key .gradient should point to the same object:');
         }
         compareGradientColors(style[key], style2[key], checkIdentity);
       } else {
-        equals(style[key].toString(), style2[key].toString(),
-            'Compare PathStyle#' + key);
+        expect(style[key].toString(), style2[key].toString(),
+            'Compare PathStyle#$key');
       }
     }
-  });
+  };
 
-  Base.each(['strokeCap', 'strokeJoin', 'dashOffset', 'miterLimit',
-      'strokeOverprint', 'fillOverprint'], function(key) {
+  for(var key in ['strokeCap', 'strokeJoin', 'dashOffset', 'miterLimit',
+      'strokeOverprint', 'fillOverprint']) {
     if (style[key]) {
-      equals(function() {
-        return style[key] == style2[key];
-      }, true, 'Compare PathStyle#' + key);
+      expect(style[key] == style2[key], true, 'Compare PathStyle#$key');
     }
-  });
+  };
 
   if (style.dashArray) {
     equals(style.dashArray.toString(), style2.dashArray.toString(),
@@ -148,53 +139,46 @@ function comparePathStyles(style, style2, checkIdentity) {
   }
 }
 
-function compareObjects(name, keys, obj, obj2, checkIdentity) {
+// TODO this is not going to work in dart
+compareObjects(name, keys, obj, obj2, checkIdentity) {
   if (checkIdentity) {
-    equals(function() {
-      return obj != obj2;
-    }, true);
+    expect(obj != obj2, true);
   }
-  Base.each(keys, function(key) {
-    equals(obj[key], obj2[key], 'Compare ' + name + '#' + key);
-  });
+  for(var key in keys) {
+    equals(obj[key], obj2[key], 'Compare $name#$key');
+  };
 }
 
-function compareCharacterStyles(characterStyle, characterStyle2, checkIdentity) {
+compareCharacterStyles(characterStyle, characterStyle2, checkIdentity) {
   compareObjects('CharacterStyle', ['fontSize', 'font'],
       characterStyle, characterStyle2, checkIdentity);
 }
 
-function compareParagraphStyles(paragraphStyle, paragraphStyle2, checkIdentity) {
+compareParagraphStyles(paragraphStyle, paragraphStyle2, checkIdentity) {
   compareObjects('ParagraphStyle', ['justification'],
       paragraphStyle, paragraphStyle2, checkIdentity);
 }
 
-function compareSegmentPoints(segmentPoint, segmentPoint2, checkIdentity) {
+compareSegmentPoints(segmentPoint, segmentPoint2, checkIdentity) {
   compareObjects('SegmentPoint', ['x', 'y', 'selected'],
       segmentPoint, segmentPoint2, checkIdentity);
 }
 
-function compareSegments(segment, segment2, checkIdentity) {
+compareSegments(segment, segment2, checkIdentity) {
   if (checkIdentity) {
-    equals(function() {
-      return segment !== segment2;
-    }, true);
+    expect(segment !== segment2, true);
   }
-  equals(function() {
-    return segment.selected == segment2.selected;
-  }, true);
-  Base.each(['handleIn', 'handleOut', 'point'], function(key) {
+  expect(segment.selected == segment2.selected, true);
+  for(var key in ['handleIn', 'handleOut', 'point']) {
     compareSegmentPoints(segment[key], segment2[key]);
-  });
+  }
 }
 
-function compareSegmentLists(segmentList, segmentList2, checkIdentity) {
+compareSegmentLists(segmentList, segmentList2, checkIdentity) {
   if (checkIdentity) {
-    equals(function() {
-      return segmentList !== segmentList2;
-    }, true);
+    expect(segmentList !== segmentList2, true);
   }
-  equals(segmentList.toString(), segmentList2.toString(),
+  expect(segmentList.toString(), segmentList2.toString(),
       'Compare Item#segments');
   if (checkIdentity) {
     for (var i = 0, l = segmentList.length; i < l; i++) {
@@ -205,136 +189,108 @@ function compareSegmentLists(segmentList, segmentList2, checkIdentity) {
   }
 }
 
-function compareItems(item, item2, checkIdentity) {
+compareItems(item, item2, checkIdentity) {
   if (checkIdentity) {
-    equals(function() {
-      return item != item2;
-    }, true);
+    expect(item != item2, true);
 
-    equals(function() {
-      return item.id != item2.id;
-    }, true);
+    expect(item.id != item2.id, true);
   }
 
-  equals(function() {
-    return item.constructor == item2.constructor;
-  }, true);
+  expect(item.constructor == item2.constructor, true);
 
   var itemProperties = ['opacity', 'locked', 'visible', 'blendMode', 'name',
        'selected', 'clipMask'];
-  Base.each(itemProperties, function(key) {
-    equals(item[key], item2[key], 'compare Item#' + key);
-  });
-
-  if (checkIdentity) {
-    equals(function() {
-      return item.bounds != item2.bounds;
-    }, true);
+  for(var key in itemProperties) {
+    expect(item[key], item2[key], 'compare Item#' + key);
   }
 
-  equals(item.bounds.toString(), item2.bounds.toString(),
+  if (checkIdentity) {
+    expect(item.bounds != item2.bounds, true);
+  }
+
+  expect(item.bounds.toString(), item2.bounds.toString(),
       'Compare Item#bounds');
 
   if (checkIdentity) {
-    equals(function() {
-      return item.position != item2.position;
-    }, true);
+    expect(item.position != item2.position, true);
   }
 
-  equals(item.position.toString(), item2.position.toString(),
+  expect(item.position.toString(), item2.position.toString(),
       'Compare Item#position');
 
-  if (item.matrix) {
+  if (item.matrix != null) {
     if (checkIdentity) {
-      equals(function() {
-        return item.matrix != item2.matrix;
-      }, true);
+      expect(item.matrix != item2.matrix, true);
     }
-    equals(item.matrix.toString(), item2.matrix.toString(),
+    expect(item.matrix.toString(), item2.matrix.toString(),
         'Compare Item#matrix');
   }
 
   // Path specific
-  if (item2 instanceof Path) {
+  if (item2 is Path) {
     var keys = ['closed', 'fullySelected', 'clockwise', 'length'];
-    for (var i = 0, l = keys.length; i < l; i++) {
-      var key = keys[i];
+    for(var key in keys) {
       equals(item[key], item2[key], 'Compare Path#' + key);
     }
     compareSegmentLists(item.segments, item2.segments, checkIdentity);
   }
 
   // Group specific
-  if (item instanceof Group) {
-    equals(function() {
-      return item.clipped == item2.clipped;
-    }, true);
+  if (item is Group) {
+    expect(item.clipped == item2.clipped, true);
   }
 
   // Layer specific
-  if (item instanceof Layer) {
-    equals(function() {
-      return item.project == item2.project;
-    }, true);
+  if (item is Layer) {
+    expect(item.project == item2.project, true);
   }
 
   // PlacedSymbol specific
-  if (item instanceof PlacedSymbol) {
-    equals(function() {
-      return item.symbol == item2.symbol;
-    }, true);
+  if (item is PlacedSymbol) {
+    expect(item.symbol == item2.symbol, true);
   }
 
   // Raster specific
-  if (item instanceof Raster) {
+  if (item is Raster) {
     // TODO: remove access of private fields:
-    if (item._canvas) {
+    if (item._canvas != null) {
       if (checkIdentity) {
-        equals(function() {
-          return item._canvas != item2._canvas;
-        }, true);
+        expect(item._canvas != item2._canvas, true);
       }
     }
-    if (item._image) {
-      equals(function() {
-        return item._image == item2._image;
-      }, true);
+    if (item._image != null) {
+      expect(item._image == item2._image, true);
     }
-    equals(item._size.toString(), item2._size.toString(),
+    expect(item._size.toString(), item2._size.toString(),
         'Compare Item#size');
   }
 
   // TextItem specific:
-  if (item instanceof TextItem) {
-    equals(item.content, item2.content, 'Compare Item#content');
+  if (item is TextItem) {
+    expect(item.content, item2.content, 'Compare Item#content');
     compareCharacterStyles(item.characterStyle, item2.characterStyle,
         checkIdentity);
   }
 
   // PointText specific:
-  if (item instanceof PointText) {
+  if (item is PointText) {
     if (checkIdentity) {
-      equals(function() {
-        return item.point != item2.point;
-      }, true);
+      expect(item.point != item2.point, true);
     }
-    equals(item.point.toString(), item2.point.toString(),
+    expect(item.point.toString(), item2.point.toString(),
         'Compare Item#point');
   }
 
-  if (item.style) {
+  if (item.style != null) {
     // Path Style
     comparePathStyles(item.style, item2.style, checkIdentity);
   }
 
   // Check length of children and recursively compare them:
-  if (item.children) {
-    equals(function() {
-      return item.children.length == item2.children.length;
-    }, true);
+  if (item.children != null) {
+    expect(item.children.length == item2.children.length, true);
     for (var i = 0, l = item.children.length; i < l; i++) {
       compareItems(item.children[i], item2.children[i], checkIdentity);
     }
   }
 }
-*/
