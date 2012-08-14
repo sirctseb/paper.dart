@@ -337,7 +337,7 @@ class Segment {
    * @type Segment
    * @bean
    */
-  getPrevious: function() {
+  getPrevious() {
     if(_path != null) {
       var segments = _path._segments;
       if(segments != null) {
