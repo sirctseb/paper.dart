@@ -412,7 +412,7 @@ class Matrix {
     num x2 = x1 + rect.width;
     num y2 = y1 + rect.height;
     List coords = [ x1, y1, x2, y1, x2, y2, x1, y2 ];
-    return this._transformCoordinates(coords, 0, coords, 0, 4);
+    return this.transformCoordinates(coords, 0, coords, 0, 4);
   }
 
   /**
@@ -423,19 +423,19 @@ class Matrix {
   Rectangle _transformBounds(Rectangle bounds, [Rectangle dest]) {
     List coords = this._transformCorners(bounds);
     // TODO check these
-    List min = coords.getRange(0,2);
-    List max = new List.from(coords);
+    List mins = coords.getRange(0,2);
+    List maxs = new List.from(coords);
     for (var i = 2; i < 8; i++) {
       int val = coords[i];
       int j = i & 1;
-      if (val < min[j])
-        min[j] = val;
-      else if (val > max[j])
-        max[j] = val;
+      if (val < mins[j])
+        mins[j] = val;
+      else if (val > maxs[j])
+        maxs[j] = val;
     }
     if (dest == null)
       dest = new Rectangle();
-    return dest.set(min[0], min[1], max[0] - min[0], max[1] - min[1]);
+    return dest.set(mins[0], mins[1], maxs[0] - mins[0], maxs[1] - mins[1]);
   }
 
   /**
@@ -452,9 +452,9 @@ class Matrix {
    * reversible, null otherwise.
    */
   num _getDeterminant() {
-    var det = _a * _d - _b * _c;
-    return isFinite(det) && det.abs() > Numerical.EPSILON
-        && isFinite(_tx) && isFinite(_ty)
+    num det = _a * _d - _b * _c;
+    return !det.isInfinite() && det.abs() > Numerical.EPSILON
+        && !_tx.isInfinite() && !_ty.isInfinite()
         ? det : null;
   }
 
@@ -620,11 +620,11 @@ class Matrix {
     angle = angle * Math.PI / 180;
     num x = center.x;
     num y = center.y;
-    num cos = Math.cos(angle);
-    num sin = Math.sin(angle);
-    return set(cos, sin, -sin, cos,
-        x - x * cos + y * sin,
-        y - x * sin - y * cos);
+    num cos_angle = Math.cos(angle);
+    num sin_angle = Math.sin(angle);
+    return set(cos_angle, sin_angle, -sin_angle, cos_angle,
+        x - x * cos_angle + y * sin_angle,
+        y - x * sin_angle - y * cos_angle);
   }
 
   /**
