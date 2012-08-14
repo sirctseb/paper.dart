@@ -179,6 +179,7 @@ class Segment {
   // property
   set handleOut(Point value) => setHandleOut(value);
 
+  int _selectionState;
   bool _isSelected(Point point) {
     var state = this._selectionState;
     // TODO check operator precedence
