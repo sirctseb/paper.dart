@@ -71,10 +71,15 @@ class SegmentPoint extends Point {
       point = Point.read(point);
       x = point.x;
       y = point.y;
-      selected = point.selected;
+      // only get selected if it is a SegmentPoint
+      if(point is SegmentPoint) {
+        selected = point.selected;
+      } else {
+        selected = false;
+      }
     }
-    this.x = x;
-    this.y = y;
+    super.setX(x);
+    super.setY(y);
     _owner = segment;
     // We need to set the point on the segment before copying over the
     // selected state, as otherwise this won't actually select it.
