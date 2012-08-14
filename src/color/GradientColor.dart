@@ -14,12 +14,13 @@
  * All rights reserved.
  */
 
+
 /**
  * @name GradientColor
  *
  * @class The GradientColor object.
  */
-class GradientColor {
+class GradientColor extends Color {
 
   /**
    * Creates a gradient color object.
@@ -82,21 +83,23 @@ class GradientColor {
    * // Set the fill color of the path to the gradient color:
    * path.fillColor = gradientColor;
    */
-  GradientColor(gradient, origin, destination, hilite) {
-    this.gradient = gradient || new Gradient();
-    this.gradient._addOwner(this);
-    this.setOrigin(origin);
-    this.setDestination(destination);
+  GradientColor(Gradient gradient, origin, destination, hilite) {
+    gradient = gradient == null ? new Gradient() : gradient;
+    gradient._addOwner(this);
+    setOrigin(origin);
+    setDestination(destination);
     if (hilite)
-      this.setHilite(hilite);
+      setHilite(hilite);
   }
+
+  Gradient _gradient;
 
   /**
    * @return {GradientColor} a copy of the gradient color
    */
   GradientColor clone() {
-    return new GradientColor(this.gradient, this._origin, this._destination,
-        this._hilite);
+    return new GradientColor(_gradient, _origin, _destination,
+        _hilite);
   }
 
   /**
@@ -128,17 +131,18 @@ class GradientColor {
    * }
    *
    */
+  Point _origin;
   Point getOrigin() {
-    return this._origin;
+    return _origin;
   }
 
-  GradientColor setOrigin(origin) {
+  GradientColor setOrigin(/*Point*/ origin) {
     // PORT: Add clone to Scriptographer
-    origin = Point.read(arguments).clone();
-    this._origin = origin;
-    if (this._destination)
-      this._radius = this._destination.getDistance(this._origin);
-    this._changed();
+    origin = Point.read(origin).clone();
+    _origin = origin;
+    if (_destination != null)
+      _radius = _destination.getDistance(this._origin);
+    _changed();
     return this;
   }
 
@@ -169,18 +173,21 @@ class GradientColor {
    *   path.fillColor.destination = event.point;
    * }
    */
+  Point _destination;
   Point getDestination() {
-    return this._destination;
+    return _destination;
   }
 
-  GradientColor setDestination(destination) {
+  GradientColor setDestination(/*Point*/ destination) {
     // PORT: Add clone to Scriptographer
-    destination = Point.read(arguments).clone();
-    this._destination = destination;
-    this._radius = this._destination.getDistance(this._origin);
-    this._changed();
+    destination = Point.read(destination).clone();
+    _destination = destination;
+    _radius = _destination.getDistance(_origin);
+    _changed();
     return this;
   }
+  
+  num _radius;
 
   /**
    * The hilite point of the gradient.
@@ -208,36 +215,42 @@ class GradientColor {
    *   path.fillColor.hilite = event.point;
    * }
    */
+  
+  Point _hilite;
+  
   Point getHilite() {
-    return this._hilite;
+    return _hilite;
   }
 
-  GradienColor setHilite(hilite) {
+  GradientColor setHilite(/*Point*/ hilite) {
     // PORT: Add clone to Scriptographer
-    hilite = Point.read(arguments).clone();
-    var vector = hilite.subtract(this._origin);
-    if (vector.getLength() > this._radius) {
-      this._hilite = this._origin.add(
-          vector.normalize(this._radius - 0.1));
+    hilite = Point.read(hilite).clone();
+    var vector = hilite.subtract(_origin);
+    if (vector.getLength() > _radius) {
+      _hilite = _origin.add(
+          vector.normalize(_radius - 0.1));
     } else {
-      this._hilite = hilite;
+      _hilite = hilite;
     }
-    this._changed();
+    _changed();
     return this;
   }
 
-  getCanvasStyle(ctx) {
+  getCanvasStyle([ctx]) {
+    // TODO made ctx optional so we can override Color.getCanvasStyle,
+    // but it is really required
+    if(ctx == null) return null;
     var gradient;
-    if (this.gradient.type === 'linear') {
-      gradient = ctx.createLinearGradient(this._origin.x, this._origin.y,
-          this._destination.x, this._destination.y);
+    if (_gradient.type === 'linear') {
+      gradient = ctx.createLinearGradient(_origin.x, _origin.y,
+          _destination.x, _destination.y);
     } else {
-      var origin = this._hilite || this._origin;
+      var origin = _hilite == null ? _origin : _hilite;
       gradient = ctx.createRadialGradient(origin.x, origin.y,
-          0, this._origin.x, this._origin.y, this._radius);
+          0, _origin.x, _origin.y, _radius);
     }
-    for (var i = 0, l = this.gradient._stops.length; i < l; i++) {
-      var stop = this.gradient._stops[i];
+    for (var i = 0, l = _gradient._stops.length; i < l; i++) {
+      var stop = _gradient._stops[i];
       gradient.addColorStop(stop._rampPoint, stop._color.toCssString());
     }
     return gradient;
@@ -251,10 +264,10 @@ class GradientColor {
    * @return {@true the GradientColor is the same}
    */
   bool equals(color) {
-    return color == this || color && color._colorType === this._colorType
-        && this.gradient.equals(color.gradient)
-        && this._origin.equals(color._origin)
-        && this._destination.equals(color._destination);
+    return color === this || color && color._type === _type
+        && _gradient.equals(color.gradient)
+        && _origin.equals(color._origin)
+        && _destination.equals(color._destination);
   }
 
   /**
@@ -263,11 +276,11 @@ class GradientColor {
    * @param {Matrix} matrix the matrix to transform the gradient color by
    */
   void transform(matrix) {
-    matrix._transformPoint(this._origin, this._origin, true);
-    matrix._transformPoint(this._destination, this._destination, true);
-    if (this._hilite)
-      matrix._transformPoint(this._hilite, this._hilite, true);
-    this._radius = this._destination.getDistance(this._origin);
+    matrix._transformPoint(_origin, _origin, true);
+    matrix._transformPoint(_destination, _destination, true);
+    if (_hilite != null)
+      matrix._transformPoint(_hilite, _hilite, true);
+    _radius = _destination.getDistance(_origin);
   }
 }
 
