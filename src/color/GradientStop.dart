@@ -45,7 +45,7 @@ class GradientStop {
     }
   }
   
-  List<GradientStop> readAll(List args) {
+  static List<GradientStop> readAll(List args) {
     List result = [];
     for(var gs in args) {
       if(gs is GradientStop) {
