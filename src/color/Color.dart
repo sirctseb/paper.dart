@@ -18,6 +18,7 @@
 #import("../core/Base.dart");
 #import("../util/CanvasProvider.dart");
 #import("dart:core");
+#source("GradientStop.dart");
 
 /**
  * @name Color
