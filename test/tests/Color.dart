@@ -51,7 +51,7 @@ ColorTests() {
       //expect(path.fillColor.toCssString(), equals('rgba(255, 0, 255, 1)'));
       Color color = new Color({"red": 1, "green": 0, "blue": 1});
       compareRgbColors(color, new RgbColor(1, 0, 1));
-      expect(color.toCssString(), equals('rgba(255, 0, 200, 1)'));
+      expect(color.toCssString(), equals('rgba(255, 0, 255, 1)'));
 
       //var path = new Path();
       //path.fillColor = { "gray": 0.2 };
