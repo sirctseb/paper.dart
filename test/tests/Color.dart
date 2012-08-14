@@ -198,9 +198,9 @@ ColorTests() {
 
     test('Cloning colors', () {
       var color = new RgbColor(0, 0, 0);
-      expect(color.clone() != color);
+      expect(color.clone() !== color);
 
-      expect(new RgbColor(color) != color);
+      expect(new RgbColor(color) !== color);
     });
 
     test('Color#convert', () {
