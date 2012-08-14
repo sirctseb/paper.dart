@@ -186,7 +186,7 @@ class Segment {
       : point === _handleIn ? (state & SelectionState.HANDLE_IN) != 0
       : point === _handleOut ? (state & SelectionState.HANDLE_OUT) != 0
       : false;
-  },
+  }
 
   _setSelected(Point point, bool selected) {
     var path = this._path;
@@ -357,7 +357,7 @@ class Segment {
    */
   Segment reverse() {
     return new Segment(this._point, this._handleOut, this._handleIn);
-  },
+  }
 
   /**
    * Removes the segment from the path that it belongs to.
@@ -460,4 +460,4 @@ class Segment {
       }
     }
   }
-});
+}
