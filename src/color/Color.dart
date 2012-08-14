@@ -20,6 +20,7 @@
 #import("dart:core");
 #source("GradientStop.dart");
 #source("Gradient.dart");
+#source("GradientColor.dart");
 
 /**
  * @name Color
