@@ -16,68 +16,68 @@
 
 SegmentTests() {
   group("Segment Tests", () {
-    test('new Segment(point)', function() {
+    test('new Segment(point)', () {
       var segment = new Segment(new Point(10, 10));
       equals(segment.toString(), '{ point: { x: 10, y: 10 } }');
     });
     
-    test('new Segment(x, y)', function() {
+    test('new Segment(x, y)', () {
       var segment = new Segment(10, 10);
       equals(segment.toString(), '{ point: { x: 10, y: 10 } }');
     });
     
-    test('new Segment(object)', function() {
+    test('new Segment(object)', () {
       var segment = new Segment({ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } });
       equals(segment.toString(), '{ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } }');
     });
     
-    test('new Segment(point, handleIn, handleOut)', function() {
+    test('new Segment(point, handleIn, handleOut)', () {
       var segment = new Segment(new Point(10, 10), new Point(5, 5), new Point(15, 15));
       equals(segment.toString(), '{ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } }');
     });
     
-    test('new Segment(x, y, inX, inY, outX, outY)', function() {
+    test('new Segment(x, y, inX, inY, outX, outY)', () {
       var segment = new Segment(10, 10, 5, 5, 15, 15);
       equals(segment.toString(), '{ point: { x: 10, y: 10 }, handleIn: { x: 5, y: 5 }, handleOut: { x: 15, y: 15 } }');
     });
     
-    test('new Segment(size)', function() {
+    test('new Segment(size)', () {
       var segment = new Segment(new Size(10, 10));
       equals(segment.toString(), '{ point: { x: 10, y: 10 } }');
     });
     
-    test('segment.reverse()', function() {
+    test('segment.reverse()', () {
       var segment = new Segment(new Point(10, 10), new Point(5, 5), new Point(15, 15));
       segment = segment.reverse();
       equals(segment.toString(), '{ point: { x: 10, y: 10 }, handleIn: { x: 15, y: 15 }, handleOut: { x: 5, y: 5 } }');
     });
     
-    test('segment.clone()', function() {
+    test('segment.clone()', () {
       var segment = new Segment(new Point(10, 10), new Point(5, 5), new Point(15, 15));
       var clone = segment.clone();
-      equals(function() {
+      equals(() {
         return segment == clone;
       }, false);
     
-      equals(function() {
+      equals(() {
         return segment.toString();
       }, clone.toString());
     });
     
-    test('segment.remove()', function() {
+    test('segment.remove()', () {
       var path = new Path([10, 10], [5, 5], [10, 10]);
       path.segments[1].remove();
       equals(path.segments.toString(), '{ point: { x: 10, y: 10 } },{ point: { x: 10, y: 10 } }');
     });
     
-    test('segment.selected', function() {
+    test('segment.selected', () {
       var path = new Path([10, 20], [50, 100]);
       path.segments[0].point.selected = true;
-      equals(function() {
+      equals(() {
         return path.segments[0].point.selected;
       }, true);
       path.segments[0].point.selected = false;
-      equals(function() {
+      equals(() {
         return path.segments[0].point.selected;
       }, false);});
   });
