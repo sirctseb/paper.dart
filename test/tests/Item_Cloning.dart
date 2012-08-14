@@ -33,13 +33,13 @@ ItemCloningTests() {
       path.closed = true;
       path.name = 'test';
       path.style = {
-        strokeCap: 'round',
-        strokeJoin: 'round',
-        dashOffset: 10,
-        dashArray: [10, 2, 10],
-        fillColor: new RgbColor(0, 0, 1),
-        strokeColor: new RgbColor(0, 0, 1),
-        miterLimit: 5
+        "strokeCap": 'round',
+        "strokeJoin": 'round',
+        "dashOffset": 10,
+        "dashArray": [10, 2, 10],
+        "fillColor": new RgbColor(0, 0, 1),
+        "strokeColor": new RgbColor(0, 0, 1),
+        "miterLimit": 5
       };
       path.clockwise = false;
       path.opacity = 0.5;
@@ -84,13 +84,13 @@ ItemCloningTests() {
     test('Group#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
-        strokeCap: 'round',
-        strokeJoin: 'round',
-        dashOffset: 10,
-        dashArray: [10, 2, 10],
-        fillColor: new RgbColor(0, 0, 1),
-        strokeColor: new RgbColor(0, 0, 1),
-        miterLimit: 5
+        "strokeCap": 'round',
+        "strokeJoin": 'round',
+        "dashOffset": 10,
+        "dashArray": [10, 2, 10],
+        "fillColor": new RgbColor(0, 0, 1),
+        "strokeColor": new RgbColor(0, 0, 1),
+        "miterLimit": 5
       };
       var secondPath = new Path.Circle([175, 175], 85);
       var group = new Group([path, secondPath]);
@@ -102,8 +102,8 @@ ItemCloningTests() {
       pointText.content = 'test';
       pointText.position = pointText.position.add(100);
       pointText.characterStyle = {
-        font: 'serif',
-        fontSize: 20
+        "font": 'serif',
+        "fontSize": 20
       };
       pointText.justification = 'center';
       cloneAndCompare(pointText);
@@ -121,13 +121,13 @@ ItemCloningTests() {
     test('Symbol#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
-        strokeCap: 'round',
-        strokeJoin: 'round',
-        dashOffset: 10,
-        dashArray: [10, 2, 10],
-        fillColor: new RgbColor(0, 0, 1),
-        strokeColor: new RgbColor(0, 0, 1),
-        miterLimit: 5
+        "strokeCap": 'round',
+        "strokeJoin": 'round',
+        "dashOffset": 10,
+        "dashArray": [10, 2, 10],
+        "fillColor": new RgbColor(0, 0, 1),
+        "strokeColor": new RgbColor(0, 0, 1),
+        "miterLimit": 5
       };
       path.selected = true;
       var symbol = new Symbol(path);
@@ -140,8 +140,8 @@ ItemCloningTests() {
     test('Raster#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
-        fillColor: new RgbColor(0, 0, 1),
-        strokeColor: new RgbColor(0, 0, 1)
+        "fillColor": new RgbColor(0, 0, 1),
+        "strokeColor": new RgbColor(0, 0, 1)
       };
       var raster = path.rasterize();
       raster.opacity = 0.5;
