@@ -61,9 +61,10 @@ class GradientStop {
     // the change, so they can notify their gradient colors, which in turn
     // will notify the items they are used in:
     //for (var i = 0, l = _owners && _owners.length; i < l; i++)
-    for(owner in _owners) {
+    for(var owner in _owners) {
       //_owners[i]._changed(Change.STYLE);
       owner._changed(Change.STYLE);
+    }
   }
 
   List _owners;
@@ -179,7 +180,7 @@ class GradientStop {
   void setColor(Color color) {
     // If the stop already contained a color,
     // remove it as an owner:
-    if (_color)
+    if (_color != null)
       _color._removeOwner(this);
     _color = Color.read(color);
     _color._addOwner(this);
