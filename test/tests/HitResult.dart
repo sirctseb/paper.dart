@@ -91,7 +91,7 @@ HitResultTests() {
       path.closed = true;
 
       var hitResult = paper.project.hitTest(path.position, {
-        center: true
+        "center": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned.');
@@ -111,7 +111,7 @@ HitResultTests() {
       var path = new Path([0, 0], [100, 100], [200, 0]);
       path.closed = true;
       var hitResult = paper.project.hitTest(path.position.add(1, 1), {
-        center: true
+        "center": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned.');
@@ -138,7 +138,7 @@ HitResultTests() {
       path.firstSegment.handleOut = [50, 0];
       var firstPoint = path.firstSegment.point;
       var hitResult = paper.project.hitTest(firstPoint.add(50, 0), {
-        handles: true
+        "handles": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned (1)');
@@ -150,7 +150,7 @@ HitResultTests() {
       }
 
       var hitResult = paper.project.hitTest(firstPoint.add(-50, 0), {
-        handles: true
+        "handles": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned (2)');
@@ -164,13 +164,13 @@ HitResultTests() {
 
     test('hitting path handles (2)', () {
       var path = new Path(new Segment({
-        point: [0, 0],
-        handleIn: [-50, -50],
-        handleOut: [50, 50]
+        "point": [0, 0],
+        "handleIn": [-50, -50],
+        "handleOut": [50, 50]
       }));
 
       var hitResult = paper.project.hitTest([50, 50], {
-        handles: true
+        "handles": true
       });
       
       expect(hitResult != null, true, 'A HitResult should be returned (1)');
@@ -182,7 +182,7 @@ HitResultTests() {
       }
 
       var hitResult = paper.project.hitTest([-50, -50], {
-        handles: true
+        "handles": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned (2)');
@@ -202,7 +202,7 @@ HitResultTests() {
       var error = null;
       try {
         var hitResult = paper.project.hitTest(path.firstSegment.point, {
-          stroke: true
+          "stroke": true
         });
       } catch (e) {
         error = e;
@@ -220,7 +220,7 @@ HitResultTests() {
       var error;
       try {
         var hitResult = path.hitTest(point, {
-          stroke: true
+          "stroke": true
         });
       } catch(e) {
         error = e;
@@ -242,7 +242,7 @@ HitResultTests() {
       path.closed = false;
 
       var hitResult = paper.project.hitTest(path.lastSegment.point, {
-        ends: true
+        "ends": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned (1)');
@@ -263,7 +263,7 @@ HitResultTests() {
       path.closed = true;
 
       var hitResult = paper.project.hitTest([0, 0], {
-        ends: true
+        "ends": true
       });
       expect(hitResult == null, true,
         'When a path is closed, the end of a path cannot be hit.');
@@ -273,7 +273,7 @@ HitResultTests() {
       var path = new Path.Circle(new Point(100, 100), 50);
 
       var hitResult = paper.project.hitTest(path.bounds.topLeft, {
-        bounds: true
+        "bounds": true
       });
 
       expect(hitResult != null, true, 'A HitResult should be returned (1)');
@@ -304,8 +304,8 @@ HitResultTests() {
       path.guide = true;
       
       var hitResult = paper.project.hitTest(path.position, {
-        guides: true,
-        fill: true
+        "guides": true,
+        "fill": true
       });
       
       expect(hitResult != null, true, 'A HitResult should be returned (2)');
