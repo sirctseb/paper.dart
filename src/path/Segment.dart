@@ -434,7 +434,7 @@ class Segment {
     // we are done now.
     if (matrix == null)
       return;
-    matrix.transformCoordinates(coords, 0, coords, 0, i / 2);
+    matrix.transformCoordinates(coords, 0, coords, 0, (i / 2).toInt());
     x = coords[0];
     y = coords[1];
     if (change) {
