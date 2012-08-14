@@ -94,19 +94,20 @@ class Gradient {
   void setStops(List stops) {
     // If this gradient already contains stops, first remove
     // this gradient as their owner.
-    if (stops) {
+    if (_stops != null) {
       for(var stop in _stops) {
         stop._removeOwner(this);
       }
     }
     if (stops.length < 2)
-      throw new Error(
+      throw new Exception(
           'Gradient stop list needs to contain at least two stops.');
     _stops = GradientStop.readAll(stops);
     // Now reassign ramp points if they were not specified.
-    for(var stop in _stops) {
+    for (var i = 0, l = _stops.length; i < l; i++) {
+      var stop = _stops[i];
       stop._addOwner(this);
-      if (stop._defaultRamp)
+      if (stop.defaultRamp)
         stop.setRampPoint(i / (l - 1));
     }
     _changed();
