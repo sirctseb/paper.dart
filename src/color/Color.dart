@@ -94,10 +94,16 @@ class Color {
   }
   set gray(num value) {
     if(value != _gray) {
-      _type = "gray";
-      _gray = _clampUnit(value);
-      // nullify other properties
-      _red = _green = _blue = _hue = _saturation = _brightness = _lightness = null;
+      if(_type == "gray") {
+        _gray = _clampUnit(value);
+
+        // nullify other properties
+        _red = _green = _blue = _hue = _saturation = _brightness = _lightness = null;
+      } else {
+        GrayColor grayColor = this.convert("gray");
+        grayColor.gray = value;
+        setComponents(grayColor.convert(_type));
+      }
       _cssString = null;
       _changed();
     }
@@ -287,6 +293,17 @@ class Color {
   }
   // TODO why do we need this if we return a valid value always?
   bool hasAlpha() => _alpha != null;
+  
+  void setComponents(Color color) {
+    _gray = color._gray;
+    _red = color._red;
+    _green = color._green;
+    _blue = color._blue;
+    _hue = color._hue;
+    _saturation = color._saturation;
+    _brightness = color._brightness;
+    _lightness = color._lightness;
+  }
 
 
   /*static var components = const {
