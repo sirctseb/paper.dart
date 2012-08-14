@@ -16,317 +16,317 @@
 
 ItemTests() {
   group("Item Tests", () {
-    test('copyTo(project)', function() {
+    test('copyTo(project)', () {
       var project = paper.project;
       var path = new Path();
       var secondDoc = new Project();
       var copy = path.copyTo(secondDoc);
-      equals(function() {
+      equals(() {
         return secondDoc.activeLayer.children.indexOf(copy) != -1;
       }, true);
-      equals(function() {
+      equals(() {
         return project.activeLayer.children.indexOf(copy) == -1;
       }, true);
-      equals(function() {
+      equals(() {
         return copy != path;
       }, true);
     });
 
-    test('copyTo(layer)', function() {
+    test('copyTo(layer)', () {
       var project = paper.project;
       var path = new Path();
 
       var layer = new Layer();
       var copy = path.copyTo(layer);
-      equals(function() {
+      equals(() {
         return layer.children.indexOf(copy) != -1;
       }, true);
-      equals(function() {
+      equals(() {
         return project.layers[0].children.indexOf(copy) == -1;
       }, true);
     });
 
-    test('clone()', function() {
+    test('clone()', () {
       var project = paper.project;
       var path = new Path();
       var copy = path.clone();
-      equals(function() {
+      equals(() {
         return project.activeLayer.children.length;
       }, 2);
-      equals(function() {
+      equals(() {
         return path != copy;
       }, true);
     });
 
-    test('addChild(item)', function() {
+    test('addChild(item)', () {
       var project = paper.project;
       var path = new Path();
       project.activeLayer.addChild(path);
-      equals(function() {
+      equals(() {
         return project.activeLayer.children.length;
       },  1);
     });
 
-    test('item.parent / item.isChild / item.isParent / item.layer', function() {
+    test('item.parent / item.isChild / item.isParent / item.layer', () {
       var project = paper.project;
       var secondDoc = new Project();
       var path = new Path();
       project.activeLayer.addChild(path);
-      equals(function() {
+      equals(() {
         return project.activeLayer.children.indexOf(path) != -1;
       }, true);
-        equals(function() {
+        equals(() {
         return path.layer == project.activeLayer;
       }, true);
       secondDoc.activeLayer.addChild(path);
-      equals(function() {
+      equals(() {
         return project.activeLayer.isChild(path);
       }, false);
-      equals(function() {
+      equals(() {
         return path.layer == secondDoc.activeLayer;
       }, true);
-      equals(function() {
+      equals(() {
         return path.isParent(project.activeLayer);
       }, false);
-      equals(function() {
+      equals(() {
         return secondDoc.activeLayer.isChild(path);
       }, true);
-      equals(function() {
+      equals(() {
         return path.isParent(secondDoc.activeLayer);
       }, true);
-      equals(function() {
+      equals(() {
         return project.activeLayer.children.indexOf(path) == -1;
       }, true);
-      equals(function() {
+      equals(() {
         return secondDoc.activeLayer.children.indexOf(path) == 0;
       }, true);
     });
 
-    test('item.lastChild / item.firstChild', function() {
+    test('item.lastChild / item.firstChild', () {
       var project = paper.project;
       var path = new Path();
       var secondPath = new Path();
-      equals(function() {
+      equals(() {
         return project.activeLayer.firstChild == path;
       }, true);
-      equals(function() {
+      equals(() {
         return project.activeLayer.lastChild == secondPath;
       }, true);
     });
 
-    test('insertChild(0, item)', function() {
+    test('insertChild(0, item)', () {
       var project = paper.project;
       var path = new Path();
       var secondPath = new Path();
       project.activeLayer.insertChild(0, secondPath);
-      equals(function() {
+      equals(() {
         return secondPath.index < path.index;
       }, true);
     });
 
-    test('insertAbove(item)', function() {
+    test('insertAbove(item)', () {
       var project = paper.project;
       var path = new Path();
       var secondPath = new Path();
       path.insertAbove(secondPath);
-      equals(function() {
+      equals(() {
         return project.activeLayer.lastChild == path;
       }, true);
     });
 
-    test('insertBelow(item)', function() {
+    test('insertBelow(item)', () {
       var project = paper.project;
       var firstPath = new Path();
       var secondPath = new Path();
-      equals(function() {
+      equals(() {
         return secondPath.index > firstPath.index;
       }, true);
       secondPath.insertBelow(firstPath);
-      equals(function() {
+      equals(() {
         return secondPath.index < firstPath.index;
       }, true);
     });
 
-    test('isDescendant(item) / isAncestor(item)', function() {
+    test('isDescendant(item) / isAncestor(item)', () {
       var project = paper.project;
       var path = new Path();
-      equals(function() {
+      equals(() {
         return path.isDescendant(project.activeLayer);
       }, true);
-      equals(function() {
+      equals(() {
         return project.activeLayer.isDescendant(path);
       }, false);
-      equals(function() {
+      equals(() {
         return path.isAncestor(project.activeLayer);
       }, false);
-      equals(function() {
+      equals(() {
         return project.activeLayer.isAncestor(path);
       }, true);
 
       // an item can't be its own descendant:
-      equals(function() {
+      equals(() {
         return project.activeLayer.isDescendant(project.activeLayer);
       }, false);
       // an item can't be its own ancestor:
-      equals(function() {
+      equals(() {
         return project.activeLayer.isAncestor(project.activeLayer);
       }, false);
     });
 
-    test('isGroupedWith', function() {
+    test('isGroupedWith', () {
       var project = paper.project;
       var path = new Path();
       var secondPath = new Path();
       var group = new Group([path]);
       var secondGroup = new Group([secondPath]);
 
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(secondPath);
       }, false);
       secondGroup.addChild(path);
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(secondPath);
       }, true);
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(group);
       }, false);
-      equals(function() {
+      equals(() {
         return path.isDescendant(secondGroup);
       }, true);
-      equals(function() {
+      equals(() {
         return secondGroup.isDescendant(path);
       }, false);
-      equals(function() {
+      equals(() {
         return secondGroup.isDescendant(secondGroup);
       }, false);
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(secondGroup);
       }, false);
       paper.project.activeLayer.addChild(path);
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(secondPath);
       }, false);
       paper.project.activeLayer.addChild(secondPath);
-      equals(function() {
+      equals(() {
         return path.isGroupedWith(secondPath);
       }, false);
     });
 
-    test('getPreviousSibling() / getNextSibling()', function() {
+    test('getPreviousSibling() / getNextSibling()', () {
       var firstPath = new Path();
       var secondPath = new Path();
-      equals(function() {
+      equals(() {
         return firstPath.nextSibling == secondPath;
       }, true);
-      equals(function() {
+      equals(() {
         return secondPath.previousSibling == firstPath;
       }, true);
-      equals(function() {
+      equals(() {
         return secondPath.nextSibling == null;
       }, true);
     });
 
-    test('reverseChildren()', function() {
+    test('reverseChildren()', () {
       var project = paper.project;
       var path = new Path();
       var secondPath = new Path();
       var thirdPath = new Path();
-      equals(function() {
+      equals(() {
         return project.activeLayer.firstChild == path;
       }, true);
       project.activeLayer.reverseChildren();
-      equals(function() {
+      equals(() {
         return project.activeLayer.firstChild == path;
       }, false);
-      equals(function() {
+      equals(() {
         return project.activeLayer.firstChild == thirdPath;
       }, true);
-      equals(function() {
+      equals(() {
         return project.activeLayer.lastChild == path;
       }, true);
     });
 
-    test('Check item#project when moving items across projects', function() {
+    test('Check item#project when moving items across projects', () {
       var project = paper.project;
       var doc1 = new Project();
       var path = new Path();
       var group = new Group();
       group.addChild(new Path());
 
-      equals(function() {
+      equals(() {
         return path.project == doc1;
       }, true);
       var doc2 = new Project();
       doc2.activeLayer.addChild(path);
-      equals(function() {
+      equals(() {
         return path.project == doc2;
       }, true);
 
       doc2.activeLayer.addChild(group);
-      equals(function() {
+      equals(() {
         return group.children[0].project == doc2;
       }, true);
     });
 
-    test('group.selected', function() {
+    test('group.selected', () {
       var path = new Path([0, 0]);
       var path2 = new Path([0, 0]);
       var group = new Group([path, path2]);
       path.selected = true;
-      equals(function() {
+      equals(() {
         return group.selected;
       }, true);
 
       path.selected = false;
-      equals(function() {
+      equals(() {
         return group.selected;
       }, false);
 
       group.selected = true;
-      equals(function() {
+      equals(() {
         return path.selected;
       }, true);
-      equals(function() {
+      equals(() {
         return path2.selected;
       }, true);
 
       group.selected = false;
-      equals(function() {
+      equals(() {
         return path.selected;
       }, false);
-      equals(function() {
+      equals(() {
         return path2.selected;
       }, false);
     });
 
-    test('Check parent children object for named item', function() {
+    test('Check parent children object for named item', () {
       var path = new Path();
       path.name = 'test';
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path;
       }, true);
 
       var path2 = new Path();
       path2.name = 'test';
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path2;
       }, true);
 
       path2.remove();
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path;
       }, true);
 
       path.remove();
 
-      equals(function() {
+      equals(() {
         return !paper.project.activeLayer.children['test'];
       }, true);
     });
 
-    test('Named child access 1', function() {
+    test('Named child access 1', () {
       var path = new Path();
       path.name = 'test';
 
@@ -335,12 +335,12 @@ ItemTests() {
 
       path.remove();
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path2;
       }, true);
     });
 
-    test('Named child access 2', function() {
+    test('Named child access 2', () {
       var path = new Path();
       path.name = 'test';
 
@@ -349,26 +349,26 @@ ItemTests() {
 
       path.remove();
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path2;
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer._namedChildren['test'].length == 1;
       }, true);
 
       path2.remove();
 
-      equals(function() {
+      equals(() {
         return !paper.project.activeLayer._namedChildren['test'];
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] === undefined;
       }, true);
     });
 
-    test('Named child access 3', function() {
+    test('Named child access 3', () {
       var path = new Path();
       path.name = 'test';
 
@@ -379,103 +379,103 @@ ItemTests() {
 
       group.addChild(path2);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path;
       }, true);
 
       // TODO: Tests should not access internal properties
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer._namedChildren['test'].length;
       }, 1);
 
-      equals(function() {
+      equals(() {
         return group.children['test'] == path2;
       }, true);
 
-      equals(function() {
+      equals(() {
         return group._namedChildren['test'].length == 1;
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer._namedChildren['test'][0] == path;
       }, true);
 
       paper.project.activeLayer.appendTop(path2);
 
-      equals(function() {
+      equals(() {
         return group.children['test'] == null;
       }, true);
 
-      equals(function() {
+      equals(() {
         return group._namedChildren['test'] === undefined;
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path2;
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer._namedChildren['test'].length;
       }, 2);
     });
 
-    test('Setting name of child back to null', function() {
+    test('Setting name of child back to null', () {
       var path = new Path();
       path.name = 'test';
 
       var path2 = new Path();
       path2.name = 'test';
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path2;
       }, true);
 
       path2.name = null;
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] == path;
       }, true);
 
       path.name = null;
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] === undefined;
       }, true);
     });
 
-    test('Renaming item', function() {
+    test('Renaming item', () {
       var path = new Path();
       path.name = 'test';
 
       path.name = 'test2';
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test'] === undefined;
       }, true);
 
-      equals(function() {
+      equals(() {
         return paper.project.activeLayer.children['test2'] == path;
       }, true);
     });
 
-    test('Changing item#position.x', function() {
+    test('Changing item#position.x', () {
       var path = new Path.Circle(new Point(50, 50), 50);
       path.position.x += 5;
       equals(path.position.toString(), '{ x: 55, y: 50 }', 'path.position.x += 5');
     });
 
-    test('Naming a removed item', function() {
+    test('Naming a removed item', () {
       var path = new Path();
       path.remove();
       path.name = 'test';
     });
 
-    test('Naming a layer', function() {
+    test('Naming a layer', () {
       var layer = new Layer();
       layer.name = 'test';
     });
 
-    test('Cloning a linked size', function() {
+    test('Cloning a linked size', () {
       var path = new Path([40, 75], [140, 75]);
       var error = null;
       try {
