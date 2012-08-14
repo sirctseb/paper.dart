@@ -28,37 +28,21 @@ ItemOrderTests() {
       var group = new Group([circle]);
       group.name = 'group';
 
-      equals(() {
-        return circle.isAbove(line);
-        }, true);
-      equals(() {
-        return line.isBelow(circle);
-        }, true);
+      expect(circle.isAbove(line), true);
+      expect(line.isBelow(circle), true);
 
-      equals(() {
-        return group.isAbove(line);
-        }, true);
-      equals(() {
-        return line.isBelow(group);
-        }, true);
+      expect(group.isAbove(line), true);
+      expect(line.isBelow(group), true);
 
 
-      equals(() {
-        return group.isAncestor(circle);
-        }, true);
+      expect(group.isAncestor(circle), true);
 
-      equals(() {
-        return circle.isDescendant(group);
-        }, true);
+      expect(circle.isDescendant(group), true);
 
 
-      equals(() {
-        return group.isAbove(circle);
-        }, false);
+      expect(group.isAbove(circle), false);
 
-      equals(() {
-        return group.isBelow(circle);
-        }, false);
+      expect(group.isBelow(circle), false);
     });
 
     test('Item#moveAbove(item) / Item#moveBelow(item)', () {
@@ -70,15 +54,9 @@ ItemOrderTests() {
         item1 = new Group();
         item2 = new Group();
         command();
-        equals(() {
-          return item0.index;
-          }, indexes[0], command.toString());
-        equals(() {
-          return item1.index;
-          }, indexes[1]);
-        equals(() {
-          return item2.index;
-          }, indexes[2]);
+        expect(item0.index, indexes[0], command.toString());
+        expect(item1.index, indexes[1]);
+        expect(item2.index, indexes[2]);
       }
 
       testMove(() { item0.moveBelow(item0) }, [0,1,2]);
