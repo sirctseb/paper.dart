@@ -85,9 +85,6 @@ class GradientStop {
     var index = _owners != null ? _owners.indexOf(gradient) : -1;
     if (index != -1) {
       _owners.removeRange(index, 1);
-      // TODO why set this to null?
-      //if (_owners.length == 0)
-      //  _owners = null;
     }
   }
 
