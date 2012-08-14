@@ -65,13 +65,16 @@ SegmentTests() {
     });
     
     test('segment.remove()', () {
-      var path = new Path([10, 10], [5, 5], [10, 10]);
+      // TODO enable when Path is implemented
+      /*var path = new Path([10, 10], [5, 5], [10, 10]);
       path.segments[1].remove();
-      equals(path.segments.toString(), '{ point: { x: 10, y: 10 } },{ point: { x: 10, y: 10 } }');
+      equals(path.segments.toString(), '{ point: { x: 10, y: 10 } },{ point: { x: 10, y: 10 } }');*/
+      equals(false);
     });
     
     test('segment.selected', () {
-      var path = new Path([10, 20], [50, 100]);
+      // TODO enable when Path is implemented
+      /*var path = new Path([10, 20], [50, 100]);
       path.segments[0].point.selected = true;
       equals(() {
         return path.segments[0].point.selected;
@@ -79,6 +82,8 @@ SegmentTests() {
       path.segments[0].point.selected = false;
       equals(() {
         return path.segments[0].point.selected;
-      }, false);});
+      }, false);});*/
+      equals(false);
+    });
   });
 }
