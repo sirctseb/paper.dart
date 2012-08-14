@@ -14,16 +14,16 @@
  * All rights reserved.
  */
 
-function cloneAndCompare(item) {
+ cloneAndCompare(item) {
   var copy = item.clone();
-  equals(function() {
+  equals(() {
     return item.parent == copy.parent;
   }, true);
-  equals(function() {
+  equals(() {
     return item.nextSibling == copy;
   }, true);
   if (item.name) {
-    equals(function() {
+    equals(() {
       return copy.parent.children[copy.name] == copy;
     }, true);
   }
@@ -34,7 +34,7 @@ function cloneAndCompare(item) {
 
 ItemCloningTests() {
   group("Item Cloning Tests", () {
-    test('Path#clone()', function() {
+    test('Path#clone()', () {
       var path = new Path([10, 20], [30, 40]);
       path.closed = true;
       path.name = 'test';
@@ -57,7 +57,7 @@ ItemCloningTests() {
       cloneAndCompare(path);
     });
 
-    test('Path#clone() with GradientColor', function() {
+    test('Path#clone() with GradientColor', () {
       var colors = ['red', 'green', 'black'];
       var gradient = new Gradient(colors, 'radial');
       var color = new GradientColor(gradient, [0, 0], [20, 20], [10, 10]);
@@ -67,31 +67,31 @@ ItemCloningTests() {
       cloneAndCompare(path);
     });
 
-    test('CompoundPath#clone()', function() {
+    test('CompoundPath#clone()', () {
       var path1 = new Path.Rectangle([200, 200], [100, 100]);
       var path2 = new Path.Rectangle([50, 50], [200, 200]);
       var compound = new CompoundPath(path1, path2);
       cloneAndCompare(compound);
     });
 
-    test('Layer#clone()', function() {
+    test('Layer#clone()', () {
       var path = new Path.Rectangle([200, 200], [100, 100]);
       cloneAndCompare(paper.project.activeLayer);
     });
 
-    test('Layer#clone() - check activeLayer', function() {
+    test('Layer#clone() - check activeLayer', () {
       var project = paper.project,
       activeLayer = project.activeLayer,
       layer = activeLayer.clone();
-      equals(function() {
+      equals(() {
         return layer == project.activeLayer;
         }, true);
-      equals(function() {
+      equals(() {
         return activeLayer != project.activeLayer;
         }, true);
     });
 
-    test('Group#clone()', function() {
+    test('Group#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
         strokeCap: 'round',
@@ -107,7 +107,7 @@ ItemCloningTests() {
       cloneAndCompare(group);
       });
 
-    test('PointText#clone()', function() {
+    test('PointText#clone()', () {
       var pointText = new PointText(new Point(50, 50));
       pointText.content = 'test';
       pointText.position = pointText.position.add(100);
@@ -119,7 +119,7 @@ ItemCloningTests() {
       cloneAndCompare(pointText);
     });
 
-    test('PlacedSymbol#clone()', function() {
+    test('PlacedSymbol#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       var symbol = new Symbol(path);
       var placedSymbol = new PlacedSymbol(symbol);
@@ -128,7 +128,7 @@ ItemCloningTests() {
       cloneAndCompare(placedSymbol);
     });
 
-    test('Symbol#clone()', function() {
+    test('Symbol#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
         strokeCap: 'round',
@@ -143,15 +143,15 @@ ItemCloningTests() {
       var symbol = new Symbol(path);
       var copy = symbol.clone();
       compareItems(copy.definition, symbol.definition);
-      equals(function() {
+      equals(() {
         return symbol.project == copy.project;
         }, true);
-      equals(function() {
+      equals(() {
         return paper.project.symbols.length == 2;
         }, true);
     });
 
-    test('Raster#clone()', function() {
+    test('Raster#clone()', () {
       var path = new Path.Circle([150, 150], 60);
       path.style = {
         fillColor: new RgbColor(0, 0, 1),
@@ -166,7 +166,7 @@ ItemCloningTests() {
       cloneAndCompare(raster);
     });
 
-    test('Group with clipmask', function() {
+    test('Group with clipmask', () {
       var path = new Path.Circle([100, 100], 30),
       path2 = new Path.Circle([100, 100], 20),
       group = new Group([path, path2]);
