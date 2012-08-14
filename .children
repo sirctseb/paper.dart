@@ -5,4 +5,3 @@ src/util/CanvasProvider.dart
 src/basic/Basic.dart
 src/color/Color.dart
 src/core/Base.dart
-src/item/ChangeFlag.dart

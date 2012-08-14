@@ -21,6 +21,7 @@
 #source("GradientStop.dart");
 #source("Gradient.dart");
 #source("GradientColor.dart");
+#source("../item/ChangeFlag.dart");
 
 /**
  * @name Color
