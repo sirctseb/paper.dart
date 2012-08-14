@@ -347,7 +347,8 @@ class Segment {
         if(_index - 1 >= 0) {
           return segments[_index - 1];
         } else if(_path.closed) {
-          return segements[segments.length - 1];
+          // TODO fix segements typo and submit pull request on paper.js
+          return segments[segments.length - 1];
         }
       }
     }
