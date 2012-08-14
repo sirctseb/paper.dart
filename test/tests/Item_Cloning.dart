@@ -16,16 +16,10 @@
 
  cloneAndCompare(item) {
   var copy = item.clone();
-  equals(() {
-    return item.parent == copy.parent;
-  }, true);
-  equals(() {
-    return item.nextSibling == copy;
-  }, true);
+  expect(item.parent == copy.parent, true);
+  expect(item.nextSibling == copy, true);
   if (item.name) {
-    equals(() {
-      return copy.parent.children[copy.name] == copy;
-    }, true);
+    expect(copy.parent.children[copy.name] == copy, true);
   }
   compareItems(copy, item, true);
   // Remove the cloned item to restore the document:
@@ -83,12 +77,8 @@ ItemCloningTests() {
       var project = paper.project,
       activeLayer = project.activeLayer,
       layer = activeLayer.clone();
-      equals(() {
-        return layer == project.activeLayer;
-        }, true);
-      equals(() {
-        return activeLayer != project.activeLayer;
-        }, true);
+      expect(layer == project.activeLayer, true);
+      expect(activeLayer != project.activeLayer, true);
     });
 
     test('Group#clone()', () {
@@ -143,12 +133,8 @@ ItemCloningTests() {
       var symbol = new Symbol(path);
       var copy = symbol.clone();
       compareItems(copy.definition, symbol.definition);
-      equals(() {
-        return symbol.project == copy.project;
-        }, true);
-      equals(() {
-        return paper.project.symbols.length == 2;
-        }, true);
+      expect(symbol.project == copy.project, true);
+      expect(paper.project.symbols.length == 2, true);
     });
 
     test('Raster#clone()', () {
