@@ -14,9 +14,8 @@
  * All rights reserved.
  */
 
-module('Compound Path');
 
-test('moveTo / lineTo', function() {
+test('moveTo / lineTo', () {
   var path = new CompoundPath();
 
   var lists = [
@@ -33,41 +32,41 @@ test('moveTo / lineTo', function() {
 
   path.fillColor = 'black';
 
-  equals(function() {
+  equals(() {
     return path.children.length;
   }, 2);
 });
 
-test('clockwise', function() {
+test('clockwise', () {
   var path1 = new Path.Rectangle([200, 200], [100, 100]);
   var path2 = new Path.Rectangle([50, 50], [200, 200]);
   var path3 = new Path.Rectangle([0, 0], [400, 400]);
 
-  equals(function() {
+  equals(() {
     return path1.clockwise;
   }, true);
-  equals(function() {
+  equals(() {
     return path2.clockwise;
   }, true);
-  equals(function() {
+  equals(() {
     return path3.clockwise;
   }, true);
 
   var compound = new CompoundPath(path1, path2, path3);
 
-  equals(function() {
+  equals(() {
     return compound.lastChild == path3;
   }, true);
-  equals(function() {
+  equals(() {
     return compound.firstChild == path1;
   }, true);
-  equals(function() {
+  equals(() {
     return path1.clockwise;
   }, true);
-  equals(function() {
+  equals(() {
     return path2.clockwise;
   }, false);
-  equals(function() {
+  equals(() {
     return path3.clockwise;
   }, false);
 })
