@@ -19,7 +19,7 @@
  *
  * @class The GradientColor object.
  */
-var GradientColor = this.GradientColor = Color.extend(/** @lends GradientColor# */{
+class GradientColor {
 
   /**
    * Creates a gradient color object.
@@ -268,6 +268,6 @@ var GradientColor = this.GradientColor = Color.extend(/** @lends GradientColor# 
     if (this._hilite)
       matrix._transformPoint(this._hilite, this._hilite, true);
     this._radius = this._destination.getDistance(this._origin);
+  }
 }
-});
 
