@@ -10,6 +10,8 @@
 #source("../lib/helpers.dart");
 #source("./Color.dart");
 #source("./Segment.dart");
+#source("Group.dart");
+#source("HitResult.dart");
 
 void main() {
 	PointTests();
