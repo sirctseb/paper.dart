@@ -341,7 +341,7 @@ class Color {
   }
   static _hexToRgbColor(String string) {
     var hex = new RegExp(@"^#?(\w{1,2})(\w{1,2})(\w{1,2})$").firstMatch(string);
-    if (hex.groupCount() >= 4) {
+    if (hex.groupCount() >= 3) {
       var rgb = new List(3);
       for (var i = 0; i < 3; i++) {
         var channel = hex[i + 1];
