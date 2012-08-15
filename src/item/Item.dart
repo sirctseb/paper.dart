@@ -905,14 +905,16 @@ class Item {
    * // The path is the first child of the group:
    * group.firstChild.fillColor = 'green';
    */
-  getChildren: function() {
+  List<Item> _children;
+  List<Item> getChildren() {
     return this._children;
-  },
+  }
+  List<Item> get children() => getChildren();
 
-  setChildren: function(items) {
-    this.removeChildren();
-    this.addChildren(items);
-  },
+  void setChildren(List<Item> items) {
+    removeChildren();
+    addChildren(items);
+  }
 
   /**
    * The first item contained within this item. This is a shortcut for
@@ -921,9 +923,9 @@ class Item {
    * @type Item
    * @bean
    */
-  getFirstChild: function() {
-    return this._children && this._children[0] || null;
-  },
+  Item getFirstChild() {
+    return _children != null ? _children[0] : null;
+  }
 
   /**
    * The last item contained within this item.This is a shortcut for
@@ -932,10 +934,10 @@ class Item {
    * @type Item
    * @bean
    */
-  getLastChild: function() {
-    return this._children && this._children[this._children.length - 1]
-        || null;
-  },
+  Item getLastChild() {
+    return _children != null ? _children[_children.length - 1]
+        : null;
+  }
 
   /**
    * The next item on the same level as this item.
@@ -943,9 +945,10 @@ class Item {
    * @type Item
    * @bean
    */
-  getNextSibling: function() {
-    return this._parent && this._parent._children[this._index + 1] || null;
-  },
+  Item getNextSibling() {
+    // TODO I think we have to be more careful about index overflow
+    return _parent != null ? _parent._children[_index + 1] : null;
+  }
 
   /**
    * The previous item on the same level as this item.
@@ -953,9 +956,10 @@ class Item {
    * @type Item
    * @bean
    */
-  getPreviousSibling: function() {
-    return this._parent && this._parent._children[this._index - 1] || null;
-  },
+  Item getPreviousSibling() {
+    // TODO I think we have to be more careful about index overflow
+    return _parent != null ? _parent._children[_index - 1] : null;
+  }
 
   /**
    * The index of this item within the list of its parent's children.
@@ -963,9 +967,9 @@ class Item {
    * @type Number
    * @bean
    */
-  getIndex: function() {
-    return this._index;
-  },
+  int getIndex() {
+    return _index;
+  }
 
   /**
    * Clones the item within the same project and places the copy above the
