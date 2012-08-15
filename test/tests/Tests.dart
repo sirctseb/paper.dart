@@ -25,6 +25,7 @@
 #source("Path_Drawing_Commands.dart");
 #source("Path_Length.dart");
 #source("Path_Shapes.dart");
+#source("PlacedSymbol.dart");
 
 void main() {
 	PointTests();
