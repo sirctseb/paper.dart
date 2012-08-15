@@ -106,7 +106,7 @@ PathBoundsTests() {
           { "x": 186.87242, "y": 1.78419, "width": 140.64705, "height": 120.96766 },
           'butt/round path.strokeBounds');
 
-      var path = makePath().translate(150, 0);
+      path = makePath().translate(150, 0);
       path.strokeColor = 'black';
       path.strokeCap = 'butt';
       path.strokeJoin = 'bevel';
@@ -117,7 +117,7 @@ PathBoundsTests() {
           { "x": 336.87242, "y": 1.78419, "width": 140.64705, "height": 119.73034 },
           'butt/bevel path.strokeBounds');
 
-      var path = makePath().translate(300, 0);
+      path = makePath().translate(300, 0);
       path.strokeColor = 'black';
       path.strokeCap = 'butt';
       path.strokeJoin = 'miter';
@@ -128,7 +128,7 @@ PathBoundsTests() {
           { "x": 486.87242, "y": 1.78419, "width": 140.64705, "height": 133.64882 },
           'butt/miter path.strokeBounds');
 
-      var path = makePath().translate(0, 150);
+      path = makePath().translate(0, 150);
       path.strokeColor = 'black';
       path.strokeCap = 'square';
       path.strokeJoin = 'round';
@@ -139,7 +139,7 @@ PathBoundsTests() {
            { "x": 178.06332, "y": 151.78419, "width": 149.45615, "height": 120.96766 },
           'square/strokeBounds path.bounds');
 
-      var path = makePath().translate(150, 150);
+      path = makePath().translate(150, 150);
       path.strokeColor = 'black';
       path.strokeCap = 'square';
       path.strokeJoin = 'bevel';
@@ -150,7 +150,7 @@ PathBoundsTests() {
           { "x": 328.06332, "y": 151.78419, "width": 149.45615, "height": 119.73034 },
           'square/bevel path.strokeBounds');
 
-      var path = makePath().translate(300, 150);
+      path = makePath().translate(300, 150);
       path.strokeColor = 'black';
       path.strokeCap = 'square';
       path.strokeJoin = 'miter';
@@ -161,7 +161,7 @@ PathBoundsTests() {
           { "x": 478.06332, "y": 151.78419, "width": 149.45615, "height": 133.64882 },
           'square/miter path.strokeBounds');
 
-      var path = makePath().translate(0, 300);
+      path = makePath().translate(0, 300);
       path.strokeColor = 'black';
       path.strokeCap = 'round';
       path.strokeJoin = 'round';
@@ -172,7 +172,7 @@ PathBoundsTests() {
           { "x": 184.01325, "y": 301.78419, "width": 143.50622, "height": 120.96766 },
           'round/round path.strokeBounds');
 
-      var path = makePath().translate(150, 300);
+      path = makePath().translate(150, 300);
       path.strokeColor = 'black';
       path.strokeCap = 'round';
       path.strokeJoin = 'bevel';
@@ -183,7 +183,7 @@ PathBoundsTests() {
           { "x": 334.01325, "y": 301.78419, "width": 143.50622, "height": 119.73034 },
           'round/bevel path.strokeBounds');
 
-      var path = makePath().translate(300, 300);
+      path = makePath().translate(300, 300);
       path.strokeColor = 'black';
       path.strokeCap = 'round';
       path.strokeJoin = 'miter';
