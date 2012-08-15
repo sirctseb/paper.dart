@@ -29,32 +29,32 @@ PathTests() {
       expect(path.segments.toString(), '{ point: { x: 0, y: 0 } },{ point: { x: 10, y: 0 } },{ point: { x: 20, y: 10 } }');
       expect(paper.project.activeLayer.children.length, 1);
 
-      var path = new Path();
+      path = new Path();
       path.add(0, 0);
       path.add(10, 0);
 
-      var path2 = new Path();
+      path2 = new Path();
       path2.add(20, 10);
       path2.add(10, 0);
       path.join(path2);
       expect(path.segments.toString(), '{ point: { x: 0, y: 0 } },{ point: { x: 10, y: 0 } },{ point: { x: 20, y: 10 } }');
 
-      var path = new Path();
+      path = new Path();
       path.add(0, 0);
       path.add(10, 0);
 
-      var path2 = new Path();
+      path2 = new Path();
       path2.add(30, 10);
       path2.add(40, 0);
       path.join(path2);
       expect(path.segments.toString(), '{ point: { x: 0, y: 0 } },{ point: { x: 10, y: 0 } },{ point: { x: 30, y: 10 } },{ point: { x: 40, y: 0 } }');
 
-      var path = new Path();
+      path = new Path();
       path.add(0, 0);
       path.add(10, 0);
       path.add(20, 10);
 
-      var path2 = new Path();
+      path2 = new Path();
       path2.add(0, 0);
       path2.add(10, 5);
       path2.add(20, 10);
@@ -171,7 +171,7 @@ PathTests() {
     test('After simplifying a path using #simplify(), the path should stay selected', () {
       var path = new Path();
       for (var i = 0; i < 30; i++) {
-        path.add(i * 10, (i % 2 ? 20 : 40));
+        path.add(i * 10, (i % 2 == 1 ? 20 : 40));
       };
       path.selected = true;
       path.simplify();
@@ -181,7 +181,7 @@ PathTests() {
     test('After smoothing a path using #smooth(), the path should stay fullySelected', () {
       var path = new Path();
       for (var i = 0; i < 30; i++) {
-        path.add(i * 10, (i % 2 ? 20 : 40));
+        path.add(i * 10, (i % 2 == 1 ? 20 : 40));
       };
       path.fullySelected = true;
       path.smooth();
@@ -191,7 +191,7 @@ PathTests() {
     test('After smoothing a path using #smooth(), the path should stay selected', () {
       var path = new Path();
       for (var i = 0; i < 30; i++) {
-        path.add(i * 10, (i % 2 ? 20 : 40));
+        path.add(i * 10, (i % 2 == 1? 20 : 40));
       };
       path.selected = true;
       path.smooth();
