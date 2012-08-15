@@ -19,6 +19,7 @@
 #source("Item_Order.dart");
 #source("Layer.dart");
 #source("Path.dart");
+#source("PathStyle.dart");
 
 void main() {
 	PointTests();
