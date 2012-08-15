@@ -23,6 +23,7 @@
 #source("Path_Bounds.dart");
 #source("Path_Curves.dart");
 #source("Path_Drawing_Commands.dart");
+#source("Path_Length.dart");
 
 void main() {
 	PointTests();
