@@ -1435,27 +1435,27 @@ class Item {
    * Returns -1 if 'this' is above 'item', 1 if below, 0 if their order is not
    * defined in such a way, e.g. if one is a descendant of the other.
    */
-  _getOrder: function(item) {
+  int _getOrder(Item item) {
     // Private method that produces a list of anchestors, starting with the
     // root and ending with the actual element as the last entry.
-    function getList(item) {
+    var getList = (item) {
       var list = [];
       do {
-        list.unshift(item);
-      } while (item = item._parent)
+        list.add(item);
+      } while (item = item._parent != null)
       return list;
     }
-    var list1 = getList(this),
-      list2 = getList(item);
+    var list1 = getList(this);
+    var list2 = getList(item);
     for (var i = 0, l = Math.min(list1.length, list2.length); i < l; i++) {
-      if (list1[i] != list2[i]) {
+      if (list1[list1.length - i - 1] != list2[list2.length - i - 1]) {
         // Found the position in the parents list where the two start
         // to differ. Look at who's above who.
-        return list1[i]._index < list2[i]._index ? 1 : -1;
+        return list1[list1.length - i - 1]._index < list2[list2.length - i - 1]._index ? 1 : -1;
       }
     }
     return 0;
-  },
+  }
 
   /**
    * {@grouptitle Hierarchy Tests}
