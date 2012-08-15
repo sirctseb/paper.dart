@@ -754,6 +754,25 @@ function(name) {
     transform(matrix);
   }
 
+  // Produce getters for bounds properties. These handle caching, matrices
+  // and redirect the call to the private _getBounds, which can be
+  // overridden by subclasses, see below.
+  Rectangle boundsAccessor(String name, [Matrix matrix]) {
+    var type = _boundsType;
+    Rectangle bounds = _getCachedBounds(
+      // Allow subclasses to override _boundsType if they use the same
+      // calculations for multiple types. The default is name:
+      type is String ? type : type != null ? type[name] : name,
+      // Pass on the optional matrix
+      matrix
+      );
+    // If we're returning 'bounds', create a LinkedRectangle that uses the
+    // setBounds() setter to update the Item whenever the bounds are
+    // changed:
+    return name == "bounds" ? LinkedRectangle.create(this, setBounds,
+      bounds.x, bounds.y, bounds.width, bounds.height) : bounds;
+  }
+
   /**
    * The bounding rectangle of the item excluding stroke width.
    *
@@ -761,6 +780,8 @@ function(name) {
    * @type Rectangle
    * @bean
    */
+   Rectangle getBounds([Matrix matrix]) => boundsAccessor("bounds", matrix);
+   Rectangle get bounds() => getBounds();
 
   /**
    * The bounding rectangle of the item including stroke width.
@@ -769,6 +790,8 @@ function(name) {
    * @type Rectangle
    * @bean
    */
+   Rectangle getStrokeBounds([Matrix matrix]) => boundsAccessor("strokeBounds", matrix);
+   Rectangle get strokeBounds() => getStrokeBounds();
 
   /**
    * The bounding rectangle of the item including handles.
@@ -777,9 +800,12 @@ function(name) {
    * @type Rectangle
    * @bean
    */
+   Rectangle getHandleBounds([Matrix matrix]) => boundsAccessor("handleBounds", matrix);
+   Rectangle get handleBounds() => getHandleBounds();
 
   /**
-   * The rough bounding rectangle of the item that is shure to include all of
+   * TODO typo below shure-> sure. submit pull request?
+   * The rough bounding rectangle of the item that is sure to include all of
    * the drawing, including stroke width.
    *
    * @name Item#getRoughBounds
@@ -787,6 +813,9 @@ function(name) {
    * @bean
    * @ignore
    */
+   Rectangle getRoughBounds([Matrix matrix]) => boundsAccessor("roughBounds", matrix);
+   Rectangle get roughBounds() => getRoughBounds();
+
 }), /** @lends Item# */{
   /**
    * {@grouptitle Project Hierarchy}
