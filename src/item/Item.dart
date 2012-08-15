@@ -494,26 +494,28 @@ class Item {
    * @default false
    * @bean
    */
-  isClipMask: function() {
-    return this._clipMask;
-  },
+  // TODO init in constructor
+  bool _clipMask;// = false;
+  bool isClipMask() {
+    return _clipMask;
+  }
+  bool get clipMask() => _clipMask;
 
-  setClipMask: function(clipMask) {
+  void setClipMask(bool clipMask) {
     // On-the-fly conversion to boolean:
-    if (this._clipMask != (clipMask = !!clipMask)) {
-      this._clipMask = clipMask;
+    if (_clipMask != clipMask)) {
+      _clipMask = clipMask;
       if (clipMask) {
-        this.setFillColor(null);
-        this.setStrokeColor(null);
+        setFillColor(null);
+        setStrokeColor(null);
       }
-      this._changed(Change.ATTRIBUTE);
+      _changed(Change.ATTRIBUTE);
       // Tell the parent the clipping mask has changed
-      if (this._parent)
-        this._parent._changed(ChangeFlag.CLIPPING);
+      if (_parent != null)
+        _parent._changed(ChangeFlag.CLIPPING);
     }
-  },
-
-  _clipMask: false,
+  }
+  set clipMask(bool clipMask) => setClipMask(clipMask);
 
   // TODO: get/setIsolated (print specific feature)
   // TODO: get/setKnockout (print specific feature)
