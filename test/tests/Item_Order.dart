@@ -59,26 +59,26 @@ ItemOrderTests() {
         expect(item2.index, indexes[2]);
       };
 
-      testMove(() { item0.moveBelow(item0) }, [0,1,2]);
-      testMove(() { item0.moveBelow(item1) }, [0,1,2]);
-      testMove(() { item0.moveBelow(item2) }, [1,0,2]);
-      testMove(() { item1.moveBelow(item0) }, [1,0,2]);
-      testMove(() { item1.moveBelow(item1) }, [0,1,2]);
-      testMove(() { item1.moveBelow(item2) }, [0,1,2]);
+      testMove(() { item0.moveBelow(item0); }, [0,1,2]);
+      testMove(() { item0.moveBelow(item1); }, [0,1,2]);
+      testMove(() { item0.moveBelow(item2); }, [1,0,2]);
+      testMove(() { item1.moveBelow(item0); }, [1,0,2]);
+      testMove(() { item1.moveBelow(item1); }, [0,1,2]);
+      testMove(() { item1.moveBelow(item2); }, [0,1,2]);
 
-      testMove(() { item2.moveBelow(item0) }, [1,2,0]);
-      testMove(() { item2.moveBelow(item1) }, [0,2,1]);
-      testMove(() { item2.moveBelow(item2) }, [0,1,2]);
+      testMove(() { item2.moveBelow(item0); }, [1,2,0]);
+      testMove(() { item2.moveBelow(item1); }, [0,2,1]);
+      testMove(() { item2.moveBelow(item2); }, [0,1,2]);
 
-      testMove(() { item0.moveAbove(item0) }, [0,1,2]);
-      testMove(() { item0.moveAbove(item1) }, [1,0,2]);
-      testMove(() { item0.moveAbove(item2) }, [2,0,1]);
-      testMove(() { item1.moveAbove(item0) }, [0,1,2]);
-      testMove(() { item1.moveAbove(item1) }, [0,1,2]);
-      testMove(() { item1.moveAbove(item2) }, [0,2,1]);
-      testMove(() { item2.moveAbove(item0) }, [0,2,1]);
-      testMove(() { item2.moveAbove(item1) }, [0,1,2]);
-      testMove(() { item2.moveAbove(item2) }, [0,1,2]);
+      testMove(() { item0.moveAbove(item0); }, [0,1,2]);
+      testMove(() { item0.moveAbove(item1); }, [1,0,2]);
+      testMove(() { item0.moveAbove(item2); }, [2,0,1]);
+      testMove(() { item1.moveAbove(item0); }, [0,1,2]);
+      testMove(() { item1.moveAbove(item1); }, [0,1,2]);
+      testMove(() { item1.moveAbove(item2); }, [0,2,1]);
+      testMove(() { item2.moveAbove(item0); }, [0,2,1]);
+      testMove(() { item2.moveAbove(item1); }, [0,1,2]);
+      testMove(() { item2.moveAbove(item2); }, [0,1,2]);
     });
   });
 }
