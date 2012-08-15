@@ -554,25 +554,29 @@ class Item {
    * // Move the circle 100 points to the right
    * circle.position.x += 100;
    */
-  getPosition: function(/* dontLink */) {
+  // TODO init in constructor?
+  Point _position;
+  Point getPosition: function([bool dontLink = false]) {
     // Cache position value.
     // Pass true for dontLink in getCenter(), so receive back a normal point
-    var pos = this._position
+    var pos = this._position != null ?
         || (this._position = this.getBounds().getCenter(true));
     // Do not cache LinkedPoints directly, since we would not be able to
     // use them to calculate the difference in #setPosition, as when it is
     // modified, it would hold new values already and only then cause the
     // calling of #setPosition.
-    return arguments[0] ? pos
-        : LinkedPoint.create(this, 'setPosition', pos.x, pos.y);
-  },
+    return dontLink ? pos
+        : LinkedPoint.create(this, setPosition, pos.x, pos.y);
+  }
+  Point get position() => getPosition();
 
-  setPosition: function(point) {
+  void setPosition(/*Point*/ point) {
     // Calculate the distance to the current position, by which to
     // translate the item. Pass true for dontLink, as we do not need a
     // LinkedPoint to simply calculate this distance.
-    this.translate(Point.read(arguments).subtract(this.getPosition(true)));
-  },
+    translate(Point.read(point).subtract(getPosition(true)));
+  }
+  set position(/*Point*/ point) => setPosition(point);
 
   /**
    * The item's transformation matrix, defining position and dimensions in the
