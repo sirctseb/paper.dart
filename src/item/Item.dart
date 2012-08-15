@@ -439,49 +439,51 @@ class Item {
    * var path = new Path.Circle(new Size(80, 50), 35);
    * path.selected = true; // Select the path
    */
-  isSelected: function() {
+  // TODO init to false in constructor
+  bool _selected; // = false;
+  bool isSelected() {
     if (this._children) {
-      for (var i = 0, l = this._children.length; i < l; i++)
-        if (this._children[i].isSelected())
+      for (var i = 0, l = _children.length; i < l; i++)
+        if (_children[i].isSelected())
           return true;
     }
-    return this._selected;
-  },
+    return _selected;
+  }
+  bool get selected() => _isSelected();
 
-  setSelected: function(selected /*, noChildren */) {
+  void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
     // noChildren set to true, see #setFullySelected().
-    if (this._children && !arguments[1]) {
-      for (var i = 0, l = this._children.length; i < l; i++)
-        this._children[i].setSelected(selected);
-    } else if ((selected = !!selected) != this._selected) {
-      this._selected = selected;
-      this._project._updateSelection(this);
-      this._changed(Change.ATTRIBUTE);
+    if (_children && !noChildren) {
+      for (var i = 0, l = _children.length; i < l; i++)
+        _children[i].setSelected(selected);
+    } else if (selected != _selected) {
+      _selected = selected;
+      _project._updateSelection(this);
+      _changed(Change.ATTRIBUTE);
     }
-  },
+  }
+  set selected(bool selected) => setSelected(selected);
 
-  _selected: false,
-
-  isFullySelected: function() {
-    if (this._children && this._selected) {
-      for (var i = 0, l = this._children.length; i < l; i++)
-        if (!this._children[i].isFullySelected())
+  bool isFullySelected() {
+    if (_children && _selected) {
+      for (var i = 0, l = _children.length; i < l; i++)
+        if (!_children[i].isFullySelected())
           return false;
       return true;
     }
     // If there are no children, this is the same as #selected
-    return this._selected;
-  },
+    return _selected;
+  }
 
-  setFullySelected: function(selected) {
-    if (this._children) {
-      for (var i = 0, l = this._children.length; i < l; i++)
-        this._children[i].setFullySelected(selected);
+  void setFullySelected(bool selected) {
+    if (_children) {
+      for (var i = 0, l = _children.length; i < l; i++)
+        _children[i].setFullySelected(selected);
     }
     // Pass true for hidden noChildren argument
-    this.setSelected(selected, true);
-  },
+    setSelected(selected, true);
+  }
 
   /**
    * Specifies whether the item defines a clip mask. This can only be set on
