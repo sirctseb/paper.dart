@@ -2022,21 +2022,21 @@ class Item {
    * // Fit the path to the bounding rectangle of the view:
    * path.fitBounds(view.bounds);
    */
-  fitBounds: function(rectangle, fill) {
+  void fitBounds(/*Rectangle*/ rectangle, [bool fill = false]) {
     // TODO: Think about passing options with various ways of defining
     // fitting.
     rectangle = Rectangle.read(arguments);
-    var bounds = this.getBounds(),
-      itemRatio = bounds.height / bounds.width,
-      rectRatio = rectangle.height / rectangle.width,
-      scale = (fill ? itemRatio > rectRatio : itemRatio < rectRatio)
+    Rectangle bounds = getBounds();
+    num itemRatio = bounds.height / bounds.width;
+    num rectRatio = rectangle.height / rectangle.width;
+    num scale = (fill ? itemRatio > rectRatio : itemRatio < rectRatio)
           ? rectangle.width / bounds.width
-          : rectangle.height / bounds.height,
-      newBounds = new Rectangle(new Point(),
+          : rectangle.height / bounds.height;
+    Rectangle newBounds = new Rectangle(new Point(),
           Size.create(bounds.width * scale, bounds.height * scale));
     newBounds.setCenter(rectangle.getCenter());
-    this.setBounds(newBounds);
-  },
+    setBounds(newBounds);
+  }
 
   toString: function() {
     return (this.constructor._name || 'Item') + (this._name
