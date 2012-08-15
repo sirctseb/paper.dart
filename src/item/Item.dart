@@ -853,9 +853,10 @@ class Item {
    * // Now the parent of the path has become the group:
    * console.log(path.parent == group); // true
    */
-  getParent: function() {
-    return this._parent;
-  },
+  Item getParent() {
+    return _parent;
+  }
+  Item get parent() => _parent;
 
   /**
    * The children items contained within this item. Items that define a
