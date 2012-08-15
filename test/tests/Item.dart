@@ -239,7 +239,7 @@ ItemTests() {
 
       expect(!paper.project.activeLayer._namedChildren['test'], true);
 
-      expect(paper.project.activeLayer.children['test'] === undefined, true);
+      expect(paper.project.activeLayer.children['test'] ==  null, true);
     });
 
     test('Named child access 3', () {
@@ -268,7 +268,7 @@ ItemTests() {
 
       expect(group.children['test'] == null, true);
 
-      expect(group._namedChildren['test'] === undefined, true);
+      expect(group._namedChildren['test'] == null, true);
 
       expect(paper.project.activeLayer.children['test'] == path2, true);
 
@@ -290,7 +290,7 @@ ItemTests() {
 
       path.name = null;
 
-      expect(paper.project.activeLayer.children['test'] === undefined, true);
+      expect(paper.project.activeLayer.children['test'] == null, true);
     });
 
     test('Renaming item', () {
@@ -299,7 +299,7 @@ ItemTests() {
 
       path.name = 'test2';
 
-      expect(paper.project.activeLayer.children['test'] === undefined, true);
+      expect(paper.project.activeLayer.children['test'] == null, true);
 
       expect(paper.project.activeLayer.children['test2'] == path, true);
     });
