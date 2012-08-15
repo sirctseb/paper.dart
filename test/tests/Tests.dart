@@ -24,6 +24,7 @@
 #source("Path_Curves.dart");
 #source("Path_Drawing_Commands.dart");
 #source("Path_Length.dart");
+#source("Path_Shapes.dart");
 
 void main() {
 	PointTests();
