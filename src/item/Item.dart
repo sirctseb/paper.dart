@@ -1111,37 +1111,37 @@ class Item {
    * information about what exactly was hit or {@code null} if nothing was
    * hit.
    */
-  hitTest: function(point, options) {
+  HitResult hitTest(Point point, Map options) {
     options = HitResult.getOptions(point, options);
-    point = options.point = this._matrix._inverseTransform(options.point);
+    point = options["point"] = _matrix._inverseTransform(options["point"]);
     // Check if the point is withing roughBounds + tolerance, but only if
     // this item does not have children, since we'd have to travel up the
     // chain already to determine the rough bounds.
-    if (!this._children && !this.getRoughBounds()
-        .expand(options.tolerance)._containsPoint(point))
+    if (_children == null && !this.getRoughBounds()
+        .expand(options["tolerance"])._containsPoint(point))
       return null;
-    if ((options.center || options.bounds) &&
+    if ((options["center"] || options["bounds"]) &&
         // Ignore top level layers:
-        !(this instanceof Layer && !this._parent)) {
+        !(this is Layer && !_parent)) {
       // Don't get the transformed bounds, check against transformed
       // points instead
-      var bounds = this.getBounds(),
-        that = this,
+      Rectangle bounds = getBounds();
+      var that = this;
         // TODO: Move these into a private scope
-        points = ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight',
-        'LeftCenter', 'TopCenter', 'RightCenter', 'BottomCenter'],
-        res;
-      function checkBounds(type, part) {
-        var pt = bounds['get' + part]();
+      var points = ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight',
+        'LeftCenter', 'TopCenter', 'RightCenter', 'BottomCenter'];
+      var res;
+      var checkBounds = (type, part) {
+        var pt = bounds.getNamedPoint(part);
         // TODO: We need to transform the point back to the coordinate
         // system of the DOM level on which the inquiry was started!
-        if (point.getDistance(pt) < options.tolerance)
+        if (point.getDistance(pt) < options["tolerance"])
           return new HitResult(type, that,
-              { name: Base.hyphenate(part), point: pt });
+              { "name": Base.hyphenate(part), "point": pt });
       }
-      if (options.center && (res = checkBounds('center', 'Center')))
+      if (options["center"] && (res = checkBounds('center', 'Center') != null))
         return res;
-      if (options.bounds) {
+      if (options["bounds"]) {
         for (var i = 0; i < 8; i++)
           if (res = checkBounds('bounds', points[i]))
             return res;
