@@ -101,38 +101,26 @@ PlacedSymbolTests() {
       var path = new Path.Circle([50, 50], 50);
       path.selected = true;
       var symbol = new Symbol(path);
-      equals(() {
-        return symbol.definition.selected == false;
-      }, true);
-      equals(() {
-        return paper.project.selectedItems.length == 0;
-      }, true);
+      expect(symbol.definition.selected == false, true);
+      expect(paper.project.selectedItems.length == 0, true);
     });
 
     test('Symbol#place()', () {
       var path = new Path.Circle([50, 50], 50);
       var symbol = new Symbol(path);
       var placedSymbol = symbol.place();
-      equals(() {
-        return placedSymbol.parent == paper.project.activeLayer;
-      }, true);
+      expect(placedSymbol.parent == paper.project.activeLayer, true);
 
-      equals(() {
-        return placedSymbol.symbol == symbol;
-      }, true);
+      expect(placedSymbol.symbol == symbol, true);
 
-      equals(() {
-        return placedSymbol.position.toString();
-      }, '{ x: 0, y: 0 }');
+      expect(placedSymbol.position.toString(), '{ x: 0, y: 0 }');
     });
 
     test('Symbol#place(position)', () {
       var path = new Path.Circle([50, 50], 50);
       var symbol = new Symbol(path);
       var placedSymbol = symbol.place(new Point(100, 100));
-      equals(() {
-        return placedSymbol.position.toString();
-      }, '{ x: 100, y: 100 }');
+      expect(placedSymbol.position.toString(), '{ x: 100, y: 100 }');
     });
 
   });
