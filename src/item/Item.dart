@@ -825,14 +825,15 @@ class Item {
    * @type Layer
    * @bean
    */
-  getLayer: function() {
+  Layer getLayer() {
     var parent = this;
     while (parent = parent._parent) {
-      if (parent instanceof Layer)
+      if (parent is Layer)
         return parent;
     }
     return null;
-  },
+  }
+  Layer get layer() => getLayer();
 
   /**
    * The item that this item is contained within.
