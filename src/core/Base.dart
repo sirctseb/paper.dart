@@ -157,8 +157,21 @@ class Base {
    * Converst camelized strings to hyphenated ones: CapsLock -> caps-lock
    */
   static String hyphenate(String str) {
-    RegExp transitions = new RegExp("(?![a-z])(?=[A-Z0-9])|(?![0-9])(?=[a-zA-Z])|(?![A-Z]{2})(?=[a-z])");
-    str.replaceAll(transitions, "-").toLowerCase();
+    StringBuffer sb = new StringBuffer();
+    int lastIndex = 0;
+    RegExp transitions = new RegExp("([a-z])([A-Z0-9])|([0-9])([a-zA-Z])|([A-Z]{2})([a-z])");
+    for(Match match in transitions.allMatches(str)) {
+      // add stuff between last match and this
+      sb.add(str.substring(lastIndex, match.start()));
+      // add transition
+      var ind = match[1] != null ? 1 : match[3] != null ? 3 : 5;
+      sb.add("${match[ind]}-${match[ind+1]}");
+      // update index
+      lastIndex = match.end();
+    }
+    // add remaining
+    sb.add(str.substring(lastIndex));
+    return sb.toString().toLowerCase();
   }
 
   /**
