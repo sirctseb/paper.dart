@@ -24,7 +24,7 @@ PlacedSymbolTests() {
       path.strokeCap = 'round';
       path.strokeJoin = 'round';
       compareRectangles(path.strokeBounds,
-        { x: -0.5, y: -0.5, width: 101, height: 101 },
+        { "x": -0.5, "y": -0.5, "width": 101, "height": 101 },
         'Path initial bounds');
       var symbol = new Symbol(path);
       var placedSymbol = new PlacedSymbol(symbol);
@@ -35,12 +35,12 @@ PlacedSymbolTests() {
 
       placedSymbol.scale(1, 0.5);
       compareRectangles(placedSymbol.bounds,
-        { x: -50.5, y: -25.25, width: 101, height: 50.5 },
+        { "x": -50.5, "y": -25.25, "width": 101, "height": 50.5 },
         'Bounds after scale');
 
       placedSymbol.rotate(40);
       compareRectangles(placedSymbol.bounds,
-        { x: -41.96283, y: -37.79252, width: 83.92567, height: 75.58503 },
+        { "x": -41.96283, "y": -37.79252, "width": 83.92567, "height": 75.58503 },
         'Bounds after rotation');
     });
 
@@ -54,7 +54,7 @@ PlacedSymbolTests() {
       }
       var group = new Group(instances);
       compareRectangles(group.bounds,
-        { x: -10, y: 10, width: 200, height: 20 },
+        { "x": -10, "y": 10, "width": 200, "height": 20 },
         'Group bounds');
     });
 
@@ -63,19 +63,19 @@ PlacedSymbolTests() {
       var path2 = path.clone();
       path2.position.x += 20;
       compareRectangles(path.bounds,
-        { x: -10, y: -10, width: 20, height: 20 },
+        { "x": -10, "y": -10, "width": 20, "height": 20 },
         'path bounds');
       compareRectangles(path2.bounds,
-        { x: 10, y: -10, width: 20, height: 20 },
+        { "x": 10, "y": -10, "width": 20, "height": 20 },
         'path2 bounds');
       var group = new Group(path, path2);
       compareRectangles(group.bounds,
-        { x: -10, y: -10, width: 40, height: 20 },
+        { "x": -10, "y": -10, "width": 40, "height": 20 },
         'Group bounds');
       var symbol = new Symbol(group);
       var instance = symbol.place(new Point(50, 50));
       compareRectangles(instance.bounds,
-        { x: 30, y: 40, width: 40, height: 20 },
+        { "x": 30, "y": 40, "width": 40, "height": 20 },
         'Instance bounds');
     });
 
@@ -85,15 +85,15 @@ PlacedSymbolTests() {
       var symbol = new Symbol(path);
       var instance = symbol.place(new Point(0, 0));
       compareRectangles(instance.bounds,
-        { x: -10, y: -10, width: 20, height: 20 },
+        { "x": -10, "y": -10, "width": 20, "height": 20 },
         'Initial bounds');
       symbol.definition = path2;
       compareRectangles(instance.bounds,
-        { x: -20, y: -20, width: 40, height: 40 },
+        { "x": -20, "y": -20, "width": 40, "height": 40 },
         'Bounds after changing symbol definition');
       symbol.definition.scale(0.5, 0.5);
       compareRectangles(instance.bounds,
-        { x: -10, y: -10, width: 20, height: 20 },
+        { "x": -10, "y": -10, "width": 20, "height": 20 },
         'Bounds after modifying symbol definition');
     });
 
