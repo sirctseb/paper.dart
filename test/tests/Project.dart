@@ -22,12 +22,8 @@ ProjectTests() {
       var secondDoc = new Project();
       project.activate();
       var path = new Path();
-      equals(() {
-        return project.activeLayer.children[0] == path;
-      }, true);
-      equals(() {
-        return secondDoc.activeLayer.children.length == 0;
-      }, true);
+      expect(project.activeLayer.children[0] == path, true);
+      expect(secondDoc.activeLayer.children.length == 0, true);
     });
   });
 }
