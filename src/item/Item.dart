@@ -1152,10 +1152,10 @@ class Item {
     // children are matched but the parent is returned.
 
     // Filter for guides or selected items if that's required
-    return this._children || !(options.guides && !this._guide
-        || options.selected && !this._selected)
-          ? this._hitTest(point, options) : null;
-  },
+    return _children != null || !(options["guides"] && !_guide
+        || options["selected"] && !_selected)
+          ? _hitTest(point, options) : null;
+  }
 
   _hitTest: function(point, options) {
     if (this._children) {
