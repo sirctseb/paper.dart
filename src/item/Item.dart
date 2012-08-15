@@ -1162,9 +1162,10 @@ class Item {
       // Loop backwards, so items that get drawn last are tested first
       for (var i = _children.length - 1; i >= 0; i--) {
         var res = _children[i].hitTest(point, options);
-        if (res) return res;
+        if (res != null) return res;
       }
     }
+    return null;
   }
 
   /**
