@@ -585,15 +585,19 @@ class Item {
    * @type Matrix
    * @bean
    */
-  getMatrix: function() {
-    return this._matrix;
-  },
-
-  setMatrix: function(matrix) {
-    // Use Matrix#initialize to easily copy over values.
-    this._matrix.initialize(matrix);
-    this._changed(Change.GEOMETRY);
+  Matrix _matrix;
+  Matrix getMatrix() {
+    return _matrix;
   }
+  Matrix get matrix() => _matrix;
+
+  void setMatrix(Matrix matrix) {
+    // Use Matrix#initialize to easily copy over values.
+    _matrix.initialize(matrix);
+    _changed(Change.GEOMETRY);
+  }
+  set matrix(Matrix matrix) => setMatrix(matrix);
+  
 }, Base.each(['bounds', 'strokeBounds', 'handleBounds', 'roughBounds'],
 function(name) {
   // Produce getters for bounds properties. These handle caching, matrices
