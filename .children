@@ -1,7 +1,6 @@
 src/path/Segment.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
-test/tests/Path_Drawing_Commands.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
 src/color/Color.dart
