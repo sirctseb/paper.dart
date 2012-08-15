@@ -1558,6 +1558,7 @@ class Item {
   }
 
   // Document all style properties which get injected into Item by Style:
+  // TODO implement these properties and pass through to style object
 
   /**
    * {@grouptitle Stroke Style}
@@ -1781,16 +1782,16 @@ class Item {
    * // Scale the path horizontally by 300%
    * circle.scale(3, 1);
    */
-  scale: function(hor, ver /* | scale */, center, apply) {
+  Item scale(num hor, [ver /* | scale */, center, apply]) {
     // See Matrix#scale for explanation of this:
-    if (arguments.length < 2 || typeof ver === 'object') {
+    if(ver == null || ver is! num) {
       apply = center;
       center = ver;
       ver = hor;
     }
-    return this.transform(new Matrix().scale(hor, ver,
-        center || this.getPosition(true)), apply);
-  },
+    return transform(new Matrix().scale(hor, ver,
+        center == null ? this.getPosition(true) : center), apply);
+  }
 
   /**
    * Translates (moves) the item by the given offset point.
@@ -1798,10 +1799,10 @@ class Item {
    * @param {Point} delta the offset to translate the item by
    * @param {Boolean} apply
    */
-  translate: function(delta, apply) {
+  Item translate(delta, apply) {
     var mx = new Matrix();
-    return this.transform(mx.translate.apply(mx, arguments), apply);
-  },
+    return transform(mx.translate(mx, delta), apply);
+  }
 
   /**
    * Rotates the item by a given angle around the given point.
@@ -1845,10 +1846,10 @@ class Item {
    *   path.rotate(3, view.center);
    * }
    */
-  rotate: function(angle, center, apply) {
-    return this.transform(new Matrix().rotate(angle,
-        center || this.getPosition(true)), apply);
-  },
+  Item rotate(num angle, center, apply) {
+    return transform(new Matrix().rotate(angle,
+        center == null ? this.getPosition(true) : center), apply);
+  }
 
   // TODO: Add test for item shearing, as it might be behaving oddly.
   /**
@@ -1874,17 +1875,17 @@ class Item {
    * @param {Boolean} apply
    * @see Matrix#shear
    */
-  shear: function(hor, ver, center, apply) {
+  Item shear(num hor, [ver, center, apply]) {
     // PORT: Add support for center and apply back to Scriptographer too!
     // See Matrix#scale for explanation of this:
-    if (arguments.length < 2 || typeof ver === 'object') {
+    if(ver == null || ver is! num) {
       apply = center;
       center = ver;
       ver = hor;
     }
-    return this.transform(new Matrix().shear(hor, ver,
+    return transform(new Matrix().shear(hor, ver,
         center || this.getPosition(true)), apply);
-  },
+  }
 
   /**
    * Transform the item.
@@ -1898,24 +1899,25 @@ class Item {
   // @param {String[]} flags Array of any of the following: 'objects',
   //        'children', 'fill-gradients', 'fill-patterns', 'stroke-patterns',
   //        'lines'. Default: ['objects', 'children']
-  transform: function(matrix, apply) {
+  Item transform(Matrix matrix, bool apply) {
     // Calling _changed will clear _bounds and _position, but depending
     // on matrix we can calculate and set them again.
-    var bounds = this._bounds,
-      position = this._position;
+    var bounds = this._bounds;
+    var position = this._position;
     // Simply preconcatenate the internal matrix with the passed one:
-    this._matrix.preConcatenate(matrix);
+    _matrix.preConcatenate(matrix);
+    // TODO what? is this checking for the existence of method _transform?
     if (this._transform)
       this._transform(matrix);
     if (apply)
       this.apply();
     // We always need to call _changed since we're caching bounds on all
     // items, including Group.
-    this._changed(Change.GEOMETRY);
+    _changed(Change.GEOMETRY);
     // Detect matrices that contain only translations and scaling
     // and transform the cached _bounds and _position without having to
     // fully recalculate each time.
-    if (bounds && matrix.getRotation() % 90 === 0) {
+    if (bounds != null && matrix.getRotation() % 90 === 0) {
       // Transform the old bound by looping through all the cached bounds
       // in _bounds and transform each.
       for (var key in bounds) {
@@ -1925,46 +1927,47 @@ class Item {
       // If we have cached 'bounds', update _position again as its 
       // center. We need to take into account _boundsType here too, in 
       // case another type is assigned to it, e.g. 'strokeBounds'.
-      var type = this._boundsType,
-        rect = bounds[type && type.bounds || 'bounds'];
-      if (rect)
-        this._position = rect.getCenter(true);
-      this._bounds = bounds;
-    } else if (position) {
+      var type = _boundsType;
+      // TODO what?
+      var rect = bounds[type && type.bounds || 'bounds'];
+      if (rect != null)
+        _position = rect.getCenter(true);
+      _bounds = bounds;
+    } else if (position != null) {
       // Transform position as well.
-      this._position = matrix._transformPoint(position, position);
+      _position = matrix._transformPoint(position, position);
     }
     // PORT: Return 'this' in all chainable commands
     return this;
-  },
+  }
 
   // DOCS: Document #apply()
-  apply: function() {
+  void apply() {
     // Call the internal #_apply(), and set the internal _matrix to the
     // identity transformation if it was possible to apply it.
     // Application is not possible on Raster, PointText, PlacedSymbol, since
     // the matrix is storing the actual location / transformation state.
     // Pass on this._matrix to _apply calls, for reasons of faster access
     // and code minification.
-    if (this._apply(this._matrix)) {
+    if (_apply(_matrix)) {
       // Set _matrix to the identity
-      this._matrix.setIdentity();
+      _matrix.setIdentity();
       // TODO: This needs a _changed notification, but the GEOMETRY
       // actually doesn't change! What to do?
     }
-  },
+  }
 
-  _apply: function(matrix) {
+  bool _apply(Matrix matrix) {
     // Pass on the transformation to the children, and apply it there too:
-    if (this._children) {
-      for (var i = 0, l = this._children.length; i < l; i++) {
-        var child = this._children[i];
+    if (_children != null) {
+      for (var i = 0, l = _children.length; i < l; i++) {
+        var child = _children[i];
         child.transform(matrix);
         child.apply();
       }
       return true;
     }
-  },
+  }
 
   /**
    * Transform the item so that its {@link #bounds} fit within the specified
