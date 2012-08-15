@@ -795,7 +795,6 @@ class Item {
    Rectangle getRoughBounds([Matrix matrix]) => boundsAccessor("roughBounds", matrix);
    Rectangle get roughBounds() => getRoughBounds();
 
-}), /** @lends Item# */{
   /**
    * {@grouptitle Project Hierarchy}
    * The project that this item belongs to.
@@ -803,20 +802,22 @@ class Item {
    * @type Project
    * @bean
    */
-  getProject: function() {
-    return this._project;
-  },
+  Project _project;
+  Project getProject() {
+    return _project;
+  }
+  Project get project() => _project;
 
-  _setProject: function(project) {
-    if (this._project != project) {
-      this._project = project;
-      if (this._children) {
-        for (var i = 0, l = this._children.length; i < l; i++) {
-          this._children[i]._setProject(project);
+  void _setProject(Project project) {
+    if (_project != project) {
+      _project = project;
+      if (_children) {
+        for (var i = 0, l = _children.length; i < l; i++) {
+          _children[i]._setProject(project);
         }
       }
     }
-  },
+  }
 
   /**
    * The layer that this item is contained within.
