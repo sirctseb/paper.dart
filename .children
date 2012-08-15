@@ -1,3 +1,4 @@
+test/tests/Project.dart
 src/path/Segment.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
