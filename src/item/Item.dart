@@ -1414,15 +1414,15 @@ class Item {
    * locked or hidden}
    * @ignore
    */
-  isEditable: function() {
+  bool isEditable() {
     var item = this;
-    while (item) {
+    while (item != null) {
       if (!item._visible || item._locked)
         return false;
       item = item._parent;
     }
     return true;
-  },
+  }
 
   /**
    * Checks whether the item is valid, i.e. it hasn't been removed.
