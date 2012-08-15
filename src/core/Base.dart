@@ -96,33 +96,36 @@ class Base {
    * each entry keeps a reference to its index in the list in the private
    * _index property. Used for PaperScope#projects and Item#children.
    */
-  /*splice: function(list, items, index, remove) {
-    var amount = items && items.length,
-      append = index === undefined;
-    index = append ? list.length : index;
+  splice(list, items, index, remove) {
+    int amount = items != null ? items.length : 0;
+    bool append = index == null;
+    int index = append ? list.length : index;
     // Update _index on the items to be added first.
     for (var i = 0; i < amount; i++)
       items[i]._index = index + i;
     if (append) {
       // Append them all at the end by using push
-      list.push.apply(list, items);
+      list.addAll(items);
       // Nothing removed, and nothing to adjust above
       return [];
     } else {
-      // Insert somewhere else and/or remove
-      var args = [index, remove];
-      if (items)
-        args.push.apply(args, items);
-      var removed = list.splice.apply(list, args);
-      // Delete the indices of the removed items
-      for (var i = 0, l = removed.length; i < l; i++)
-        delete removed[i]._index;
+      // get and remove
+      var removed = list.getRange(index, remove);
+      list.removeRange(index, remove);
+
+      // insert new items
+      list.insertRange(index, items.length, null);
+      for(int i = 0; i < items.length; i++) {
+        list[index+i] = items[i];
+      }
+
       // Adjust the indices of the items above.
       for (var i = index + amount, l = list.length; i < l; i++)
         list[i]._index = i;
+      
       return removed;
     }
-  },*/
+  }
 
   /**
    * Merge all passed hash objects into a newly creted Base object.
