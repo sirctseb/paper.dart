@@ -18,6 +18,7 @@
 #source("Item_Cloning.dart");
 #source("Item_Order.dart");
 #source("Layer.dart");
+#source("Path.dart");
 
 void main() {
 	PointTests();

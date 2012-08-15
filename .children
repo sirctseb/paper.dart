@@ -4,5 +4,4 @@ src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
 src/color/Color.dart
-test/tests/Path.dart
 src/core/Base.dart
