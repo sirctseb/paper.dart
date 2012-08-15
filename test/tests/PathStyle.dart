@@ -83,7 +83,7 @@ PathStyleTests() {
 
       // the group now contains two paths with different fillColors and therefore
       // should return "undefined":
-      expect(group.fillColor, undefined);
+      expect(group.fillColor, null);
 
       //If we remove the first path, it should now return 'black':
       group.children[0].remove();
@@ -131,7 +131,7 @@ PathStyleTests() {
 
       // By appending a path with a different fillcolor,
       // the group's fillColor should return "undefined":
-      expect(group.fillColor, undefined);
+      expect(group.fillColor, null);
 
       // But, both paths have a red strokeColor, "so":
       compareRgbColors(group.strokeColor, 'red', 'group.strokeColor');
