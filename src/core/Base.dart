@@ -156,13 +156,10 @@ class Base {
   /**
    * Converst camelized strings to hyphenated ones: CapsLock -> caps-lock
    */
-  /*hyphenate: function(str) {
-    return str.replace(/[a-z][A-Z0-9]|[0-9][a-zA-Z]|[A-Z]{2}[a-z]/g,
-      function(match) {
-        return match.charAt(0) + '-' + match.substring(1);
-      }
-    ).toLowerCase();
-  },*/
+  static String hyphenate(String str) {
+    RegExp transitions = new RegExp("(?![a-z])(?=[A-Z0-9])|(?![0-9])(?=[a-zA-Z])|(?![A-Z]{2})(?=[a-z])");
+    str.replaceAll(transitions, "-").toLowerCase();
+  }
 
   /**
    * Utility function for rendering numbers to strings at a precision of
