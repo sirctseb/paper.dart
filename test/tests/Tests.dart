@@ -1,5 +1,5 @@
 #library("paper.dart.test");
-#import("../../../../Downloads/dart/dart-sdk/lib/unittest/unittest.dart");
+#import("../../../../../Desktop/dart/dart-sdk/lib/unittest/unittest.dart");
 #import("../../src/basic/Basic.dart");
 #import("../../src/color/Color.dart");
 #import("../../src/path/Segment.dart");
