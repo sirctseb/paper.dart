@@ -20,12 +20,12 @@
  * @class The Item type allows you to access and modify the items in
  * Paper.js projects. Its functionality is inherited by different project
  * item types such as {@link Path}, {@link CompoundPath}, {@link Group},
- * {@link Layer} and {@link Raster}. They each add a layer of ality that
- * is unique to their type, but share the underlying properties and s
+ * {@link Layer} and {@link Raster}. They each add a layer of functionality that
+ * is unique to their type, but share the underlying properties and functions
  * that they inherit from Item.
  */
 var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
-  _events: new () {
+  _events: new function() {
 
     // Flags defining which native events are required by which Paper events
     // as required for counting amount of necessary natives events.
@@ -53,7 +53,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 
     // Entry for all mouse events in the _events list
     var mouseEvent = {
-      install: (type) {
+      install: function(type) {
         // If the view requires counting of installed mouse events,
         // increase the counters now according to mouseFlags
         var counters = this._project.view._eventCounters;
@@ -64,7 +64,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
           }
         }
       },
-      uninstall: (type) {
+      uninstall: function(type) {
         // If the view requires counting of installed mouse events,
         // decrease the counters now according to mouseFlags
         var counters = this._project.view._eventCounters;
@@ -76,23 +76,23 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     };
 
     var onFrameItems = [];
-     onFrame(event) {
+    function onFrame(event) {
       for (var i = 0, l = onFrameItems.length; i < l; i++)
         onFrameItems[i].fire('frame', event);
     }
 
     return Base.each(['onMouseDown', 'onMouseUp', 'onMouseDrag', 'onClick',
       'onDoubleClick', 'onMouseMove', 'onMouseEnter', 'onMouseLeave'],
-      (name) {
+      function(name) {
         this[name] = mouseEvent;
       }, {
         onFrame: {
-          install: () {
+          install: function() {
             if (!onFrameItems.length)
               this._project.view.attach('frame', onFrame);
             onFrameItems.push(this);
           },
-          uninstall: () {
+          uninstall: function() {
             onFrameItems.splice(onFrameItems.indexOf(this), 1);
             if (!onFrameItems.length)
               this._project.view.detach('frame', onFrame);
@@ -101,7 +101,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
       });
   },
 
-  initialize: (pointOrMatrix) {
+  initialize: function(pointOrMatrix) {
     // Define this Item's unique id.
     this._id = ++Item._id;
     // If _project is already set, the item was already moved into the DOM
@@ -125,7 +125,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
-  _changed: (flags) {
+  _changed: function(flags) {
     if (flags & ChangeFlag.GEOMETRY) {
       // Clear cached bounds and position whenever geometry changes
       delete this._bounds;
@@ -172,7 +172,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Number
    * @bean
    */
-  getId: () {
+  getId: function() {
     return this._id;
   },
 
@@ -195,11 +195,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // The path can be accessed by name:
    * group.children['example'].fillColor = 'red';
    */
-  getName: () {
+  getName: function() {
     return this._name;
   },
 
-  setName: (name) {
+  setName: function(name) {
     // Note: Don't check if the name has changed and bail out if it has not,
     // because setName is used internally also to update internal structures
     // when an item is moved from one parent to another.
@@ -265,13 +265,13 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 }, Base.each(['locked', 'visible', 'blendMode', 'opacity', 'guide'],
   // Produce getter/setters for properties. We need setters because we want to
   // call _changed() if a property was modified.
-  (name) {
+  function(name) {
     var part = Base.capitalize(name),
       name = '_' + name;
-    this['get' + part] = () {
+    this['get' + part] = function() {
       return this[name];
     };
-    this['set' + part] = (value) {
+    this['set' + part] = function(value) {
       if (value != this[name]) {
         this[name] = value;
         // #locked does not change appearance, all others do:
@@ -366,7 +366,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 
   // TODO: Implement guides
   /**
-   * Specifies whether the item s as a guide. When set to
+   * Specifies whether the item functions as a guide. When set to
    * {@code true}, the item will be drawn at the end as a guide.
    *
    * @name Item#guide
@@ -397,7 +397,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * var path = new Path.Circle(new Size(80, 50), 35);
    * path.selected = true; // Select the path
    */
-  isSelected: () {
+  isSelected: function() {
     if (this._children) {
       for (var i = 0, l = this._children.length; i < l; i++)
         if (this._children[i].isSelected())
@@ -406,7 +406,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     return this._selected;
   },
 
-  setSelected: (selected /*, noChildren */) {
+  setSelected: function(selected /*, noChildren */) {
     // Don't recursively call #setSelected() if it was called with
     // noChildren set to true, see #setFullySelected().
     if (this._children && !arguments[1]) {
@@ -421,7 +421,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 
   _selected: false,
 
-  isFullySelected: () {
+  isFullySelected: function() {
     if (this._children && this._selected) {
       for (var i = 0, l = this._children.length; i < l; i++)
         if (!this._children[i].isFullySelected())
@@ -432,7 +432,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     return this._selected;
   },
 
-  setFullySelected: (selected) {
+  setFullySelected: function(selected) {
     if (this._children) {
       for (var i = 0, l = this._children.length; i < l; i++)
         this._children[i].setFullySelected(selected);
@@ -450,11 +450,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @default false
    * @bean
    */
-  isClipMask: () {
+  isClipMask: function() {
     return this._clipMask;
   },
 
-  setClipMask: (clipMask) {
+  setClipMask: function(clipMask) {
     // On-the-fly conversion to boolean:
     if (this._clipMask != (clipMask = !!clipMask)) {
       this._clipMask = clipMask;
@@ -508,7 +508,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // Move the circle 100 points to the right
    * circle.position.x += 100;
    */
-  getPosition: (/* dontLink */) {
+  getPosition: function(/* dontLink */) {
     // Cache position value.
     // Pass true for dontLink in getCenter(), so receive back a normal point
     var pos = this._position
@@ -521,7 +521,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
         : LinkedPoint.create(this, 'setPosition', pos.x, pos.y);
   },
 
-  setPosition: (point) {
+  setPosition: function(point) {
     // Calculate the distance to the current position, by which to
     // translate the item. Pass true for dontLink, as we do not need a
     // LinkedPoint to simply calculate this distance.
@@ -535,21 +535,21 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Matrix
    * @bean
    */
-  getMatrix: () {
+  getMatrix: function() {
     return this._matrix;
   },
 
-  setMatrix: (matrix) {
+  setMatrix: function(matrix) {
     // Use Matrix#initialize to easily copy over values.
     this._matrix.initialize(matrix);
     this._changed(Change.GEOMETRY);
   }
 }, Base.each(['bounds', 'strokeBounds', 'handleBounds', 'roughBounds'],
-(name) {
+function(name) {
   // Produce getters for bounds properties. These handle caching, matrices
   // and redirect the call to the private _getBounds, which can be
   // overridden by subclasses, see below.
-  this['get' + Base.capitalize(name)] = (/* matrix */) {
+  this['get' + Base.capitalize(name)] = function(/* matrix */) {
     var type = this._boundsType,
       bounds = this._getCachedBounds(
         // Allow subclasses to override _boundsType if they use the same
@@ -568,7 +568,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Private method that deals with the calling of _getBounds, recursive
    * matrix concatenation and handles all the complicated caching mechanisms.
    */
-  _getCachedBounds: (type, matrix, cacheItem) {
+  _getCachedBounds: function(type, matrix, cacheItem) {
     // See if we can cache these bounds. We only cache the bounds
     // transformed with the internally stored _matrix, (the default if no
     // matrix is passed).
@@ -628,7 +628,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * contributing to. See #_getCachedBounds() for an explanation why this
    * information is stored on parents, not the children themselves.
    */
-  _clearBoundsCache: () {
+  _clearBoundsCache: function() {
     if (this._boundsCache) {
       for (var i = 0, list = this._boundsCache.list, l = list.length;
           i < l; i++) {
@@ -650,7 +650,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Subclasses override it to define calculations for the various required
    * bounding types.
    */
-  _getBounds: (type, matrix, cacheItem) {
+  _getBounds: function(type, matrix, cacheItem) {
     // Note: We cannot cache these results here, since we do not get
     // _changed() notifications here for changing geometry in children.
     // But cacheName is used in sub-classes such as PlacedItem.
@@ -676,7 +676,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   },
 
-  setBounds: (rect) {
+  setBounds: function(rect) {
     rect = Rectangle.read(arguments);
     var bounds = this.getBounds(),
       matrix = new Matrix(),
@@ -739,11 +739,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Project
    * @bean
    */
-  getProject: () {
+  getProject: function() {
     return this._project;
   },
 
-  _setProject: (project) {
+  _setProject: function(project) {
     if (this._project != project) {
       this._project = project;
       if (this._children) {
@@ -760,7 +760,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Layer
    * @bean
    */
-  getLayer: () {
+  getLayer: function() {
     var parent = this;
     while (parent = parent._parent) {
       if (parent instanceof Layer)
@@ -787,7 +787,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // Now the parent of the path has become the group:
    * console.log(path.parent == group); // true
    */
-  getParent: () {
+  getParent: function() {
     return this._parent;
   },
 
@@ -796,7 +796,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * {@link #name} can also be accessed by name.
    *
    * <b>Please note:</b> The children array should not be modified directly
-   * using array s. To remove single items from the children list, use
+   * using array functions. To remove single items from the children list, use
    * {@link Item#remove()}, to remove all items from the children list, use
    * {@link Item#removeChildren()}. To add items to the children list, use
    * {@link Item#addChild(item)} or {@link Item#insertChild(index,item)}.
@@ -838,11 +838,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // The path is the first child of the group:
    * group.firstChild.fillColor = 'green';
    */
-  getChildren: () {
+  getChildren: function() {
     return this._children;
   },
 
-  setChildren: (items) {
+  setChildren: function(items) {
     this.removeChildren();
     this.addChildren(items);
   },
@@ -854,7 +854,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Item
    * @bean
    */
-  getFirstChild: () {
+  getFirstChild: function() {
     return this._children && this._children[0] || null;
   },
 
@@ -865,7 +865,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Item
    * @bean
    */
-  getLastChild: () {
+  getLastChild: function() {
     return this._children && this._children[this._children.length - 1]
         || null;
   },
@@ -876,7 +876,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Item
    * @bean
    */
-  getNextSibling: () {
+  getNextSibling: function() {
     return this._parent && this._parent._children[this._index + 1] || null;
   },
 
@@ -886,7 +886,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Item
    * @bean
    */
-  getPreviousSibling: () {
+  getPreviousSibling: function() {
     return this._parent && this._parent._children[this._index - 1] || null;
   },
 
@@ -896,7 +896,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @type Number
    * @bean
    */
-  getIndex: () {
+  getIndex: function() {
     return this._index;
   },
 
@@ -919,11 +919,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *   copy.position.x += i * copy.bounds.width;
    * }
    */
-  clone: () {
+  clone: function() {
     return this._clone(new this.constructor());
   },
 
-  _clone: (copy) {
+  _clone: function(copy) {
     // Copy over style
     copy.setStyle(this._style);
     // If this item has children, clone and append each of them:
@@ -962,7 +962,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * copy the item to
    * @return {Item} the new copy of the item
    */
-  copyTo: (itemOrProject) {
+  copyTo: function(itemOrProject) {
     var copy = this.clone();
     if (itemOrProject.layers) {
       itemOrProject.activeLayer.addChild(copy);
@@ -994,7 +994,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * circle.scale(5);
    * raster.scale(5);
    */
-  rasterize: (resolution) {
+  rasterize: function(resolution) {
     var bounds = this.getStrokeBounds(),
       scale = (resolution || 72) / 72,
       canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale)),
@@ -1043,7 +1043,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * information about what exactly was hit or {@code null} if nothing was
    * hit.
    */
-  hitTest: (point, options) {
+  hitTest: function(point, options) {
     options = HitResult.getOptions(point, options);
     point = options.point = this._matrix._inverseTransform(options.point);
     // Check if the point is withing roughBounds + tolerance, but only if
@@ -1063,7 +1063,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
         points = ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight',
         'LeftCenter', 'TopCenter', 'RightCenter', 'BottomCenter'],
         res;
-       checkBounds(type, part) {
+      function checkBounds(type, part) {
         var pt = bounds['get' + part]();
         // TODO: We need to transform the point back to the coordinate
         // system of the DOM level on which the inquiry was started!
@@ -1089,7 +1089,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
           ? this._hitTest(point, options) : null;
   },
 
-  _hitTest: (point, options) {
+  _hitTest: function(point, options) {
     if (this._children) {
       // Loop backwards, so items that get drawn last are tested first
       for (var i = this._children.length - 1; i >= 0; i--) {
@@ -1102,24 +1102,24 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   /**
    * {@grouptitle Hierarchy Operations}
    * Adds the specified item as a child of this item at the end of the
-   * its children list. You can use this  for groups, compound
+   * its children list. You can use this function for groups, compound
    * paths and layers.
    *
    * @param {Item} item The item to be added as a child
    */
-  addChild: (item) {
+  addChild: function(item) {
     return this.insertChild(undefined, item);
   },
 
   /**
    * Inserts the specified item as a child of this item at the specified
-   * index in its {@link #children} list. You can use this  for
+   * index in its {@link #children} list. You can use this function for
    * groups, compound paths and layers.
    *
    * @param {Number} index
    * @param {Item} item The item to be appended as a child
    */
-  insertChild: (index, item) {
+  insertChild: function(index, item) {
     if (this._children) {
       item._remove(false, true);
       Base.splice(this._children, [item], index, 0);
@@ -1137,25 +1137,25 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 
   /**
    * Adds the specified items as children of this item at the end of the
-   * its children list. You can use this  for groups, compound
+   * its children list. You can use this function for groups, compound
    * paths and layers.
    *
    * @param {item[]} items The items to be added as children
    */
-  addChildren: (items) {
+  addChildren: function(items) {
     for (var i = 0, l = items && items.length; i < l; i++)
       this.insertChild(undefined, items[i]);
   },
 
   /**
    * Inserts the specified items as children of this item at the specified
-   * index in its {@link #children} list. You can use this  for
+   * index in its {@link #children} list. You can use this function for
    * groups, compound paths and layers.
    *
    * @param {Number} index
    * @param {Item[]} items The items to be appended as children
    */
-  insertChildren: (index, items) {
+  insertChildren: function(index, items) {
     for (var i = 0, l = items && items.length; i < l; i++) {
       if (this.insertChild(index, items[i]))
         index++;
@@ -1168,7 +1168,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item above which it should be moved
    * @return {Boolean} {@true it was inserted}
    */
-  insertAbove: (item) {
+  insertAbove: function(item) {
     var index = item._index;
     if (item._parent == this._parent && index < this._index)
        index++;
@@ -1181,7 +1181,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item above which it should be moved
    * @return {Boolean} {@true it was inserted}
    */
-  insertBelow: (item) {
+  insertBelow: function(item) {
     var index = item._index;
     if (item._parent == this._parent && index > this._index)
        index--;
@@ -1191,24 +1191,24 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   /**
    * Inserts the specified item as a child of this item by appending it to
    * the list of children and moving it above all other children. You can
-   * use this  for groups, compound paths and layers.
+   * use this function for groups, compound paths and layers.
    *
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #addChild(item)} instead.
    */
-  appendTop: (item) {
+  appendTop: function(item) {
     return this.addChild(item);
   },
 
   /**
    * Inserts the specified item as a child of this item by appending it to
    * the list of children and moving it below all other children. You can
-   * use this  for groups, compound paths and layers.
+   * use this function for groups, compound paths and layers.
    *
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #insertChild(index, item)} instead.
    */
-  appendBottom: (item) {
+  appendBottom: function(item) {
     return this.insertChild(0, item);
   },
 
@@ -1219,7 +1219,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @return {Boolean} {@true it was moved}
    * @deprecated use {@link #insertAbove(item)} instead.
    */
-  moveAbove: (item) {
+  moveAbove: function(item) {
     return this.insertAbove(item);
   },
 
@@ -1230,14 +1230,14 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @return {Boolean} {@true it was moved}
    * @deprecated use {@link #insertBelow(item)} instead.
    */
-  moveBelow: (item) {
+  moveBelow: function(item) {
     return this.insertBelow(item);
   },
 
   /**
   * Removes the item from its parent's named children list.
   */
-  _removeFromNamed: () {
+  _removeFromNamed: function() {
     var children = this._parent._children,
       namedChildren = this._parent._namedChildren,
       name = this._name,
@@ -1263,7 +1263,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   /**
   * Removes the item from its parent's children list.
   */
-  _remove: (deselect, notify) {
+  _remove: function(deselect, notify) {
     if (this._parent) {
       if (deselect)
         this.setSelected(false);
@@ -1286,7 +1286,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   *
   * @return {Boolean} {@true the item was removed}
   */
-  remove: () {
+  remove: function() {
     return this._remove(true, true);
   },
 
@@ -1294,7 +1294,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Removes all of the item's {@link #children} (if any).
    *
    * @name Item#removeChildren
-   * @
+   * @function
    * @return {Item[]} an array containing the removed items
    */
   /**
@@ -1302,12 +1302,12 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * {@code to} index from the parent's {@link #children} array.
    *
    * @name Item#removeChildren
-   * @
+   * @function
    * @param {Number} from the beginning index, inclusive
    * @param {Number} [to=children.length] the ending index, exclusive
    * @return {Item[]} an array containing the removed items
    */
-  removeChildren: (from, to) {
+  removeChildren: function(from, to) {
     if (!this._children)
       return null;
     from = from || 0;
@@ -1326,7 +1326,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   /**
    * Reverses the order of the item's children
    */
-  reverseChildren: () {
+  reverseChildren: function() {
     if (this._children) {
       this._children.reverse();
       // Adjust inidces
@@ -1346,7 +1346,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * locked or hidden}
    * @ignore
    */
-  isEditable: () {
+  isEditable: function() {
     var item = this;
     while (item) {
       if (!item._visible || item._locked)
@@ -1367,10 +1367,10 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Returns -1 if 'this' is above 'item', 1 if below, 0 if their order is not
    * defined in such a way, e.g. if one is a descendant of the other.
    */
-  _getOrder: (item) {
+  _getOrder: function(item) {
     // Private method that produces a list of anchestors, starting with the
     // root and ending with the actual element as the last entry.
-     getList(item) {
+    function getList(item) {
       var list = [];
       do {
         list.unshift(item);
@@ -1396,7 +1396,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *
    * @return {Boolean} {@true it has one or more children}
    */
-  hasChildren: () {
+  hasChildren: function() {
     return this._children && this._children.length > 0;
   },
 
@@ -1407,7 +1407,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is above the specified item}
    */
-  isAbove: (item) {
+  isAbove: function(item) {
     return this._getOrder(item) == -1;
   },
 
@@ -1418,7 +1418,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is below the specified item}
    */
-  isBelow: (item) {
+  isBelow: function(item) {
     return this._getOrder(item) == 1;
   },
 
@@ -1428,7 +1428,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is the parent of the item}
    */
-  isParent: (item) {
+  isParent: function(item) {
     return this._parent == item;
   },
 
@@ -1438,7 +1438,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item to check against
    * @return {Boolean} {@true it is a child of the item}
    */
-  isChild: (item) {
+  isChild: function(item) {
     return item && item._parent == this;
   },
 
@@ -1448,7 +1448,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is inside the specified item}
    */
-  isDescendant: (item) {
+  isDescendant: function(item) {
     var parent = this;
     while (parent = parent._parent) {
       if (parent == item)
@@ -1464,7 +1464,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @return {Boolean} {@true if the item is an ancestor of the specified
    * item}
    */
-  isAncestor: (item) {
+  isAncestor: function(item) {
     return item ? item.isDescendant(this) : false;
   },
 
@@ -1474,7 +1474,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Item} item
    * @return {Boolean} {@true if the items are grouped together}
    */
-  isGroupedWith: (item) {
+  isGroupedWith: function(item) {
     var parent = this._parent;
     while (parent) {
       // Find group parents. Check for parent._parent, since don't want
@@ -1655,8 +1655,8 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * circle.fillColor = new RgbColor(1, 0, 0);
    */
 
-  // DOCS: Document the different arguments that this  can receive.
-  // DOCS: Document the apply parameter in all transform s.
+  // DOCS: Document the different arguments that this function can receive.
+  // DOCS: Document the apply parameter in all transform functions.
   /**
    * {@grouptitle Transform Functions}
    *
@@ -1664,7 +1664,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * from a supplied point.
    *
    * @name Item#scale
-   * @
+   * @function
    * @param {Number} scale the scale factor
    * @param {Point} [center={@link Item#position}]
    * @param {Boolean} apply
@@ -1696,7 +1696,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * from a supplied point.
    *
    * @name Item#scale
-   * @
+   * @function
    * @param {Number} hor the horizontal scale factor
    * @param {Number} ver the vertical scale factor
    * @param {Point} [center={@link Item#position}]
@@ -1713,7 +1713,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // Scale the path horizontally by 300%
    * circle.scale(3, 1);
    */
-  scale: (hor, ver /* | scale */, center, apply) {
+  scale: function(hor, ver /* | scale */, center, apply) {
     // See Matrix#scale for explanation of this:
     if (arguments.length < 2 || typeof ver === 'object') {
       apply = center;
@@ -1730,7 +1730,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * @param {Point} delta the offset to translate the item by
    * @param {Boolean} apply
    */
-  translate: (delta, apply) {
+  translate: function(delta, apply) {
     var mx = new Matrix();
     return this.transform(mx.translate.apply(mx, arguments), apply);
   },
@@ -1773,11 +1773,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *
    * // Each frame rotate the path 3 degrees around the center point
    * // of the view:
-   *  onFrame(event) {
+   * function onFrame(event) {
    *   path.rotate(3, view.center);
    * }
    */
-  rotate: (angle, center, apply) {
+  rotate: function(angle, center, apply) {
     return this.transform(new Matrix().rotate(angle,
         center || this.getPosition(true)), apply);
   },
@@ -1788,7 +1788,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * by a supplied point.
    *
    * @name Item#shear
-   * @
+   * @function
    * @param {Point} point
    * @param {Point} [center={@link Item#position}]
    * @param {Boolean} apply
@@ -1799,14 +1799,14 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * by a supplied point.
    *
    * @name Item#shear
-   * @
+   * @function
    * @param {Number} hor the horizontal shear factor.
    * @param {Number} ver the vertical shear factor.
    * @param {Point} [center={@link Item#position}]
    * @param {Boolean} apply
    * @see Matrix#shear
    */
-  shear: (hor, ver, center, apply) {
+  shear: function(hor, ver, center, apply) {
     // PORT: Add support for center and apply back to Scriptographer too!
     // See Matrix#scale for explanation of this:
     if (arguments.length < 2 || typeof ver === 'object') {
@@ -1830,7 +1830,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   // @param {String[]} flags Array of any of the following: 'objects',
   //        'children', 'fill-gradients', 'fill-patterns', 'stroke-patterns',
   //        'lines'. Default: ['objects', 'children']
-  transform: (matrix, apply) {
+  transform: function(matrix, apply) {
     // Calling _changed will clear _bounds and _position, but depending
     // on matrix we can calculate and set them again.
     var bounds = this._bounds,
@@ -1871,7 +1871,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   },
 
   // DOCS: Document #apply()
-  apply: () {
+  apply: function() {
     // Call the internal #_apply(), and set the internal _matrix to the
     // identity transformation if it was possible to apply it.
     // Application is not possible on Raster, PointText, PlacedSymbol, since
@@ -1886,7 +1886,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     }
   },
 
-  _apply: (matrix) {
+  _apply: function(matrix) {
     // Pass on the transformation to the children, and apply it there too:
     if (this._children) {
       for (var i = 0, l = this._children.length; i < l; i++) {
@@ -1951,7 +1951,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // Fit the path to the bounding rectangle of the view:
    * path.fitBounds(view.bounds);
    */
-  fitBounds: (rectangle, fill) {
+  fitBounds: function(rectangle, fill) {
     // TODO: Think about passing options with various ways of defining
     // fitting.
     rectangle = Rectangle.read(arguments);
@@ -1967,7 +1967,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     this.setBounds(newBounds);
   },
 
-  toString: () {
+  toString: function() {
     return (this.constructor._name || 'Item') + (this._name
         ? " '" + this._name + "'"
         : ' @' + this._id);
@@ -1975,8 +1975,8 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
 
   /**
    * {@grouptitle Event Handlers}
-   * Item level handler  to be called on each frame of an animation.
-   * The  receives an event object which contains information about
+   * Item level handler function to be called on each frame of an animation.
+   * The function receives an event object which contains information about
    * the frame event:
    *
    * <b>{@code event.count}</b>: the number of times the frame event was
@@ -1995,7 +1995,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
    * path.fillColor = 'black';
    *
-   * path.onFrame = (event) {
+   * path.onFrame = function(event) {
    *   // Every frame, rotate the path by 3 degrees:
    *   this.rotate(3);
    * }
@@ -2006,8 +2006,8 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    */
 
   /**
-   * The  to be called when the mouse button is pushed down on the
-   * item. The  receives a {@link MouseEvent} object which contains
+   * The function to be called when the mouse button is pushed down on the
+   * item. The function receives a {@link MouseEvent} object which contains
    * information about the mouse event.
    *
    * @name Item#onMouseDown
@@ -2023,7 +2023,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse is pressed on the item,
    * // set its fill color to red:
-   * path.onMouseDown = (event) {
+   * path.onMouseDown = function(event) {
    *   this.fillColor = 'red';
    * }
    * 
@@ -2039,15 +2039,15 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *   path.fillColor = 'black';
    *   path.strokeColor = 'white';
    *   // When the mouse is pressed on the item, remove it:
-   *   path.onMouseDown = (event) {
+   *   path.onMouseDown = function(event) {
    *     this.remove();
    *   }
    * }
    */
 
   /**
-   * The  to be called when the mouse button is released over the item.
-   * The  receives a {@link MouseEvent} object which contains
+   * The function to be called when the mouse button is released over the item.
+   * The function receives a {@link MouseEvent} object which contains
    * information about the mouse event.
    *
    * @name Item#onMouseUp
@@ -2063,13 +2063,13 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse is released over the item,
    * // set its fill color to red:
-   * path.onMouseUp = (event) {
+   * path.onMouseUp = function(event) {
    *   this.fillColor = 'red';
    * }
    */
 
   /**
-   * The  to be called when the mouse clicks on the item. The 
+   * The function to be called when the mouse clicks on the item. The function
    * receives a {@link MouseEvent} object which contains information about the
    * mouse event.
    *
@@ -2086,7 +2086,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse is clicked on the item,
    * // set its fill color to red:
-   * path.onClick = (event) {
+   * path.onClick = function(event) {
    *   this.fillColor = 'red';
    * }
    * 
@@ -2102,15 +2102,15 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *   path.fillColor = 'black';
    *   path.strokeColor = 'white';
    *   // When the mouse is clicked on the item, remove it:
-   *   path.onClick = (event) {
+   *   path.onClick = function(event) {
    *     this.remove();
    *   }
    * }
    */
 
   /**
-   * The  to be called when the mouse double clicks on the item. The
-   *  receives a {@link MouseEvent} object which contains information
+   * The function to be called when the mouse double clicks on the item. The
+   * function receives a {@link MouseEvent} object which contains information
    * about the mouse event.
    *
    * @name Item#onDoubleClick
@@ -2126,7 +2126,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse is double clicked on the item,
    * // set its fill color to red:
-   * path.onDoubleClick = (event) {
+   * path.onDoubleClick = function(event) {
    *   this.fillColor = 'red';
    * }
    * 
@@ -2142,15 +2142,15 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *   path.fillColor = 'black';
    *   path.strokeColor = 'white';
    *   // When the mouse is clicked on the item, remove it:
-   *   path.onDoubleClick = (event) {
+   *   path.onDoubleClick = function(event) {
    *     this.remove();
    *   }
    * }
    */
 
   /**
-   * The  to be called repeatedly when the mouse moves on top of the
-   * item. The  receives a {@link MouseEvent} object which contains
+   * The function to be called repeatedly when the mouse moves on top of the
+   * item. The function receives a {@link MouseEvent} object which contains
    * information about the mouse event.
    *
    * @name Item#onMouseMove
@@ -2166,15 +2166,15 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse moves on top of the item, set its opacity
    * // to a random value between 0 and 1:
-   * path.onMouseMove = (event) {
+   * path.onMouseMove = function(event) {
    *   this.opacity = Math.random();
    * }
    */
 
   /**
-   * The  to be called when the mouse moves over the item. This
-   *  will only be called again, once the mouse moved outside of the
-   * item first. The  receives a {@link MouseEvent} object which
+   * The function to be called when the mouse moves over the item. This
+   * function will only be called again, once the mouse moved outside of the
+   * item first. The function receives a {@link MouseEvent} object which
    * contains information about the mouse event.
    *
    * @name Item#onMouseEnter
@@ -2191,12 +2191,12 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * path.fillColor = 'black';
    * 
    * // When the mouse enters the item, set its fill color to red:
-   * path.onMouseEnter = (event) {
+   * path.onMouseEnter = function(event) {
    *   this.fillColor = 'red';
    * }
    
    * // When the mouse leaves the item, set its fill color to black:
-   * path.onMouseLeave = (event) {
+   * path.onMouseLeave = function(event) {
    *   this.fillColor = 'black';
    * }
    * @example {@paperscript}
@@ -2205,16 +2205,16 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // move the mouse outside again, its fill color is set back
    * // to black.
    * 
-   *  enter(event) {
+   * function enter(event) {
    *   this.fillColor = 'red';
    * }
    * 
-   *  leave(event) {
+   * function leave(event) {
    *   this.fillColor = 'black';
    * }
    * 
    * // When the mouse is pressed:
-   *  onMouseDown(event) {
+   * function onMouseDown(event) {
    *   // Create a circle shaped path at the position of the mouse:
    *   var path = new Path.Circle(event.point, 25);
    *   path.fillColor = 'black';
@@ -2228,8 +2228,8 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    */
 
   /**
-   * The  to be called when the mouse moves out of the item.
-   * The  receives a {@link MouseEvent} object which contains
+   * The function to be called when the mouse moves out of the item.
+   * The function receives a {@link MouseEvent} object which contains
    * information about the mouse event.
    *
    * @name Item#onMouseLeave
@@ -2245,7 +2245,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * path.fillColor = 'black';
    * 
    * // When the mouse leaves the item, set its fill color to red:
-   * path.onMouseLeave = (event) {
+   * path.onMouseLeave = function(event) {
    *   this.fillColor = 'red';
    * }
    */
@@ -2256,11 +2256,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Attach an event handler to the item.
    *
    * @name Item#attach
-   * @
+   * @function
    * @param {String('mousedown', 'mouseup', 'mousedrag', 'click',
    * 'doubleclick', 'mousemove', 'mouseenter', 'mouseleave')} type the event
    * type
-   * @param {Function}  The  to be called when the event
+   * @param {Function} function The function to be called when the event
    * occurs
    *
    * @example {@paperscript}
@@ -2272,12 +2272,12 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * path.fillColor = 'black';
    * 
    * // When the mouse enters the item, set its fill color to red:
-   * path.attach('mouseenter', () {
+   * path.attach('mouseenter', function() {
    *   this.fillColor = 'red';
    * });
    * 
    * // When the mouse leaves the item, set its fill color to black:
-   * path.attach('mouseleave', () {
+   * path.attach('mouseleave', function() {
    *   this.fillColor = 'black';
    * });
    */
@@ -2285,7 +2285,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Attach one or more event handlers to the item.
    *
    * @name Item#attach^2
-   * @
+   * @function
    * @param {Object} param An object literal containing one or more of the
    * following properties: {@code mousedown, mouseup, mousedrag, click,
    * doubleclick, mousemove, mouseenter, mouseleave}.
@@ -2300,10 +2300,10 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * 
    * // When the mouse enters the item, set its fill color to red:
    * path.attach({
-   *   mouseenter: (event) {
+   *   mouseenter: function(event) {
    *     this.fillColor = 'red';
    *   },
-   *   mouseleave: (event) {
+   *   mouseleave: function(event) {
    *     this.fillColor = 'black';
    *   }
    * });
@@ -2313,16 +2313,16 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * // move the mouse outside again, its fill color is set black.
    * 
    * var pathHandlers = {
-   *   mouseenter: (event) {
+   *   mouseenter: function(event) {
    *     this.fillColor = 'red';
    *   },
-   *   mouseleave: (event) {
+   *   mouseleave: function(event) {
    *     this.fillColor = 'black';
    *   }
    * }
    * 
    * // When the mouse is pressed:
-   *  onMouseDown(event) {
+   * function onMouseDown(event) {
    *   // Create a circle shaped path at the position of the mouse:
    *   var path = new Path.Circle(event.point, 25);
    *   path.fillColor = 'black';
@@ -2336,17 +2336,17 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Detach an event handler from the item.
    *
    * @name Item#detach
-   * @
+   * @function
    * @param {String('mousedown', 'mouseup', 'mousedrag', 'click',
    * 'doubleclick', 'mousemove', 'mouseenter', 'mouseleave')} type the event
    * type
-   * @param {Function}  The  to be detached
+   * @param {Function} function The function to be detached
    */
   /**
    * Detach one or more event handlers to the item.
    *
    * @name Item#detach^2
-   * @
+   * @function
    * @param {Object} param An object literal containing one or more of the
    * following properties: {@code mousedown, mouseup, mousedrag, click,
    * doubleclick, mousemove, mouseenter, mouseleave}
@@ -2356,7 +2356,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Fire an event on the item.
    *
    * @name Item#fire
-   * @
+   * @function
    * @param {String('mousedown', 'mouseup', 'mousedrag', 'click',
    * 'doubleclick', 'mousemove', 'mouseenter', 'mouseleave')} type the event
    * type
@@ -2368,7 +2368,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Check if the item has one or more event handlers of the specified type.
    *
    * @name Item#responds
-   * @
+   * @function
    * @param {String('mousedown', 'mouseup', 'mousedrag', 'click',
    * 'doubleclick', 'mousemove', 'mouseenter', 'mouseleave')} type the event
    * type
@@ -2381,7 +2381,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Not defined in Path as it is required by other classes too,
    * e.g. PointText.
    */
-  _setStyles: (ctx) {
+  _setStyles: function(ctx) {
     // We can access internal properties since we're only using this on
     // items without children, where styles would be merged.
     var style = this._style,
@@ -2405,7 +2405,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
   },
 
   statics: {
-    drawSelectedBounds: (bounds, ctx, matrix) {
+    drawSelectedBounds: function(bounds, ctx, matrix) {
       var coords = matrix._transformCorners(bounds);
       ctx.beginPath();
       for (var i = 0; i < 8; i++)
@@ -2422,7 +2422,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
     // TODO: Implement View into the drawing.
     // TODO: Optimize temporary canvas drawing to ignore parts that are
     // outside of the visible view.
-    draw: (item, ctx, param) {
+    draw: function(item, ctx, param) {
       if (!item._visible || item._opacity == 0)
         return;
       var tempCanvas, parentCtx,
@@ -2487,8 +2487,8 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
       }
     }
   }
-}, Base.each(['down', 'drag', 'up', 'move'], (name) {
-  this['removeOn' + Base.capitalize(name)] = () {
+}, Base.each(['down', 'drag', 'up', 'move'], function(name) {
+  this['removeOn' + Base.capitalize(name)] = function() {
     var hash = {};
     hash[name] = true;
     return this.removeOn(hash);
@@ -2513,12 +2513,12 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * fired: {@code object.up = true}
    *
    * @name Item#removeOn
-   * @
+   * @function
    * @param {Object} object
    *
    * @example {@paperscript height=200}
    * // Click and drag below:
-   *  onMouseDrag(event) {
+   * function onMouseDrag(event) {
    *   // Create a circle shaped path at the mouse position,
    *   // with a radius of 10:
    *   var path = new Path.Circle(event.point, 10);
@@ -2536,11 +2536,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Removes the item when the next {@link Tool#onMouseMove} event is fired.
    *
    * @name Item#removeOnMove
-   * @
+   * @function
    *
    * @example {@paperscript height=200}
    * // Move your mouse below:
-   *  onMouseMove(event) {
+   * function onMouseMove(event) {
    *   // Create a circle shaped path at the mouse position,
    *   // with a radius of 10:
    *   var path = new Path.Circle(event.point, 10);
@@ -2555,11 +2555,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Removes the item when the next {@link Tool#onMouseDown} event is fired.
    *
    * @name Item#removeOnDown
-   * @
+   * @function
    *
    * @example {@paperscript height=200}
    * // Click a few times below:
-   *  onMouseDown(event) {
+   * function onMouseDown(event) {
    *   // Create a circle shaped path at the mouse position,
    *   // with a radius of 10:
    *   var path = new Path.Circle(event.point, 10);
@@ -2574,11 +2574,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Removes the item when the next {@link Tool#onMouseDrag} event is fired.
    *
    * @name Item#removeOnDrag
-   * @
+   * @function
    *
    * @example {@paperscript height=200}
    * // Click and drag below:
-   *  onMouseDrag(event) {
+   * function onMouseDrag(event) {
    *   // Create a circle shaped path at the mouse position,
    *   // with a radius of 10:
    *   var path = new Path.Circle(event.point, 10);
@@ -2593,11 +2593,11 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * Removes the item when the next {@link Tool#onMouseUp} event is fired.
    *
    * @name Item#removeOnUp
-   * @
+   * @function
    *
    * @example {@paperscript height=200}
    * // Click a few times below:
-   *  onMouseDown(event) {
+   * function onMouseDown(event) {
    *   // Create a circle shaped path at the mouse position,
    *   // with a radius of 10:
    *   var path = new Path.Circle(event.point, 10);
@@ -2608,7 +2608,7 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    * }
    */
   // TODO: implement Item#removeOnFrame
-  removeOn: (obj) {
+  removeOn: function(obj) {
     for (var name in obj) {
       if (obj[name]) {
         var key = 'mouse' + name,
