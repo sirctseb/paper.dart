@@ -16,7 +16,7 @@
 
 module('Path Bounds');
 
-test('path.bounds', function() {
+test('path.bounds', () {
   var path = new Path([
     new Segment(new Point(121, 334), new Point(-19, 38), new Point(30.7666015625, -61.53369140625)),
     new Segment(new Point(248, 320), new Point(-42, -74), new Point(42, 74)),
@@ -71,7 +71,7 @@ test('path.bounds', function() {
       'roated path.segments');
 });
 
-test('path.strokeBounds on path without stroke', function() {
+test('path.strokeBounds on path without stroke', () {
   var path = new Path([
     new Segment(new Point(121, 334), new Point(-19, 38), new Point(30.7666015625, -61.53369140625)),
     new Segment(new Point(248, 320), new Point(-42, -74), new Point(42, 74)),
@@ -80,8 +80,8 @@ test('path.strokeBounds on path without stroke', function() {
   compareRectangles(path.strokeBounds, { x: 121, y: 275.06796, width: 149.49304, height: 145.87686 });
 });
 
-test('path.bounds & path.strokeBounds with stroke styles', function() {
-  function makePath() {
+test('path.bounds & path.strokeBounds with stroke styles', () {
+   makePath() {
     var path = new Path();
     path.moveTo(200, 50);
     path.lineTo(230, 100);
