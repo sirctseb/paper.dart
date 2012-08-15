@@ -1237,12 +1237,12 @@ class Item {
    * @param {Item} item The item above which it should be moved
    * @return {Boolean} {@true it was inserted}
    */
-  insertAbove: function(item) {
+  bool insertAbove(Item item) {
     var index = item._index;
-    if (item._parent == this._parent && index < this._index)
+    if (item._parent == _parent && index < _index)
        index++;
     return item._parent.insertChild(index, this);
-  },
+  }
 
   /**
    * Inserts this item below the specified item.
@@ -1250,12 +1250,12 @@ class Item {
    * @param {Item} item The item above which it should be moved
    * @return {Boolean} {@true it was inserted}
    */
-  insertBelow: function(item) {
+  bool insertBelow(Item item) {
     var index = item._index;
-    if (item._parent == this._parent && index > this._index)
+    if (item._parent == _parent && index > _index)
        index--;
     return item._parent.insertChild(index, this);
-  },
+  }
 
   /**
    * Inserts the specified item as a child of this item by appending it to
@@ -1265,9 +1265,9 @@ class Item {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #addChild(item)} instead.
    */
-  appendTop: function(item) {
-    return this.addChild(item);
-  },
+  Item appendTop(Item item) {
+    return addChild(item);
+  }
 
   /**
    * Inserts the specified item as a child of this item by appending it to
@@ -1277,9 +1277,9 @@ class Item {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #insertChild(index, item)} instead.
    */
-  appendBottom: function(item) {
-    return this.insertChild(0, item);
-  },
+  Item appendBottom(Item item) {
+    return insertChild(0, item);
+  }
 
   /**
    * Moves this item above the specified item.
@@ -1288,9 +1288,9 @@ class Item {
    * @return {Boolean} {@true it was moved}
    * @deprecated use {@link #insertAbove(item)} instead.
    */
-  moveAbove: function(item) {
+  bool moveAbove(Item item) {
     return this.insertAbove(item);
-  },
+  }
 
   /**
    * Moves the item below the specified item.
@@ -1299,9 +1299,9 @@ class Item {
    * @return {Boolean} {@true it was moved}
    * @deprecated use {@link #insertBelow(item)} instead.
    */
-  moveBelow: function(item) {
-    return this.insertBelow(item);
-  },
+  bool moveBelow(Item item) {
+    return insertBelow(item);
+  }
 
   /**
   * Removes the item from its parent's named children list.
