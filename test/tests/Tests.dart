@@ -17,6 +17,7 @@
 #source("Item_Bounds.dart");
 #source("Item_Cloning.dart");
 #source("Item_Order.dart");
+#source("Layer.dart");
 
 void main() {
 	PointTests();
