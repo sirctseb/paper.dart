@@ -277,31 +277,13 @@ class Item {
    * var path2 = new Path.Circle(new Point(150, 50), 20);
    * path2.style = myStyle;
    */
+  PathStyle _style;
+  // TODO I _think_ we need to:
+  // get/set style (notify owners on style setting? maybe not)
+  // get/set style properties (def with owner notification)
 
-  statics: {
-    _id: 0
-  }
-}, Base.each(['locked', 'visible', 'blendMode', 'opacity', 'guide'],
   // Produce getter/setters for properties. We need setters because we want to
   // call _changed() if a property was modified.
-  function(name) {
-    var part = Base.capitalize(name),
-      name = '_' + name;
-    this['get' + part] = function() {
-      return this[name];
-    };
-    this['set' + part] = function(value) {
-      if (value != this[name]) {
-        this[name] = value;
-        // #locked does not change appearance, all others do:
-        this._changed(name === '_locked'
-            ? ChangeFlag.ATTRIBUTE : Change.ATTRIBUTE);
-      }
-    };
-}, {}), /** @lends Item# */{
-  // Note: These properties have their getter / setters produced in the
-  // injection scope above.
-
   /**
    * Specifies whether the item is locked.
    *
@@ -310,7 +292,15 @@ class Item {
    * @default false
    * @ignore
    */
-  _locked: false,
+  // TODO init to false in constructor
+  bool _locked; // = false;
+  bool get locked() => _locked;
+  set locked(bool locked) {
+    if(_locked != locked) {
+      _locked = locked;
+      _changed(ChangeFlag.ATTRIBUTE);
+    }
+  }
 
   /**
    * Specifies whether the item is visible. When set to {@code false}, the
@@ -328,7 +318,15 @@ class Item {
    * // Hide the path:
    * path.visible = false;
    */
-  _visible: true,
+  // TODO init to true in constructor
+  bool _visible; // = true;
+  bool get visible() => _svisible;
+  set visible(bool visible) {
+    if(_visible != visible) {
+      _visible = visible;
+      _changed(Change.ATTRIBUTE);
+    }
+  }
 
   /**
    * The blend mode of the item.
@@ -357,7 +355,15 @@ class Item {
    * // Set the blend mode of circle2:
    * circle2.blendMode = 'multiply';
    */
-  _blendMode: 'normal',
+  // TODO init to 'normal' in constructor
+  String _blendMode; //= 'normal';
+  String get blendMode() => _blendMode;
+  set blendMode(String blendMode) {
+    if(_blendMode != blendMode) {
+      _blendMode = blendMode;
+      _changed(Change.ATTRIBUTE);
+    }
+  }
 
   /**
    * The opacity of the item as a value between {@code 0} and {@code 1}.
@@ -381,7 +387,15 @@ class Item {
    * // Make circle2 50% transparent:
    * circle2.opacity = 0.5;
    */
-  _opacity: 1,
+  // TODO init to 1 in constructor
+  num _opacity; //= 1;
+  num get opacity() => _opacity;
+  set opacity(num opacity) {
+    if(_opacity != opacity) {
+      _opacity = opacity;
+      _changed(Change.ATTRIBUTE);
+    }
+  }
 
   // TODO: Implement guides
   /**
@@ -392,7 +406,16 @@ class Item {
    * @type Number
    * @default 1
    */
-  _guide: false,
+  // TODO set to false in constructor
+  // TODO why is does this have @type Number and @default 1?
+  bool _guide; // = false;
+  bool get guide() => _guide;
+  set guide(bool guide) {
+    if(_guide != guide) {
+      _guide = guide;
+      _changed(Change.ATTRIBUTE);
+    }
+  }
 
   /**
    * Specifies whether an item is selected and will also return {@code true}
