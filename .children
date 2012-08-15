@@ -1,4 +1,5 @@
 src/path/Segment.dart
+src/item/Item.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
