@@ -14,104 +14,106 @@
  * All rights reserved.
  */
 
-module('Layer');
+LayerTests() {
+  group("Layer Tests", () {
+    test('previousSibling / nextSibling', () {
+      var project = paper.project;
+      var firstLayer = project.activeLayer;
+      var secondLayer = new Layer();
+      equals(() {
+        return secondLayer.previousSibling == firstLayer;
+        }, true);
+      equals(() {
+        return secondLayer.nextSibling == null;
+        }, true);
 
-test('previousSibling / nextSibling', function() {
-  var project = paper.project;
-  var firstLayer = project.activeLayer;
-  var secondLayer = new Layer();
-  equals(function() {
-    return secondLayer.previousSibling == firstLayer;
-  }, true);
-  equals(function() {
-    return secondLayer.nextSibling == null;
-  }, true);
+      // Move another layer into secondLayer and check nextSibling /
+      // previousSibling:
+      var path = new Path();
+      var thirdLayer = new Layer();
+      secondLayer.insertChild(0, thirdLayer);
+      equals(() {
+        return secondLayer.children.length;
+        }, 2);
+      equals(() {
+        return thirdLayer.nextSibling == path;
+        }, true);
+      secondLayer.addChild(thirdLayer);
+      equals(() {
+        return thirdLayer.nextSibling == null;
+        }, true);
+      equals(() {
+        return thirdLayer.previousSibling == path;
+        }, true);
+      equals(() {
+        return project.layers.length == 2;
+        }, true);
 
-  // Move another layer into secondLayer and check nextSibling /
-  // previousSibling:
-  var path = new Path();
-  var thirdLayer = new Layer();
-  secondLayer.insertChild(0, thirdLayer);
-  equals(function() {
-    return secondLayer.children.length;
-  }, 2);
-  equals(function() {
-    return thirdLayer.nextSibling == path;
-  }, true);
-  secondLayer.addChild(thirdLayer);
-  equals(function() {
-    return thirdLayer.nextSibling == null;
-  }, true);
-  equals(function() {
-    return thirdLayer.previousSibling == path;
-  }, true);
-  equals(function() {
-    return project.layers.length == 2;
-  }, true);
+      firstLayer.addChild(secondLayer);
+      equals(() {
+        return project.layers.length == 1;
+        }, true);
+    });
 
-  firstLayer.addChild(secondLayer);
-  equals(function() {
-    return project.layers.length == 1;
-  }, true);
-});
+    test('insertabove / insertbelow', () {
+      var project = paper.project;
+      var firstlayer = project.activelayer;
+      var secondlayer = new layer();
+      secondlayer.insertbelow(firstlayer);
+      equals(() {
+        return secondlayer.previoussibling == null;
+        }, true);
+      equals(() {
+        return secondlayer.nextsibling == firstlayer;
+        }, true);
 
-test('insertAbove / insertBelow', function() {
-  var project = paper.project;
-  var firstLayer = project.activeLayer;
-  var secondLayer = new Layer();
-  secondLayer.insertBelow(firstLayer);
-  equals(function() {
-    return secondLayer.previousSibling == null;
-  }, true);
-  equals(function() {
-    return secondLayer.nextSibling == firstLayer;
-  }, true);
+      var path = new path();
+      firstlayer.addchild(path);
 
-  var path = new Path();
-  firstLayer.addChild(path);
+      // move the layer above the path, inside the firstlayer:
+      secondlayer.insertabove(path);
+      equals(() {
+        return secondlayer.nextsibling == path;
+        }, true);
+      equals(() {
+        return secondlayer.parent == firstlayer;
+        }, true);
+      // there should now only be one layer left:
+      equals(() {
+        return project.layers.length;
+        }, 1);
+    });
 
-  // move the layer above the path, inside the firstLayer:
-  secondLayer.insertAbove(path);
-  equals(function() {
-    return secondLayer.nextSibling == path;
-  }, true);
-  equals(function() {
-    return secondLayer.parent == firstLayer;
-  }, true);
-  // There should now only be one layer left:
-  equals(function() {
-    return project.layers.length;
-  }, 1);
-});
-
-test('addChild / appendBottom / nesting', function() {
-  var project = paper.project;
-  var firstLayer = project.activeLayer;
-  var secondLayer = new Layer();
-  // There should be two layers now in project.layers
-  equals(function() {
-    return project.layers.length;
-  }, 2);
-  firstLayer.addChild(secondLayer);
-  equals(function() {
-    return secondLayer.parent == firstLayer;
-  }, true);
-  // There should only be the firsLayer now in project.layers
-  equals(function() {
-    return project.layers.length;
-  }, 1);
-  equals(function() {
-    return project.layers[0] == firstLayer;
-  }, true);
-  // Now move secondLayer bellow the first again, in which case it should
-  // reappear in project.layers
-  secondLayer.insertBelow(firstLayer);
-  // There should be two layers now in project.layers again now
-  equals(function() {
-    return project.layers.length;
-  }, 2);
-  equals(function() {
-    return project.layers[0] == secondLayer
-      && project.layers[1] == firstLayer;
-  }, true);
-});
+    test('addchild / appendbottom / nesting', () {
+      var project = paper.project;
+      var firstlayer = project.activelayer;
+      var secondlayer = new layer();
+      // there should be two layers now in project.layers
+      equals(() {
+        return project.layers.length;
+        }, 2);
+      firstlayer.addchild(secondlayer);
+      equals(() {
+        return secondlayer.parent == firstlayer;
+        }, true);
+      // there should only be the firslayer now in project.layers
+      equals(() {
+        return project.layers.length;
+        }, 1);
+      equals(() {
+        return project.layers[0] == firstlayer;
+        }, true);
+      // now move secondlayer bellow the first again, in which case it should
+      // reappear in project.layers
+      secondlayer.insertbelow(firstlayer);
+      // there should be two layers now in project.layers again now
+      equals(() {
+        return project.layers.length;
+        }, 2);
+      equals(() {
+        return project.layers[0] == secondlayer
+        && project.layers[1] == firstlayer;
+        }, true);
+    });
+  });
+}
