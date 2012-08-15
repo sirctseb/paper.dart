@@ -1464,9 +1464,9 @@ class Item {
    *
    * @return {Boolean} {@true it has one or more children}
    */
-  hasChildren: function() {
-    return this._children && this._children.length > 0;
-  },
+  bool hasChildren() {
+    return _children != null && _children.length > 0;
+  }
 
   /**
    * Checks if this item is above the specified item in the stacking order
@@ -1475,9 +1475,9 @@ class Item {
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is above the specified item}
    */
-  isAbove: function(item) {
-    return this._getOrder(item) == -1;
-  },
+  bool isAbove(Item item) {
+    return _getOrder(item) == -1;
+  }
 
   /**
    * Checks if the item is below the specified item in the stacking order of
@@ -1486,9 +1486,9 @@ class Item {
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is below the specified item}
    */
-  isBelow: function(item) {
-    return this._getOrder(item) == 1;
-  },
+  bool isBelow(Item item) {
+    return _getOrder(item) == 1;
+  }
 
   /**
    * Checks whether the specified item is the parent of the item.
@@ -1496,9 +1496,9 @@ class Item {
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is the parent of the item}
    */
-  isParent: function(item) {
-    return this._parent == item;
-  },
+  bool isParent(Item item) {
+    return _parent == item;
+  }
 
   /**
    * Checks whether the specified item is a child of the item.
@@ -1506,9 +1506,9 @@ class Item {
    * @param {Item} item The item to check against
    * @return {Boolean} {@true it is a child of the item}
    */
-  isChild: function(item) {
-    return item && item._parent == this;
-  },
+  bool isChild(Item item) {
+    return item != null && item._parent == this;
+  }
 
   /**
    * Checks if the item is contained within the specified item.
@@ -1516,14 +1516,14 @@ class Item {
    * @param {Item} item The item to check against
    * @return {Boolean} {@true if it is inside the specified item}
    */
-  isDescendant: function(item) {
+  bool isDescendant(Item item) {
     var parent = this;
-    while (parent = parent._parent) {
+    while (parent = parent._parent != null) {
       if (parent == item)
         return true;
     }
     return false;
-  },
+  }
 
   /**
    * Checks if the item is an ancestor of the specified item.
@@ -1532,9 +1532,9 @@ class Item {
    * @return {Boolean} {@true if the item is an ancestor of the specified
    * item}
    */
-  isAncestor: function(item) {
-    return item ? item.isDescendant(this) : false;
-  },
+  bool isAncestor(Item item) {
+    return item != null ? item.isDescendant(this) : false;
+  }
 
   /**
    * Checks whether the item is grouped with the specified item.
@@ -1542,20 +1542,20 @@ class Item {
    * @param {Item} item
    * @return {Boolean} {@true if the items are grouped together}
    */
-  isGroupedWith: function(item) {
-    var parent = this._parent;
-    while (parent) {
+  bool isGroupedWith(Item item) {
+    var parent = _parent;
+    while (parent != null) {
       // Find group parents. Check for parent._parent, since don't want
       // top level layers, because they also inherit from Group
-      if (parent._parent
-        && (parent instanceof Group || parent instanceof CompoundPath)
+      if (parent._parent != null
+        && (parent is Group || parent is CompoundPath)
         && item.isDescendant(parent))
           return true;
       // Keep walking up otherwise
       parent = parent._parent;
     }
     return false;
-  },
+  }
 
   // Document all style properties which get injected into Item by Style:
 
