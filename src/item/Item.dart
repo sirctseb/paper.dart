@@ -1394,15 +1394,15 @@ class Item {
   /**
    * Reverses the order of the item's children
    */
-  reverseChildren: function() {
-    if (this._children) {
-      this._children.reverse();
+  void reverseChildren() {
+    if (_children != null) {
+      _children.reverse();
       // Adjust inidces
       for (var i = 0, l = this._children.length; i < l; i++)
-        this._children[i]._index = i;
-      this._changed(Change.HIERARCHY);
+        _children[i]._index = i;
+      _changed(Change.HIERARCHY);
     }
-  },
+  }
 
   // TODO: Item#isEditable is currently ignored in the documentation, as
   // locking an item currently has no effect
