@@ -24,7 +24,9 @@
  * is unique to their type, but share the underlying properties and functions
  * that they inherit from Item.
  */
-var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
+class Item {
+//var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
+  // TODO figure out events stuff
   _events: new function() {
 
     // Flags defining which native events are required by which Paper events
@@ -101,23 +103,25 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
       });
   },
 
-  initialize: function(pointOrMatrix) {
+  static int _next_id;
+  Item(/*Point or Matrix*/ [pointOrMatrix]) {
+    if(_next_id == null) _next_id = 0;
     // Define this Item's unique id.
-    this._id = ++Item._id;
+    _id = ++Item._next_id;
     // If _project is already set, the item was already moved into the DOM
     // hierarchy. Used by Layer, where it's added to project.layers instead
-    if (!this._project)
+    if (_project == null)
       paper.project.activeLayer.addChild(this);
     // TextItem defines its own _style, based on CharacterStyle
-    if (!this._style)
+    if (_style == null)
       this._style = PathStyle.create(this);
-    this.setStyle(this._project.getCurrentStyle());
-    this._matrix = pointOrMatrix !== undefined
-      ? pointOrMatrix instanceof Matrix
+    setStyle(_project.getCurrentStyle());
+    _matrix = pointOrMatrix !== null
+      ? pointOrMatrix is Matrix
         ? pointOrMatrix.clone()
-        : new Matrix().translate(Point.read(arguments, 0))
+        : new Matrix().translate(Point.read(pointOrMatrix))
       : new Matrix();
-  },
+  }
 
   /**
    * Private notifier that is called whenever a change occurs in this item or
@@ -125,46 +129,46 @@ var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
    *
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
-  _changed: function(flags) {
-    if (flags & ChangeFlag.GEOMETRY) {
+  _changed(int flags) {
+    if (flags & ChangeFlag.GEOMETRY != 0) {
       // Clear cached bounds and position whenever geometry changes
-      delete this._bounds;
-      delete this._position;
+      _bounds = null;
+      _position = null;
     }
-    if (this._parent
-        && (flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE))) {
+    if (_parent != null
+        && (flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE) != 0)) {
       // Clear cached bounds of all items that this item contributes to.
       // We call this on the parent, since the information is cached on
       // the parent, see getBounds().
-      this._parent._clearBoundsCache();
+      _parent._clearBoundsCache();
     }
-    if (flags & ChangeFlag.HIERARCHY) {
+    if (flags & ChangeFlag.HIERARCHY != 0) {
       // Clear cached bounds of all items that this item contributes to.
       // We don't call this on the parent, since we're already the parent
       // of the child that modified the hierarchy (that's where these
       // HIERARCHY notifications go)
-      this._clearBoundsCache();
+      _clearBoundsCache();
     }
-    if (flags & ChangeFlag.APPEARANCE) {
-      this._project._needsRedraw();
+    if (flags & ChangeFlag.APPEARANCE != 0) {
+      _project._needsRedraw();
     }
     // If this item is a symbol's definition, notify it of the change too
-    if (this._parentSymbol)
-      this._parentSymbol._changed(flags);
+    if (this._parentSymbol != null)
+      _parentSymbol._changed(flags);
     // Have project keep track of changed items, so they can be iterated.
     // This can be used for example to update the SVG tree. Needs to be
     // activated in Project
-    if (this._project._changes) {
-      var entry = this._project._changesById[this._id];
-      if (entry) {
+    if (_project._changes != null) {
+      var entry = _project._changesById[_id];
+      if (entry != null) {
         entry.flags |= flags;
       } else {
-        entry = { item: this, flags: flags };
-        this._project._changesById[this._id] = entry;
-        this._project._changes.push(entry);
+        entry = { "item": this, "flags": flags };
+        _project._changesById[_id] = entry;
+        _project._changes.push(entry);
       }
     }
-  },
+  }
 
   /**
    * The unique id of the item.
