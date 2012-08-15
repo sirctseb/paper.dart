@@ -227,7 +227,7 @@ HitResultTests() {
       }
       var description = 'This hit test should not throw an error';
       if (error)
-        description += ': ' + error;
+        description = '$description: error';
       expect(error == null, true, description);
     });
 
