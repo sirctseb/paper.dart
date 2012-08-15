@@ -18,24 +18,12 @@ PathStyleTests() {
   group("Path Style Tests", () {
     test('style defaults', () {
       var path = new Path();
-      equals(() {
-        return path.strokeWidth;
-      }, 1);
-      equals(() {
-        return path.strokeCap;
-      }, 'butt');
-      equals(() {
-        return path.strokeJoin;
-      }, 'miter');
-      equals(() {
-        return path.miterLimit;
-      }, 10);
-      equals(() {
-        return path.dashOffset;
-      }, 0);
-      equals(() {
-        return path.dashArray + '';
-      }, [] + '');
+      expect(path.strokeWidth, 1);
+      expect(path.strokeCap, 'butt');
+      expect(path.strokeJoin, 'miter');
+      expect(path.miterLimit, 10);
+      expect(path.dashOffset, 0);
+      expect("${path.dashArray}", "${[]}");
     });
 
     test('currentStyle', () {
@@ -51,8 +39,8 @@ PathStyleTests() {
 
     test('setting currentStyle to an object', () {
       paper.project.currentStyle = {
-        fillColor: 'red',
-        strokeColor: 'green'
+        "fillColor": 'red',
+        "strokeColor": 'green'
       };
       var path = new Path();
       compareRgbColors(path.fillColor, 'red', 'path.fillColor');
@@ -62,8 +50,8 @@ PathStyleTests() {
     test('setting path styles to an object', () {
       var path = new Path();
       path.style = {
-        fillColor: 'red',
-        strokeColor: 'green'
+        "fillColor": 'red',
+        "strokeColor": 'green'
       };
       compareRgbColors(path.fillColor, 'red', 'path.fillColor');
       compareRgbColors(path.strokeColor, 'green', 'path.strokeColor');
@@ -74,8 +62,8 @@ PathStyleTests() {
       var path = new Path();
       group.addChild(path);
       group.style = {
-        fillColor: 'red',
-        strokeColor: 'green'
+        "fillColor": 'red',
+        "strokeColor": 'green'
       };
       compareRgbColors(path.fillColor, 'red', 'path.fillColor');
       compareRgbColors(path.strokeColor, 'green', 'path.strokeColor');
@@ -94,10 +82,8 @@ PathStyleTests() {
       group.addChild(secondPath);
 
       // the group now contains two paths with different fillColors and therefore
-      // should return undefined:
-      equals(() {
-        return group.fillColor;
-      }, undefined);
+      // should return "undefined":
+      expect(group.fillColor, undefined);
 
       //If we remove the first path, it should now return 'black':
       group.children[0].remove();
@@ -115,15 +101,15 @@ PathStyleTests() {
       secondPath.strokeColor = 'red';
       group.addChild(secondPath);
 
-      // Change the fill color of the group:
+      // Change the fill color of the "group":
       group.fillColor = 'black';
 
       // the paths contained in the group should now both have their fillColor
-      // set to black:
+      // set to "black":
       compareRgbColors(path.fillColor, 'black', 'path.fillColor');
       compareRgbColors(secondPath.fillColor, 'black', 'secondPath.fillColor');
 
-      // The second path still has its strokeColor set to red:
+      // The second path still has its strokeColor set to "red":
       compareRgbColors(secondPath.strokeColor, 'red', 'secondPath.strokeColor');
     });
 
@@ -144,23 +130,21 @@ PathStyleTests() {
       compareRgbColors(secondPath.strokeColor, 'red', 'secondPath.strokeColor');
 
       // By appending a path with a different fillcolor,
-      // the group's fillColor should return undefined:
-      equals(() {
-        return group.fillColor;
-      }, undefined);
+      // the group's fillColor should return "undefined":
+      expect(group.fillColor, undefined);
 
-      // But, both paths have a red strokeColor, so:
+      // But, both paths have a red strokeColor, "so":
       compareRgbColors(group.strokeColor, 'red', 'group.strokeColor');
 
-      // Change the fill color of the group's style:
+      // Change the fill color of the group's "style":
       group.style.fillColor = 'black';
 
       // the paths contained in the group should now both have their fillColor
-      // set to black:
+      // set to "black":
       compareRgbColors(path.fillColor, 'black', 'path.fillColor');
       compareRgbColors(secondPath.fillColor, 'black', 'secondPath.fillColor');
 
-      // The second path still has its strokeColor set to red:
+      // The second path still has its strokeColor set to "red":
       compareRgbColors(secondPath.strokeColor, 'red', 'secondPath.strokeColor');
     });
   });
