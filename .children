@@ -1,3 +1,4 @@
+test/tests/Path_Length.dart
 src/path/Segment.dart
 test/tests/Tests.dart
 src/util/Numerical.dart
