@@ -1306,12 +1306,12 @@ class Item {
   /**
   * Removes the item from its parent's named children list.
   */
-  _removeFromNamed: function() {
-    var children = this._parent._children,
-      namedChildren = this._parent._namedChildren,
-      name = this._name,
-      namedArray = namedChildren[name],
-      index = namedArray ? namedArray.indexOf(this) : -1;
+  void _removeFromNamed() {
+    var children = _parent._children;
+    var namedChildren = _parent._namedChildren;
+    String name = this._name;
+    var namedArray = namedChildren[name];
+    int index = namedArray != null ? namedArray.indexOf(this) : -1;
     if (index == -1)
       return;
     // Remove the named reference
@@ -1325,29 +1325,29 @@ class Item {
       children[name] = namedArray[namedArray.length - 1];
     } else {
       // Otherwise delete the empty array
-      delete namedChildren[name];
+      namedChildren.remove(name);
     }
-  },
+  }
 
   /**
   * Removes the item from its parent's children list.
   */
-  _remove: function(deselect, notify) {
-    if (this._parent) {
+  bool _remove(bool deselect, bool notify) {
+    if (_parent != null) {
       if (deselect)
-        this.setSelected(false);
-      if (this._name)
-        this._removeFromNamed();
-      if (this._index != null)
+        setSelected(false);
+      if (_name != null)
+        _removeFromNamed();
+      if (_index != null)
         Base.splice(this._parent._children, null, this._index, 1);
       // Notify parent of changed hierarchy
-      if (notify)
-        this._parent._changed(Change.HIERARCHY);
-      this._parent = null;
+      if (bool notify)
+        _parent._changed(Change.HIERARCHY);
+      _parent = null;
       return true;
     }
     return false;
-  },
+  }
 
   /**
   * Removes the item from the project. If the item has children, they are also
@@ -1355,9 +1355,9 @@ class Item {
   *
   * @return {Boolean} {@true the item was removed}
   */
-  remove: function() {
-    return this._remove(true, true);
-  },
+  bool remove() {
+    return _remove(true, true);
+  }
 
   /**
    * Removes all of the item's {@link #children} (if any).
@@ -1376,11 +1376,10 @@ class Item {
    * @param {Number} [to=children.length] the ending index, exclusive
    * @return {Item[]} an array containing the removed items
    */
-  removeChildren: function(from, to) {
-    if (!this._children)
+  List<Item> removeChildren([int from = 0, int to = null]) {
+    if (_children == null)
       return null;
-    from = from || 0;
-    to = Base.pick(to, this._children.length);
+    to = to == null ? _children.length : to;
     // Use Base.splice(), wich adjusts #_index for the items above, and
     // deletes it for the removed items. Calling #_remove() afterwards is
     // fine, since it only calls Base.splice() if #_index is set.
@@ -1388,9 +1387,9 @@ class Item {
     for (var i = removed.length - 1; i >= 0; i--)
       removed[i]._remove(true, false);
     if (removed.length > 0)
-      this._changed(Change.HIERARCHY);
+      _changed(Change.HIERARCHY);
     return removed;
-  },
+  }
 
   /**
    * Reverses the order of the item's children
