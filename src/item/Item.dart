@@ -598,27 +598,6 @@ class Item {
   }
   set matrix(Matrix matrix) => setMatrix(matrix);
 
-}, Base.each(['bounds', 'strokeBounds', 'handleBounds', 'roughBounds'],
-function(name) {
-  // Produce getters for bounds properties. These handle caching, matrices
-  // and redirect the call to the private _getBounds, which can be
-  // overridden by subclasses, see below.
-  this['get' + Base.capitalize(name)] = function(/* matrix */) {
-    var type = this._boundsType,
-      bounds = this._getCachedBounds(
-        // Allow subclasses to override _boundsType if they use the same
-        // calculations for multiple types. The default is name:
-        typeof type == 'string' ? type : type && type[name] || name,
-        // Pass on the optional matrix
-        arguments[0]);
-    // If we're returning 'bounds', create a LinkedRectangle that uses the
-    // setBounds() setter to update the Item whenever the bounds are
-    // changed:
-    return name == 'bounds' ? LinkedRectangle.create(this, 'setBounds',
-        bounds.x, bounds.y, bounds.width, bounds.height) : bounds;
-  };
-}, /** @lends Item# */{
-
   /**
    * Private method that deals with the calling of _getBounds, recursive
    * matrix concatenation and handles all the complicated caching mechanisms.
