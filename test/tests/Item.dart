@@ -331,7 +331,7 @@ ItemTests() {
       }
       var description = 'Cloning a linked size should not throw an error';
       if (error)
-        description += ': ' + error;
+        description = "$description: error";
       expect(error == null, true, description);
     });
   });
