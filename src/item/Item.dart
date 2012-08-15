@@ -1176,9 +1176,9 @@ class Item {
    *
    * @param {Item} item The item to be added as a child
    */
-  addChild: function(item) {
-    return this.insertChild(undefined, item);
-  },
+  Item addChild(Item item) {
+    return this.insertChild(null, item);
+  }
 
   /**
    * Inserts the specified item as a child of this item at the specified
@@ -1188,21 +1188,21 @@ class Item {
    * @param {Number} index
    * @param {Item} item The item to be appended as a child
    */
-  insertChild: function(index, item) {
-    if (this._children) {
+  Item insertChild(int index, Item item) {
+    if (_children != null) {
       item._remove(false, true);
       Base.splice(this._children, [item], index, 0);
       item._parent = this;
-      item._setProject(this._project);
+      item._setProject(_project);
       // Setting the name again makes sure all name lookup structures are
       // kept in sync.
       if (item._name)
         item.setName(item._name);
-      this._changed(Change.HIERARCHY);
+      _changed(Change.HIERARCHY);
       return true;
     }
     return false;
-  },
+  }
 
   /**
    * Adds the specified items as children of this item at the end of the
@@ -1211,10 +1211,10 @@ class Item {
    *
    * @param {item[]} items The items to be added as children
    */
-  addChildren: function(items) {
+  void addChildren(List<Item> items) {
     for (var i = 0, l = items && items.length; i < l; i++)
-      this.insertChild(undefined, items[i]);
-  },
+      this.insertChild(null, items[i]);
+  }
 
   /**
    * Inserts the specified items as children of this item at the specified
@@ -1224,12 +1224,12 @@ class Item {
    * @param {Number} index
    * @param {Item[]} items The items to be appended as children
    */
-  insertChildren: function(index, items) {
+  void insertChildren(int index, List<Item> items) {
     for (var i = 0, l = items && items.length; i < l; i++) {
-      if (this.insertChild(index, items[i]))
+      if (insertChild(index, items[i]))
         index++;
     }
-  },
+  }
 
   /**
    * Inserts this item above the specified item.
