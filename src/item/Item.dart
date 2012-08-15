@@ -176,9 +176,12 @@ class Item {
    * @type Number
    * @bean
    */
-  getId: function() {
-    return this._id;
-  },
+  int _id;
+  int getId() {
+    return _id;
+  }
+  // property
+  int get id() => _id;
 
   /**
    * The name of the item. If the item has a name, it can be accessed by name
@@ -199,28 +202,40 @@ class Item {
    * // The path can be accessed by name:
    * group.children['example'].fillColor = 'red';
    */
-  getName: function() {
-    return this._name;
-  },
+  String _name;
+  String getName() {
+    return _name;
+  }
+  // property
+  String get name() => _name;
 
-  setName: function(name) {
+  void setName(String name) {
     // Note: Don't check if the name has changed and bail out if it has not,
     // because setName is used internally also to update internal structures
     // when an item is moved from one parent to another.
 
     // If the item already had a name, remove the reference to it from the
     // parent's children object:
-    if (this._name)
-      this._removeFromNamed();
-    this._name = name || undefined;
-    if (name && this._parent) {
-      var children = this._parent._children,
-        namedChildren = this._parent._namedChildren;
-      (namedChildren[name] = namedChildren[name] || []).push(this);
+    if (_name != null)
+      _removeFromNamed();
+    _name = name;
+    if (name != null && _parent != null) {
+      var children = _parent._children;
+      var namedChildren = _parent._namedChildren;
+      // TODO namedChildren[name] is itself a list?
+      if(namedChildre[name] == null) {
+        namedChildren[name] = [this];
+      } else {
+        namedChildren[name].add(this);
+      }
       children[name] = this;
     }
-    this._changed(ChangeFlag.ATTRIBUTE);
-  },
+    _changed(ChangeFlag.ATTRIBUTE);
+  }
+  // property
+  set name(String name) {
+    setName(name);
+  }
 
   /**
    * The path style of the item.
