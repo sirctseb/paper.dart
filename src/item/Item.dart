@@ -990,39 +990,36 @@ class Item {
    *   copy.position.x += i * copy.bounds.width;
    * }
    */
-  clone: function() {
-    return this._clone(new this.constructor());
-  },
+  Item clone() {
+    return _clone(new Item());
+  }
 
-  _clone: function(copy) {
+  Item _clone(Item copy) {
     // Copy over style
-    copy.setStyle(this._style);
+    copy.setStyle(_style);
     // If this item has children, clone and append each of them:
-    if (this._children) {
-      for (var i = 0, l = this._children.length; i < l; i++)
-        copy.addChild(this._children[i].clone());
+    if (_children) {
+      for (var i = 0, l = _children.length; i < l; i++)
+        copy.addChild(_children[i].clone());
     }
-    // Only copy over these fields if they are actually defined in 'this'
-    // TODO: Consider moving this to Base once it's useful in more than one
-    // place
-    var keys = ['_locked', '_visible', '_blendMode', '_opacity',
-        '_clipMask', '_guide'];
-    for (var i = 0, l = keys.length; i < l; i++) {
-      var key = keys[i];
-      if (this.hasOwnProperty(key))
-        copy[key] = this[key];
-    }
+    // TODO other fields?
+    copy._locked = _locked;
+    copy._visible = _visible;
+    copy._blendMode = _blendMode;
+    copy._opacity = _opacity;
+    copy._clipMask = _clipMask;
+    copy._guide = _guide;
     // Use Matrix#initialize to easily copy over values.
-    copy._matrix.initialize(this._matrix);
+    copy._matrix.initialize(_matrix);
     // Copy over the selection state, use setSelected so the item
     // is also added to Project#selectedItems if it is selected.
-    copy.setSelected(this._selected);
+    copy.setSelected(_selected);
     // Only set name once the copy is moved, to avoid setting and unsettting
     // name related structures.
-    if (this._name)
-      copy.setName(this._name);
+    if (_name)
+      copy.setName(_name);
     return copy;
-  },
+  }
 
   /**
    * When passed a project, copies the item to the project,
@@ -1033,15 +1030,15 @@ class Item {
    * copy the item to
    * @return {Item} the new copy of the item
    */
-  copyTo: function(itemOrProject) {
-    var copy = this.clone();
+  Item copyTo(/*Item of Project*/ itemOrProject) {
+    var copy = clone();
     if (itemOrProject.layers) {
       itemOrProject.activeLayer.addChild(copy);
     } else {
       itemOrProject.addChild(copy);
     }
     return copy;
-  },
+  }
 
   /**
    * Rasterizes the item into a newly created Raster object. The item itself
