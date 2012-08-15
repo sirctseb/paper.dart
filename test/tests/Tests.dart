@@ -20,6 +20,7 @@
 #source("Layer.dart");
 #source("Path.dart");
 #source("PathStyle.dart");
+#source("Path_Bounds.dart");
 
 void main() {
 	PointTests();
