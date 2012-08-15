@@ -597,7 +597,7 @@ class Item {
     _changed(Change.GEOMETRY);
   }
   set matrix(Matrix matrix) => setMatrix(matrix);
-  
+
 }, Base.each(['bounds', 'strokeBounds', 'handleBounds', 'roughBounds'],
 function(name) {
   // Produce getters for bounds properties. These handle caching, matrices
@@ -618,15 +618,16 @@ function(name) {
         bounds.x, bounds.y, bounds.width, bounds.height) : bounds;
   };
 }, /** @lends Item# */{
+
   /**
    * Private method that deals with the calling of _getBounds, recursive
    * matrix concatenation and handles all the complicated caching mechanisms.
    */
-  _getCachedBounds: function(type, matrix, cacheItem) {
+  Rectangle _getCachedBounds(String type, [Matrix matrix, cacheItem]) {
     // See if we can cache these bounds. We only cache the bounds
     // transformed with the internally stored _matrix, (the default if no
     // matrix is passed).
-    var cache = (!matrix || matrix.equals(this._matrix)) && type;
+    bool cache = (matrix == null || matrix.equals(this._matrix)) && type != null;
     // Set up a boundsCache structure that keeps track of items that keep
     // cached bounds that depend on this item. We store this in our parent,
     // for multiple reasons:
@@ -637,66 +638,67 @@ function(name) {
     // times the same structure.
     // Note: This needs to happen before returning cached values, since even
     // then, _boundsCache needs to be kept up-to-date.
-    if (cacheItem && this._parent) {
+    if (cacheItem != null && _parent != null) {
       // Set-up the parent's boundsCache structure if it does not
       // exist yet and add the cacheItem to it.
-      var id = cacheItem._id,
-        ref = this._parent._boundsCache
-          = this._parent._boundsCache || {
+      var id = cacheItem._id;
+      // TODO where is this used? is _parent._boundsCache ever not a map?
+      var ref = _parent._boundsCache
+          = _parent._boundsCache != null ? _parent._boundsCaches : {
         // Use both a hashtable for ids and an array for the list,
         // so we can keep track of items that were added already
-        ids: {},
-        list: []
+        "ids": {},
+        "list": []
       };
-      if (!ref.ids[id]) {
-        ref.list.push(cacheItem);
-        ref.ids[id] = cacheItem;
+      if (!ref["ids"][id]) {
+        ref["list"].add(cacheItem);
+        ref["ids"][id] = cacheItem;
       }
     }
-    if (cache && this._bounds && this._bounds[cache])
-      return this._bounds[cache];
-    // If the result of concatinating the passed matrix with our internal
+    if (cache && _bounds != null && _bounds[cache] != null)
+      return _bounds[cache];
+    // If the result of concatenating the passed matrix with our internal
     // one is an identity transformation, set it to null for faster
     // processing
-    var identity = this._matrix.isIdentity();
-    matrix = !matrix || matrix.isIdentity()
-        ? identity ? null : this._matrix
-        : identity ? matrix : matrix.clone().concatenate(this._matrix);
+    bool identity = _matrix.isIdentity();
+    matrix = matrix == null || matrix.isIdentity()
+        ? identity ? null : _matrix
+        : identity ? matrix : matrix.clone().concatenate(_matrix);
     // If we're caching bounds on this item, pass it on as cacheItem, so the
     // children can setup the _boundsCache structures for it.
-    var bounds = this._getBounds(type, matrix, cache ? this : cacheItem);
+    var bounds = _getBounds(type, matrix, cache ? this : cacheItem);
     // If we can cache the result, update the _bounds cache structure
     // before returning
     if (cache) {
-      if (!this._bounds)
-        this._bounds = {};
+      if (_bounds == null)
+        _bounds = {};
       // Put a separate instance into the cache, so modifications of the
       // returned one won't affect it.
-      this._bounds[cache] = bounds.clone();
+      _bounds[cache] = bounds.clone();
     }
     return bounds;
-  },
+  }
 
   /**
    * Clears cached bounds of all items that the children of this item are
    * contributing to. See #_getCachedBounds() for an explanation why this
    * information is stored on parents, not the children themselves.
    */
-  _clearBoundsCache: function() {
-    if (this._boundsCache) {
-      for (var i = 0, list = this._boundsCache.list, l = list.length;
+  void _clearBoundsCache() {
+    if (_boundsCache != null) {
+      for (var i = 0, list = _boundsCache["list"], l = list.length;
           i < l; i++) {
         var item = list[i];
-        delete item._bounds;
+        item._bounds = null;
         // We need to recursively call _clearBoundsCache, because if the
         // cache for this item's children is not valid anymore, that
         // propagates up the DOM tree.
-        if (item != this && item._boundsCache)
+        if (item != this && item._boundsCache != null)
           item._clearBoundsCache();
       }
-      delete this._boundsCache;
+      _boundsCache = null;
     }
-  },
+  }
 
   /**
    * Protected method used in all the bounds getters. It loops through all the
@@ -704,19 +706,19 @@ function(name) {
    * Subclasses override it to define calculations for the various required
    * bounding types.
    */
-  _getBounds: function(type, matrix, cacheItem) {
+  Rectangle _getBounds(String type, [Matrix matrix, cacheItem]) {
     // Note: We cannot cache these results here, since we do not get
     // _changed() notifications here for changing geometry in children.
     // But cacheName is used in sub-classes such as PlacedItem.
-    var children = this._children;
+    var children = _children;
     // TODO: What to return if nothing is defined, e.g. empty Groups?
     // Scriptographer behaves weirdly then too.
-    if (!children || children.length == 0)
+    if (children == null || children.length == 0)
       return new Rectangle();
-    var x1 = Infinity,
-      x2 = -x1,
-      y1 = x1,
-      y2 = x2;
+    num x1 = Infinity;
+    num x2 = -x1;
+    num y1 = x1;
+    num y2 = x2;
     for (var i = 0, l = children.length; i < l; i++) {
       var child = children[i];
       if (child._visible) {
@@ -728,11 +730,11 @@ function(name) {
       }
     }
     return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
-  },
+  }
 
-  setBounds: function(rect) {
+  void setBounds(/*Rectangle*/ rect) {
     rect = Rectangle.read(arguments);
-    var bounds = this.getBounds(),
+    var bounds = getBounds(),
       matrix = new Matrix(),
       center = rect.getCenter();
     // Read this from bottom to top:
@@ -749,7 +751,7 @@ function(name) {
     matrix.translate(-center.x, -center.y);
     // Now execute the transformation
     // TODO: do we need to apply too, or just change the matrix?
-    this.transform(matrix);
+    transform(matrix);
   }
 
   /**
