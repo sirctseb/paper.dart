@@ -21,6 +21,7 @@
 #source("Path.dart");
 #source("PathStyle.dart");
 #source("Path_Bounds.dart");
+#source("Path_Curves.dart");
 
 void main() {
 	PointTests();
