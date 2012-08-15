@@ -36,12 +36,12 @@ compareNumbers(num number1, num number2, [String message]) {
   expect(number1, equals(number2), message);
 }
 
-/*function comparePoints(point1, point2, message) {
+comparePoints(point1, point2, message) {
   compareNumbers(point1.x, point2.x,
-      (message || '') + ' x');
+      "$message x");
   compareNumbers(point1.y, point2.y,
-      (message || '') + ' y');
-}*/
+      "$message y");
+}
 
 compareRectangles(rect1, rect2, message) {
   compareNumbers(rect1.x, rect2.x,
