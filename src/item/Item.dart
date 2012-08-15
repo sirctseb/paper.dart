@@ -1062,19 +1062,19 @@ class Item {
    * circle.scale(5);
    * raster.scale(5);
    */
-  rasterize: function(resolution) {
-    var bounds = this.getStrokeBounds(),
-      scale = (resolution || 72) / 72,
-      canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale)),
-      ctx = canvas.getContext('2d'),
-      matrix = new Matrix().scale(scale).translate(-bounds.x, -bounds.y);
+  Raster rasterize(num resolution) {
+    Rectangle bounds = getStrokeBounds();
+    num scale = (resolution || 72) / 72;
+    var canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale));
+    var ctx = canvas.getContext('2d');
+    Matrix matrix = new Matrix().scale(scale).translate(-bounds.x, -bounds.y);
     matrix.applyToContext(ctx);
     // XXX: Decide how to handle _matrix
-    this.draw(ctx, {});
+    draw(ctx, {});
     var raster = new Raster(canvas);
     raster.setBounds(bounds);
     return raster;
-  },
+  }
 
   /**
    * Perform a hit test on the item (and its children, if it is a
