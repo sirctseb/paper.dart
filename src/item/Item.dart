@@ -24,87 +24,109 @@
  * is unique to their type, but share the underlying properties and functions
  * that they inherit from Item.
  */
-class Item {
+class Item extends Callback {
 //var Item = this.Item = Base.extend(Callback, /** @lends Item# */{
-  // TODO figure out events stuff
-  _events: new function() {
+  // Flags defining which native events are required by which Paper events
+  // as required for counting amount of necessary natives events.
+  // The mapping is native -> virtual
+  static Map mouseFlags = const {
+    "mousedown": const {
+      "mousedown": 1,
+      "mousedrag": 1,
+      "click": 1,
+      "doubleclick": 1
+    },
+    "mouseup": {
+      "mouseup": 1,
+      "mousedrag": 1,
+      "click": 1,
+      "doubleclick": 1
+    },
+    "mousemove": {
+      "mousedrag": 1,
+      "mousemove": 1,
+      "mouseenter": 1,
+      "mouseleave": 1
+    }
+  };
+  static int _next_id;
 
-    // Flags defining which native events are required by which Paper events
-    // as required for counting amount of necessary natives events.
-    // The mapping is native -> virtual
-    var mouseFlags = {
-      mousedown: {
-        mousedown: 1,
-        mousedrag: 1,
-        click: 1,
-        doubleclick: 1
-      },
-      mouseup: {
-        mouseup: 1,
-        mousedrag: 1,
-        click: 1,
-        doubleclick: 1
-      },
-      mousemove: {
-        mousedrag: 1,
-        mousemove: 1,
-        mouseenter: 1,
-        mouseleave: 1
+  // install method for mouse handlers
+  void _installMouseHandler(String type) {
+    // If the view requires counting of installed mouse events,
+    // increase the counters now according to mouseFlags
+    var counters = _project.view._eventCounters;
+    if(counters != null) {
+      for(var key in mouseFlags) {
+        counters[key] = (counters[key] != 0 ? counters[key] : 0) +
+                        (mouseFlags[key][type] != null ? mouseFlags[key][type] : 0);
       }
-    };
+    }
+  }
+  void _uninstallMouseHandler(String type) {
+    // If the view requires counting of installed mouse events,
+    // decrease the counters now according to mouseFlags
+    var counters = this._project.view._eventCounters;
+    if (counters) {
+      for (var key in mouseFlags)
+      counters[key] -= mouseFlags[key][type] || 0;
+    }
+  }
+  static List _onFrameItems;
+  static void _onFrame(event) {
+    for(var handler in _onFrameItems) {
+      handler.fire('frame', event);
+    }
+  }
+  void _installFrameHandler() {
+    if(_onFrameItems == null) _onFrameItems = [];
+    if(_onFrameItems.length == 0) _project.view.attach('frame', _onFrame);
+    _onFrameItems.add(this);
+  }
+  void _uninstallFrameHandler() {
+    _onFrameItems.removeRange(_onFrameItems.indexOf(this), 1);
+    if(_onFrameItems.length == 0) {
+      _project.view.detach("frame", _onFrame);
+    }
+  }
+  get onFrame() => getEvent("frame");
+  set onFrame(value) => setEvent("frame", value);
+  get onMouseDown() => getEvent("mousedown"); // TODO capitalization on these?
+  set onMouseDown(value) => setEvent("mousedown", value);
+  get onMouseUp() => getEvent("mouseup");
+  set onMouseDown(value) => setEvent("mouseup", value);
+  get onMouseDrag() => getEvent("mousedrag");
+  set onMouseDrag(value) => setEvent("mousedrag", value);
+  get onClick() => getEvent("click");
+  set onClick(value) => setEvent("click", value);
+  get onDoubleClick() => getEvent("doubleclick");
+  set onDoubleClick(value) => setEvent("doubleclick", value);
+  get onMouseMove() => getEvent("mousemove");
+  set onMouseMove(value) => setEvent("mousemove", value);
+  get onMouseEnter() => getEvent("mouseenter");
+  set onMouseEnter(value) => setEvent("mouseenter", value);
+  get onMouseLeave() => getEvent("mouseleave");
+  set onMouseLeave(value) => setEvent("mouseleave", value);
+
+  Map _eventTypes;
+
+  Item(/*Point or Matrix*/ [pointOrMatrix]) {
+    // build events
+    _eventTypes = {};
 
     // Entry for all mouse events in the _events list
     var mouseEvent = {
-      install: function(type) {
-        // If the view requires counting of installed mouse events,
-        // increase the counters now according to mouseFlags
-        var counters = this._project.view._eventCounters;
-        if (counters) {
-          for (var key in mouseFlags) {
-            counters[key] = (counters[key] || 0)
-                + (mouseFlags[key][type] || 0);
-          }
-        }
-      },
-      uninstall: function(type) {
-        // If the view requires counting of installed mouse events,
-        // decrease the counters now according to mouseFlags
-        var counters = this._project.view._eventCounters;
-        if (counters) {
-          for (var key in mouseFlags)
-            counters[key] -= mouseFlags[key][type] || 0;
-        }
-      }
+      "install": _installMouseHandler,
+      "uninstall": _uninstallMouseHandler
     };
 
-    var onFrameItems = [];
-    function onFrame(event) {
-      for (var i = 0, l = onFrameItems.length; i < l; i++)
-        onFrameItems[i].fire('frame', event);
+    for(var event in ['onMouseDown', 'onMouseUp', 'onMouseDrag', 'onClick',
+        'onDoubleClick', 'onMouseMove', 'onMouseEnter', 'onMouseLeave']) {
+      _eventTypes[event] = mouseEvent;
     }
+    _eventTypes["onFrame"] = {"install": _installFrameHandler,
+                              "uninstall": _uninstallFrameHandler};
 
-    return Base.each(['onMouseDown', 'onMouseUp', 'onMouseDrag', 'onClick',
-      'onDoubleClick', 'onMouseMove', 'onMouseEnter', 'onMouseLeave'],
-      function(name) {
-        this[name] = mouseEvent;
-      }, {
-        onFrame: {
-          install: function() {
-            if (!onFrameItems.length)
-              this._project.view.attach('frame', onFrame);
-            onFrameItems.push(this);
-          },
-          uninstall: function() {
-            onFrameItems.splice(onFrameItems.indexOf(this), 1);
-            if (!onFrameItems.length)
-              this._project.view.detach('frame', onFrame);
-          }
-        }
-      });
-  },
-
-  static int _next_id;
-  Item(/*Point or Matrix*/ [pointOrMatrix]) {
     if(_next_id == null) _next_id = 0;
     // Define this Item's unique id.
     _id = ++Item._next_id;
