@@ -39,8 +39,8 @@ class Callback {
       handlers.add(func);
       // See if this is the first handler that we're attaching, and 
       // call install if defined.
-      if (entry.install != null && handlers.length == 1)
-        entry.install(type);
+      if (entry["install"] != null && handlers.length == 1)
+        entry["install"](type);
     }
     return this;
   }
@@ -60,8 +60,8 @@ class Callback {
       // are detaching all handlers), and call uninstall if defined.
       if (func== null || (index = handlers.indexOf(func)) != -1
           && handlers.length == 1) {
-        if (entry.uninstall != null)
-          entry.uninstall(type);
+        if (entry["uninstall"] != null)
+          entry["uninstall"](type);
         _handlers.remove(type);
       } else if (index != -1) {
         // Just remove this one handler
