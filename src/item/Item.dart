@@ -2038,11 +2038,11 @@ class Item {
     setBounds(newBounds);
   }
 
-  toString: function() {
-    return (this.constructor._name || 'Item') + (this._name
-        ? " '" + this._name + "'"
-        : ' @' + this._id);
-  },
+  String toString() {
+    // TODO original used this.constructor._name if it was set instead of Item
+    String descriptor = _name != null ? " '$_name'" : " @$_id";
+    return "Item $descriptor";
+  }
 
   /**
    * {@grouptitle Event Handlers}
