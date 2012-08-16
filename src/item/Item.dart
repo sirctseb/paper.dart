@@ -2097,7 +2097,6 @@ class Item extends Callback {
    * @property
    * @type Function
    */
-  var onFrame;
 
   /**
    * The function to be called when the mouse button is pushed down on the
@@ -2138,7 +2137,6 @@ class Item extends Callback {
    *   }
    * }
    */
-   var onMouseDown;
 
   /**
    * The function to be called when the mouse button is released over the item.
@@ -2162,7 +2160,6 @@ class Item extends Callback {
    *   this.fillColor = 'red';
    * }
    */
-   var onMouseUp;
 
   /**
    * The function to be called when the mouse clicks on the item. The function
@@ -2203,7 +2200,6 @@ class Item extends Callback {
    *   }
    * }
    */
-   var onClick;
 
   /**
    * The function to be called when the mouse double clicks on the item. The
@@ -2244,7 +2240,6 @@ class Item extends Callback {
    *   }
    * }
    */
-   var onDoubleClick;
 
   /**
    * The function to be called repeatedly when the mouse moves on top of the
@@ -2268,7 +2263,6 @@ class Item extends Callback {
    *   this.opacity = Math.random();
    * }
    */
-   var onMouseMove;
 
   /**
    * The function to be called when the mouse moves over the item. This
@@ -2325,7 +2319,6 @@ class Item extends Callback {
    *   path.onMouseLeave = leave;
    * }
    */
-   var onMouseEnter;
 
   /**
    * The function to be called when the mouse moves out of the item.
@@ -2349,7 +2342,6 @@ class Item extends Callback {
    *   this.fillColor = 'red';
    * }
    */
-   var onMouseLeave;
 
   /**
    * {@grouptitle Event Handling}
