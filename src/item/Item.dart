@@ -2075,6 +2075,7 @@ class Item {
    * @property
    * @type Function
    */
+  var onFrame;
 
   /**
    * The function to be called when the mouse button is pushed down on the
@@ -2115,6 +2116,7 @@ class Item {
    *   }
    * }
    */
+   var onMouseDown;
 
   /**
    * The function to be called when the mouse button is released over the item.
@@ -2138,6 +2140,7 @@ class Item {
    *   this.fillColor = 'red';
    * }
    */
+   var onMouseUp;
 
   /**
    * The function to be called when the mouse clicks on the item. The function
@@ -2178,6 +2181,7 @@ class Item {
    *   }
    * }
    */
+   var onClick;
 
   /**
    * The function to be called when the mouse double clicks on the item. The
@@ -2218,6 +2222,7 @@ class Item {
    *   }
    * }
    */
+   var onDoubleClick;
 
   /**
    * The function to be called repeatedly when the mouse moves on top of the
@@ -2241,6 +2246,7 @@ class Item {
    *   this.opacity = Math.random();
    * }
    */
+   var onMouseMove;
 
   /**
    * The function to be called when the mouse moves over the item. This
@@ -2265,7 +2271,7 @@ class Item {
    * path.onMouseEnter = function(event) {
    *   this.fillColor = 'red';
    * }
-   
+   *
    * // When the mouse leaves the item, set its fill color to black:
    * path.onMouseLeave = function(event) {
    *   this.fillColor = 'black';
@@ -2297,6 +2303,7 @@ class Item {
    *   path.onMouseLeave = leave;
    * }
    */
+   var onMouseEnter;
 
   /**
    * The function to be called when the mouse moves out of the item.
@@ -2320,6 +2327,7 @@ class Item {
    *   this.fillColor = 'red';
    * }
    */
+   var onMouseLeave;
 
   /**
    * {@grouptitle Event Handling}
