@@ -2579,13 +2579,19 @@ class Item extends Callback {
       CanvasProvider.returnCanvas(tempCanvas);
     }
   }
-}, Base.each(['down', 'drag', 'up', 'move'], function(name) {
-  this['removeOn' + Base.capitalize(name)] = function() {
-    var hash = {};
-    hash[name] = true;
-    return this.removeOn(hash);
-  };
-}, /** @lends Item# */{
+
+  Item removeOnDown() {
+    return removeOn({"down": true});
+  }
+  Item removeOnDrag() {
+    return removeOn({"drag": true});
+  }
+  Item removeOnUp() {
+    return removeOn({"up": true});
+  }
+  Item removeOnMove() {
+    return removeOn({"move": true});
+  }
   /**
    * {@grouptitle Remove On Event}
    *
@@ -2700,15 +2706,15 @@ class Item extends Callback {
    * }
    */
   // TODO: implement Item#removeOnFrame
-  removeOn: function(obj) {
+  Item removeOn(obj) {
     for (var name in obj) {
       if (obj[name]) {
-        var key = 'mouse' + name,
-          sets = Tool._removeSets = Tool._removeSets || {};
+        var key = 'mouse$name',
+          sets = Tool._removeSets = Tool._removeSets != null ? Tool._removeSets : {};
         sets[key] = sets[key] || {};
-        sets[key][this._id] = this;
+        sets[key][_id] = this;
       }
     }
     return this;
   }
-}));
+}
