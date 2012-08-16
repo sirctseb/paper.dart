@@ -14,76 +14,101 @@
  * All rights reserved.
  */
 
-var Callback = {
-  attach: function(type, func) {
+class Callback {
+  Map _this_name;
+  Map _handlers;
+  Map _eventTypes;
+  Map _events;
+
+  Callback() {
+    _this_name = {};
+  }
+  Callback attach(/*Map | String*/ type, [func]) {
     // If an object literal is passed, attach all callbacks defined in it
-    if (typeof type !== 'string') {
-      return Base.each(type, function(value, key) {
-        this.attach(key, value);
+    if (type is! String) {
+      return Base.each(type, (value, key) {
+        attach(key, value);
       }, this);
     }
-    var entry = this._eventTypes[type];
-    if (!entry)
+    var entry = _eventTypes[type];
+    if (entry == null)
       return this;
-    var handlers = this._handlers = this._handlers || {};
-    handlers = handlers[type] = handlers[type] || [];
+    var handlers = _handlers != null ? _handlers : {};
+    handlers = handlers[type] != null ? handlers[type] : [];
     if (handlers.indexOf(func) == -1) { // Not added yet, add it now
-      handlers.push(func);
+      handlers.add(func);
       // See if this is the first handler that we're attaching, and 
       // call install if defined.
-      if (entry.install && handlers.length == 1)
-        entry.install.call(this, type);
+      if (entry.install != null && handlers.length == 1)
+        entry.install(type);
     }
     return this;
-  },
+  }
 
-  detach: function(type, func) {
+  Callback detach(/*Map | String*/type, [func]) {
     // If an object literal is passed, detach all callbacks defined in it
-    if (typeof type !== 'string') {
-      return Base.each(type, function(value, key) {
-        this.detach(key, value);
+    if (type is! String) {
+      return Base.each(type, (value, key) {
+        detach(key, value);
       }, this);
     }
-    var entry = this._eventTypes[type],
-      handlers = this._handlers && this._handlers[type],
-      index;
-    if (entry && handlers) {
+    var entry = _eventTypes[type];
+    var handlers = this._handlers != null ? this._handlers[type] : null;
+    int index;
+    if (entry != null && handlers != null) {
       // See if this is the last handler that we're detaching (or if we
       // are detaching all handlers), and call uninstall if defined.
-      if (!func || (index = handlers.indexOf(func)) != -1
+      if (func== null || (index = handlers.indexOf(func)) != -1
           && handlers.length == 1) {
-        if (entry.uninstall)
-          entry.uninstall.call(this, type);
-        delete this._handlers[type];
+        if (entry.uninstall != null)
+          entry.uninstall(type);
+        _handlers.remove(type);
       } else if (index != -1) {
         // Just remove this one handler
-        handlers.splice(index, 1);
+        handlers.removeRange(index, 1);
       }
     }
     return this;
-  },
+  }
 
-  fire: function(type, event) {
+  bool fire(type, event) {
     // Returns true if fired, false otherwise
-    var handlers = this._handlers && this._handlers[type];
-    if (!handlers)
+    var handlers = _handlers != null ? _handlers[type] : null;
+    if (handlers == null)
       return false;
-    Base.each(handlers, function(func) {
+    Base.each(handlers, (func) {
       // When the handler function returns false, prevent the default
       // behaviour of the event by calling stop() on it
       // PORT: Add to Sg
-      if (func.call(this, event) === false && event && event.stop)
+      if (func(event) == false && event != null && event.stop != null)
         event.stop();
     }, this);
     return true;
-  },
+  }
 
-  responds: function(type) {
-    return !!(this._handlers && this._handlers[type]);
-  },
+  bool responds(type) {
+    return _handlers != null && _handlers[type] != null;
+  }
 
-  statics: {
-    inject: function(/* src, ... */) {
+  // this installs set/get methods and properties on the object
+  // for each event. this is not possible in dart, so instead,
+  // we will define one method that takes the event name and
+  // does the work, and the individual setter/getters will have
+  // to be written individually and call these
+  getEvent(String eventType) {
+    return _this_name[eventType];
+  }
+  setEvent(String eventType, [func]) {
+    if(funct != null) {
+      attach(eventType, func);
+    } else if(_this_name[eventType] != null) {
+      detach(eventType, _this_name[eventType]);
+    }
+    _this_name[eventType] = func;
+  }
+
+  /*statics: {
+    inject: function() {
       for (var i = 0, l = arguments.length; i < l; i++) {
         var src = arguments[i],
           events = src._events;
@@ -121,5 +146,5 @@ var Callback = {
       }
       return this;
     }
-  }
-};
+  }*/
+}
