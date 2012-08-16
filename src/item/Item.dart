@@ -2474,10 +2474,10 @@ class Item extends Callback {
    * Not defined in Path as it is required by other classes too,
    * e.g. PointText.
    */
-  _setStyles: function(ctx) {
+  void _setStyles(ctx) {
     // We can access internal properties since we're only using this on
     // items without children, where styles would be merged.
-    var style = this._style,
+    var style = _style,
       width = style._strokeWidth,
       join = style._strokeJoin,
       cap = style._strokeCap,
@@ -2485,99 +2485,98 @@ class Item extends Callback {
       fillColor = style._fillColor,
       strokeColor = style._strokeColor;
     if (width != null) ctx.lineWidth = width;
-    if (join) ctx.lineJoin = join;
-    if (cap) ctx.lineCap = cap;
-    if (limit) ctx.miterLimit = limit;
-    if (fillColor) ctx.fillStyle = fillColor.getCanvasStyle(ctx);
-    if (strokeColor) ctx.strokeStyle = strokeColor.getCanvasStyle(ctx);
+    if (join != null) ctx.lineJoin = join;
+    if (cap != null) ctx.lineCap = cap;
+    if (limit != null) ctx.miterLimit = limit;
+    if (fillColor != null) ctx.fillStyle = fillColor.getCanvasStyle(ctx);
+    if (strokeColor != null) ctx.strokeStyle = strokeColor.getCanvasStyle(ctx);
     // If the item only defines a strokeColor or a fillColor, draw it
     // directly with the globalAlpha set, otherwise we will do it later when
     // we composite the temporary canvas.
-    if (!fillColor || !strokeColor)
-      ctx.globalAlpha = this._opacity;
-  },
+    if (fillColor == null || strokeColor == null)
+      ctx.globalAlpha = _opacity;
+  }
 
-  statics: {
-    drawSelectedBounds: function(bounds, ctx, matrix) {
-      var coords = matrix._transformCorners(bounds);
+  //statics: {
+  static void drawSelectedBounds(bounds, ctx, matrix) {
+    Rectangle coords = matrix._transformCorners(bounds);
+    ctx.beginPath();
+    for (var i = 0; i < 8; i++)
+      ctx[i == 0 ? 'moveTo' : 'lineTo'](coords[i], coords[++i]);
+    ctx.closePath();
+    ctx.stroke();
+    for (var i = 0; i < 8; i++) {
       ctx.beginPath();
-      for (var i = 0; i < 8; i++)
-        ctx[i == 0 ? 'moveTo' : 'lineTo'](coords[i], coords[++i]);
-      ctx.closePath();
-      ctx.stroke();
-      for (var i = 0; i < 8; i++) {
-        ctx.beginPath();
-        ctx.rect(coords[i] - 2, coords[++i] - 2, 4, 4);
-        ctx.fill();
-      }
-    },
+      ctx.rect(coords[i] - 2, coords[++i] - 2, 4, 4);
+      ctx.fill();
+    }
+  }
 
-    // TODO: Implement View into the drawing.
-    // TODO: Optimize temporary canvas drawing to ignore parts that are
-    // outside of the visible view.
-    draw: function(item, ctx, param) {
-      if (!item._visible || item._opacity == 0)
+  // TODO: Implement View into the drawing.
+  // TODO: Optimize temporary canvas drawing to ignore parts that are
+  // outside of the visible view.
+  static draw(item, ctx, param) {
+    if (!item._visible || item._opacity == 0)
+      return;
+    var tempCanvas, parentCtx,
+       itemOffset, prevOffset;
+    // If the item has a blendMode or is defining an opacity, draw it on
+    // a temporary canvas first and composite the canvas afterwards.
+    // Paths with an opacity < 1 that both define a fillColor
+    // and strokeColor also need to be drawn on a temporary canvas
+    // first, since otherwise their stroke is drawn half transparent
+    // over their fill.
+    if (item._blendMode !== 'normal' || item._opacity < 1
+        && !(item._segments != null
+          && (item.getFillColor() == null || item.getStrokeColor() == null))) {
+      var bounds = item.getStrokeBounds();
+      if (bounds.width == 0 || bounds.height == 0)
         return;
-      var tempCanvas, parentCtx,
-         itemOffset, prevOffset;
-      // If the item has a blendMode or is defining an opacity, draw it on
-      // a temporary canvas first and composite the canvas afterwards.
-      // Paths with an opacity < 1 that both define a fillColor
-      // and strokeColor also need to be drawn on a temporary canvas
-      // first, since otherwise their stroke is drawn half transparent
-      // over their fill.
-      if (item._blendMode !== 'normal' || item._opacity < 1
-          && !(item._segments
-            && (!item.getFillColor() || !item.getStrokeColor()))) {
-        var bounds = item.getStrokeBounds();
-        if (!bounds.width || !bounds.height)
-          return;
-        // Store previous offset and save the parent context, so we can
-        // draw onto it later
-        prevOffset = param.offset;
-        parentCtx = ctx;
-        // Floor the offset and ceil the size, so we don't cut off any
-        // antialiased pixels when drawing onto the temporary canvas.
-        itemOffset = param.offset = bounds.getTopLeft().floor();
-        tempCanvas = CanvasProvider.getCanvas(
-            bounds.getSize().ceil().add(Size.create(1, 1)));
-        // Set ctx to the context of the temporary canvas,
-        // so we draw onto it, instead of the parentCtx
-        ctx = tempCanvas.getContext('2d');
+      // Store previous offset and save the parent context, so we can
+      // draw onto it later
+      prevOffset = param.offset;
+      parentCtx = ctx;
+      // Floor the offset and ceil the size, so we don't cut off any
+      // antialiased pixels when drawing onto the temporary canvas.
+      itemOffset = param.offset = bounds.getTopLeft().floor();
+      tempCanvas = CanvasProvider.getCanvas(
+          bounds.getSize().ceil().add(Size.create(1, 1)));
+      // Set ctx to the context of the temporary canvas,
+      // so we draw onto it, instead of the parentCtx
+      ctx = tempCanvas.getContext('2d');
+    }
+    if (!param.clipping)
+      ctx.save();
+    // Translate the context so the topLeft of the item is at (0, 0)
+    // on the temporary canvas.
+    if (tempCanvas != null)
+      ctx.translate(-itemOffset.x, -itemOffset.y);
+    item._matrix.applyToContext(ctx);
+    item.draw(ctx, param);
+    if (!param.clipping)
+      ctx.restore();
+    // If we created a temporary canvas before, composite it onto the
+    // parent canvas:
+    if (tempCanvas) {
+      // Restore previous offset.
+      param.offset = prevOffset;
+      // If the item has a blendMode, use BlendMode#process to
+      // composite its canvas on the parentCanvas.
+      if (item._blendMode !== 'normal') {
+        // The pixel offset of the temporary canvas to the parent
+        // canvas.
+        BlendMode.process(item._blendMode, ctx, parentCtx,
+          item._opacity, itemOffset.subtract(prevOffset));
+      } else {
+      // Otherwise we just need to set the globalAlpha before drawing
+      // the temporary canvas on the parent canvas.
+        parentCtx.save();
+        parentCtx.globalAlpha = item._opacity;
+        parentCtx.drawImage(tempCanvas, itemOffset.x, itemOffset.y);
+        parentCtx.restore();
       }
-      if (!param.clipping)
-        ctx.save();
-      // Translate the context so the topLeft of the item is at (0, 0)
-      // on the temporary canvas.
-      if (tempCanvas)
-        ctx.translate(-itemOffset.x, -itemOffset.y);
-      item._matrix.applyToContext(ctx);
-      item.draw(ctx, param);
-      if (!param.clipping)
-        ctx.restore();
-      // If we created a temporary canvas before, composite it onto the
-      // parent canvas:
-      if (tempCanvas) {
-        // Restore previous offset.
-        param.offset = prevOffset;
-        // If the item has a blendMode, use BlendMode#process to
-        // composite its canvas on the parentCanvas.
-        if (item._blendMode !== 'normal') {
-          // The pixel offset of the temporary canvas to the parent
-          // canvas.
-          BlendMode.process(item._blendMode, ctx, parentCtx,
-            item._opacity, itemOffset.subtract(prevOffset));
-        } else {
-        // Otherwise we just need to set the globalAlpha before drawing
-        // the temporary canvas on the parent canvas.
-          parentCtx.save();
-          parentCtx.globalAlpha = item._opacity;
-          parentCtx.drawImage(tempCanvas, itemOffset.x, itemOffset.y);
-          parentCtx.restore();
-        }
-        // Return the temporary canvas, so it can be reused
-        CanvasProvider.returnCanvas(tempCanvas);
-      }
+      // Return the temporary canvas, so it can be reused
+      CanvasProvider.returnCanvas(tempCanvas);
     }
   }
 }, Base.each(['down', 'drag', 'up', 'move'], function(name) {
