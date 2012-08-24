@@ -16,6 +16,7 @@
 #library("Item.dart");
 #import("../core/Core.dart");
 #import("../basic/Basic.dart");
+#source("./ChangeFlag.dart");
 
 /**
  * @name Item
