@@ -146,10 +146,12 @@ class Item extends Callback {
     // If _project is already set, the item was already moved into the DOM
     // hierarchy. Used by Layer, where it's added to project.layers instead
     if (_project == null)
+      // TODO figure out global paper scope
       paper.project.activeLayer.addChild(this);
     // TextItem defines its own _style, based on CharacterStyle
     if (_style == null)
-      this._style = PathStyle.create(this);
+      // TODO port PathStyle
+      _style = PathStyle.create(this);
     setStyle(_project.getCurrentStyle());
     _matrix = pointOrMatrix !== null
       ? pointOrMatrix is Matrix
@@ -313,6 +315,13 @@ class Item extends Callback {
    * path2.style = myStyle;
    */
   PathStyle _style;
+  PathStyle getStyle() => _style;
+  PathStyle get style() => getStyle();
+  void setStyle(Style style) {
+    _style = style;
+  }
+  set style(PathStyle style) => setStyle(style);
+
   // TODO I _think_ we need to:
   // get/set style (notify owners on style setting? maybe not)
   // get/set style properties (def with owner notification)
