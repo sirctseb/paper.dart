@@ -598,11 +598,11 @@ class Item extends Callback {
    */
   // TODO init in constructor?
   Point _position;
-  Point getPosition: function([bool dontLink = false]) {
+  Point getPosition([bool dontLink = false]) {
     // Cache position value.
     // Pass true for dontLink in getCenter(), so receive back a normal point
-    var pos = this._position != null ?
-        || (this._position = this.getBounds().getCenter(true));
+    var pos = _position != null ? _position
+        : (_position = this.getBounds().getCenter(true));
     // Do not cache LinkedPoints directly, since we would not be able to
     // use them to calculate the difference in #setPosition, as when it is
     // modified, it would hold new values already and only then cause the
