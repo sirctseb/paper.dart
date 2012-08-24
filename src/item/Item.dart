@@ -790,7 +790,7 @@ class Item extends Callback {
     // If we're returning 'bounds', create a LinkedRectangle that uses the
     // setBounds() setter to update the Item whenever the bounds are
     // changed:
-    return name == "bounds" ? LinkedRectangle.create(this, setBounds,
+    return name == "bounds" ? new LinkedRectangle.create(this, setBounds,
       bounds.x, bounds.y, bounds.width, bounds.height) : bounds;
   }
 
