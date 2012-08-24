@@ -754,7 +754,7 @@ class Item extends Callback {
   }
 
   void setBounds(/*Rectangle*/ rect) {
-    rect = Rectangle.read(arguments);
+    rect = Rectangle.read(rect);
     var bounds = getBounds(),
       matrix = new Matrix(),
       center = rect.getCenter();
