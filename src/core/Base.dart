@@ -96,7 +96,7 @@ class Base {
   splice(list, items, index, remove) {
     int amount = items != null ? items.length : 0;
     bool append = index == null;
-    int index = append ? list.length : index;
+    index = append ? list.length : index;
     // Update _index on the items to be added first.
     for (var i = 0; i < amount; i++)
       items[i]._index = index + i;
