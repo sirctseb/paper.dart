@@ -1942,7 +1942,7 @@ class Item extends Callback {
   // @param {String[]} flags Array of any of the following: 'objects',
   //        'children', 'fill-gradients', 'fill-patterns', 'stroke-patterns',
   //        'lines'. Default: ['objects', 'children']
-  Item transform(Matrix matrix, bool apply) {
+  Item transform(Matrix matrix, [bool apply = false]) {
     // Calling _changed will clear _bounds and _position, but depending
     // on matrix we can calculate and set them again.
     var bounds = this._bounds;
