@@ -193,7 +193,8 @@ class Item extends Callback {
       _project._needsRedraw();
     }
     // If this item is a symbol's definition, notify it of the change too
-    if (this._parentSymbol != null)
+    // TODO I guess symbol sets this. declare it
+    if (_parentSymbol != null)
       _parentSymbol._changed(flags);
     // Have project keep track of changed items, so they can be iterated.
     // This can be used for example to update the SVG tree. Needs to be
