@@ -485,7 +485,7 @@ class Item extends Callback {
    */
   bool _selected; // = false;
   bool isSelected() {
-    if (this._children) {
+    if (_children) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (_children[i].isSelected())
           return true;
