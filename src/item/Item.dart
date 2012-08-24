@@ -13,6 +13,10 @@
  *
  * All rights reserved.
  */
+#library("Item.dart");
+#import("../core/Core.dart");
+#import("../basic/Basic.dart");
+#source("./ChangeFlag.dart");
 
 /**
  * @name Item
@@ -36,13 +40,13 @@ class Item extends Callback {
       "click": 1,
       "doubleclick": 1
     },
-    "mouseup": {
+    "mouseup": const {
       "mouseup": 1,
       "mousedrag": 1,
       "click": 1,
       "doubleclick": 1
     },
-    "mousemove": {
+    "mousemove": const {
       "mousedrag": 1,
       "mousemove": 1,
       "mouseenter": 1,
@@ -57,7 +61,7 @@ class Item extends Callback {
     // increase the counters now according to mouseFlags
     var counters = _project.view._eventCounters;
     if(counters != null) {
-      for(var key in mouseFlags) {
+      for(var key in mouseFlags.getKeys()) {
         counters[key] = (counters[key] != 0 ? counters[key] : 0) +
                         (mouseFlags[key][type] != null ? mouseFlags[key][type] : 0);
       }
@@ -66,10 +70,12 @@ class Item extends Callback {
   void _uninstallMouseHandler(String type) {
     // If the view requires counting of installed mouse events,
     // decrease the counters now according to mouseFlags
-    var counters = this._project.view._eventCounters;
+    var counters = _project.view._eventCounters;
     if (counters) {
-      for (var key in mouseFlags)
-      counters[key] -= mouseFlags[key][type] || 0;
+      for (var key in mouseFlags.getKeys()) {
+        if(mouseFlags[key].containsKey(type))
+          counters[key] -= mouseFlags[key][type];  
+      }
     }
   }
   static List _onFrameItems;
@@ -94,7 +100,7 @@ class Item extends Callback {
   get onMouseDown() => getEvent("mousedown"); // TODO capitalization on these?
   set onMouseDown(value) => setEvent("mousedown", value);
   get onMouseUp() => getEvent("mouseup");
-  set onMouseDown(value) => setEvent("mouseup", value);
+  set onMouseUp(value) => setEvent("mouseup", value);
   get onMouseDrag() => getEvent("mousedrag");
   set onMouseDrag(value) => setEvent("mousedrag", value);
   get onClick() => getEvent("click");
@@ -142,10 +148,12 @@ class Item extends Callback {
     // If _project is already set, the item was already moved into the DOM
     // hierarchy. Used by Layer, where it's added to project.layers instead
     if (_project == null)
+      // TODO figure out global paper scope
       paper.project.activeLayer.addChild(this);
     // TextItem defines its own _style, based on CharacterStyle
     if (_style == null)
-      this._style = PathStyle.create(this);
+      // TODO port PathStyle
+      _style = PathStyle.create(this);
     setStyle(_project.getCurrentStyle());
     _matrix = pointOrMatrix !== null
       ? pointOrMatrix is Matrix
@@ -161,30 +169,32 @@ class Item extends Callback {
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
   _changed(int flags) {
-    if (flags & ChangeFlag.GEOMETRY != 0) {
+    if ((flags & ChangeFlag.GEOMETRY) != 0) {
       // Clear cached bounds and position whenever geometry changes
+      // TODO figure out bounds
       _bounds = null;
       _position = null;
     }
     if (_parent != null
-        && (flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE) != 0)) {
+        && ((flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE)) != 0)) {
       // Clear cached bounds of all items that this item contributes to.
       // We call this on the parent, since the information is cached on
       // the parent, see getBounds().
       _parent._clearBoundsCache();
     }
-    if (flags & ChangeFlag.HIERARCHY != 0) {
+    if ((flags & ChangeFlag.HIERARCHY) != 0) {
       // Clear cached bounds of all items that this item contributes to.
       // We don't call this on the parent, since we're already the parent
       // of the child that modified the hierarchy (that's where these
       // HIERARCHY notifications go)
       _clearBoundsCache();
     }
-    if (flags & ChangeFlag.APPEARANCE != 0) {
+    if ((flags & ChangeFlag.APPEARANCE) != 0) {
       _project._needsRedraw();
     }
     // If this item is a symbol's definition, notify it of the change too
-    if (this._parentSymbol != null)
+    // TODO I guess symbol sets this. declare it
+    if (_parentSymbol != null)
       _parentSymbol._changed(flags);
     // Have project keep track of changed items, so they can be iterated.
     // This can be used for example to update the SVG tree. Needs to be
@@ -251,10 +261,11 @@ class Item extends Callback {
       _removeFromNamed();
     _name = name;
     if (name != null && _parent != null) {
+      // TODO declare _children and _namedChildren
       var children = _parent._children;
       var namedChildren = _parent._namedChildren;
       // TODO namedChildren[name] is itself a list?
-      if(namedChildre[name] == null) {
+      if(namedChildren[name] == null) {
         namedChildren[name] = [this];
       } else {
         namedChildren[name].add(this);
@@ -309,6 +320,13 @@ class Item extends Callback {
    * path2.style = myStyle;
    */
   PathStyle _style;
+  PathStyle getStyle() => _style;
+  PathStyle get style() => getStyle();
+  void setStyle(Style style) {
+    _style = style;
+  }
+  set style(PathStyle style) => setStyle(style);
+
   // TODO I _think_ we need to:
   // get/set style (notify owners on style setting? maybe not)
   // get/set style properties (def with owner notification)
@@ -349,7 +367,7 @@ class Item extends Callback {
    * path.visible = false;
    */
   bool _visible; // = true;
-  bool get visible() => _svisible;
+  bool get visible() => _visible;
   set visible(bool visible) {
     if(_visible != visible) {
       _visible = visible;
@@ -467,14 +485,14 @@ class Item extends Callback {
    */
   bool _selected; // = false;
   bool isSelected() {
-    if (this._children) {
+    if (_children) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (_children[i].isSelected())
           return true;
     }
     return _selected;
   }
-  bool get selected() => _isSelected();
+  bool get selected() => isSelected();
 
   void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
@@ -877,6 +895,7 @@ class Item extends Callback {
    * // Now the parent of the path has become the group:
    * console.log(path.parent == group); // true
    */
+  Item _parent;
   Item getParent() {
     return _parent;
   }
