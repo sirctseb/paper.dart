@@ -111,6 +111,15 @@ class Item extends Callback {
   Map _eventTypes;
 
   Item(/*Point or Matrix*/ [pointOrMatrix]) {
+    // initialize fields
+    _locked = false;
+    _visible = true;
+    _opacity = 1;
+    _blendMode = 'normal';
+    _guide = false;
+    _selected = false;
+    _clipMask = false;
+
     // build events
     _eventTypes = {};
 
@@ -314,7 +323,6 @@ class Item extends Callback {
    * @default false
    * @ignore
    */
-  // TODO init to false in constructor
   bool _locked; // = false;
   bool get locked() => _locked;
   set locked(bool locked) {
@@ -340,7 +348,6 @@ class Item extends Callback {
    * // Hide the path:
    * path.visible = false;
    */
-  // TODO init to true in constructor
   bool _visible; // = true;
   bool get visible() => _svisible;
   set visible(bool visible) {
@@ -377,7 +384,6 @@ class Item extends Callback {
    * // Set the blend mode of circle2:
    * circle2.blendMode = 'multiply';
    */
-  // TODO init to 'normal' in constructor
   String _blendMode; //= 'normal';
   String get blendMode() => _blendMode;
   set blendMode(String blendMode) {
@@ -409,7 +415,6 @@ class Item extends Callback {
    * // Make circle2 50% transparent:
    * circle2.opacity = 0.5;
    */
-  // TODO init to 1 in constructor
   num _opacity; //= 1;
   num get opacity() => _opacity;
   set opacity(num opacity) {
@@ -428,7 +433,6 @@ class Item extends Callback {
    * @type Number
    * @default 1
    */
-  // TODO set to false in constructor
   // TODO why is does this have @type Number and @default 1?
   bool _guide; // = false;
   bool get guide() => _guide;
@@ -461,7 +465,6 @@ class Item extends Callback {
    * var path = new Path.Circle(new Size(80, 50), 35);
    * path.selected = true; // Select the path
    */
-  // TODO init to false in constructor
   bool _selected; // = false;
   bool isSelected() {
     if (this._children) {
@@ -516,7 +519,6 @@ class Item extends Callback {
    * @default false
    * @bean
    */
-  // TODO init in constructor
   bool _clipMask;// = false;
   bool isClipMask() {
     return _clipMask;
@@ -2717,4 +2719,6 @@ class Item extends Callback {
     }
     return this;
   }
+
+  // TODO style accessor stuff
 }
