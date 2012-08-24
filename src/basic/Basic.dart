@@ -2,7 +2,7 @@
 
 #import("dart:math");
 #import("../util/Numerical.dart");
-#import("../core/Base.dart");
+#import("../core/Core.dart");
 
 #source("Line.dart");
 #source("Matrix.dart");
