@@ -261,6 +261,7 @@ class Item extends Callback {
       _removeFromNamed();
     _name = name;
     if (name != null && _parent != null) {
+      // TODO declare _children and _namedChildren
       var children = _parent._children;
       var namedChildren = _parent._namedChildren;
       // TODO namedChildren[name] is itself a list?
