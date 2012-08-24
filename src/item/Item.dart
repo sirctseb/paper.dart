@@ -1842,7 +1842,7 @@ class Item extends Callback {
    * @param {Point} delta the offset to translate the item by
    * @param {Boolean} apply
    */
-  Item translate(delta, apply) {
+  Item translate(delta, [bool apply = false]) {
     var mx = new Matrix();
     return transform(mx.translate(mx, delta), apply);
   }
@@ -1889,7 +1889,7 @@ class Item extends Callback {
    *   path.rotate(3, view.center);
    * }
    */
-  Item rotate(num angle, center, apply) {
+  Item rotate(num angle, center, [bool apply = false]) {
     return transform(new Matrix().rotate(angle,
         center == null ? this.getPosition(true) : center), apply);
   }
