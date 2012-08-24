@@ -1,9 +1,8 @@
 src/path/Segment.dart
 src/item/Item.dart
 test/tests/Tests.dart
-src/core/Callback.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
 src/color/Color.dart
-src/core/Base.dart
+src/core/Core.dart
