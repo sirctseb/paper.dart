@@ -545,7 +545,7 @@ class Item extends Callback {
 
   void setClipMask(bool clipMask) {
     // On-the-fly conversion to boolean:
-    if (_clipMask != clipMask)) {
+    if (_clipMask != clipMask) {
       _clipMask = clipMask;
       if (clipMask) {
         setFillColor(null);
