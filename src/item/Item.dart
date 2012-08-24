@@ -13,6 +13,8 @@
  *
  * All rights reserved.
  */
+#library("Item.dart");
+#import("../core/Core.dart");
 
 /**
  * @name Item
