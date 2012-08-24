@@ -98,7 +98,7 @@ class Item extends Callback {
   get onMouseDown() => getEvent("mousedown"); // TODO capitalization on these?
   set onMouseDown(value) => setEvent("mousedown", value);
   get onMouseUp() => getEvent("mouseup");
-  set onMouseDown(value) => setEvent("mouseup", value);
+  set onMouseUp(value) => setEvent("mouseup", value);
   get onMouseDrag() => getEvent("mousedrag");
   set onMouseDrag(value) => setEvent("mousedrag", value);
   get onClick() => getEvent("click");
