@@ -59,6 +59,10 @@ class Matrix {
   Matrix.fromList(List list) {
     _a = list[0]; _c = list[1]; _b = list[2]; _d = list[3]; _tx = list[4]; _ty = list[5];
   }
+  
+  Matrix initialize(Matrix matrix) {
+    set(matrix.a, matrix.c, matrix.b, matrix.d, matrix.tx, matrix.ty);
+  }
 
   /**
    * @return {Matrix} A copy of this transform.
