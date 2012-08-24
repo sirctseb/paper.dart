@@ -169,26 +169,26 @@ class Item extends Callback {
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
   _changed(int flags) {
-    if (flags & ChangeFlag.GEOMETRY != 0) {
+    if ((flags & ChangeFlag.GEOMETRY) != 0) {
       // Clear cached bounds and position whenever geometry changes
       _bounds = null;
       _position = null;
     }
     if (_parent != null
-        && (flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE) != 0)) {
+        && ((flags & (ChangeFlag.GEOMETRY | ChangeFlag.STROKE)) != 0)) {
       // Clear cached bounds of all items that this item contributes to.
       // We call this on the parent, since the information is cached on
       // the parent, see getBounds().
       _parent._clearBoundsCache();
     }
-    if (flags & ChangeFlag.HIERARCHY != 0) {
+    if ((flags & ChangeFlag.HIERARCHY) != 0) {
       // Clear cached bounds of all items that this item contributes to.
       // We don't call this on the parent, since we're already the parent
       // of the child that modified the hierarchy (that's where these
       // HIERARCHY notifications go)
       _clearBoundsCache();
     }
-    if (flags & ChangeFlag.APPEARANCE != 0) {
+    if ((flags & ChangeFlag.APPEARANCE) != 0) {
       _project._needsRedraw();
     }
     // If this item is a symbol's definition, notify it of the change too
