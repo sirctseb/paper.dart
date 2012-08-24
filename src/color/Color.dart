@@ -18,9 +18,9 @@
 #import("../core/Base.dart");
 #import("../util/CanvasProvider.dart");
 #import("dart:core");
-#source("GradientStop.dart");
-#source("Gradient.dart");
-#source("GradientColor.dart");
+#source("./GradientStop.dart");
+#source("./Gradient.dart");
+#source("./GradientColor.dart");
 #source("../item/ChangeFlag.dart");
 
 /**
