@@ -15,6 +15,7 @@
  */
 #library("Item.dart");
 #import("../core/Core.dart");
+#import("../basic/Basic.dart");
 
 /**
  * @name Item
