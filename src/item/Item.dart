@@ -264,7 +264,7 @@ class Item extends Callback {
       var children = _parent._children;
       var namedChildren = _parent._namedChildren;
       // TODO namedChildren[name] is itself a list?
-      if(namedChildre[name] == null) {
+      if(namedChildren[name] == null) {
         namedChildren[name] = [this];
       } else {
         namedChildren[name].add(this);
