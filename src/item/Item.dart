@@ -68,7 +68,7 @@ class Item extends Callback {
   void _uninstallMouseHandler(String type) {
     // If the view requires counting of installed mouse events,
     // decrease the counters now according to mouseFlags
-    var counters = this._project.view._eventCounters;
+    var counters = _project.view._eventCounters;
     if (counters) {
       for (var key in mouseFlags)
       counters[key] -= mouseFlags[key][type] || 0;
