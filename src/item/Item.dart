@@ -893,6 +893,7 @@ class Item extends Callback {
    * // Now the parent of the path has become the group:
    * console.log(path.parent == group); // true
    */
+  Item _parent;
   Item getParent() {
     return _parent;
   }
