@@ -769,7 +769,7 @@ class Item extends Callback {
     }
     // Translate to bounds center:
     center = bounds.getCenter();
-    matrix.translate(-center.x, -center.y);
+    matrix.translate(-center);
     // Now execute the transformation
     // TODO: do we need to apply too, or just change the matrix?
     transform(matrix);
