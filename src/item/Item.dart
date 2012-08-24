@@ -70,8 +70,10 @@ class Item extends Callback {
     // decrease the counters now according to mouseFlags
     var counters = _project.view._eventCounters;
     if (counters) {
-      for (var key in mouseFlags.getKeys())
-      counters[key] -= mouseFlags[key][type] || 0;
+      for (var key in mouseFlags.getKeys()) {
+        if(mouseFlags[key].containsKey(type))
+          counters[key] -= mouseFlags[key][type];  
+      }
     }
   }
   static List _onFrameItems;
