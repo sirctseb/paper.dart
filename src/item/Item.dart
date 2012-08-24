@@ -736,7 +736,7 @@ class Item extends Callback {
     // Scriptographer behaves weirdly then too.
     if (children == null || children.length == 0)
       return new Rectangle();
-    num x1 = Infinity;
+    num x1 = double.INFINITY;
     num x2 = -x1;
     num y1 = x1;
     num y2 = x2;
