@@ -171,6 +171,7 @@ class Item extends Callback {
   _changed(int flags) {
     if ((flags & ChangeFlag.GEOMETRY) != 0) {
       // Clear cached bounds and position whenever geometry changes
+      // TODO figure out bounds
       _bounds = null;
       _position = null;
     }
