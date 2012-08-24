@@ -15,7 +15,7 @@
  */
 #library("Color.dart");
 #import("../basic/Basic.dart");
-#import("../core/Base.dart");
+#import("../core/Core.dart");
 #import("../util/CanvasProvider.dart");
 #import("dart:core");
 #source("./GradientStop.dart");
