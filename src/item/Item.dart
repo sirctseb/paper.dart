@@ -367,7 +367,7 @@ class Item extends Callback {
    * path.visible = false;
    */
   bool _visible; // = true;
-  bool get visible() => _svisible;
+  bool get visible() => _visible;
   set visible(bool visible) {
     if(_visible != visible) {
       _visible = visible;
