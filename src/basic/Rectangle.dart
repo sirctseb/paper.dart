@@ -351,6 +351,20 @@ class Rectangle {
   // property
   set center(Point value) => setCenter(value);
 
+  // Get a point by name
+  Point getNamedPoint(String name) {
+    switch(name) {
+      case "TopLeft": return topLeft;
+      case "TopRight": return topRight;
+      case "BottomLeft": return bottomLeft;
+      case "BottomRight": return bottomRight;
+      case "LeftCenter": return leftCenter;
+      case "TopCenter": return topCenter;
+      case "RightCenter": return rightCenter;
+      case "BottomCenter": return bottomCenter;
+      default: return null;
+    }
+  }
   /**
    * The top-left point of the rectangle.
    *

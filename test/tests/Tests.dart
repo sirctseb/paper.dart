@@ -10,6 +10,23 @@
 #source("../lib/helpers.dart");
 #source("./Color.dart");
 #source("./Segment.dart");
+#source("Group.dart");
+#source("HitResult.dart");
+#source("CompoundPath.dart");
+#source("Item.dart");
+#source("Item_Bounds.dart");
+#source("Item_Cloning.dart");
+#source("Item_Order.dart");
+#source("Layer.dart");
+#source("Path.dart");
+#source("PathStyle.dart");
+#source("Path_Bounds.dart");
+#source("Path_Curves.dart");
+#source("Path_Drawing_Commands.dart");
+#source("Path_Length.dart");
+#source("Path_Shapes.dart");
+#source("PlacedSymbol.dart");
+#source("Project.dart");
 
 void main() {
 	PointTests();

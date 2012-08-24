@@ -96,33 +96,36 @@ class Base {
    * each entry keeps a reference to its index in the list in the private
    * _index property. Used for PaperScope#projects and Item#children.
    */
-  /*splice: function(list, items, index, remove) {
-    var amount = items && items.length,
-      append = index === undefined;
-    index = append ? list.length : index;
+  splice(list, items, index, remove) {
+    int amount = items != null ? items.length : 0;
+    bool append = index == null;
+    int index = append ? list.length : index;
     // Update _index on the items to be added first.
     for (var i = 0; i < amount; i++)
       items[i]._index = index + i;
     if (append) {
       // Append them all at the end by using push
-      list.push.apply(list, items);
+      list.addAll(items);
       // Nothing removed, and nothing to adjust above
       return [];
     } else {
-      // Insert somewhere else and/or remove
-      var args = [index, remove];
-      if (items)
-        args.push.apply(args, items);
-      var removed = list.splice.apply(list, args);
-      // Delete the indices of the removed items
-      for (var i = 0, l = removed.length; i < l; i++)
-        delete removed[i]._index;
+      // get and remove
+      var removed = list.getRange(index, remove);
+      list.removeRange(index, remove);
+
+      // insert new items
+      list.insertRange(index, items.length, null);
+      for(int i = 0; i < items.length; i++) {
+        list[index+i] = items[i];
+      }
+
       // Adjust the indices of the items above.
       for (var i = index + amount, l = list.length; i < l; i++)
         list[i]._index = i;
+      
       return removed;
     }
-  },*/
+  }
 
   /**
    * Merge all passed hash objects into a newly creted Base object.
@@ -156,13 +159,23 @@ class Base {
   /**
    * Converst camelized strings to hyphenated ones: CapsLock -> caps-lock
    */
-  /*hyphenate: function(str) {
-    return str.replace(/[a-z][A-Z0-9]|[0-9][a-zA-Z]|[A-Z]{2}[a-z]/g,
-      function(match) {
-        return match.charAt(0) + '-' + match.substring(1);
-      }
-    ).toLowerCase();
-  },*/
+  static String hyphenate(String str) {
+    StringBuffer sb = new StringBuffer();
+    int lastIndex = 0;
+    RegExp transitions = new RegExp("([a-z])([A-Z0-9])|([0-9])([a-zA-Z])|([A-Z]{2})([a-z])");
+    for(Match match in transitions.allMatches(str)) {
+      // add stuff between last match and this
+      sb.add(str.substring(lastIndex, match.start()));
+      // add transition
+      var ind = match[1] != null ? 1 : match[3] != null ? 3 : 5;
+      sb.add("${match[ind]}-${match[ind+1]}");
+      // update index
+      lastIndex = match.end();
+    }
+    // add remaining
+    sb.add(str.substring(lastIndex));
+    return sb.toString().toLowerCase();
+  }
 
   /**
    * Utility function for rendering numbers to strings at a precision of
