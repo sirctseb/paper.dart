@@ -750,7 +750,7 @@ class Item extends Callback {
         y2 = Math.max(rect.y + rect.height, y2);
       }
     }
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
   void setBounds(/*Rectangle*/ rect) {
