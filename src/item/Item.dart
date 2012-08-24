@@ -38,13 +38,13 @@ class Item extends Callback {
       "click": 1,
       "doubleclick": 1
     },
-    "mouseup": {
+    "mouseup": const {
       "mouseup": 1,
       "mousedrag": 1,
       "click": 1,
       "doubleclick": 1
     },
-    "mousemove": {
+    "mousemove": const {
       "mousedrag": 1,
       "mousemove": 1,
       "mouseenter": 1,
