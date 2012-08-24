@@ -59,7 +59,7 @@ class Item extends Callback {
     // increase the counters now according to mouseFlags
     var counters = _project.view._eventCounters;
     if(counters != null) {
-      for(var key in mouseFlags) {
+      for(var key in mouseFlags.getKeys()) {
         counters[key] = (counters[key] != 0 ? counters[key] : 0) +
                         (mouseFlags[key][type] != null ? mouseFlags[key][type] : 0);
       }
