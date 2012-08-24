@@ -608,7 +608,7 @@ class Item extends Callback {
     // modified, it would hold new values already and only then cause the
     // calling of #setPosition.
     return dontLink ? pos
-        : LinkedPoint.create(this, setPosition, pos.x, pos.y);
+        : new LinkedPoint.create(this, setPosition, pos.x, pos.y);
   }
   Point get position() => getPosition();
 
