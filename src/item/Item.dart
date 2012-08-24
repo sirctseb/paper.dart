@@ -492,7 +492,7 @@ class Item extends Callback {
     }
     return _selected;
   }
-  bool get selected() => _isSelected();
+  bool get selected() => isSelected();
 
   void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
