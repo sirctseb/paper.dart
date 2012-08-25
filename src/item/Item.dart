@@ -2071,7 +2071,7 @@ class Item extends Callback {
   void fitBounds(/*Rectangle*/ rectangle, [bool fill = false]) {
     // TODO: Think about passing options with various ways of defining
     // fitting.
-    rectangle = Rectangle.read(arguments);
+    rectangle = Rectangle.read(rectangle);
     Rectangle bounds = getBounds();
     num itemRatio = bounds.height / bounds.width;
     num rectRatio = rectangle.height / rectangle.width;
