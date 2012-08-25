@@ -424,7 +424,7 @@ class Matrix {
    * point and finding the new bounding box to these points. This is not
    * really the transformed reactangle!
    */
-  Rectangle _transformBounds(Rectangle bounds, [Rectangle dest]) {
+  Rectangle transformBounds(Rectangle bounds, [Rectangle dest]) {
     List coords = this._transformCorners(bounds);
     // TODO check these
     List mins = coords.getRange(0,2);

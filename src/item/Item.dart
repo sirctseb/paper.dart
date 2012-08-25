@@ -1968,7 +1968,7 @@ class Item extends Callback {
       // in _bounds and transform each.
       for (var key in bounds) {
         var rect = bounds[key];
-        matrix._transformBounds(rect, rect);
+        matrix.transformBounds(rect, rect);
       }
       // If we have cached 'bounds', update _position again as its 
       // center. We need to take into account _boundsType here too, in 
