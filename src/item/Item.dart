@@ -2079,7 +2079,7 @@ class Item extends Callback {
           ? rectangle.width / bounds.width
           : rectangle.height / bounds.height;
     Rectangle newBounds = new Rectangle(new Point(),
-          Size.create(bounds.width * scale, bounds.height * scale));
+          new Size.create(bounds.width * scale, bounds.height * scale));
     newBounds.setCenter(rectangle.getCenter());
     setBounds(newBounds);
   }
