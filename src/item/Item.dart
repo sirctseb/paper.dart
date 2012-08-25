@@ -1157,7 +1157,7 @@ class Item extends Callback {
    */
   HitResult hitTest(Point point, Map options) {
     options = HitResult.getOptions(point, options);
-    point = options["point"] = _matrix._inverseTransform(options["point"]);
+    point = options["point"] = _matrix.inverseTransform(options["point"]);
     // Check if the point is withing roughBounds + tolerance, but only if
     // this item does not have children, since we'd have to travel up the
     // chain already to determine the rough bounds.
