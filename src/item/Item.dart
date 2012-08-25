@@ -1106,9 +1106,9 @@ class Item extends Callback {
    * circle.scale(5);
    * raster.scale(5);
    */
-  Raster rasterize(num resolution) {
+  Raster rasterize([num resolution = 72]) {
     Rectangle bounds = getStrokeBounds();
-    num scale = (resolution || 72) / 72;
+    num scale = resolution / 72;
     var canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale));
     var ctx = canvas.getContext('2d');
     Matrix matrix = new Matrix().scale(scale).translate(-bounds.x, -bounds.y);
