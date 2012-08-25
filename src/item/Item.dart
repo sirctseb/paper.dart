@@ -1060,7 +1060,7 @@ class Item extends Callback {
     copy.setSelected(_selected);
     // Only set name once the copy is moved, to avoid setting and unsettting
     // name related structures.
-    if (_name)
+    if (_name != null)
       copy.setName(_name);
     return copy;
   }
