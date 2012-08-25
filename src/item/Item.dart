@@ -1488,9 +1488,9 @@ class Item extends Callback {
       var list = [];
       do {
         list.add(item);
-      } while (item = item._parent != null)
+      } while (item = item._parent != null);
       return list;
-    }
+    };
     var list1 = getList(this);
     var list2 = getList(item);
     for (var i = 0, l = Math.min(list1.length, list2.length); i < l; i++) {
