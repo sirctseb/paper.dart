@@ -1111,7 +1111,7 @@ class Item extends Callback {
     num scale = resolution / 72;
     var canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale));
     var ctx = canvas.getContext('2d');
-    Matrix matrix = new Matrix().scale(scale).translate(-bounds.x, -bounds.y);
+    Matrix matrix = new Matrix().scale(scale).translate(-bounds);
     matrix.applyToContext(ctx);
     // XXX: Decide how to handle _matrix
     draw(ctx, {});
