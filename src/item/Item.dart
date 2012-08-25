@@ -1981,7 +1981,7 @@ class Item extends Callback {
       _bounds = bounds;
     } else if (position != null) {
       // Transform position as well.
-      _position = matrix._transformPoint(position, position);
+      _position = matrix.transformPoint(position, position);
     }
     // PORT: Return 'this' in all chainable commands
     return this;
