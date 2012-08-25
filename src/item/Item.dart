@@ -2735,7 +2735,7 @@ class Item extends Callback {
       if (obj[name]) {
         var key = 'mouse$name',
           sets = Tool._removeSets = Tool._removeSets != null ? Tool._removeSets : {};
-        sets[key] = sets[key] || {};
+        sets[key] = sets.containsKey(key) ? sets[key] : {};
         sets[key][_id] = this;
       }
     }
