@@ -1220,7 +1220,7 @@ class Item extends Callback {
    *
    * @param {Item} item The item to be added as a child
    */
-  Item addChild(Item item) {
+  bool addChild(Item item) {
     return this.insertChild(null, item);
   }
 
@@ -1232,7 +1232,7 @@ class Item extends Callback {
    * @param {Number} index
    * @param {Item} item The item to be appended as a child
    */
-  Item insertChild(int index, Item item) {
+  bool insertChild(int index, Item item) {
     if (_children != null) {
       item._remove(false, true);
       Base.splice(this._children, [item], index, 0);
