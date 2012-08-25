@@ -118,7 +118,7 @@ class Matrix {
    * @return {Matrix} This affine transform
    */
   // Concatenate this transform with a scaling transformation
-  Matrix scale(num hor, /*num or Point*/ vert, [/*Point*/ center = null]) {
+  Matrix scale(num hor, [/*num or Point*/ vert, /*Point*/ center = null]) {
 
     if(vert is! num) {
       center = Point.read(vert);
