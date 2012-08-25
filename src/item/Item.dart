@@ -1386,7 +1386,7 @@ class Item extends Callback {
       if (_index != null)
         Base.splice(this._parent._children, null, this._index, 1);
       // Notify parent of changed hierarchy
-      if (bool notify)
+      if (notify)
         _parent._changed(Change.HIERARCHY);
       _parent = null;
       return true;
