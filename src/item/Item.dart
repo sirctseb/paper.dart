@@ -1182,7 +1182,7 @@ class Item extends Callback {
         if (point.getDistance(pt) < options["tolerance"])
           return new HitResult(type, that,
               { "name": Base.hyphenate(part), "point": pt });
-      }
+      };
       if (options["center"] && (res = checkBounds('center', 'Center') != null))
         return res;
       if (options["bounds"]) {
