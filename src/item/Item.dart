@@ -1310,7 +1310,7 @@ class Item extends Callback {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #addChild(item)} instead.
    */
-  Item appendTop(Item item) {
+  bool appendTop(Item item) {
     return addChild(item);
   }
 
@@ -1322,7 +1322,7 @@ class Item extends Callback {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #insertChild(index, item)} instead.
    */
-  Item appendBottom(Item item) {
+  bool appendBottom(Item item) {
     return insertChild(0, item);
   }
 
