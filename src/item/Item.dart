@@ -1240,7 +1240,7 @@ class Item extends Callback {
       item._setProject(_project);
       // Setting the name again makes sure all name lookup structures are
       // kept in sync.
-      if (item._name)
+      if (item._name != null)
         item.setName(item._name);
       _changed(Change.HIERARCHY);
       return true;
