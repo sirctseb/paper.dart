@@ -2564,7 +2564,7 @@ class Item extends Callback {
       // antialiased pixels when drawing onto the temporary canvas.
       itemOffset = param.offset = bounds.getTopLeft().floor();
       tempCanvas = CanvasProvider.getCanvas(
-          bounds.getSize().ceil().add(Size.create(1, 1)));
+          bounds.getSize().ceil().add(new Size.create(1, 1)));
       // Set ctx to the context of the temporary canvas,
       // so we draw onto it, instead of the parentCtx
       ctx = tempCanvas.getContext('2d');
