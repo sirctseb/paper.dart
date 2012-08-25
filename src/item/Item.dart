@@ -1930,7 +1930,7 @@ class Item extends Callback {
       ver = hor;
     }
     return transform(new Matrix().shear(hor, ver,
-        center || this.getPosition(true)), apply);
+        center == null ? center : getPosition(true)), apply);
   }
 
   /**
