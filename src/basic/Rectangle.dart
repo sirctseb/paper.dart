@@ -641,10 +641,10 @@ class Rectangle {
 //        : this._containsPoint(Point.read(arguments));
     // TODO to what extent can we accept Rectangle-like and Point-like objects in the same argument?
     if(arg is Rectangle) return _containsRectangle(arg);
-    return _containsPoint(Point.read(arg));
+    return containsPoint(Point.read(arg));
   }
 
-  bool _containsPoint(Point point) {
+  bool containsPoint(Point point) {
     num x = point.x;
     num y = point.y;
     return x >= this.x && y >= this.y

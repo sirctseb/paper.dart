@@ -1162,7 +1162,7 @@ class Item extends Callback {
     // this item does not have children, since we'd have to travel up the
     // chain already to determine the rough bounds.
     if (_children == null && !this.getRoughBounds()
-        .expand(options["tolerance"])._containsPoint(point))
+        .expand(options["tolerance"]).containsPoint(point))
       return null;
     if ((options["center"] || options["bounds"]) &&
         // Ignore top level layers:
