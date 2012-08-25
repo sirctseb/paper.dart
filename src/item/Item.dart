@@ -1847,7 +1847,7 @@ class Item extends Callback {
    */
   Item translate(delta, [bool apply = false]) {
     var mx = new Matrix();
-    return transform(mx.translate(mx, delta), apply);
+    return transform(mx.translate(delta), apply);
   }
 
   /**
