@@ -1270,8 +1270,8 @@ class Item extends Callback {
    * @param {Item[]} items The items to be appended as children
    */
   void insertChildren(int index, List<Item> items) {
-    for (var i = 0, l = items && items.length; i < l; i++) {
-      if (insertChild(index, items[i]))
+    for(Item item in items) {
+      if(insertChild(index, item))
         index++;
     }
   }
