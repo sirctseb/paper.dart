@@ -1166,7 +1166,7 @@ class Item extends Callback {
       return null;
     if ((options["center"] || options["bounds"]) &&
         // Ignore top level layers:
-        !(this is Layer && !_parent)) {
+        !(this is Layer && _parent == null)) {
       // Don't get the transformed bounds, check against transformed
       // points instead
       Rectangle bounds = getBounds();
