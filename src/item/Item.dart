@@ -2523,7 +2523,7 @@ class Item extends Callback {
 
   //statics: {
   static void drawSelectedBounds(bounds, ctx, matrix) {
-    Rectangle coords = matrix._transformCorners(bounds);
+    List coords = matrix._transformCorners(bounds);
     ctx.beginPath();
     for (var i = 0; i < 8; i++)
       ctx[i == 0 ? 'moveTo' : 'lineTo'](coords[i], coords[++i]);
