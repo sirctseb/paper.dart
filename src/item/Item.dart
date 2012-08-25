@@ -1013,6 +1013,7 @@ class Item extends Callback {
   int getIndex() {
     return _index;
   }
+  int _index;
 
   /**
    * Clones the item within the same project and places the copy above the
