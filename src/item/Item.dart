@@ -1366,14 +1366,16 @@ class Item extends Callback {
     if (index == -1)
       return;
     // Remove the named reference
-    if (children[name] == this)
-      delete children[name];
+    // TODO we can't do this unless we use MapList
+    /*if (children[name] == this)
+      delete children[name];*/
     // Remove this entry
     namedArray.splice(index, 1);
     // If there are any items left in the named array, set
     // the last of them to be this.parent.children[this.name]
-    if (namedArray.length) {
-      children[name] = namedArray[namedArray.length - 1];
+    if (namedArray.length > 0) {
+      // TODO we can't do this unless we use MapList
+      //children[name] = namedArray[namedArray.length - 1];
     } else {
       // Otherwise delete the empty array
       namedChildren.remove(name);
