@@ -270,7 +270,8 @@ class Item extends Callback {
       } else {
         namedChildren[name].add(this);
       }
-      children[name] = this;
+      // TODO we can't do this unless we use MapList
+      //children[name] = this;
     }
     _changed(ChangeFlag.ATTRIBUTE);
   }
@@ -485,7 +486,7 @@ class Item extends Callback {
    */
   bool _selected; // = false;
   bool isSelected() {
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (_children[i].isSelected())
           return true;
@@ -497,7 +498,7 @@ class Item extends Callback {
   void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
     // noChildren set to true, see #setFullySelected().
-    if (_children && !noChildren) {
+    if (_children != null && !noChildren) {
       for (var i = 0, l = _children.length; i < l; i++)
         _children[i].setSelected(selected);
     } else if (selected != _selected) {
@@ -509,7 +510,7 @@ class Item extends Callback {
   set selected(bool selected) => setSelected(selected);
 
   bool isFullySelected() {
-    if (_children && _selected) {
+    if (_children != null && _selected) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (!_children[i].isFullySelected())
           return false;
@@ -520,7 +521,7 @@ class Item extends Callback {
   }
 
   void setFullySelected(bool selected) {
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         _children[i].setFullySelected(selected);
     }
