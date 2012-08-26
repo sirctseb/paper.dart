@@ -961,7 +961,7 @@ class Item extends Callback {
   
   // storage for named children
   // TODO use MapList for _children
-  Map<String, Item> _namedChildren;
+  Map<String, List<Item>> _namedChildren;
   
 
   /**
