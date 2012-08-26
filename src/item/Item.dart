@@ -870,7 +870,7 @@ class Item extends Callback {
    */
   Layer getLayer() {
     var parent = this;
-    while (parent = parent._parent) {
+    while (parent = parent._parent != null) {
       if (parent is Layer)
         return parent;
     }
