@@ -958,6 +958,11 @@ class Item extends Callback {
     removeChildren();
     addChildren(items);
   }
+  
+  // storage for named children
+  // TODO use MapList for _children
+  Map<String, Item> _namedChildren;
+  
 
   /**
    * The first item contained within this item. This is a shortcut for
