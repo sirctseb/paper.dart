@@ -93,7 +93,7 @@ class Base {
    * each entry keeps a reference to its index in the list in the private
    * _index property. Used for PaperScope#projects and Item#children.
    */
-  splice(list, items, index, remove) {
+  static splice(list, items, index, remove) {
     int amount = items != null ? items.length : 0;
     bool append = index == null;
     index = append ? list.length : index;

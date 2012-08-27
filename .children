@@ -4,5 +4,6 @@ test/tests/Tests.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
+src/item/MapList.dart
 src/color/Color.dart
 src/core/Core.dart

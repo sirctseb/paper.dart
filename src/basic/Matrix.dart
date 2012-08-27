@@ -59,6 +59,10 @@ class Matrix {
   Matrix.fromList(List list) {
     _a = list[0]; _c = list[1]; _b = list[2]; _d = list[3]; _tx = list[4]; _ty = list[5];
   }
+  
+  Matrix initialize(Matrix matrix) {
+    set(matrix.a, matrix.c, matrix.b, matrix.d, matrix.tx, matrix.ty);
+  }
 
   /**
    * @return {Matrix} A copy of this transform.
@@ -114,7 +118,7 @@ class Matrix {
    * @return {Matrix} This affine transform
    */
   // Concatenate this transform with a scaling transformation
-  Matrix scale(num hor, /*num or Point*/ vert, [/*Point*/ center = null]) {
+  Matrix scale(num hor, [/*num or Point*/ vert, /*Point*/ center = null]) {
 
     if(vert is! num) {
       center = Point.read(vert);
@@ -420,7 +424,7 @@ class Matrix {
    * point and finding the new bounding box to these points. This is not
    * really the transformed reactangle!
    */
-  Rectangle _transformBounds(Rectangle bounds, [Rectangle dest]) {
+  Rectangle transformBounds(Rectangle bounds, [Rectangle dest]) {
     List coords = this._transformCorners(bounds);
     // TODO check these
     List mins = coords.getRange(0,2);

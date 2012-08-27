@@ -270,7 +270,8 @@ class Item extends Callback {
       } else {
         namedChildren[name].add(this);
       }
-      children[name] = this;
+      // TODO we can't do this unless we use MapList
+      //children[name] = this;
     }
     _changed(ChangeFlag.ATTRIBUTE);
   }
@@ -485,7 +486,7 @@ class Item extends Callback {
    */
   bool _selected; // = false;
   bool isSelected() {
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (_children[i].isSelected())
           return true;
@@ -497,7 +498,7 @@ class Item extends Callback {
   void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
     // noChildren set to true, see #setFullySelected().
-    if (_children && !noChildren) {
+    if (_children != null && !noChildren) {
       for (var i = 0, l = _children.length; i < l; i++)
         _children[i].setSelected(selected);
     } else if (selected != _selected) {
@@ -509,7 +510,7 @@ class Item extends Callback {
   set selected(bool selected) => setSelected(selected);
 
   bool isFullySelected() {
-    if (_children && _selected) {
+    if (_children != null && _selected) {
       for (var i = 0, l = _children.length; i < l; i++)
         if (!_children[i].isFullySelected())
           return false;
@@ -520,7 +521,7 @@ class Item extends Callback {
   }
 
   void setFullySelected(bool selected) {
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         _children[i].setFullySelected(selected);
     }
@@ -545,7 +546,7 @@ class Item extends Callback {
 
   void setClipMask(bool clipMask) {
     // On-the-fly conversion to boolean:
-    if (_clipMask != clipMask)) {
+    if (_clipMask != clipMask) {
       _clipMask = clipMask;
       if (clipMask) {
         setFillColor(null);
@@ -598,17 +599,17 @@ class Item extends Callback {
    */
   // TODO init in constructor?
   Point _position;
-  Point getPosition: function([bool dontLink = false]) {
+  Point getPosition([bool dontLink = false]) {
     // Cache position value.
     // Pass true for dontLink in getCenter(), so receive back a normal point
-    var pos = this._position != null ?
-        || (this._position = this.getBounds().getCenter(true));
+    var pos = _position != null ? _position
+        : (_position = this.getBounds().getCenter(true));
     // Do not cache LinkedPoints directly, since we would not be able to
     // use them to calculate the difference in #setPosition, as when it is
     // modified, it would hold new values already and only then cause the
     // calling of #setPosition.
     return dontLink ? pos
-        : LinkedPoint.create(this, setPosition, pos.x, pos.y);
+        : new LinkedPoint.create(this, setPosition, pos.x, pos.y);
   }
   Point get position() => getPosition();
 
@@ -644,6 +645,9 @@ class Item extends Callback {
    * Private method that deals with the calling of _getBounds, recursive
    * matrix concatenation and handles all the complicated caching mechanisms.
    */
+  Map _bounds;
+  Map _boundsCache;
+  String _boundsType;
   Rectangle _getCachedBounds(String type, [Matrix matrix, cacheItem]) {
     // See if we can cache these bounds. We only cache the bounds
     // transformed with the internally stored _matrix, (the default if no
@@ -665,7 +669,7 @@ class Item extends Callback {
       var id = cacheItem._id;
       // TODO where is this used? is _parent._boundsCache ever not a map?
       var ref = _parent._boundsCache
-          = _parent._boundsCache != null ? _parent._boundsCaches : {
+          = _parent._boundsCache != null ? _parent._boundsCache : {
         // Use both a hashtable for ids and an array for the list,
         // so we can keep track of items that were added already
         "ids": {},
@@ -736,7 +740,7 @@ class Item extends Callback {
     // Scriptographer behaves weirdly then too.
     if (children == null || children.length == 0)
       return new Rectangle();
-    num x1 = Infinity;
+    num x1 = double.INFINITY;
     num x2 = -x1;
     num y1 = x1;
     num y2 = x2;
@@ -750,11 +754,11 @@ class Item extends Callback {
         y2 = Math.max(rect.y + rect.height, y2);
       }
     }
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
   void setBounds(/*Rectangle*/ rect) {
-    rect = Rectangle.read(arguments);
+    rect = Rectangle.read(rect);
     var bounds = getBounds(),
       matrix = new Matrix(),
       center = rect.getCenter();
@@ -769,7 +773,7 @@ class Item extends Callback {
     }
     // Translate to bounds center:
     center = bounds.getCenter();
-    matrix.translate(-center.x, -center.y);
+    matrix.translate(-center);
     // Now execute the transformation
     // TODO: do we need to apply too, or just change the matrix?
     transform(matrix);
@@ -790,7 +794,7 @@ class Item extends Callback {
     // If we're returning 'bounds', create a LinkedRectangle that uses the
     // setBounds() setter to update the Item whenever the bounds are
     // changed:
-    return name == "bounds" ? LinkedRectangle.create(this, setBounds,
+    return name == "bounds" ? new LinkedRectangle.create(this, setBounds,
       bounds.x, bounds.y, bounds.width, bounds.height) : bounds;
   }
 
@@ -869,7 +873,7 @@ class Item extends Callback {
    */
   Layer getLayer() {
     var parent = this;
-    while (parent = parent._parent) {
+    while (parent = parent._parent != null) {
       if (parent is Layer)
         return parent;
     }
@@ -958,6 +962,11 @@ class Item extends Callback {
     removeChildren();
     addChildren(items);
   }
+  
+  // storage for named children
+  // TODO use MapList for _children
+  Map<String, List<Item>> _namedChildren;
+  
 
   /**
    * The first item contained within this item. This is a shortcut for
@@ -1013,6 +1022,7 @@ class Item extends Callback {
   int getIndex() {
     return _index;
   }
+  int _index;
 
   /**
    * Clones the item within the same project and places the copy above the
@@ -1041,7 +1051,7 @@ class Item extends Callback {
     // Copy over style
     copy.setStyle(_style);
     // If this item has children, clone and append each of them:
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         copy.addChild(_children[i].clone());
     }
@@ -1059,7 +1069,7 @@ class Item extends Callback {
     copy.setSelected(_selected);
     // Only set name once the copy is moved, to avoid setting and unsettting
     // name related structures.
-    if (_name)
+    if (_name != null)
       copy.setName(_name);
     return copy;
   }
@@ -1105,12 +1115,12 @@ class Item extends Callback {
    * circle.scale(5);
    * raster.scale(5);
    */
-  Raster rasterize(num resolution) {
+  Raster rasterize([num resolution = 72]) {
     Rectangle bounds = getStrokeBounds();
-    num scale = (resolution || 72) / 72;
+    num scale = resolution / 72;
     var canvas = CanvasProvider.getCanvas(bounds.getSize().multiply(scale));
     var ctx = canvas.getContext('2d');
-    Matrix matrix = new Matrix().scale(scale).translate(-bounds.x, -bounds.y);
+    Matrix matrix = new Matrix().scale(scale).translate(-bounds);
     matrix.applyToContext(ctx);
     // XXX: Decide how to handle _matrix
     draw(ctx, {});
@@ -1156,16 +1166,16 @@ class Item extends Callback {
    */
   HitResult hitTest(Point point, Map options) {
     options = HitResult.getOptions(point, options);
-    point = options["point"] = _matrix._inverseTransform(options["point"]);
+    point = options["point"] = _matrix.inverseTransform(options["point"]);
     // Check if the point is withing roughBounds + tolerance, but only if
     // this item does not have children, since we'd have to travel up the
     // chain already to determine the rough bounds.
     if (_children == null && !this.getRoughBounds()
-        .expand(options["tolerance"])._containsPoint(point))
+        .expand(options["tolerance"]).containsPoint(point))
       return null;
     if ((options["center"] || options["bounds"]) &&
         // Ignore top level layers:
-        !(this is Layer && !_parent)) {
+        !(this is Layer && _parent == null)) {
       // Don't get the transformed bounds, check against transformed
       // points instead
       Rectangle bounds = getBounds();
@@ -1181,7 +1191,7 @@ class Item extends Callback {
         if (point.getDistance(pt) < options["tolerance"])
           return new HitResult(type, that,
               { "name": Base.hyphenate(part), "point": pt });
-      }
+      };
       if (options["center"] && (res = checkBounds('center', 'Center') != null))
         return res;
       if (options["bounds"]) {
@@ -1219,7 +1229,7 @@ class Item extends Callback {
    *
    * @param {Item} item The item to be added as a child
    */
-  Item addChild(Item item) {
+  bool addChild(Item item) {
     return this.insertChild(null, item);
   }
 
@@ -1231,7 +1241,7 @@ class Item extends Callback {
    * @param {Number} index
    * @param {Item} item The item to be appended as a child
    */
-  Item insertChild(int index, Item item) {
+  bool insertChild(int index, Item item) {
     if (_children != null) {
       item._remove(false, true);
       Base.splice(this._children, [item], index, 0);
@@ -1239,7 +1249,7 @@ class Item extends Callback {
       item._setProject(_project);
       // Setting the name again makes sure all name lookup structures are
       // kept in sync.
-      if (item._name)
+      if (item._name != null)
         item.setName(item._name);
       _changed(Change.HIERARCHY);
       return true;
@@ -1255,8 +1265,9 @@ class Item extends Callback {
    * @param {item[]} items The items to be added as children
    */
   void addChildren(List<Item> items) {
-    for (var i = 0, l = items && items.length; i < l; i++)
-      this.insertChild(null, items[i]);
+    for(Item item in items) {
+      insertChild(null, item);
+    }
   }
 
   /**
@@ -1268,8 +1279,8 @@ class Item extends Callback {
    * @param {Item[]} items The items to be appended as children
    */
   void insertChildren(int index, List<Item> items) {
-    for (var i = 0, l = items && items.length; i < l; i++) {
-      if (insertChild(index, items[i]))
+    for(Item item in items) {
+      if(insertChild(index, item))
         index++;
     }
   }
@@ -1308,7 +1319,7 @@ class Item extends Callback {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #addChild(item)} instead.
    */
-  Item appendTop(Item item) {
+  bool appendTop(Item item) {
     return addChild(item);
   }
 
@@ -1320,7 +1331,7 @@ class Item extends Callback {
    * @param {Item} item The item to be appended as a child
    * @deprecated use {@link #insertChild(index, item)} instead.
    */
-  Item appendBottom(Item item) {
+  bool appendBottom(Item item) {
     return insertChild(0, item);
   }
 
@@ -1358,14 +1369,16 @@ class Item extends Callback {
     if (index == -1)
       return;
     // Remove the named reference
-    if (children[name] == this)
-      delete children[name];
+    // TODO we can't do this unless we use MapList
+    /*if (children[name] == this)
+      delete children[name];*/
     // Remove this entry
     namedArray.splice(index, 1);
     // If there are any items left in the named array, set
     // the last of them to be this.parent.children[this.name]
-    if (namedArray.length) {
-      children[name] = namedArray[namedArray.length - 1];
+    if (namedArray.length > 0) {
+      // TODO we can't do this unless we use MapList
+      //children[name] = namedArray[namedArray.length - 1];
     } else {
       // Otherwise delete the empty array
       namedChildren.remove(name);
@@ -1384,7 +1397,7 @@ class Item extends Callback {
       if (_index != null)
         Base.splice(this._parent._children, null, this._index, 1);
       // Notify parent of changed hierarchy
-      if (bool notify)
+      if (notify)
         _parent._changed(Change.HIERARCHY);
       _parent = null;
       return true;
@@ -1439,6 +1452,7 @@ class Item extends Callback {
    */
   void reverseChildren() {
     if (_children != null) {
+      // TODO implement reverse somewhere until dart does
       _children.reverse();
       // Adjust inidces
       for (var i = 0, l = this._children.length; i < l; i++)
@@ -1485,9 +1499,9 @@ class Item extends Callback {
       var list = [];
       do {
         list.add(item);
-      } while (item = item._parent != null)
+      } while (item = item._parent != null);
       return list;
-    }
+    };
     var list1 = getList(this);
     var list2 = getList(item);
     for (var i = 0, l = Math.min(list1.length, list2.length); i < l; i++) {
@@ -1842,9 +1856,9 @@ class Item extends Callback {
    * @param {Point} delta the offset to translate the item by
    * @param {Boolean} apply
    */
-  Item translate(delta, apply) {
+  Item translate(delta, [bool apply = false]) {
     var mx = new Matrix();
-    return transform(mx.translate(mx, delta), apply);
+    return transform(mx.translate(delta), apply);
   }
 
   /**
@@ -1889,7 +1903,7 @@ class Item extends Callback {
    *   path.rotate(3, view.center);
    * }
    */
-  Item rotate(num angle, center, apply) {
+  Item rotate(num angle, center, [bool apply = false]) {
     return transform(new Matrix().rotate(angle,
         center == null ? this.getPosition(true) : center), apply);
   }
@@ -1927,7 +1941,7 @@ class Item extends Callback {
       ver = hor;
     }
     return transform(new Matrix().shear(hor, ver,
-        center || this.getPosition(true)), apply);
+        center == null ? center : getPosition(true)), apply);
   }
 
   /**
@@ -1942,7 +1956,7 @@ class Item extends Callback {
   // @param {String[]} flags Array of any of the following: 'objects',
   //        'children', 'fill-gradients', 'fill-patterns', 'stroke-patterns',
   //        'lines'. Default: ['objects', 'children']
-  Item transform(Matrix matrix, bool apply) {
+  Item transform(Matrix matrix, [bool apply = false]) {
     // Calling _changed will clear _bounds and _position, but depending
     // on matrix we can calculate and set them again.
     var bounds = this._bounds;
@@ -1965,7 +1979,7 @@ class Item extends Callback {
       // in _bounds and transform each.
       for (var key in bounds) {
         var rect = bounds[key];
-        matrix._transformBounds(rect, rect);
+        matrix.transformBounds(rect, rect);
       }
       // If we have cached 'bounds', update _position again as its 
       // center. We need to take into account _boundsType here too, in 
@@ -1978,7 +1992,7 @@ class Item extends Callback {
       _bounds = bounds;
     } else if (position != null) {
       // Transform position as well.
-      _position = matrix._transformPoint(position, position);
+      _position = matrix.transformPoint(position, position);
     }
     // PORT: Return 'this' in all chainable commands
     return this;
@@ -2068,7 +2082,7 @@ class Item extends Callback {
   void fitBounds(/*Rectangle*/ rectangle, [bool fill = false]) {
     // TODO: Think about passing options with various ways of defining
     // fitting.
-    rectangle = Rectangle.read(arguments);
+    rectangle = Rectangle.read(rectangle);
     Rectangle bounds = getBounds();
     num itemRatio = bounds.height / bounds.width;
     num rectRatio = rectangle.height / rectangle.width;
@@ -2076,7 +2090,7 @@ class Item extends Callback {
           ? rectangle.width / bounds.width
           : rectangle.height / bounds.height;
     Rectangle newBounds = new Rectangle(new Point(),
-          Size.create(bounds.width * scale, bounds.height * scale));
+          new Size.create(bounds.width * scale, bounds.height * scale));
     newBounds.setCenter(rectangle.getCenter());
     setBounds(newBounds);
   }
@@ -2520,7 +2534,7 @@ class Item extends Callback {
 
   //statics: {
   static void drawSelectedBounds(bounds, ctx, matrix) {
-    Rectangle coords = matrix._transformCorners(bounds);
+    List coords = matrix._transformCorners(bounds);
     ctx.beginPath();
     for (var i = 0; i < 8; i++)
       ctx[i == 0 ? 'moveTo' : 'lineTo'](coords[i], coords[++i]);
@@ -2561,7 +2575,7 @@ class Item extends Callback {
       // antialiased pixels when drawing onto the temporary canvas.
       itemOffset = param.offset = bounds.getTopLeft().floor();
       tempCanvas = CanvasProvider.getCanvas(
-          bounds.getSize().ceil().add(Size.create(1, 1)));
+          bounds.getSize().ceil().add(new Size.create(1, 1)));
       // Set ctx to the context of the temporary canvas,
       // so we draw onto it, instead of the parentCtx
       ctx = tempCanvas.getContext('2d');
@@ -2732,7 +2746,7 @@ class Item extends Callback {
       if (obj[name]) {
         var key = 'mouse$name',
           sets = Tool._removeSets = Tool._removeSets != null ? Tool._removeSets : {};
-        sets[key] = sets[key] || {};
+        sets[key] = sets.containsKey(key) ? sets[key] : {};
         sets[key][_id] = this;
       }
     }
