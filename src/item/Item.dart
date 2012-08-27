@@ -1051,7 +1051,7 @@ class Item extends Callback {
     // Copy over style
     copy.setStyle(_style);
     // If this item has children, clone and append each of them:
-    if (_children) {
+    if (_children != null) {
       for (var i = 0, l = _children.length; i < l; i++)
         copy.addChild(_children[i].clone());
     }
