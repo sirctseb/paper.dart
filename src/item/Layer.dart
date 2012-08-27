@@ -26,7 +26,7 @@
  *
  * @extends Group
  */
-var Layer = this.Layer = Group.extend(/** @lends Layer# */{
+class Layer extends Group {
   // DOCS: improve constructor code example.
   /**
    * Creates a new Layer item and places it at the end of the
@@ -39,19 +39,19 @@ var Layer = this.Layer = Group.extend(/** @lends Layer# */{
    * @example
    * var layer = new Layer();
    */
-  initialize: function(items) {
+  Layer(items) {
     this._project = paper.project;
     // Push it onto project.layers and set index:
     this._index = this._project.layers.push(this) - 1;
     this.base.apply(this, arguments);
     this.activate();
-  },
+  }
 
   /**
   * Removes the layer from its project's layers list
   * or its parent's children list.
   */
-  _remove: function(deselect, notify) {
+  _remove(deselect, notify) {
     if (this._parent)
       return this.base(deselect, notify);
     if (this._index != null) {
@@ -64,17 +64,17 @@ var Layer = this.Layer = Group.extend(/** @lends Layer# */{
       return true;
     }
     return false;
-  },
+  }
 
-  getNextSibling: function() {
+  getNextSibling() {
     return this._parent ? this.base()
         : this._project.layers[this._index + 1] || null;
-  },
+  }
 
-  getPreviousSibling: function() {
+  getPreviousSibling() {
     return this._parent ? this.base()
         : this._project.layers[this._index - 1] || null;
-  },
+  }
 
   /**
    * Activates the layer.
@@ -86,7 +86,7 @@ var Layer = this.Layer = Group.extend(/** @lends Layer# */{
    * firstLayer.activate();
    * console.log(project.activeLayer == firstLayer); // true
    */
-  activate: function() {
+  activate() {
     this._project.activeLayer = this;
   }
 }, new function () {
