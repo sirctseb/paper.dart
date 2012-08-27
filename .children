@@ -1,6 +1,7 @@
 src/path/Segment.dart
 src/item/Item.dart
 test/tests/Tests.dart
+src/item/HitResult.dart
 src/util/Numerical.dart
 src/util/CanvasProvider.dart
 src/basic/Basic.dart
