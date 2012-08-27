@@ -77,28 +77,28 @@ class Group extends Item {
     //    || typeof items[0] !== 'object' ? arguments : items);
   }
 
-  _changed(flags) {
+  _changed(int flags) {
     // Don't use base() for reasons of performance.
-    Item.prototype._changed.call(this, flags);
+    super._changed(flags);
     if (flags & (ChangeFlag.HIERARCHY | ChangeFlag.CLIPPING)) {
       // Clear cached clip item whenever hierarchy changes
-      delete this._clipItem;
+      _clipItem = null;
     }
   }
 
-  _getClipItem() {
+  Item _getClipItem() {
     // Allow us to set _clipItem to null when none is found and still return
     // it as a defined value without searching again
-    if (this._clipItem !== undefined)
-      return this._clipItem;
-    for (var i = 0, l = this._children.length; i < l; i++) {
-      var child = this._children[i];
-      if (child._clipMask)
-        return this._clipItem = child;
+    if (_clipItem != null)
+      return _clipItem;
+    for (child in _children) {
+      if (child._clipMask != null) {
+        return _clipItem = child;
+      }
     }
     // Make sure we're setting _clipItem to null so it won't be searched for
     // nex time.
-    return this._clipItem = null;
+    return _clipItem = null;
   }
 
   /**
@@ -109,28 +109,30 @@ class Group extends Item {
    * @type Boolean
    * @bean
    */
-  isClipped() {
-    return !!this._getClipItem();
+  bool isClipped() {
+    return _getClipItem != null;
   }
+  bool get clipped() => isClipped();
 
-  setClipped(clipped) {
+  setClipped(bool clipped) {
     var child = this.getFirstChild();
     if (child)
       child.setClipMask(clipped);
     return this;
   }
+  set clipped(bool value) => setClipped(value);
 
   draw(ctx, param) {
-    var clipItem = this._getClipItem();
-    if (clipItem) {
+    var clipItem = _getClipItem();
+    if (clipItem != null) {
       param.clipping = true;
       Item.draw(clipItem, ctx, param);
-      delete param.clipping;
+      param.clipping = null;
     }
-    for (var i = 0, l = this._children.length; i < l; i++) {
-      var item = this._children[i];
-      if (item != clipItem)
+    for (Item child in _children) {
+      if(item !== clipItem) {
         Item.draw(item, ctx, param);
+      }
     }
   }
 }
