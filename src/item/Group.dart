@@ -94,7 +94,7 @@ class Group extends Item {
     // it as a defined value without searching again
     if (_clipItem != null)
       return _clipItem;
-    for (child in _children) {
+    for (Item child in _children) {
       if (child._clipMask != null) {
         return _clipItem = child;
       }
@@ -132,7 +132,7 @@ class Group extends Item {
       Item.draw(clipItem, ctx, param);
       param.clipping = null;
     }
-    for (Item child in _children) {
+    for (Item item in _children) {
       if(item !== clipItem) {
         Item.draw(item, ctx, param);
       }
