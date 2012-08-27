@@ -645,6 +645,9 @@ class Item extends Callback {
    * Private method that deals with the calling of _getBounds, recursive
    * matrix concatenation and handles all the complicated caching mechanisms.
    */
+  Map _bounds;
+  Map _boundsCache;
+  String _boundsType;
   Rectangle _getCachedBounds(String type, [Matrix matrix, cacheItem]) {
     // See if we can cache these bounds. We only cache the bounds
     // transformed with the internally stored _matrix, (the default if no
@@ -666,7 +669,7 @@ class Item extends Callback {
       var id = cacheItem._id;
       // TODO where is this used? is _parent._boundsCache ever not a map?
       var ref = _parent._boundsCache
-          = _parent._boundsCache != null ? _parent._boundsCaches : {
+          = _parent._boundsCache != null ? _parent._boundsCache : {
         // Use both a hashtable for ids and an array for the list,
         // so we can keep track of items that were added already
         "ids": {},
