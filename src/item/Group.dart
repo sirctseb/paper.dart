@@ -66,14 +66,16 @@ class Group extends Item {
    *   group.rotate(1, view.center);
    * }
    */
-  Group(items) {
+  Group(List items) {
     this.base();
     // Allow Group to have children and named children
-    this._children = [];
-    this._namedChildren = {};
-    this.addChildren(!items || !Array.isArray(items)
-        || typeof items[0] !== 'object' ? arguments : items);
-  },
+    _children = [];
+    _namedChildren = {};
+    addChildren(items);
+    // TODO below allows new Group(item1, item2, ...)
+    //this.addChildren(!items || !Array.isArray(items)
+    //    || typeof items[0] !== 'object' ? arguments : items);
+  }
 
   _changed(flags) {
     // Don't use base() for reasons of performance.
@@ -82,7 +84,7 @@ class Group extends Item {
       // Clear cached clip item whenever hierarchy changes
       delete this._clipItem;
     }
-  },
+  }
 
   _getClipItem() {
     // Allow us to set _clipItem to null when none is found and still return
@@ -97,7 +99,7 @@ class Group extends Item {
     // Make sure we're setting _clipItem to null so it won't be searched for
     // nex time.
     return this._clipItem = null;
-  },
+  }
 
   /**
    * Specifies whether the group item is to be clipped.
@@ -109,14 +111,14 @@ class Group extends Item {
    */
   isClipped() {
     return !!this._getClipItem();
-  },
+  }
 
   setClipped(clipped) {
     var child = this.getFirstChild();
     if (child)
       child.setClipMask(clipped);
     return this;
-  },
+  }
 
   draw(ctx, param) {
     var clipItem = this._getClipItem();
