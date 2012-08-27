@@ -66,7 +66,7 @@ class Group extends Item {
    *   group.rotate(1, view.center);
    * }
    */
-  initialize(items) {
+  Group(items) {
     this.base();
     // Allow Group to have children and named children
     this._children = [];
