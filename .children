@@ -1,9 +1,10 @@
 src/path/Segment.dart
 src/item/Item.dart
-test/tests/Tests.dart
 src/util/Numerical.dart
-src/util/CanvasProvider.dart
 src/basic/Basic.dart
-src/item/MapList.dart
 src/color/Color.dart
 src/core/Core.dart
+src/item/Group.dart
+test/tests/Tests.dart
+src/util/CanvasProvider.dart
+src/item/MapList.dart
