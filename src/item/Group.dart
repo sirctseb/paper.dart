@@ -77,6 +77,8 @@ class Group extends Item {
     //this.addChildren(!items || !Array.isArray(items)
     //    || typeof items[0] !== 'object' ? arguments : items);
   }
+  
+  Item _clipItem;
 
   _changed(int flags) {
     // Don't use base() for reasons of performance.
