@@ -44,6 +44,7 @@ class HitResult {
    * @type String('segment', 'handle-in', 'handle-out', 'stroke', 'fill',
    * 'bounds', 'center', 'pixel')
    */
+  String get type() => _type;
 
   /**
    * If the HitResult has a {@link HitResult#type} of 'bounds', this property
