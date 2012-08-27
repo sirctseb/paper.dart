@@ -22,7 +22,7 @@
  * {@link Project#hitTest(point)}.
  */
 class HitResult {
-  initialize(type, item, values) {
+  HitResult(type, item, values) {
     this.type = type;
     this.item = item;
     // Inject passed values, so we can be flexible about the HitResult
@@ -30,7 +30,7 @@ class HitResult {
     // This allows the definition of getters too, e.g. for 'pixel'.
     if (values)
       this.inject(values);
-  },
+  }
 
   /**
    * Describes the type of the hit result. For example, if you hit a segment
