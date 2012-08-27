@@ -22,13 +22,16 @@
  * {@link Project#hitTest(point)}.
  */
 class HitResult {
-  HitResult(type, item, values) {
+  String _type;
+  Item _item;
+
+  HitResult(String type, Item item, [values]) {
     this.type = type;
     this.item = item;
     // Inject passed values, so we can be flexible about the HitResult
     // properties.
     // This allows the definition of getters too, e.g. for 'pixel'.
-    if (values)
+    if (values != null)
       this.inject(values);
   }
 
