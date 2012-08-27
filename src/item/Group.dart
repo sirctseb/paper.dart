@@ -67,7 +67,8 @@ class Group extends Item {
    * }
    */
   Group(List items) {
-    this.base();
+    // TODO look into what this does. superclass constructor probably
+    //this.base();
     // Allow Group to have children and named children
     _children = [];
     _namedChildren = {};
@@ -80,7 +81,7 @@ class Group extends Item {
   _changed(int flags) {
     // Don't use base() for reasons of performance.
     super._changed(flags);
-    if (flags & (ChangeFlag.HIERARCHY | ChangeFlag.CLIPPING)) {
+    if ((flags & (ChangeFlag.HIERARCHY | ChangeFlag.CLIPPING)) != 0) {
       // Clear cached clip item whenever hierarchy changes
       _clipItem = null;
     }
