@@ -55,6 +55,8 @@ class HitResult {
    * @type String('top-left', 'top-right', 'bottom-left', 'bottom-right',
    * 'left-center', 'top-center', 'right-center', 'bottom-center')
    */
+  String _name;
+  String get name() => _name;
 
   /**
    * The item that was hit.
@@ -63,6 +65,7 @@ class HitResult {
    * @property
    * @type Item
    */
+  Item get item() => _item;
 
   /**
    * If the HitResult has a type of 'stroke', this property gives more
@@ -72,6 +75,8 @@ class HitResult {
    * @property
    * @type CurveLocation
    */
+  CurveLocation _location;
+  CurveLocation get location() => _location;
 
   /**
    * If the HitResult has a type of 'pixel', this property refers to the color
@@ -81,6 +86,8 @@ class HitResult {
    * @property
    * @type RgbColor
    */
+  RgbColor _color;
+  RgbColor get color() => _color;
 
   /**
    * If the HitResult has a type of 'stroke', 'segment', 'handle-in' or
@@ -91,6 +98,8 @@ class HitResult {
    * @property
    * @type Segment
    */
+  Segment _segment;
+  Segment get segment() => _segment;
 
   /**
    * Describes the actual coordinates of the segment, handle or bounding box
@@ -100,47 +109,47 @@ class HitResult {
    * @property
    * @type Point
    */
+  Point _point;
+  Point get point() => _point;
 
-  statics: {
-    /**
-     * Merges default options into options hash for #hitTest() calls, and
-     * marks as merged, to prevent repeated merging in nested calls.
-     *
-     * @private
-     */
-    getOptions(point, options) {
-      return options && options._merged ? options : Base.merge({
-        // Use the converted options object to perform point conversion
-        // only once.
-        point: Point.read(arguments, 0, 1),
-        // Type of item, for instanceof check: PathItem, TexItem, etc
-        type: null,
-        // Tolerance
-        tolerance: 2,
-        // Hit the fill of items
-        fill: !options,
-        // Hit the curves of path items, taking into account the stroke
-        // width.
-        stroke: !options,
-        // Hit the part of segments that curves pass through, excluding
-        // its segments (Segment#point)
-        segments: !options,
-        // Hit the parts of segments that define the curvature
-        handles: false,
-        // Only first or last segment hits on path (mutually exclusive
-        // with segments: true)
-        ends: false,
-        // Hit test the center of the bounds
-        center: false,
-        // Hit test the corners and side-centers of the boudning box
-        bounds: false,
-        //  Hit items that are marked as guides
-        guides: false,
-        // Only hit selected objects
-        selected: false,
-        // Mark as merged, so next time Base.merge isn't called
-        _merged: true
-      }, options);
-    }
+  /**
+   * Merges default options into options hash for #hitTest() calls, and
+   * marks as merged, to prevent repeated merging in nested calls.
+   *
+   * @private
+   */
+  static getOptions(point, options) {
+    return options && options._merged ? options : Base.merge({
+      // Use the converted options object to perform point conversion
+      // only once.
+      point: Point.read(arguments, 0, 1),
+      // Type of item, for instanceof check: PathItem, TexItem, etc
+      type: null,
+      // Tolerance
+      tolerance: 2,
+      // Hit the fill of items
+      fill: !options,
+      // Hit the curves of path items, taking into account the stroke
+      // width.
+      stroke: !options,
+      // Hit the part of segments that curves pass through, excluding
+      // its segments (Segment#point)
+      segments: !options,
+      // Hit the parts of segments that define the curvature
+      handles: false,
+      // Only first or last segment hits on path (mutually exclusive
+      // with segments: true)
+      ends: false,
+      // Hit test the center of the bounds
+      center: false,
+      // Hit test the corners and side-centers of the boudning box
+      bounds: false,
+      //  Hit items that are marked as guides
+      guides: false,
+      // Only hit selected objects
+      selected: false,
+      // Mark as merged, so next time Base.merge isn't called
+      _merged: true
+    }, options);
   }
-});
+}
