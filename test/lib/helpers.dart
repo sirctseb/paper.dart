@@ -1,4 +1,4 @@
-part of paper.dart.test;
+part of paper_dart_test;
 
 // TODO I am just porting these as the other test files that I'm porting use them
 

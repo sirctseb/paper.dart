@@ -1,4 +1,4 @@
-part of paper.dart.test;
+part of paper_dart_test;
 
 /*
  * Paper.js
