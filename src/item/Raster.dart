@@ -143,6 +143,7 @@ class Raster extends PlacedItem {
    * @type Context
    * @bean
    */
+  Context _context;
   Context getContext([bool notifyChange = false]) {
     if (!_context)
       _context = getCanvas().getContext('2d');
