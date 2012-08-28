@@ -367,10 +367,10 @@ class Raster extends PlacedItem {
    * @param {Size} size
    * @return {ImageData}
    */
-  createData: function(size) {
-    size = Size.read(arguments);
-    return this.getContext().createImageData(size.width, size.height);
-  },
+  ImageData createData(/*Size*/ size) {
+    size = Size.read(size);
+    return getContext().createImageData(size.width, size.height);
+  }
 
   // TODO: Rename to #get/setImageData, as it will conflict with Item#getData
   // DOCS: document Raster#getData
@@ -378,13 +378,13 @@ class Raster extends PlacedItem {
    * @param {Rectangle} rect
    * @return {ImageData}
    */
-  getData: function(rect) {
-    rect = Rectangle.read(arguments);
+  ImageDatat getData(rect) {
+    rect = Rectangle.read(rect);
     if (rect.isEmpty())
-      rect = new Rectangle(this.getSize());
-    return this.getContext().getImageData(rect.x, rect.y,
+      rect = new Rectangle(getSize());
+    return getContext().getImageData(rect.x, rect.y,
         rect.width, rect.height);
-  },
+  }
 
   // DOCS: document Raster#setData
   /**
@@ -392,10 +392,10 @@ class Raster extends PlacedItem {
    * @param {Point} point
    * @return {ImageData}
    */
-  setData: function(data, point) {
-    point = Point.read(arguments, 1);
-    this.getContext(true).putImageData(data, point.x, point.y);
-  },
+  setData(data, point) {
+    point = Point.read(point);
+    getContext(true).putImageData(data, point.x, point.y);
+  }
 
   _getBounds: function(type, matrix) {
     var rect = new Rectangle(this._size).setCenter(0, 0);
