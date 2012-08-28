@@ -141,20 +141,22 @@ class Raster extends PlacedItem {
    * @type Context
    * @bean
    */
-  getContext: function(/* notifyChange */) {
-    if (!this._context)
-      this._context = this.getCanvas().getContext('2d');
+  Context getContext([bool notifyChange = false]) {
+    if (!_context)
+      _context = getCanvas().getContext('2d');
     // Support a hidden parameter that indicates if the context will be used
     // to modify the Raster object. We can notify such changes ahead since
     // they are only used afterwards for redrawing.
-    if (arguments[0])
-      this._changed(Change.PIXELS);
-    return this._context;
-  },
+    if (notifyChange)
+      _changed(Change.PIXELS);
+    return _context;
+  }
+  Context get context => getContext();
 
-  setContext: function(context) {
-    this._context = context;
-  },
+  void setContext(Context context) {
+    _context = context;
+  }
+  void set context(Context value) setContext(value);
 
   getCanvas: function() {
     if (!this._canvas) {
