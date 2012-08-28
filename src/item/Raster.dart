@@ -213,13 +213,13 @@ class Raster extends PlacedItem {
    *
    * @return {Canvas}
    */
-  getSubImage: function(rect) {
+  Canvas getSubImage(/*Rectangle*/ rect) {
     rect = Rectangle.read(arguments);
     var canvas = CanvasProvider.getCanvas(rect.getSize());
     canvas.getContext('2d').drawImage(this.getCanvas(), rect.x, rect.y,
         canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
     return canvas;
-  },
+  }
 
   /**
    * Draws an image on the raster.
@@ -228,10 +228,10 @@ class Raster extends PlacedItem {
    * @param {Point} point the offset of the image as a point in pixel
    * coordinates
    */
-  drawImage: function(image, point) {
-    point = Point.read(arguments, 1);
-    this.getContext(true).drawImage(image, point.x, point.y);
-  },
+  void drawImage(image, point) {
+    point = Point.read(point);
+    getContext(true).drawImage(image, point.x, point.y);
+  }
 
   /**
    * Calculates the average color of the image within the given path,
