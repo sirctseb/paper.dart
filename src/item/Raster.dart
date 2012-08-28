@@ -45,8 +45,9 @@ class Raster extends PlacedItem {
     } else {
 /*#*/ if (options.browser) {
       // If it's a string, get the element with this id first.
-      if (object is String) {
-        object = query("#$object");
+        if (object is String) {
+          object = query("#$object");
+        }
 /*#*/ } else if (options.server) {
         // If we're running on the server and it's a string,
         // load it from disk:
