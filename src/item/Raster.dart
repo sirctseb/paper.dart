@@ -414,13 +414,13 @@ class Raster extends PlacedItem {
     }
   }
 
-  draw: function(ctx, param) {
-    ctx.drawImage(this._canvas || this._image,
-        -this._size.width / 2, -this._size.height / 2);
-  },
+  void draw(ctx, param) {
+    ctx.drawImage(_canvas || _image,
+        -_size.width / 2, -_size.height / 2);
+  }
 
-  drawSelected: function(ctx, matrix) {
-    Item.drawSelectedBounds(new Rectangle(this._size).setCenter(0, 0), ctx,
+  void drawSelected(ctx, matrix) {
+    Item.drawSelectedBounds(new Rectangle(_size).setCenter(0, 0), ctx,
         matrix);
   }
-});
+}
