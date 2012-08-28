@@ -175,7 +175,7 @@ class Raster extends PlacedItem {
     if (_canvas != null)
       CanvasProvider.returnCanvas(_canvas);
     _canvas = canvas;
-    _size = Size.create(canvas.width, canvas.height);
+    _size = new Size.create(canvas.width, canvas.height);
     _image = null;
     _context = null;
     _changed(Change.GEOMETRY | Change.PIXELS);
