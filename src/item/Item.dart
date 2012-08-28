@@ -21,6 +21,7 @@ import "./ChangeFlag.dart";
 part "./HitResult.dart";
 part "./Group.dart";
 part "./Layer.dart";
+part "./PlacedItem.dart";
 
 /**
  * @name Item
@@ -651,7 +652,7 @@ class Item extends Callback {
    */
   Map _bounds;
   Map _boundsCache;
-  String _boundsType;
+  Map _boundsType;
   Rectangle _getCachedBounds(String type, [Matrix matrix, cacheItem]) {
     // See if we can cache these bounds. We only cache the bounds
     // transformed with the internally stored _matrix, (the default if no

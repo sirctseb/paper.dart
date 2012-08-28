@@ -23,7 +23,8 @@
  *
  * @extends Item
  */
-var PlacedItem = this.PlacedItem = Item.extend(/** @lends PlacedItem# */{
-  // PlacedItem uses strokeBounds for bounds
-  _boundsType: { bounds: 'strokeBounds' }
-});
+class PlacedItem extends Item {
+  PlacedItem() {
+  	_boundsType = {"bounds": "strokeBounds"};
+  }
+}
