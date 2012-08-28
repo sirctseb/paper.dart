@@ -74,18 +74,21 @@ class PlacedSymbol extends PlacedItem {
    * @type Symbol
    * @bean
    */
-  getSymbol: function() {
-    return this._symbol;
-  },
+  Symbol _symbol;
+  getSymbol() {
+    return _symbol;
+  }
+  Symbol get symbol => _symbol;
 
-  setSymbol: function(symbol) {
+  void setSymbol(Symbol symbol) {
     // Remove from previous symbol's instances
-    if (this._symbol)
-      delete this._symbol._instances[this._id];
-    this._symbol = symbol;
+    if (_symbol != null)
+      _symbol._instances.remove(_id);
+    _symbol = symbol;
     // Add to the new one's
-    symbol._instances[this._id] = this;
-  },
+    symbol._instances[_id] = this;
+  }
+  set symbol(Symbol value) => setSymbol(value);
 
   clone: function() {
     return this._clone(new PlacedSymbol(this.symbol, this._matrix.clone()));
