@@ -121,7 +121,7 @@ class Group extends Item {
 
   setClipped(bool clipped) {
     var child = this.getFirstChild();
-    if (child)
+    if (child != null)
       child.setClipMask(clipped);
     return this;
   }
