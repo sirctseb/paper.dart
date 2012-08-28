@@ -108,9 +108,9 @@ class Layer extends Group {
   }
 
   insertAbove(Item item) {
-    return insert(true, item);
+    return _insert(true, item);
   }
   insertBelow(Item item) {
-    return insert(false, item);
+    return _insert(false, item);
   }
 }
