@@ -703,7 +703,7 @@ class Item extends Callback {
         _bounds = {};
       // Put a separate instance into the cache, so modifications of the
       // returned one won't affect it.
-      _bounds[cache] = bounds.clone();
+      _bounds[cache] = new Rectangle(bounds);
     }
     return bounds;
   }
