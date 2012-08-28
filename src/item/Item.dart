@@ -15,6 +15,7 @@
  */
 library Item;
 import "dart:math";
+import "dart:html";
 import "../core/Core.dart";
 import "../basic/Basic.dart";
 import "./ChangeFlag.dart";
