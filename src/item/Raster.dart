@@ -242,18 +242,18 @@ class Raster extends PlacedItem {
    * @return {RgbColor} the average color contained in the area covered by the
    * specified path, rectangle or point.
    */
-  getAverageColor: function(object) {
+  RgbColor getAverageColor([object]) {
     var bounds, path;
-    if (!object) {
-      bounds = this.getBounds();
-    } else if (object instanceof PathItem) {
+    if (object == null) {
+      bounds = getBounds();
+    } else if (object is PathItem) {
       // TODO: What if the path is smaller than 1 px?
       // TODO: How about rounding of bounds.size?
       path = object;
       bounds = object.getBounds();
-    } else if (object.width) {
+    } else if (object is Rectangle) {
       bounds = new Rectangle(object);
-    } else if (object.x) {
+    } else if (object is Point) {
       // Create a rectangle of 1px size around the specified coordinates
       bounds = Rectangle.create(object.x - 0.5, object.y - 0.5, 1, 1);
     }
@@ -261,12 +261,12 @@ class Raster extends PlacedItem {
     // scaled as a clipping path, and then the actual image is drawn in and
     // sampled.
     var sampleSize = 32,
-      width = Math.min(bounds.width, sampleSize),
-      height = Math.min(bounds.height, sampleSize);
+      width = min(bounds.width, sampleSize),
+      height = min(bounds.height, sampleSize);
     // Reuse the same sample context for speed. Memory consumption is low
     // since it's only 32 x 32 pixels.
     var ctx = Raster._sampleContext;
-    if (!ctx) {
+    if (ctx == null) {
       ctx = Raster._sampleContext = CanvasProvider.getCanvas(
           new Size(sampleSize)).getContext('2d');
     } else {
@@ -276,19 +276,19 @@ class Raster extends PlacedItem {
     ctx.save();
     // Scale the context so that the bounds ends up at the given sample size
     ctx.scale(width / bounds.width, height / bounds.height);
-    ctx.translate(-bounds.x, -bounds.y);
+    ctx.translate(-bounds);
     // If a path was passed, draw it as a clipping mask:
-    if (path)
-      path.draw(ctx, { clip: true });
+    if (path != null)
+      path.draw(ctx, { "clip": true });
     // Now draw the image clipped into it.
-    this._matrix.applyToContext(ctx);
-    ctx.drawImage(this._canvas || this._image,
-        -this._size.width / 2, -this._size.height / 2);
+    _matrix.applyToContext(ctx);
+    ctx.drawImage(_canvas != null ? _canvas : _image,
+        -_size.width / 2, -_size.height / 2);
     ctx.restore();
     // Get pixel data from the context and calculate the average color value
     // from it, taking alpha into account.
-    var pixels = ctx.getImageData(0.5, 0.5, Math.ceil(width),
-        Math.ceil(height)).data,
+    var pixels = ctx.getImageData(0.5, 0.5, ceil(width),
+        ceil(height)).data,
       channels = [0, 0, 0],
       total = 0;
     for (var i = 0, l = pixels.length; i < l; i += 4) {
@@ -302,7 +302,7 @@ class Raster extends PlacedItem {
     for (var i = 0; i < 3; i++)
       channels[i] /= total;
     return total ? Color.read(channels) : null;
-  },
+  }
 
   /**
    * {@grouptitle Pixels}
