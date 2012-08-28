@@ -39,7 +39,7 @@ class Layer extends Group {
    * @example
    * var layer = new Layer();
    */
-  Layer(items) {
+  Layer(items) : super(items) {
     _project = paper.project;
     // Push it onto project.layers and set index:
     _index = this._project.layers.push(this) - 1;
