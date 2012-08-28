@@ -61,17 +61,17 @@ class Raster extends PlacedItem {
     }
   }
 
-  clone: function() {
-    var image = this._image;
-    if (!image) {
+  clone() {
+    var image = _image;
+    if (image == null) {
       // If the Raster contains a Canvas object, we need to create
       // a new one and draw this raster's canvas on it.
-      image = CanvasProvider.getCanvas(this._size);
-      image.getContext('2d').drawImage(this._canvas, 0, 0);
+      image = CanvasProvider.getCanvas(_size);
+      image.getContext('2d').drawImage(_canvas, 0, 0);
     }
     var copy = new Raster(image);
-    return this._clone(copy);
-  },
+    return _clone(copy);
+  }
 
   /**
    * The size of the raster in pixels.
@@ -79,19 +79,21 @@ class Raster extends PlacedItem {
    * @type Size
    * @bean
    */
-  getSize: function() {
-    return this._size;
-  },
+  Size getSize() {
+    return _size;
+  }
+  Size get size => _size;
 
-  setSize: function() {
-    var size = Size.read(arguments),
-      // Get reference to image before changing canvas
-      image = this.getImage();
+  void setSize(size) {
+    Size size = Size.read(size);
+    // Get reference to image before changing canvas
+    Image image = getImage();
     // Setting canvas internally sets _size
-    this.setCanvas(CanvasProvider.getCanvas(size));
+    setCanvas(CanvasProvider.getCanvas(size));
     // Draw image back onto new canvas
-    this.getContext(true).drawImage(image, 0, 0, size.width, size.height);
-  },
+    getContext(true).drawImage(image, 0, 0, size.width, size.height);
+  }
+  void set size(Size value) => setSize(value);
 
   /**
    * The width of the raster in pixels.
