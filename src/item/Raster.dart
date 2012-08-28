@@ -158,24 +158,26 @@ class Raster extends PlacedItem {
   }
   void set context(Context value) setContext(value);
 
-  getCanvas: function() {
-    if (!this._canvas) {
-      this._canvas = CanvasProvider.getCanvas(this._size);
-      if (this._image)
-        this.getContext(true).drawImage(this._image, 0, 0);
+  Canvas getCanvas() {
+    if (_canvas == null) {
+      _canvas = CanvasProvider.getCanvas(_size);
+      if (_image != null)
+        getContext(true).drawImage(_image, 0, 0);
     }
-    return this._canvas;
-  },
+    return _canvas;
+  }
+  Canvas get canvas => getCanvas();
 
-  setCanvas: function(canvas) {
-    if (this._canvas)
-      CanvasProvider.returnCanvas(this._canvas);
-    this._canvas = canvas;
-    this._size = Size.create(canvas.width, canvas.height);
-    this._image = null;
-    this._context = null;
-    this._changed(Change.GEOMETRY | Change.PIXELS);
-  },
+  void setCanvas(Canvas canvas) {
+    if (_canvas != null)
+      CanvasProvider.returnCanvas(_canvas);
+    _canvas = canvas;
+    _size = Size.create(canvas.width, canvas.height);
+    _image = null;
+    _context = null;
+    _changed(Change.GEOMETRY | Change.PIXELS);
+  }
+  set canvas(Canvas value) setCanvas(value);
 
   /**
    * The HTMLImageElement or Canvas of the raster.
