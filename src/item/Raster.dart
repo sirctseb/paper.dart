@@ -185,24 +185,26 @@ class Raster extends PlacedItem {
    * @type HTMLImageElement|Canvas
    * @bean
    */
-  getImage: function() {
-    return this._image || this.getCanvas();
-  },
+  Image getImage() {
+    return _image != null ? _image : getCanvas();
+  }
+  Image get image => getImage();
 
   // TODO: Support string id of image element.
-  setImage: function(image) {
-    if (this._canvas)
-      CanvasProvider.returnCanvas(this._canvas);
-    this._image = image;
+  void setImage(Image image) {
+    if (_canvas != null)
+      CanvasProvider.returnCanvas(_canvas);
+    _image = image;
 /*#*/ if (options.browser) {
-    this._size = Size.create(image.naturalWidth, image.naturalHeight);
+    _size = Size.create(image.naturalWidth, image.naturalHeight);
 /*#*/ } else if (options.server) {
-    this._size = Size.create(image.width, image.height);
+    _size = Size.create(image.width, image.height);
 /*#*/ } // options.server
-    this._canvas = null;
-    this._context = null;
-    this._changed(Change.GEOMETRY);
-  },
+    _canvas = null;
+    _context = null;
+    _changed(Change.GEOMETRY);
+  }
+  set image(Image value) => setImage(value);
 
   // DOCS: document Raster#getSubImage
   /**
