@@ -248,7 +248,8 @@ class Raster extends PlacedItem {
    * specified path, rectangle or point.
    */
   RgbColor getAverageColor([object]) {
-    var bounds, path;
+    Rectangle bounds;
+    PathItem path;
     if (object == null) {
       bounds = getBounds();
     } else if (object is PathItem) {
