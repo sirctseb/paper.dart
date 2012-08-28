@@ -161,6 +161,7 @@ class Raster extends PlacedItem {
   }
   set context(Context value) => setContext(value);
 
+  Canvas _canvas;
   Canvas getCanvas() {
     if (_canvas == null) {
       _canvas = CanvasProvider.getCanvas(_size);
