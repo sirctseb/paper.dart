@@ -397,23 +397,22 @@ class Raster extends PlacedItem {
     getContext(true).putImageData(data, point.x, point.y);
   }
 
-  _getBounds: function(type, matrix) {
-    var rect = new Rectangle(this._size).setCenter(0, 0);
+  Rectangle _getBounds(type, matrix) {
+    var rect = new Rectangle(_size).setCenter(0, 0);
     return matrix ? matrix._transformBounds(rect) : rect;
-  },
+  }
 
-  _hitTest: function(point, options) {
-    if (point.isInside(this._getBounds())) {
-      var that = this;
-      return new HitResult('pixel', that, {
-        offset: point.add(that._size.divide(2)).round(),
+  _hitTest(point, options) {
+    if (point.isInside(_getBounds())) {
+      return new HitResult('pixel', this, {
+        "offset": point.add(_size.divide(2)).round(),
         // Becomes HitResult#color
-        getColor: function() {
-          return that.getPixel(this.offset);
+        "getColor": () {
+          return getPixel(offset);
         }
-      });
+      }
     }
-  },
+  }
 
   draw: function(ctx, param) {
     ctx.drawImage(this._canvas || this._image,
