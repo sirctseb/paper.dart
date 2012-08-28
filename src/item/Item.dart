@@ -19,6 +19,7 @@
 #source("./ChangeFlag.dart");
 #source("./HitResult.dart");
 #source("./Group.dart");
+#source("./Layer.dart");
 
 /**
  * @name Item
