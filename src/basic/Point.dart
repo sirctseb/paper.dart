@@ -497,7 +497,7 @@ class Point {
     num x = point.x - this.x;
     num y = point.y - this.y;
     num d = x * x + y * y;
-    return squared ? d : Math.sqrt(d);
+    return squared ? d : sqrt(d);
   }
 
   /**
@@ -514,18 +514,18 @@ class Point {
     // squared length should be returned. Hide it so it produces a bean
     // property called #length.
     var l = x * x + y * y;
-    return square ? l : Math.sqrt(l);
+    return square ? l : sqrt(l);
   }
   // property getter for length
-  num get length => Math.sqrt(x*x + y*y);
+  num get length => sqrt(x*x + y*y);
 
   Point setLength(num length) {
     // TODO: Whenever setting x/y, use #set() instead of direct assignment,
     // so LinkedPoint does not report changes twice.
     if (isZero()) {
       num angle = this.angle;
-      x = Math.cos(angle) * length;
-      y = Math.cos(angle) * length;
+      x = cos(angle) * length;
+      y = cos(angle) * length;
     } else {
       var scale = length / this.length;
       // Force calculation of angle now, so it will be preserved even when
@@ -585,7 +585,7 @@ class Point {
    */
   num getAngle([/*Point*/ point]) {
     // Hide parameters from Bootstrap so it injects bean too
-    _angle = getAngleInRadians(point) * 180 / Math.PI;
+    _angle = getAngleInRadians(point) * 180 / PI;
     return _angle;
   }
   // backing field
@@ -594,13 +594,13 @@ class Point {
   num get angle => getAngle();
 
   Point setAngle(angle) {
-    angle = this._angle = angle * Math.PI / 180;
+    angle = this._angle = angle * PI / 180;
     if (!isZero()) {
       var length = this.getLength();
       // TODO Use #set() instead of direct assignment of x/y, so LinkedPoint
       // does not report changes twice.
-      _x = Math.cos(angle) * length;
-      _y = Math.sin(angle) * length;
+      _x = cos(angle) * length;
+      _y = sin(angle) * length;
     }
     return this;
   }
@@ -630,7 +630,7 @@ class Point {
     // Hide parameters from Bootstrap so it injects bean too
     if (point == null) {
       if (_angle == null)
-        _angle = Math.atan2(y, x);
+        _angle = atan2(y, x);
       return _angle;
     } else {
       point = Point.read(point);
@@ -638,7 +638,7 @@ class Point {
       if (div == 0) {
         return double.NAN;
       } else {
-        return Math.acos(this.dot(point) / div);
+        return acos(this.dot(point) / div);
       }
     }
   }
@@ -692,7 +692,7 @@ class Point {
    */
   num getDirectedAngle(/*Point*/ point) {
     point = Point.read(point);
-    return Math.atan2(cross(point), dot(point)) * 180 / Math.PI;
+    return atan2(cross(point), dot(point)) * 180 / PI;
   }
 
   /**
@@ -707,10 +707,10 @@ class Point {
    * @returns {Point} the rotated point
    */
   Point rotate(num angle, [Point center = null]) {
-    angle = angle * Math.PI / 180;
+    angle = angle * PI / 180;
     Point point = center != null ? this - center : this;
-    num s = Math.sin(angle);
-    num c = Math.cos(angle);
+    num s = sin(angle);
+    num c = cos(angle);
     point = new Point.create(
       point.x * c - point.y * s,
       point.y * c + point.x * s
@@ -877,8 +877,8 @@ class Point {
     point1 = Point.read(point1);
     point2 = Point.read(point2);
     return new Point.create(
-      Math.min(point1.x, point2.x),
-      Math.min(point1.y, point2.y)
+      min(point1.x, point2.x),
+      min(point1.y, point2.y)
     );
   }
 
@@ -901,8 +901,8 @@ class Point {
     point1 = Point.read(point1);
     point2 = Point.read(point2);
     return new Point.create(
-      Math.max(point1.x, point2.x),
-      Math.max(point1.y, point2.y)
+      max(point1.x, point2.x),
+      max(point1.y, point2.y)
     );
   }
 
