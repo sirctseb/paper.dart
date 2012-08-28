@@ -22,7 +22,7 @@
  *
  * @extends PlacedItem
  */
-var PlacedSymbol = this.PlacedSymbol = PlacedItem.extend(/** @lends PlacedSymbol# */{
+class PlacedSymbol extends PlacedItem {
   /**
    * Creates a new PlacedSymbol Item.
    *
@@ -61,10 +61,12 @@ var PlacedSymbol = this.PlacedSymbol = PlacedItem.extend(/** @lends PlacedSymbol
    *     instance.scale(0.25 + Math.random() * 0.75);
    * }
    */
-  initialize: function(symbol, pointOrMatrix) {
+  PlacedSymbol (/*Symbol*/ symbol, [pointOrMatrix]) {
+    // TODO figure out what base does
     this.base(pointOrMatrix);
-    this.setSymbol(symbol instanceof Symbol ? symbol : new Symbol(symbol));
-  },
+
+    setSymbol(symbol is Symbol ? symbol : new Symbol(symbol));
+  }
 
   /**
    * The symbol that the placed symbol refers to.
@@ -106,4 +108,4 @@ var PlacedSymbol = this.PlacedSymbol = PlacedItem.extend(/** @lends PlacedSymbol
   }
 
   // TODO: PlacedSymbol#embed()
-});
+}
