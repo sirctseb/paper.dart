@@ -17,6 +17,9 @@
 #import("../core/Core.dart");
 #import("../basic/Basic.dart");
 #source("./ChangeFlag.dart");
+#source("./HitResult.dart");
+#source("./Group.dart");
+#source("./Layer.dart");
 
 /**
  * @name Item
