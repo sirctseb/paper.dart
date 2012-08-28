@@ -469,6 +469,9 @@ class Point {
     return new Point.create(-x, -y);
   }
   // TODO implement operator version once they push the language changes
+  Point operator negate() {
+    return negate();
+  }
 
   /**
    * Transforms the point by the matrix as a new point. The object itself
