@@ -101,9 +101,10 @@ class Raster extends PlacedItem {
    * @type Number
    * @bean
    */
-  getWidth: function() {
-    return this._size.width;
-  },
+  num getWidth() {
+    return _size.width;
+  }
+  num get width => getWidth();
 
   /**
    * The height of the raster in pixels.
@@ -111,9 +112,10 @@ class Raster extends PlacedItem {
    * @type Number
    * @bean
    */
-  getHeight: function() {
-    return this._size.height;
-  },
+  num getHeight() {
+    return _size.height;
+  }
+  num get height => getHeight();
 
   /**
    * Pixels per inch of the raster at its current size.
@@ -121,8 +123,8 @@ class Raster extends PlacedItem {
    * @type Size
    * @bean
    */
-  getPpi: function() {
-    var matrix = this._matrix,
+  Size getPpi() {
+    var matrix = _matrix,
       orig = new Point(0, 0).transform(matrix),
       u = new Point(1, 0).transform(matrix).subtract(orig),
       v = new Point(0, 1).transform(matrix).subtract(orig);
@@ -130,7 +132,8 @@ class Raster extends PlacedItem {
       72 / u.getLength(),
       72 / v.getLength()
     );
-  },
+  }
+  Size get ppi => getPpi();
 
   /**
    * The Canvas 2d drawing context of the raster.
