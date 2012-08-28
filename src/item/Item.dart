@@ -16,7 +16,7 @@
 library Item;
 import "../core/Core.dart";
 import "../basic/Basic.dart";
-part "./ChangeFlag.dart";
+import "./ChangeFlag.dart";
 part "./HitResult.dart";
 part "./Group.dart";
 part "./Layer.dart";

@@ -17,11 +17,11 @@ library Color;
 import "../basic/Basic.dart";
 import "../core/Core.dart";
 import "../util/CanvasProvider.dart";
+import "../item/ChangeFlag.dart";
 import "dart:core";
 part "./GradientStop.dart";
 part "./Gradient.dart";
 part "./GradientColor.dart";
-part "../item/ChangeFlag.dart";
 
 /**
  * @name Color

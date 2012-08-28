@@ -1,6 +1,4 @@
-part of Item.dart;
-
-part of Color.dart;
+library Change;
 
 /*
  * Paper.js
