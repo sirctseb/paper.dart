@@ -90,23 +90,23 @@ class PlacedSymbol extends PlacedItem {
   }
   set symbol(Symbol value) => setSymbol(value);
 
-  clone: function() {
-    return this._clone(new PlacedSymbol(this.symbol, this._matrix.clone()));
-  },
+  clone() {
+    return _clone(new PlacedSymbol(symbol, _matrix.clone()));
+  }
 
-  _getBounds: function(type, matrix) {
+  _getBounds(type, matrix) {
     // Redirect the call to the symbol definition to calculate the bounds
     // TODO: Implement bounds caching through passing on of cacheItem, so
     // that Symbol#_changed() notification become unnecessary!
-    return this.symbol._definition._getCachedBounds(type, matrix);
-  },
+    return symbol._definition._getCachedBounds(type, matrix);
+  }
 
-  draw: function(ctx, param) {
-    Item.draw(this.symbol._definition, ctx, param);
-  },
+  draw(ctx, param) {
+    Item.draw(symbol._definition, ctx, param);
+  }
 
-  drawSelected: function(ctx, matrix) {
-    Item.drawSelectedBounds(this.symbol._definition.getBounds(), ctx,
+  drawSelected(ctx, matrix) {
+    Item.drawSelectedBounds(symbol._definition.getBounds(), ctx,
         matrix);
   }
 
