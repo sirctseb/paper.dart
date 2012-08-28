@@ -897,6 +897,7 @@ class Point {
    * var maxPoint = Point.max(point1, point2);
    * print(maxPoint); // {x: 200, y: 100}
    */
+  // TODO Point.max and Point.min mask Math:max and min
   static Point max(/*Point*/ point1, /*Point*/ point2) {
     point1 = Point.read(point1);
     point2 = Point.read(point2);

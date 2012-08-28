@@ -756,10 +756,10 @@ class Rectangle {
    */
   Rectangle intersect(/*Rectangle*/ rect) {
     rect = Rectangle.read(rect);
-    num x1 = Math.max(this.x, rect.x);
-    num y1 = Math.max(this.y, rect.y);
-    num x2 = Math.min(this.x + this.width, rect.x + rect.width);
-    num y2 = Math.min(this.y + this.height, rect.y + rect.height);
+    num x1 = max(this.x, rect.x);
+    num y1 = max(this.y, rect.y);
+    num x2 = min(this.x + this.width, rect.x + rect.width);
+    num y2 = min(this.y + this.height, rect.y + rect.height);
     return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
@@ -773,10 +773,10 @@ class Rectangle {
    */
   Rectangle unite(/*Rectangle*/ rect) {
     rect = Rectangle.read(rect);
-    num x1 = Math.min(this.x, rect.x);
-    num y1 = Math.min(this.y, rect.y);
-    num x2 = Math.max(this.x + this.width, rect.x + rect.width);
-    num y2 = Math.max(this.y + this.height, rect.y + rect.height);
+    num x1 = min(this.x, rect.x);
+    num y1 = min(this.y, rect.y);
+    num x2 = max(this.x + this.width, rect.x + rect.width);
+    num y2 = max(this.y + this.height, rect.y + rect.height);
     return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
@@ -796,10 +796,10 @@ class Rectangle {
    */
   Rectangle include(/*Point*/ point) {
     point = Point.read(point);
-    num x1 = Math.min(this.x, point.x);
-    num y1 = Math.min(this.y, point.y);
-    num x2 = Math.max(this.x + this.width, point.x);
-    num y2 = Math.max(this.y + this.height, point.y);
+    num x1 = min(this.x, point.x);
+    num y1 = min(this.y, point.y);
+    num x2 = max(this.x + this.width, point.x);
+    num y2 = max(this.y + this.height, point.y);
     return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
