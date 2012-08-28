@@ -1,4 +1,4 @@
-part of Color.dart;
+part of Color;
 
 /*
  * Paper.js
