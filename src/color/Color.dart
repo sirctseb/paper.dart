@@ -13,15 +13,15 @@
  *
  * All rights reserved.
  */
-#library("Color.dart");
-#import("../basic/Basic.dart");
-#import("../core/Core.dart");
-#import("../util/CanvasProvider.dart");
-#import("dart:core");
-#source("./GradientStop.dart");
-#source("./Gradient.dart");
-#source("./GradientColor.dart");
-#source("../item/ChangeFlag.dart");
+library Color;
+import "../basic/Basic.dart";
+import "../core/Core.dart";
+import "../util/CanvasProvider.dart";
+import "dart:core";
+part "./GradientStop.dart";
+part "./Gradient.dart";
+part "./GradientColor.dart";
+part "../item/ChangeFlag.dart";
 
 /**
  * @name Color
@@ -60,30 +60,30 @@ class Color {
   Map<String, num> _components;
 
   // gray components
-  num get _gray() => _components["gray"];
+  num get _gray => _components["gray"];
   set _gray(num value) => _components["gray"] = value;
   
   // Rgb components
   //num _red, _green, _blue;
-  num get _red() => _components["red"];
+  num get _red => _components["red"];
   set _red(num value) => _components["red"] = value;
-  num get _green() => _components["green"];
+  num get _green => _components["green"];
   set _green(num value) => _components["green"] = value;
-  num get _blue() => _components["blue"];
+  num get _blue => _components["blue"];
   set _blue(num value) => _components["blue"] = value;
 
   // hsb components
   //num _hue, _saturation, _brightness;
-  num get _hue() => _components["hue"];
+  num get _hue => _components["hue"];
   set _hue(num value) => _components["hue"] = value;
-  num get _saturation() => _components["saturation"];
+  num get _saturation => _components["saturation"];
   set _saturation(num value) => _components["saturation"] = value;
-  num get _brightness() => _components["brightness"];
+  num get _brightness => _components["brightness"];
   set _brightness(num value) => _components["brightness"] = value;
 
   // hsl components
   //num _lightness;
-  num get _lightness() => _components["lightness"];
+  num get _lightness => _components["lightness"];
   set _lightness(num value) => _components["lightness"] = value;
 
   // remembers which components are currently definitive
@@ -126,7 +126,7 @@ class Color {
   }
   
   // Gray accessors
-  num get gray() {
+  num get gray {
     // if we don't have gray ready, compute it
     if(_gray == null) {
       GrayColor color = this.convert("gray");
@@ -146,7 +146,7 @@ class Color {
       _green = color.green;
   }
   // Rgb accessors
-  num get red() {
+  num get red {
     if(_red == null) {
       _updateRgb();
     }
@@ -155,7 +155,7 @@ class Color {
   set red(num value) {
     setValue("red", "rgb", value);
   }
-  num get blue() {
+  num get blue {
     if(_blue == null) {
       _updateRgb();
     }
@@ -165,7 +165,7 @@ class Color {
     setValue("blue", "rgb", value);
   }
 
-  num get green() {
+  num get green {
     if(_green == null) {
       _updateRgb();
     }
@@ -184,7 +184,7 @@ class Color {
   }
 
   // hsb accessors
-  num get hue() {
+  num get hue {
     if(_hue == null) {
       _updateHsb();
     }
@@ -194,7 +194,7 @@ class Color {
     setValue("hue", "hsb", value, true);
   }
 
-  num get saturation() {
+  num get saturation {
     if(_saturation == null) {
       _updateHsb();
     }
@@ -204,7 +204,7 @@ class Color {
     setValue("saturation", _type == "hsl" ? "hsl" : "hsb", value);
   }
 
-  num get brightness() {
+  num get brightness {
     if(_brightness == null) {
       _updateHsb();
     }
@@ -222,7 +222,7 @@ class Color {
     _lightness = color.lightness;
   }
   // hsl accessors
-  num get lightness() {
+  num get lightness {
     if(_lightness == null) {
       _updateHsl();
       return _lightness;
@@ -233,7 +233,7 @@ class Color {
   }
 
   // alpha accessors
-  num get alpha() => _alpha == null ? 1 : _alpha;
+  num get alpha => _alpha == null ? 1 : _alpha;
   set alpha(num value) {
     _alpha = value == null ? null : _clampUnit(value);
     _cssString = null;

@@ -1,3 +1,5 @@
+part of Item.dart;
+
 /*
  * Paper.js
  *

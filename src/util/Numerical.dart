@@ -14,7 +14,7 @@
  * All rights reserved.
  */
 
-#library("Numerical.dart");
+library Numerical;
 
 class Numerical {
 

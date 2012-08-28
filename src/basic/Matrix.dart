@@ -1,3 +1,5 @@
+part of Basic.dart;
+
 /*
  * Paper.js
  *
@@ -249,8 +251,8 @@ class Matrix {
    * @name Matrix#scaleX
    * @type Number
    */
-  num get a() => _a;
-  num get scaleX() => _a;
+  num get a => _a;
+  num get scaleX => _a;
 
   /**
    * The scaling factor in the y-direction ({@code d}).
@@ -258,8 +260,8 @@ class Matrix {
    * @name Matrix#scaleY
    * @type Number
    */
-  num get d() => _d;
-  num get scaleY() => _d;
+  num get d => _d;
+  num get scaleY => _d;
 
   /**
    * @return {Number} The shear factor in the x-direction ({@code b}).
@@ -267,8 +269,8 @@ class Matrix {
    * @name Matrix#shearX
    * @type Number
    */
-  num get b() => _b;
-  num get shearX() => _b;
+  num get b => _b;
+  num get shearX => _b;
 
   /**
    * @return {Number} The shear factor in the y-direction ({@code c}).
@@ -276,8 +278,8 @@ class Matrix {
    * @name Matrix#shearY
    * @type Number
    */
-  num get c() => _c;
-  num get shearY() => _c;
+  num get c => _c;
+  num get shearY => _c;
 
   /**
    * The translation in the x-direction ({@code tx}).
@@ -285,8 +287,8 @@ class Matrix {
    * @name Matrix#translateX
    * @type Number
    */
-  num get tx() => _tx;
-  num get translateX() => _tx;
+  num get tx => _tx;
+  num get translateX => _tx;
 
   /**
    * The translation in the y-direction ({@code ty}).
@@ -294,8 +296,8 @@ class Matrix {
    * @name Matrix#translateY
    * @type Number
    */
-  num get ty() => _ty;
-  num get translateY() => _ty;
+  num get ty => _ty;
+  num get translateY => _ty;
 
   /**
    * The transform values as an array, in the same sequence as they are passed
@@ -307,7 +309,7 @@ class Matrix {
   List<num> getValues() {
     return [ _a, _c, _b, _d, _tx, _ty ];
   }
-  List<num> get values() => getValues();
+  List<num> get values => getValues();
 
   /**
    * Concatenates an affine transform to this transform.

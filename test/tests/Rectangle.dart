@@ -1,3 +1,5 @@
+part of paper.dart.test;
+
 /*
  * Paper.js
  *

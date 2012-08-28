@@ -1,3 +1,5 @@
+part of Basic.dart;
+
 /*
  * Paper.dart
  *
@@ -58,7 +60,7 @@ class Line /** @lends Line# */ {
    * @name Line#point
    * @type Point
    */
-   Point get point() => _point1;
+   Point get point => _point1;
 
   /**
    * The vector of the line
@@ -66,7 +68,7 @@ class Line /** @lends Line# */ {
    * @name Line#vector
    * @type Point
    */
-   Point get vector() => _vector;
+   Point get vector => _vector;
 
   /**
    * Specifies whether the line extends infinitely
@@ -74,7 +76,7 @@ class Line /** @lends Line# */ {
    * @name Line#infinite
    * @type Boolean
    */
-   bool get infinite() => _infinite;
+   bool get infinite => _infinite;
 
   /**
    * @param {Line} line

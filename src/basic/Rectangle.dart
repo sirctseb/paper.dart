@@ -1,3 +1,5 @@
+part of Basic.dart;
+
 /*
  * Paper.js
  *
@@ -115,7 +117,7 @@ class Rectangle {
    * @type Number
    */
   void setX(num value) { _x = value; }
-  num get x() => _x;
+  num get x => _x;
       set x(num value) => _x = value;
 
   /**
@@ -125,7 +127,7 @@ class Rectangle {
    * @type Number
    */
   void setY(num value) { _y = value; }
-  num get y() => _y;
+  num get y => _y;
       set y(num value) => _y = value;
 
   /**
@@ -134,7 +136,7 @@ class Rectangle {
    * @name Rectangle#width
    * @type Number
    */
-  num get width() => _width;
+  num get width => _width;
       set width(num value) => _width = value;
 
   /**
@@ -143,7 +145,7 @@ class Rectangle {
    * @name Rectangle#height
    * @type Number
    */
-  num get height() => _height;
+  num get height => _height;
       set height(num value) => _height = value;
 
   // DOCS: why does jsdocs document this function, when there are no comments?
@@ -171,7 +173,7 @@ class Rectangle {
         dontLink);
   }
   // point property
-  Point get point() => getPoint();
+  Point get point => getPoint();
 
   Rectangle setPoint(/*Point*/ point) {
     point = Point.read(point);
@@ -194,7 +196,7 @@ class Rectangle {
         dontLink);
   }
   // property
-  Size get size() => getSize();
+  Size get size => getSize();
 
   Rectangle setSize(/*Size*/ size) {
     size = Size.read(size);
@@ -218,7 +220,7 @@ class Rectangle {
     return x;
   }
   // property
-  num get left() => x;
+  num get left => x;
 
   Rectangle setLeft(num left) {
     width -= left - x;
@@ -239,7 +241,7 @@ class Rectangle {
     return y;
   }
   // property
-  num get top() => y;
+  num get top => y;
 
   Rectangle setTop(num top) {
     height -= top - y;
@@ -260,7 +262,7 @@ class Rectangle {
     return x + width;
   }
   // property
-  num get right() => getRight();
+  num get right => getRight();
 
   Rectangle setRight(num right) {
     width = right - x;
@@ -280,7 +282,7 @@ class Rectangle {
     return y + height;
   }
   // property
-  num get bottom() => getBottom();
+  num get bottom => getBottom();
 
   Rectangle setBottom(num bottom) {
     height = bottom - y;
@@ -300,7 +302,7 @@ class Rectangle {
     return x + width * 0.5;
   }
   // property
-  num get centerX() => getCenterX();
+  num get centerX => getCenterX();
 
   Rectangle setCenterX(num x) {
     this.x = x - width * 0.5;
@@ -320,7 +322,7 @@ class Rectangle {
     return y + height * 0.5;
   }
   // property
-  num get centerY() => getCenterY();
+  num get centerY => getCenterY();
 
   Rectangle setCenterY(y) {
     this.y = y - height * 0.5;
@@ -342,7 +344,7 @@ class Rectangle {
         getCenterX(), getCenterY(), dontLink);
   }
   // property
-  Point get center() => getCenter();
+  Point get center => getCenter();
 
   Rectangle setCenter(/*Point*/ point) {
     point = Point.read(point);
@@ -375,7 +377,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setTopLeft, getLeft(), getTop(), dontLink);
   }
   // property
-  Point get topLeft() => getTopLeft();
+  Point get topLeft => getTopLeft();
 
   Rectangle setTopLeft(/*Point*/ point) {
     point = Point.read(point);
@@ -394,7 +396,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setTopRight, getRight(), getTop(), dontLink);
   }
   // property
-  Point get topRight() => getTopRight();
+  Point get topRight => getTopRight();
 
   Rectangle setTopRight(/*Point*/ point) {
     point = Point.read(point);
@@ -413,7 +415,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setBottomLeft, getLeft(), getBottom(), dontLink);
   }
   // property
-  Point get bottomLeft() => getBottomLeft();
+  Point get bottomLeft => getBottomLeft();
 
   Rectangle setBottomLeft(/*Point*/ point) {
     point = Point.read(point);
@@ -432,7 +434,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setBottomRight, getRight(), getBottom(), dontLink);
   }
   // property
-  Point get bottomRight() => getBottomRight();
+  Point get bottomRight => getBottomRight();
 
   Rectangle setBottomRight(/*Point*/ point) {
     point = Point.read(point);
@@ -451,7 +453,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setLeftCenter, getLeft(), getCenterY(), dontLink);
   }
   // property
-  Point get leftCenter() => getLeftCenter();
+  Point get leftCenter => getLeftCenter();
 
   Rectangle setLeftCenter(/*Point*/ point) {
     point = Point.read(point);
@@ -470,7 +472,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setTopCenter, getCenterX(), getTop(), dontLink);
   }
   // property
-  Point get topCenter() => getTopCenter();
+  Point get topCenter => getTopCenter();
 
   Rectangle setTopCenter(/*Point*/ point) {
     point = Point.read(point);
@@ -489,7 +491,7 @@ class Rectangle {
     return new LinkedPoint.create(this, setRightCenter, getRight(), getCenterY(), dontLink);
   }
   // property
-  Point get rightCenter() => getRightCenter();
+  Point get rightCenter => getRightCenter();
 
   Rectangle setRightCenter(/*Point*/ point) {
     point = Point.read(point);
@@ -508,7 +510,7 @@ class Rectangle {
    return new LinkedPoint.create(this, setBottomCenter, getCenterX(), getBottom(), dontLink);
   }
   // property
-  Point get bottomCenter() => getBottomCenter();
+  Point get bottomCenter => getBottomCenter();
   
   Rectangle setBottomCenter(/*Point*/ point) {
     point = Point.read(point);

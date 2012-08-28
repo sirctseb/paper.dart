@@ -13,13 +13,13 @@
  *
  * All rights reserved.
  */
-#library("Item.dart");
-#import("../core/Core.dart");
-#import("../basic/Basic.dart");
-#source("./ChangeFlag.dart");
-#source("./HitResult.dart");
-#source("./Group.dart");
-#source("./Layer.dart");
+library Item;
+import "../core/Core.dart";
+import "../basic/Basic.dart";
+part "./ChangeFlag.dart";
+part "./HitResult.dart";
+part "./Group.dart";
+part "./Layer.dart";
 
 /**
  * @name Item
@@ -98,23 +98,23 @@ class Item extends Callback {
       _project.view.detach("frame", _onFrame);
     }
   }
-  get onFrame() => getEvent("frame");
+  get onFrame => getEvent("frame");
   set onFrame(value) => setEvent("frame", value);
-  get onMouseDown() => getEvent("mousedown"); // TODO capitalization on these?
+  get onMouseDown => getEvent("mousedown"); // TODO capitalization on these?
   set onMouseDown(value) => setEvent("mousedown", value);
-  get onMouseUp() => getEvent("mouseup");
+  get onMouseUp => getEvent("mouseup");
   set onMouseUp(value) => setEvent("mouseup", value);
-  get onMouseDrag() => getEvent("mousedrag");
+  get onMouseDrag => getEvent("mousedrag");
   set onMouseDrag(value) => setEvent("mousedrag", value);
-  get onClick() => getEvent("click");
+  get onClick => getEvent("click");
   set onClick(value) => setEvent("click", value);
-  get onDoubleClick() => getEvent("doubleclick");
+  get onDoubleClick => getEvent("doubleclick");
   set onDoubleClick(value) => setEvent("doubleclick", value);
-  get onMouseMove() => getEvent("mousemove");
+  get onMouseMove => getEvent("mousemove");
   set onMouseMove(value) => setEvent("mousemove", value);
-  get onMouseEnter() => getEvent("mouseenter");
+  get onMouseEnter => getEvent("mouseenter");
   set onMouseEnter(value) => setEvent("mouseenter", value);
-  get onMouseLeave() => getEvent("mouseleave");
+  get onMouseLeave => getEvent("mouseleave");
   set onMouseLeave(value) => setEvent("mouseleave", value);
 
   Map _eventTypes;
@@ -225,7 +225,7 @@ class Item extends Callback {
     return _id;
   }
   // property
-  int get id() => _id;
+  int get id => _id;
 
   /**
    * The name of the item. If the item has a name, it can be accessed by name
@@ -251,7 +251,7 @@ class Item extends Callback {
     return _name;
   }
   // property
-  String get name() => _name;
+  String get name => _name;
 
   void setName(String name) {
     // Note: Don't check if the name has changed and bail out if it has not,
@@ -325,7 +325,7 @@ class Item extends Callback {
    */
   PathStyle _style;
   PathStyle getStyle() => _style;
-  PathStyle get style() => getStyle();
+  PathStyle get style => getStyle();
   void setStyle(Style style) {
     _style = style;
   }
@@ -346,7 +346,7 @@ class Item extends Callback {
    * @ignore
    */
   bool _locked; // = false;
-  bool get locked() => _locked;
+  bool get locked => _locked;
   set locked(bool locked) {
     if(_locked != locked) {
       _locked = locked;
@@ -371,7 +371,7 @@ class Item extends Callback {
    * path.visible = false;
    */
   bool _visible; // = true;
-  bool get visible() => _visible;
+  bool get visible => _visible;
   set visible(bool visible) {
     if(_visible != visible) {
       _visible = visible;
@@ -407,7 +407,7 @@ class Item extends Callback {
    * circle2.blendMode = 'multiply';
    */
   String _blendMode; //= 'normal';
-  String get blendMode() => _blendMode;
+  String get blendMode => _blendMode;
   set blendMode(String blendMode) {
     if(_blendMode != blendMode) {
       _blendMode = blendMode;
@@ -438,7 +438,7 @@ class Item extends Callback {
    * circle2.opacity = 0.5;
    */
   num _opacity; //= 1;
-  num get opacity() => _opacity;
+  num get opacity => _opacity;
   set opacity(num opacity) {
     if(_opacity != opacity) {
       _opacity = opacity;
@@ -457,7 +457,7 @@ class Item extends Callback {
    */
   // TODO why is does this have @type Number and @default 1?
   bool _guide; // = false;
-  bool get guide() => _guide;
+  bool get guide => _guide;
   set guide(bool guide) {
     if(_guide != guide) {
       _guide = guide;
@@ -496,7 +496,7 @@ class Item extends Callback {
     }
     return _selected;
   }
-  bool get selected() => isSelected();
+  bool get selected => isSelected();
 
   void setSelected(bool selected, [bool noChildren = false]) {
     // Don't recursively call #setSelected() if it was called with
@@ -545,7 +545,7 @@ class Item extends Callback {
   bool isClipMask() {
     return _clipMask;
   }
-  bool get clipMask() => _clipMask;
+  bool get clipMask => _clipMask;
 
   void setClipMask(bool clipMask) {
     // On-the-fly conversion to boolean:
@@ -614,7 +614,7 @@ class Item extends Callback {
     return dontLink ? pos
         : new LinkedPoint.create(this, setPosition, pos.x, pos.y);
   }
-  Point get position() => getPosition();
+  Point get position => getPosition();
 
   void setPosition(/*Point*/ point) {
     // Calculate the distance to the current position, by which to
@@ -635,7 +635,7 @@ class Item extends Callback {
   Matrix getMatrix() {
     return _matrix;
   }
-  Matrix get matrix() => _matrix;
+  Matrix get matrix => _matrix;
 
   void setMatrix(Matrix matrix) {
     // Use Matrix#initialize to easily copy over values.
@@ -809,7 +809,7 @@ class Item extends Callback {
    * @bean
    */
    Rectangle getBounds([Matrix matrix]) => boundsAccessor("bounds", matrix);
-   Rectangle get bounds() => getBounds();
+   Rectangle get bounds => getBounds();
 
   /**
    * The bounding rectangle of the item including stroke width.
@@ -819,7 +819,7 @@ class Item extends Callback {
    * @bean
    */
    Rectangle getStrokeBounds([Matrix matrix]) => boundsAccessor("strokeBounds", matrix);
-   Rectangle get strokeBounds() => getStrokeBounds();
+   Rectangle get strokeBounds => getStrokeBounds();
 
   /**
    * The bounding rectangle of the item including handles.
@@ -829,7 +829,7 @@ class Item extends Callback {
    * @bean
    */
    Rectangle getHandleBounds([Matrix matrix]) => boundsAccessor("handleBounds", matrix);
-   Rectangle get handleBounds() => getHandleBounds();
+   Rectangle get handleBounds => getHandleBounds();
 
   /**
    * TODO typo below shure-> sure. submit pull request?
@@ -842,7 +842,7 @@ class Item extends Callback {
    * @ignore
    */
    Rectangle getRoughBounds([Matrix matrix]) => boundsAccessor("roughBounds", matrix);
-   Rectangle get roughBounds() => getRoughBounds();
+   Rectangle get roughBounds => getRoughBounds();
 
   /**
    * {@grouptitle Project Hierarchy}
@@ -855,7 +855,7 @@ class Item extends Callback {
   Project getProject() {
     return _project;
   }
-  Project get project() => _project;
+  Project get project => _project;
 
   void _setProject(Project project) {
     if (_project != project) {
@@ -882,7 +882,7 @@ class Item extends Callback {
     }
     return null;
   }
-  Layer get layer() => getLayer();
+  Layer get layer => getLayer();
 
   /**
    * The item that this item is contained within.
@@ -906,7 +906,7 @@ class Item extends Callback {
   Item getParent() {
     return _parent;
   }
-  Item get parent() => _parent;
+  Item get parent => _parent;
 
   /**
    * The children items contained within this item. Items that define a
@@ -959,7 +959,7 @@ class Item extends Callback {
   List<Item> getChildren() {
     return this._children;
   }
-  List<Item> get children() => getChildren();
+  List<Item> get children => getChildren();
 
   void setChildren(List<Item> items) {
     removeChildren();

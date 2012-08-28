@@ -1,11 +1,11 @@
-#library("Basic.dart");
+library Basic;
 
-#import("dart:math");
-#import("../util/Numerical.dart");
-#import("../core/Core.dart");
+import "dart:math";
+import "../util/Numerical.dart";
+import "../core/Core.dart";
 
-#source("Line.dart");
-#source("Matrix.dart");
-#source("Point.dart");
-#source("Rectangle.dart");
-#source("Size.dart");
+part "Line.dart";
+part "Matrix.dart";
+part "Point.dart";
+part "Rectangle.dart";
+part "Size.dart";

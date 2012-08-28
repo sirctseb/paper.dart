@@ -1,3 +1,7 @@
+part of Item.dart;
+
+part of Color.dart;
+
 /*
  * Paper.js
  *

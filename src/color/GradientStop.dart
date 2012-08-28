@@ -1,3 +1,5 @@
+part of Color.dart;
+
 /*
  * Paper.js
  *
@@ -140,7 +142,7 @@ class GradientStop {
     return _rampPoint;
   }
   // property
-  num get rampPoint() => _rampPoint;
+  num get rampPoint => _rampPoint;
 
   void setRampPoint([num rampPoint]) {
     _defaultRamp = rampPoint == null;
@@ -151,7 +153,7 @@ class GradientStop {
   set rampPoint(num value) => setRampPoint(value);
   
   bool _defaultRamp;
-  bool get defaultRamp() => _defaultRamp;
+  bool get defaultRamp => _defaultRamp;
 
   /**
    * The color of the gradient stop.

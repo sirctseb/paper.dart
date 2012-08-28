@@ -1,3 +1,5 @@
+part of Item.dart;
+
 /*
  * Paper.js
  *
@@ -44,7 +46,7 @@ class HitResult {
    * @type String('segment', 'handle-in', 'handle-out', 'stroke', 'fill',
    * 'bounds', 'center', 'pixel')
    */
-  String get type() => _type;
+  String get type => _type;
 
   /**
    * If the HitResult has a {@link HitResult#type} of 'bounds', this property
@@ -56,7 +58,7 @@ class HitResult {
    * 'left-center', 'top-center', 'right-center', 'bottom-center')
    */
   String _name;
-  String get name() => _name;
+  String get name => _name;
 
   /**
    * The item that was hit.
@@ -65,7 +67,7 @@ class HitResult {
    * @property
    * @type Item
    */
-  Item get item() => _item;
+  Item get item => _item;
 
   /**
    * If the HitResult has a type of 'stroke', this property gives more
@@ -76,7 +78,7 @@ class HitResult {
    * @type CurveLocation
    */
   CurveLocation _location;
-  CurveLocation get location() => _location;
+  CurveLocation get location => _location;
 
   /**
    * If the HitResult has a type of 'pixel', this property refers to the color
@@ -87,7 +89,7 @@ class HitResult {
    * @type RgbColor
    */
   RgbColor _color;
-  RgbColor get color() => _color;
+  RgbColor get color => _color;
 
   /**
    * If the HitResult has a type of 'stroke', 'segment', 'handle-in' or
@@ -99,7 +101,7 @@ class HitResult {
    * @type Segment
    */
   Segment _segment;
-  Segment get segment() => _segment;
+  Segment get segment => _segment;
 
   /**
    * Describes the actual coordinates of the segment, handle or bounding box
@@ -110,7 +112,7 @@ class HitResult {
    * @type Point
    */
   Point _point;
-  Point get point() => _point;
+  Point get point => _point;
 
   /**
    * Merges default options into options hash for #hitTest() calls, and

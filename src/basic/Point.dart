@@ -1,3 +1,5 @@
+part of Basic.dart;
+
 /*
  * Paper.js
  *
@@ -214,7 +216,7 @@ class Point {
    * @name Point#x
    * @type Number
    */
-  num get x() => _x;
+  num get x => _x;
       set x(num value) => _x = value;
   setX(num value) => _x = value;
 
@@ -224,7 +226,7 @@ class Point {
    * @name Point#y
    * @type Number
    */
-  num get y() => _y;
+  num get y => _y;
       set y(num value) => _y = value;
   setY(num value) => _y = value;
 
@@ -515,7 +517,7 @@ class Point {
     return square ? l : Math.sqrt(l);
   }
   // property getter for length
-  num get length() => Math.sqrt(x*x + y*y);
+  num get length => Math.sqrt(x*x + y*y);
 
   Point setLength(num length) {
     // TODO: Whenever setting x/y, use #set() instead of direct assignment,
@@ -589,7 +591,7 @@ class Point {
   // backing field
   num _angle;
   // property getter
-  num get angle() => getAngle();
+  num get angle => getAngle();
 
   Point setAngle(angle) {
     angle = this._angle = angle * Math.PI / 180;
@@ -676,7 +678,7 @@ class Point {
     return x >= 0 ? y >= 0 ? 1 : 4 : y >= 0 ? 2 : 3;
   }
   // quadrant getter
-  int get quadrant() => getQuadrant();
+  int get quadrant => getQuadrant();
 
   /**
    * Returns the angle between two vectors. The angle is directional and

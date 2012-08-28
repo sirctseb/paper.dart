@@ -1,3 +1,5 @@
+part of Color.dart;
+
 /*
  * Paper.js
  *

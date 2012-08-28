@@ -1,3 +1,5 @@
+part of Basic.dart;
+
 /*
  * Paper.js
  *
@@ -145,7 +147,7 @@ class Size {
    * @name Size#width
    * @type Number
    */
-  num get width() => _width;
+  num get width => _width;
       set width(num value) => _width = value;
 
   /**
@@ -154,7 +156,7 @@ class Size {
    * @name Size#height
    * @type Number
    */
-  num get height() => _height;
+  num get height => _height;
       set height(num value) => _height = value;
 
   Size set(num width, num height) {

@@ -1,3 +1,5 @@
+part of Segment.dart;
+
 /*
  * Paper.js
  *
@@ -60,7 +62,7 @@ class SegmentPoint extends Point {
     return _owner._isSelected(this);
   }
   // property
-  bool get selected() => isSelected();
+  bool get selected => isSelected();
 
   SegmentPoint.create(Segment segment, key, [/*Point*/ point]) {
     num x, y;
