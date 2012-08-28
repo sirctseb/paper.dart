@@ -19,6 +19,7 @@ import "../core/Core.dart";
 import "../util/CanvasProvider.dart";
 import "../item/ChangeFlag.dart";
 import "dart:core";
+import "dart:math";
 part "./GradientStop.dart";
 part "./Gradient.dart";
 part "./GradientColor.dart";
@@ -99,7 +100,7 @@ class Color {
   // accessors
   // helper functions for validating input
   num _clampUnit(num input) {
-    return Math.max(0, Math.min(1, input));
+    return max(0, min(1, input));
   }
   num _modDegrees(num input) {
     return ((input % 360) + 360) % 360;
@@ -306,7 +307,7 @@ class Color {
                 hex[i] == "d" ? 13 << i * 4 :
                 hex[i] == "e" ? 14 << i * 4 :
                 hex[i] == "f" ? 15 << i * 4 :
-                Math.parseInt(hex[i]) << i * 4;
+                parseInt(hex[i]) << i * 4;
     }
     return result;
   }
@@ -344,8 +345,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, Math.max(g, b)),
-        min = Math.min(r, Math.max(g, b)),
+        max = max(r, max(g, b)),
+        min = min(r, min(g, b)),
         delta = max - min,
         h = delta == 0 ? 0
           :   ( max == r ? (g - b) / delta + (g < b ? 6 : 0)
@@ -378,8 +379,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, Math.max(g, b)),
-        min = Math.min(r, Math.max(g, b)),
+        max = max(r, max(g, b)),
+        min = min(r, min(g, b)),
         delta = max - min,
         achromatic = delta == 0,
         h = achromatic ? 0
@@ -394,16 +395,16 @@ class Color {
     },
 
     'hsl-rgb': (color) {
-      var s = color._saturation,
+      num s = color._saturation,
         h = color._hue / 360,
         l = color._lightness,
-        t1, t2, c;
+        t1, t2;
       if (s == 0)
         return new RgbColor(l, l, l, color._alpha);
       var t3s = [ h + 1 / 3, h, h - 1 / 3 ];
         t2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
         t1 = 2 * l - t2;
-        c = [];
+      var c = [];
       for (var i = 0; i < 3; i++) {
         var t3 = t3s[i];
         if (t3 < 0) t3 += 1;
@@ -491,7 +492,7 @@ class Color {
       _type = "rgb";
     } else {
       // TODO support params to array
-      var components = arg is List ? arg : [arg, arg1, arg2, arg3];
+      List components = arg is List ? arg : [arg, arg1, arg2, arg3];
       // Called on the abstract Color class. Guess color type
       // from arg
       //if (components.length >= 4)
