@@ -1,4 +1,4 @@
-part of Basic.dart;
+part of Basic;
 
 /*
  * Paper.js
