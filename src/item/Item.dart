@@ -23,6 +23,7 @@ part "./Group.dart";
 part "./Layer.dart";
 part "./PlacedItem.dart";
 part "./PlacedSymbol.dart";
+part "./Raster.dart";
 
 /**
  * @name Item
