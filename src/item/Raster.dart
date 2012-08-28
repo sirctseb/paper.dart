@@ -219,7 +219,7 @@ class Raster extends PlacedItem {
    * @return {Canvas}
    */
   Canvas getSubImage(/*Rectangle*/ rect) {
-    rect = Rectangle.read(arguments);
+    rect = Rectangle.read(rect);
     var canvas = CanvasProvider.getCanvas(rect.getSize());
     canvas.getContext('2d').drawImage(this.getCanvas(), rect.x, rect.y,
         canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
