@@ -145,7 +145,7 @@ class Raster extends PlacedItem {
    */
   Context _context;
   Context getContext([bool notifyChange = false]) {
-    if (!_context)
+    if (_context != null)
       _context = getCanvas().getContext('2d');
     // Support a hidden parameter that indicates if the context will be used
     // to modify the Raster object. We can notify such changes ahead since
