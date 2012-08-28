@@ -1,3 +1,5 @@
+part of Segment.dart;
+
 /*
  * Paper.js
  *

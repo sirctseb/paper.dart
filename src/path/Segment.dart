@@ -13,10 +13,10 @@
  *
  * All rights reserved.
  */
-#library("Segment.dart");
-#import("../basic/Basic.dart");
-#source("SegmentPoint.dart");
-#source("SelectionState.dart");
+library Segment;
+import "../basic/Basic.dart";
+part "SegmentPoint.dart";
+part "SelectionState.dart";
 
 /**
  * @name Segment
@@ -120,7 +120,7 @@ class Segment {
     return _point;
   }
   // property
-  SegmentPoint get point() => getPoint();
+  SegmentPoint get point => getPoint();
 
   setPoint(/*Point*/ point) {
     point = Point.read(point);
@@ -143,7 +143,7 @@ class Segment {
     return _handleIn;
   }
   // property
-  SegmentPoint get handleIn() => getHandleIn();
+  SegmentPoint get handleIn => getHandleIn();
 
   setHandleIn(/*Point*/ point) {
     point = Point.read(point);
@@ -168,7 +168,7 @@ class Segment {
     return _handleOut;
   }
   // property
-  SegmentPoint get handleOut() => getHandleOut();
+  SegmentPoint get handleOut => getHandleOut();
 
   setHandleOut(/*Point*/ point) {
     point = Point.read(point);
@@ -252,7 +252,7 @@ class Segment {
     return _isSelected(_point);
   }
   // property
-  bool get selected() => isSelected();
+  bool get selected => isSelected();
 
   setSelected(bool selected) {
     _setSelected(_point, selected);
@@ -274,7 +274,7 @@ class Segment {
     return _index;
   }
   // property
-  int get index() => getIndex();
+  int get index => getIndex();
 
   /**
    * The path that the segment belongs to.
@@ -286,7 +286,7 @@ class Segment {
     return this._path;
   }
   // property
-  Path get path() => getPath();
+  Path get path => getPath();
 
   /**
    * The curve that the segment belongs to.
@@ -306,7 +306,7 @@ class Segment {
     return null;
   }
   // property
-  Curve get curve() => getCurve();
+  Curve get curve => getCurve();
 
   /**
    * {@grouptitle Sibling Segments}

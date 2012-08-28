@@ -13,15 +13,16 @@
  *
  * All rights reserved.
  */
-#library("Color.dart");
-#import("../basic/Basic.dart");
-#import("../core/Core.dart");
-#import("../util/CanvasProvider.dart");
-#import("dart:core");
-#source("./GradientStop.dart");
-#source("./Gradient.dart");
-#source("./GradientColor.dart");
-#source("../item/ChangeFlag.dart");
+library Color;
+import "../basic/Basic.dart";
+import "../core/Core.dart";
+import "../util/CanvasProvider.dart";
+import "../item/ChangeFlag.dart";
+import "dart:core";
+import "dart:math";
+part "./GradientStop.dart";
+part "./Gradient.dart";
+part "./GradientColor.dart";
 
 /**
  * @name Color
@@ -60,30 +61,30 @@ class Color {
   Map<String, num> _components;
 
   // gray components
-  num get _gray() => _components["gray"];
+  num get _gray => _components["gray"];
   set _gray(num value) => _components["gray"] = value;
   
   // Rgb components
   //num _red, _green, _blue;
-  num get _red() => _components["red"];
+  num get _red => _components["red"];
   set _red(num value) => _components["red"] = value;
-  num get _green() => _components["green"];
+  num get _green => _components["green"];
   set _green(num value) => _components["green"] = value;
-  num get _blue() => _components["blue"];
+  num get _blue => _components["blue"];
   set _blue(num value) => _components["blue"] = value;
 
   // hsb components
   //num _hue, _saturation, _brightness;
-  num get _hue() => _components["hue"];
+  num get _hue => _components["hue"];
   set _hue(num value) => _components["hue"] = value;
-  num get _saturation() => _components["saturation"];
+  num get _saturation => _components["saturation"];
   set _saturation(num value) => _components["saturation"] = value;
-  num get _brightness() => _components["brightness"];
+  num get _brightness => _components["brightness"];
   set _brightness(num value) => _components["brightness"] = value;
 
   // hsl components
   //num _lightness;
-  num get _lightness() => _components["lightness"];
+  num get _lightness => _components["lightness"];
   set _lightness(num value) => _components["lightness"] = value;
 
   // remembers which components are currently definitive
@@ -99,7 +100,7 @@ class Color {
   // accessors
   // helper functions for validating input
   num _clampUnit(num input) {
-    return Math.max(0, Math.min(1, input));
+    return max(0, min(1, input));
   }
   num _modDegrees(num input) {
     return ((input % 360) + 360) % 360;
@@ -126,7 +127,7 @@ class Color {
   }
   
   // Gray accessors
-  num get gray() {
+  num get gray {
     // if we don't have gray ready, compute it
     if(_gray == null) {
       GrayColor color = this.convert("gray");
@@ -146,7 +147,7 @@ class Color {
       _green = color.green;
   }
   // Rgb accessors
-  num get red() {
+  num get red {
     if(_red == null) {
       _updateRgb();
     }
@@ -155,7 +156,7 @@ class Color {
   set red(num value) {
     setValue("red", "rgb", value);
   }
-  num get blue() {
+  num get blue {
     if(_blue == null) {
       _updateRgb();
     }
@@ -165,7 +166,7 @@ class Color {
     setValue("blue", "rgb", value);
   }
 
-  num get green() {
+  num get green {
     if(_green == null) {
       _updateRgb();
     }
@@ -184,7 +185,7 @@ class Color {
   }
 
   // hsb accessors
-  num get hue() {
+  num get hue {
     if(_hue == null) {
       _updateHsb();
     }
@@ -194,7 +195,7 @@ class Color {
     setValue("hue", "hsb", value, true);
   }
 
-  num get saturation() {
+  num get saturation {
     if(_saturation == null) {
       _updateHsb();
     }
@@ -204,7 +205,7 @@ class Color {
     setValue("saturation", _type == "hsl" ? "hsl" : "hsb", value);
   }
 
-  num get brightness() {
+  num get brightness {
     if(_brightness == null) {
       _updateHsb();
     }
@@ -222,7 +223,7 @@ class Color {
     _lightness = color.lightness;
   }
   // hsl accessors
-  num get lightness() {
+  num get lightness {
     if(_lightness == null) {
       _updateHsl();
       return _lightness;
@@ -233,7 +234,7 @@ class Color {
   }
 
   // alpha accessors
-  num get alpha() => _alpha == null ? 1 : _alpha;
+  num get alpha => _alpha == null ? 1 : _alpha;
   set alpha(num value) {
     _alpha = value == null ? null : _clampUnit(value);
     _cssString = null;
@@ -306,7 +307,7 @@ class Color {
                 hex[i] == "d" ? 13 << i * 4 :
                 hex[i] == "e" ? 14 << i * 4 :
                 hex[i] == "f" ? 15 << i * 4 :
-                Math.parseInt(hex[i]) << i * 4;
+                parseInt(hex[i]) << i * 4;
     }
     return result;
   }
@@ -344,8 +345,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, Math.max(g, b)),
-        min = Math.min(r, Math.max(g, b)),
+        max = max(r, max(g, b)),
+        min = min(r, min(g, b)),
         delta = max - min,
         h = delta == 0 ? 0
           :   ( max == r ? (g - b) / delta + (g < b ? 6 : 0)
@@ -378,8 +379,8 @@ class Color {
       var r = color._red,
         g = color._green,
         b = color._blue,
-        max = Math.max(r, Math.max(g, b)),
-        min = Math.min(r, Math.max(g, b)),
+        max = max(r, max(g, b)),
+        min = min(r, min(g, b)),
         delta = max - min,
         achromatic = delta == 0,
         h = achromatic ? 0
@@ -394,16 +395,16 @@ class Color {
     },
 
     'hsl-rgb': (color) {
-      var s = color._saturation,
+      num s = color._saturation,
         h = color._hue / 360,
         l = color._lightness,
-        t1, t2, c;
+        t1, t2;
       if (s == 0)
         return new RgbColor(l, l, l, color._alpha);
       var t3s = [ h + 1 / 3, h, h - 1 / 3 ];
         t2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
         t1 = 2 * l - t2;
-        c = [];
+      var c = [];
       for (var i = 0; i < 3; i++) {
         var t3 = t3s[i];
         if (t3 < 0) t3 += 1;
@@ -491,7 +492,7 @@ class Color {
       _type = "rgb";
     } else {
       // TODO support params to array
-      var components = arg is List ? arg : [arg, arg1, arg2, arg3];
+      List components = arg is List ? arg : [arg, arg1, arg2, arg3];
       // Called on the abstract Color class. Guess color type
       // from arg
       //if (components.length >= 4)

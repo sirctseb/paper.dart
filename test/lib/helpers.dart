@@ -1,3 +1,5 @@
+part of paper_dart_test;
+
 // TODO I am just porting these as the other test files that I'm porting use them
 
 // Override equals to convert functions to message and execute them as tests()

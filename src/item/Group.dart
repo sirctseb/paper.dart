@@ -1,3 +1,5 @@
+part of Item;
+
 /*
  * Paper.js
  *
@@ -115,7 +117,7 @@ class Group extends Item {
   bool isClipped() {
     return _getClipItem != null;
   }
-  bool get clipped() => isClipped();
+  bool get clipped => isClipped();
 
   setClipped(bool clipped) {
     var child = this.getFirstChild();

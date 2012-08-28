@@ -1,4 +1,4 @@
-#library("MapList.dart");
+library MapList;
 
 /** MapList is a collection whose members can be accessed as
  * a List or as Map

@@ -1,4 +1,4 @@
-#library("Core.dart");
-#import("dart:math");
-#source("./Base.dart");
-#source("./Callback.dart");
+library Core;
+import "dart:math";
+part "./Base.dart";
+part "./Callback.dart";

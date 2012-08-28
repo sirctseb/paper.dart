@@ -1,3 +1,5 @@
+part of Color;
+
 /*
  * Paper.js
  *
@@ -36,7 +38,7 @@ class Gradient {
   
   String _type;
   // property
-  String get type() => _type;
+  String get type => _type;
   set type(String value) => _type = value;
 
   /**

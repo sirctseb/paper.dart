@@ -1,3 +1,5 @@
+part of Basic;
+
 /*
  * Paper.dart
  *
@@ -58,7 +60,7 @@ class Line /** @lends Line# */ {
    * @name Line#point
    * @type Point
    */
-   Point get point() => _point1;
+   Point get point => _point1;
 
   /**
    * The vector of the line
@@ -66,7 +68,7 @@ class Line /** @lends Line# */ {
    * @name Line#vector
    * @type Point
    */
-   Point get vector() => _vector;
+   Point get vector => _vector;
 
   /**
    * Specifies whether the line extends infinitely
@@ -74,7 +76,7 @@ class Line /** @lends Line# */ {
    * @name Line#infinite
    * @type Boolean
    */
-   bool get infinite() => _infinite;
+   bool get infinite => _infinite;
 
   /**
    * @param {Line} line
@@ -106,6 +108,7 @@ class Line /** @lends Line# */ {
     num ccw = v2.cross(v1);
     if (ccw == 0) {
       ccw = v2*v1;
+      // TODO warnings because return type on Point.operator* is Object
       if (ccw > 0) {
         ccw = (v2 - v1)*v1;
         if (ccw < 0)
@@ -124,8 +127,8 @@ class Line /** @lends Line# */ {
     num m = this.vector.y / this.vector.x; // slope
     num b = this.point.y - (m * this.point.x); // y offset
     // Distance to the linear equation
-    num dist = (point.y - (m * point.x) - b).abs() / Math.sqrt(m * m + 1);
-    return infinite ? dist : Math.min(dist, Math.min(
+    num dist = (point.y - (m * point.x) - b).abs() / sqrt(m * m + 1);
+    return infinite ? dist : min(dist, min(
         point.getDistance(this.point),
         point.getDistance(this.point + this.vector)));
   }
