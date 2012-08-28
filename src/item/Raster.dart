@@ -80,6 +80,7 @@ class Raster extends PlacedItem {
    * @type Size
    * @bean
    */
+  Size _size;
   Size getSize() {
     return _size;
   }
