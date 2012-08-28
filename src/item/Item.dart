@@ -14,6 +14,7 @@
  * All rights reserved.
  */
 library Item;
+import "dart:math";
 import "../core/Core.dart";
 import "../basic/Basic.dart";
 import "./ChangeFlag.dart";
@@ -62,7 +63,7 @@ class Item extends Callback {
   void _installMouseHandler(String type) {
     // If the view requires counting of installed mouse events,
     // increase the counters now according to mouseFlags
-    var counters = _project.view._eventCounters;
+    List<int> counters = _project.view._eventCounters;
     if(counters != null) {
       for(var key in mouseFlags.getKeys()) {
         counters[key] = (counters[key] != 0 ? counters[key] : 0) +
@@ -671,7 +672,7 @@ class Item extends Callback {
       // exist yet and add the cacheItem to it.
       var id = cacheItem._id;
       // TODO where is this used? is _parent._boundsCache ever not a map?
-      var ref = _parent._boundsCache
+      Map ref = _parent._boundsCache
           = _parent._boundsCache != null ? _parent._boundsCache : {
         // Use both a hashtable for ids and an array for the list,
         // so we can keep track of items that were added already
@@ -751,10 +752,10 @@ class Item extends Callback {
       var child = children[i];
       if (child._visible) {
         var rect = child._getCachedBounds(type, matrix, cacheItem);
-        x1 = Math.min(rect.x, x1);
-        y1 = Math.min(rect.y, y1);
-        x2 = Math.max(rect.x + rect.width, x2);
-        y2 = Math.max(rect.y + rect.height, y2);
+        x1 = min(rect.x, x1);
+        y1 = min(rect.y, y1);
+        x2 = max(rect.x + rect.width, x2);
+        y2 = max(rect.y + rect.height, y2);
       }
     }
     return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
@@ -763,8 +764,8 @@ class Item extends Callback {
   void setBounds(/*Rectangle*/ rect) {
     rect = Rectangle.read(rect);
     var bounds = getBounds(),
-      matrix = new Matrix(),
-      center = rect.getCenter();
+      matrix = new Matrix();
+    Point center = rect.getCenter();
     // Read this from bottom to top:
     // Translate to new center:
     matrix.translate(center);
@@ -1507,7 +1508,7 @@ class Item extends Callback {
     };
     var list1 = getList(this);
     var list2 = getList(item);
-    for (var i = 0, l = Math.min(list1.length, list2.length); i < l; i++) {
+    for (var i = 0, l = min(list1.length, list2.length); i < l; i++) {
       if (list1[list1.length - i - 1] != list2[list2.length - i - 1]) {
         // Found the position in the parents list where the two start
         // to differ. Look at who's above who.
