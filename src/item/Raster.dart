@@ -378,7 +378,7 @@ class Raster extends PlacedItem {
    * @param {Rectangle} rect
    * @return {ImageData}
    */
-  ImageDatat getData(rect) {
+  ImageData getData(rect) {
     rect = Rectangle.read(rect);
     if (rect.isEmpty())
       rect = new Rectangle(getSize());
@@ -392,7 +392,7 @@ class Raster extends PlacedItem {
    * @param {Point} point
    * @return {ImageData}
    */
-  setData(data, point) {
+  void setData(data, point) {
     point = Point.read(point);
     getContext(true).putImageData(data, point.x, point.y);
   }
