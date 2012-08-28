@@ -423,10 +423,11 @@ class Size {
    * var minSize = Size.min(size1, size2);
    * console.log(minSize); // {width: 10, height: 5}
    */
+  // TODO Size.min and max mask Math:min and max
   static Size min(Size size1, Size size2) {
     return new Size.create(
-      Math.min(size1.width, size2.width),
-      Math.min(size1.height, size2.height));
+      min(size1.width, size2.width),
+      min(size1.height, size2.height));
   }
 
   /**
@@ -446,8 +447,8 @@ class Size {
    */
   static Size max(Size size1, Size size2) {
     return new Size.create(
-      Math.max(size1.width, size2.width),
-      Math.max(size1.height, size2.height));
+      max(size1.width, size2.width),
+      max(size1.height, size2.height));
   }
 
   /**
