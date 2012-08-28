@@ -201,9 +201,9 @@ class Raster extends PlacedItem {
       CanvasProvider.returnCanvas(_canvas);
     _image = image;
 /*#*/ if (options.browser) {
-    _size = Size.create(image.naturalWidth, image.naturalHeight);
+    _size = new Size.create(image.naturalWidth, image.naturalHeight);
 /*#*/ } else if (options.server) {
-    _size = Size.create(image.width, image.height);
+    _size = new Size.create(image.width, image.height);
 /*#*/ } // options.server
     _canvas = null;
     _context = null;
@@ -260,7 +260,7 @@ class Raster extends PlacedItem {
       bounds = new Rectangle(object);
     } else if (object is Point) {
       // Create a rectangle of 1px size around the specified coordinates
-      bounds = Rectangle.create(object.x - 0.5, object.y - 0.5, 1, 1);
+      bounds = new Rectangle.create(object.x - 0.5, object.y - 0.5, 1, 1);
     }
     // Use a sample size of max 32 x 32 pixels, into which the path is
     // scaled as a clipping path, and then the actual image is drawn in and
