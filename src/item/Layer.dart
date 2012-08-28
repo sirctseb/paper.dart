@@ -1,4 +1,4 @@
-part of Item.dart;
+part of Item;
 
 /*
  * Paper.js
