@@ -322,14 +322,14 @@ class Raster extends PlacedItem {
    * @param point the offset of the pixel as a point in pixel coordinates
    * @return {RgbColor} the color of the pixel
    */
-  getPixel: function(point) {
-    point = Point.read(arguments);
-    var pixels = this.getContext().getImageData(point.x, point.y, 1, 1).data,
-      channels = new Array(4);
+  RgbColor getPixel(/*Point*/ point, [y]) {
+    point = Point.read(point, y);
+    var pixels = getContext().getImageData(point.x, point.y, 1, 1).data,
+      channels = new List(4);
     for (var i = 0; i < 4; i++)
       channels[i] = pixels[i] / 255;
     return RgbColor.read(channels);
-  },
+  }
 
   /**
    * Sets the color of the specified pixel to the specified color.
@@ -348,11 +348,10 @@ class Raster extends PlacedItem {
    * @param point the offset of the pixel as a point in pixel coordinates
    * @param color the color that the pixel will be set to
    */
-  setPixel: function(point, color) {
-    var hasPoint = arguments.length == 2;
-    point = Point.read(arguments, 0, hasPoint ? 1 : 2);
-    color = Color.read(arguments, hasPoint ? 1 : 2);
-    var ctx = this.getContext(true),
+  void setPixel(point, color) {
+    point = Point.read(point);
+    color = Color.read(color);
+    var ctx = getContext(true),
       imageData = ctx.createImageData(1, 1),
       alpha = color.getAlpha();
     imageData.data[0] = color.getRed() * 255;
@@ -360,7 +359,7 @@ class Raster extends PlacedItem {
     imageData.data[2] = color.getBlue() * 255;
     imageData.data[3] = alpha != null ? alpha * 255 : 255;
     ctx.putImageData(imageData, point.x, point.y);
-  },
+  }
 
   // DOCS: document Raster#createData
   /**
