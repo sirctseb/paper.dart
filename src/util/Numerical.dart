@@ -15,6 +15,7 @@
  */
 
 library Numerical;
+import "dart:math";
 
 class Numerical {
 
@@ -66,9 +67,9 @@ class Numerical {
    * Gauss-Legendre Numerical Integration
    */
   static num integrate(f, a, b, n) {
-    var x = _abscissas[n - 2],
-      w = _weights[n - 2],
-      A = 0.5 * (b - a),
+    List x = _abscissas[n - 2],
+         w = _weights[n - 2];
+    num A = 0.5 * (b - a),
       B = A + a,
       i = 0,
       m = (n + 1) >> 1,
@@ -170,15 +171,15 @@ class Numerical {
       // This sqrt and division is safe, since R2 >= 0, so Q3 > R2,
       // so Q3 > 0.  The acos is also safe, since R2/Q3 < 1, and
       // thus R/sqrt(Q3) < 1.
-      var theta = Math.acos(R / Math.sqrt(Q3)),
+      var theta = acos(R / sqrt(Q3)),
         // This sqrt is safe, since Q3 >= 0, and thus Q >= 0
         q = -2 * Q.sqrt();
-      roots[0] = q * Math.cos(theta / 3) - b;
-      roots[1] = q * Math.cos((theta + 2 * Math.PI) / 3) - b;
-      roots[2] = q * Math.cos((theta - 2 * Math.PI) / 3) - b;
+      roots[0] = q * cos(theta / 3) - b;
+      roots[1] = q * cos((theta + 2 * PI) / 3) - b;
+      roots[2] = q * cos((theta - 2 * PI) / 3) - b;
       return 3;
     } else { // One real root
-      var A = -Math.pow(R.abs() + Math.sqrt(R2 - Q3), 1 / 3);
+      var A = -pow(R.abs() + sqrt(R2 - Q3), 1 / 3);
       if (R < 0) A = -A;
       var B = (A.abs() < tolerance) ? 0 : Q / A;
       roots[0] = (A + B) - b;
