@@ -22,6 +22,7 @@ part "./HitResult.dart";
 part "./Group.dart";
 part "./Layer.dart";
 part "./PlacedItem.dart";
+part "./PlacedSymbol.dart";
 
 /**
  * @name Item
