@@ -40,40 +40,44 @@ class Layer extends Group {
    * var layer = new Layer();
    */
   Layer(items) {
-    this._project = paper.project;
+    _project = paper.project;
     // Push it onto project.layers and set index:
-    this._index = this._project.layers.push(this) - 1;
+    _index = this._project.layers.push(this) - 1;
+    // TOOD figure out what this does. superclass constructor?
     this.base.apply(this, arguments);
-    this.activate();
+    activate();
   }
 
   /**
   * Removes the layer from its project's layers list
   * or its parent's children list.
   */
-  _remove(deselect, notify) {
-    if (this._parent)
+  _remove(bool deselect, bool notify) {
+    if (_parent != null)
+      // TODO what does this base call do?
       return this.base(deselect, notify);
-    if (this._index != null) {
+    if (_index != null) {
       if (deselect)
-        this.setSelected(false);
-      Base.splice(this._project.layers, null, this._index, 1);
+        setSelected(false);
+      Base.splice(_project.layers, null, _index, 1);
       // Tell project we need a redraw. This is similar to _changed()
       // mechanism.
-      this._project._needsRedraw();
+      _project._needsRedraw();
       return true;
     }
     return false;
   }
 
   getNextSibling() {
-    return this._parent ? this.base()
-        : this._project.layers[this._index + 1] || null;
+    // TODO what does base() do?
+    return _parent != null ? this.base()
+        : _project.layers[_index + 1] || null;
   }
 
   getPreviousSibling() {
-    return this._parent ? this.base()
-        : this._project.layers[this._index - 1] || null;
+    // TODO what does base() do?
+    return _parent != null ? this.base()
+        : _project.layers[_index - 1] || null;
   }
 
   /**
@@ -87,27 +91,26 @@ class Layer extends Group {
    * console.log(project.activeLayer == firstLayer); // true
    */
   activate() {
-    this._project.activeLayer = this;
-  }
-}, new function () {
-  function insert(above) {
-    return function(item) {
-      // If the item is a layer and contained within Project#layers, use
-      // our own version of move().
-      if (item instanceof Layer && !item._parent
-            && this._remove(false, true)) {
-        Base.splice(item._project.layers, [this],
-            item._index + (above ? 1 : -1), 0);
-        this._setProject(item._project);
-        return true;
-      }
-      return this.base(item);
-    };
+    _project.activeLayer = this;
   }
 
-  return {
-    insertAbove: insert(true),
+  _insert(bool above, Item item) {
+    // If the item is a layer and contained within Project#layers, use
+    // our own version of move().
+    if (item is Layer && item._parent == null
+      && _remove(false, true)) {
+      Base.splice(item._project.layers, [this],
+        item._index + (above ? 1 : -1), 0);
+      _setProject(item._project);
+      return true;
+    }
+    return this.base(item);
+  }
 
-    insertBelow: insert(false)
-  };
-});
+  insertAbove(Item item) {
+    return insert(true, item);
+  }
+  insertBelow(Item item) {
+    return insert(false, item);
+  }
+}
