@@ -187,6 +187,7 @@ class Raster extends PlacedItem {
    * @type HTMLImageElement|Canvas
    * @bean
    */
+  Image _image;
   Image getImage() {
     return _image != null ? _image : getCanvas();
   }
