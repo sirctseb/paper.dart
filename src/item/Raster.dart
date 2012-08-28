@@ -130,7 +130,7 @@ class Raster extends PlacedItem {
       orig = new Point(0, 0).transform(matrix),
       u = new Point(1, 0).transform(matrix).subtract(orig),
       v = new Point(0, 1).transform(matrix).subtract(orig);
-    return Size.create(
+    return new Size.create(
       72 / u.getLength(),
       72 / v.getLength()
     );
@@ -158,7 +158,7 @@ class Raster extends PlacedItem {
   void setContext(Context context) {
     _context = context;
   }
-  void set context(Context value) setContext(value);
+  set context(Context value) => setContext(value);
 
   Canvas getCanvas() {
     if (_canvas == null) {
@@ -179,7 +179,7 @@ class Raster extends PlacedItem {
     _context = null;
     _changed(Change.GEOMETRY | Change.PIXELS);
   }
-  set canvas(Canvas value) setCanvas(value);
+  set canvas(Canvas value) => setCanvas(value);
 
   /**
    * The HTMLImageElement or Canvas of the raster.
