@@ -334,7 +334,7 @@ class Raster extends PlacedItem {
       channels = new List(4);
     for (var i = 0; i < 4; i++)
       channels[i] = pixels[i] / 255;
-    return RgbColor.read(channels);
+    return new RgbColor(channels);
   }
 
   /**
