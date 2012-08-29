@@ -71,9 +71,9 @@ class Point {
 
   // screen Point-like objects
   // TODO turn this into a factory constructor
-  static Point read(arg) {
+  static Point read(arg, [arg2]) {
     if(arg is Point) return arg;
-    return new Point(arg);
+    return new Point(arg, arg2);
   }
 
   /**
