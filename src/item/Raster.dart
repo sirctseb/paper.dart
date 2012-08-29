@@ -293,8 +293,8 @@ class Raster extends PlacedItem {
     ctx.restore();
     // Get pixel data from the context and calculate the average color value
     // from it, taking alpha into account.
-    var pixels = ctx.getImageData(0.5, 0.5, ceil(width),
-        ceil(height)).data,
+    var pixels = ctx.getImageData(0.5, 0.5, width.ceil(),
+        height.ceil()).data,
       channels = [0, 0, 0],
       total = 0;
     for (var i = 0, l = pixels.length; i < l; i += 4) {
