@@ -404,7 +404,7 @@ class Raster extends PlacedItem {
   }
 
   Rectangle _getBounds(type, [matrix, cacheItem]) {
-    var rect = new Rectangle(_size).setCenter(0, 0);
+    var rect = new Rectangle(_size).setCenter(new Point());
     return matrix ? matrix._transformBounds(rect) : rect;
   }
 
