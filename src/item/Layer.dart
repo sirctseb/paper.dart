@@ -45,8 +45,6 @@ class Layer extends Group {
     _project = paper.project;
     // Push it onto project.layers and set index:
     _index = this._project.layers.push(this) - 1;
-    // TOOD figure out what this does. superclass constructor?
-    this.base.apply(this, arguments);
     activate();
   }
 
@@ -57,7 +55,7 @@ class Layer extends Group {
   _remove(bool deselect, bool notify) {
     if (_parent != null)
       // TODO what does this base call do?
-      return this.base(deselect, notify);
+      return super._remove(deselect, notify);
     if (_index != null) {
       if (deselect)
         setSelected(false);
@@ -72,13 +70,13 @@ class Layer extends Group {
 
   getNextSibling() {
     // TODO what does base() do?
-    return _parent != null ? this.base()
+    return _parent != null ? super.getNextSibling()
         : _project.layers[_index + 1] || null;
   }
 
   getPreviousSibling() {
     // TODO what does base() do?
-    return _parent != null ? this.base()
+    return _parent != null ? super.getPreviousSibling()
         : _project.layers[_index - 1] || null;
   }
 
@@ -106,7 +104,8 @@ class Layer extends Group {
       _setProject(item._project);
       return true;
     }
-    return this.base(item);
+    if(above) super.insertAbove(item);
+    else super.insertBelow(item);
   }
 
   insertAbove(Item item) {
