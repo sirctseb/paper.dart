@@ -94,7 +94,7 @@ class PlacedSymbol extends PlacedItem {
     return _clone(new PlacedSymbol(symbol, _matrix.clone()));
   }
 
-  _getBounds(String type, [Matrix matrix, cacheItem]) {
+  _getBounds([String type, Matrix matrix, cacheItem]) {
     // Redirect the call to the symbol definition to calculate the bounds
     // TODO: Implement bounds caching through passing on of cacheItem, so
     // that Symbol#_changed() notification become unnecessary!
