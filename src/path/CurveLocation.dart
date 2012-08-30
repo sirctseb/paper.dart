@@ -79,9 +79,11 @@ class CurveLocation {
    * @type Curve
    * @bean
    */
-  getCurve: function() {
-    return this._curve;
-  },
+  Curve _curve;
+  Curve getCurve() {
+    return _curve;
+  }
+  Curve get curve => getCurve();
 
   /**
    * The path this curve belongs to, if any.
