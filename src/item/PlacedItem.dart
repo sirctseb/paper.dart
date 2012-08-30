@@ -24,7 +24,7 @@
  * @extends Item
  */
 class PlacedItem extends Item {
-  PlacedItem() {
+  PlacedItem([pointOrMatrix]) : super(pointOrMatrix) {
   	_boundsType = {"bounds": "strokeBounds"};
   }
 }

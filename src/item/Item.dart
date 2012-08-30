@@ -15,6 +15,8 @@
  */
 library Item;
 import "dart:math";
+import "dart:html";
+import "../color/Color.dart";
 import "../core/Core.dart";
 import "../basic/Basic.dart";
 import "./ChangeFlag.dart";
@@ -22,6 +24,8 @@ part "./HitResult.dart";
 part "./Group.dart";
 part "./Layer.dart";
 part "./PlacedItem.dart";
+part "./PlacedSymbol.dart";
+part "./Raster.dart";
 
 /**
  * @name Item
@@ -736,7 +740,7 @@ class Item extends Callback {
    * Subclasses override it to define calculations for the various required
    * bounding types.
    */
-  Rectangle _getBounds(String type, [Matrix matrix, cacheItem]) {
+  Rectangle _getBounds([String type, Matrix matrix, cacheItem]) {
     // Note: We cannot cache these results here, since we do not get
     // _changed() notifications here for changing geometry in children.
     // But cacheName is used in sub-classes such as PlacedItem.
@@ -1378,7 +1382,7 @@ class Item extends Callback {
     /*if (children[name] == this)
       delete children[name];*/
     // Remove this entry
-    namedArray.splice(index, 1);
+    namedArray.removeRange(index, 1);
     // If there are any items left in the named array, set
     // the last of them to be this.parent.children[this.name]
     if (namedArray.length > 0) {
@@ -1982,7 +1986,7 @@ class Item extends Callback {
     if (bounds != null && matrix.getRotation() % 90 === 0) {
       // Transform the old bound by looping through all the cached bounds
       // in _bounds and transform each.
-      for (var key in bounds) {
+      for (var key in bounds.getKeys()) {
         var rect = bounds[key];
         matrix.transformBounds(rect, rect);
       }
@@ -1991,7 +1995,7 @@ class Item extends Callback {
       // case another type is assigned to it, e.g. 'strokeBounds'.
       var type = _boundsType;
       // TODO what?
-      var rect = bounds[type && type.bounds || 'bounds'];
+      var rect = bounds[type != null ? type['bounds'] : 'bounds'];
       if (rect != null)
         _position = rect.getCenter(true);
       _bounds = bounds;
