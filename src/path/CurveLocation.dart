@@ -94,6 +94,7 @@ class CurveLocation {
   Item getPath() {
     return _curve != null ? _curve._path : null;
   }
+  Item get path => getPath();
 
   /**
    * The index of the curve within the {@link Path#curves} list, if the
@@ -105,6 +106,7 @@ class CurveLocation {
   int getIndex() {
     return _curve != null ? _curve.getIndex() : null;
   }
+  int get index => getIndex();
 
   /**
    * The length of the path from its beginning up to the location described
@@ -117,6 +119,7 @@ class CurveLocation {
     var path = _curve != null ? _curve._path : null;
     return path != null ? path._getOffset(this) : null;
   }
+  num get offset => getOffset();
 
   /**
    * The length of the curve from its beginning up to the location described
@@ -125,11 +128,12 @@ class CurveLocation {
    * @type Number
    * @bean
    */
-  getCurveOffset: function() {
-    var parameter = this.getParameter();
-    return parameter != null && this._curve
-        && this._curve.getLength(0, parameter);
-  },
+  num getCurveOffset() {
+    var parameter = getParameter();
+    return parameter != null && _curve
+        && _curve.getLength(0, parameter);
+  }
+  num get curveOffset => getCurveOffset();
 
   /**
    * The curve parameter, as used by various bezier curve calculations. It is
