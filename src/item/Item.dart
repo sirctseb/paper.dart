@@ -1986,7 +1986,7 @@ class Item extends Callback {
     if (bounds != null && matrix.getRotation() % 90 === 0) {
       // Transform the old bound by looping through all the cached bounds
       // in _bounds and transform each.
-      for (var key in bounds) {
+      for (var key in bounds.getKeys()) {
         var rect = bounds[key];
         matrix.transformBounds(rect, rect);
       }
