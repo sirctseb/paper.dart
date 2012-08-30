@@ -403,7 +403,7 @@ class Raster extends PlacedItem {
     getContext(true).putImageData(data, point.x, point.y);
   }
 
-  Rectangle _getBounds(type, matrix) {
+  Rectangle _getBounds(type, [matrix, cacheItem]) {
     var rect = new Rectangle(_size).setCenter(0, 0);
     return matrix ? matrix._transformBounds(rect) : rect;
   }
