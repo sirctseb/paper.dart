@@ -113,10 +113,10 @@ class CurveLocation {
    * @type Number
    * @bean
    */
-  getOffset: function() {
-    var path = this._curve && this._curve._path;
-    return path && path._getOffset(this);
-  },
+  num getOffset() {
+    var path = _curve != null ? _curve._path : null;
+    return path != null ? path._getOffset(this) : null;
+  }
 
   /**
    * The length of the curve from its beginning up to the location described
