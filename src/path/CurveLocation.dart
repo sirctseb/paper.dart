@@ -26,7 +26,7 @@
  * The class is in use in many places, such as
  * {@link Path#getLocationAt(offset)}, Path#getNearestLocation(point), etc.
  */
-CurveLocation = Base.extend(/** @lends CurveLocation# */{
+class CurveLocation {
   // DOCS: CurveLocation class description: add these back when the  mentioned
   // functioned have been added: {@link Path#split(location)},
   // {@link PathItem#getIntersections(path)}, etc.
@@ -37,12 +37,12 @@ CurveLocation = Base.extend(/** @lends CurveLocation# */{
    * @param {Number} parameter
    * @param {Point} point
    */
-  initialize: function(curve, parameter, point, distance) {
-    this._curve = curve;
-    this._parameter = parameter;
-    this._point = point;
-    this._distance = distance;
-  },
+  CurveLocation(Curve curve, num parameter, Point point, num distance) {
+    _curve = curve;
+    _parameter = parameter;
+    _point = point;
+    _distance = distance;
+  }
 
   /**
    * The segment of the curve which is closer to the described location.
