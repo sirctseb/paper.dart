@@ -1382,7 +1382,7 @@ class Item extends Callback {
     /*if (children[name] == this)
       delete children[name];*/
     // Remove this entry
-    namedArray.splice(index, 1);
+    namedArray.removeRange(index, 1);
     // If there are any items left in the named array, set
     // the last of them to be this.parent.children[this.name]
     if (namedArray.length > 0) {
