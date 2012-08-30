@@ -204,19 +204,25 @@ class CurveLocation {
   /**
    * @return {String} A string representation of the curve location.
    */
-  toString: function() {
-    var parts = [],
-      point = this.getPoint();
-    if (point)
-      parts.push('point: ' + point);
-    var index = this.getIndex();
-    if (index != null)
-      parts.push('index: ' + index);
-    var parameter = this.getParameter();
-    if (parameter != null)
-      parts.push('parameter: ' + Base.formatNumber(parameter));
-    if (this._distance != null)
-      parts.push('distance: ' + Base.formatNumber(this._distance));
-    return '{ ' + parts.join(', ') + ' }';
+  String toString() {
+    StringBuffer sb = new StringBuffer();
+    Point point = getPoint();
+    if (point != null)
+      sb.add('point: ${point.toString()}');
+    int index = getIndex();
+    if (index != null) {
+      if (!sb.isEmpty()) sb.add(', ');
+      sb.add('index: $index');
+    }
+    var parameter = getParameter();
+    if (parameter != null) {
+      if(!sb.isEmpty()) sb.add(', ');
+      parts.add('parameter: ${Base.formatNumber(parameter)}');
+    }
+    if (_distance != null) {
+      if(!sb.isEmpty()) sb.add(', ');
+      parts.add('distance: ${Base.formatNumber(this._distance)}');
+    }
+    return sb.toString();
   }
-});
+}
