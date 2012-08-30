@@ -1995,7 +1995,7 @@ class Item extends Callback {
       // case another type is assigned to it, e.g. 'strokeBounds'.
       var type = _boundsType;
       // TODO what?
-      var rect = bounds[type && type.bounds || 'bounds'];
+      var rect = bounds[type != null ? type['bounds'] : 'bounds'];
       if (rect != null)
         _position = rect.getCenter(true);
       _bounds = bounds;
