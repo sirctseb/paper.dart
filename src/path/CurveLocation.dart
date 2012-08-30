@@ -143,11 +143,12 @@ class CurveLocation {
    * @type Number
    * @bean
    */
-  getParameter: function() {
-    if (this._parameter == null && this._curve && this._point)
-      this._parameter = this._curve.getParameterAt(this._point);
-    return this._parameter;
-  },
+  num getParameter() {
+    if (_parameter == null && _curve != null && _point != null)
+      _parameter = _curve.getParameterAt(_point);
+    return _parameter;
+  }
+  num get parameter => getParameter();
 
   /**
    * The point which is defined by the {@link #curve} and
