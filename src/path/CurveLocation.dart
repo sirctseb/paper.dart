@@ -157,11 +157,12 @@ class CurveLocation {
    * @type Point
    * @bean
    */
-  getPoint: function() {
-    if (!this._point && this._curve && this._parameter != null)
-      this._point = this._curve.getPoint(this._parameter);
-    return this._point;
-  },
+  Point getPoint() {
+    if (_point == null && _curve != null && _parameter != null)
+      _point = _curve.getPoint(_parameter);
+    return _point;
+  }
+  Point get point => getPoint();
 
   /**
    * The tangential vector to the {@link #curve} at the given location.
