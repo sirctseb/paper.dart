@@ -34,11 +34,10 @@ class Raster extends PlacedItem {
    *
    * @param {HTMLImageElement|Canvas|string} [object]
    */
-  Raster(object, pointOrMatrix) {
+  // TODO does _boundsType need to be set before superclass constructor goes?
+  Raster(object, [pointOrMatrix]) : super(pointOrMatrix) {
     // TODO is this correct? see above
     _boundsType = {"bounds": "bounds"};
-    // TODO figure out what base does
-    this.base(pointOrMatrix);
     // TODO how to test for member? should test for type
     if (object.getContext != null) {
       setCanvas(object);
