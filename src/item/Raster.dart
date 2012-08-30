@@ -416,7 +416,7 @@ class Raster extends PlacedItem {
         "getColor": () {
           return getPixel(offset);
         }
-      }
+      });
     }
   }
 
