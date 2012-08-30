@@ -69,8 +69,6 @@ class Group extends Item {
    * }
    */
   Group(List items) {
-    // TODO look into what this does. superclass constructor probably
-    //this.base();
     // Allow Group to have children and named children
     _children = [];
     _namedChildren = {};
