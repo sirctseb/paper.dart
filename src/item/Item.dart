@@ -740,7 +740,7 @@ class Item extends Callback {
    * Subclasses override it to define calculations for the various required
    * bounding types.
    */
-  Rectangle _getBounds(String type, [Matrix matrix, cacheItem]) {
+  Rectangle _getBounds([String type, Matrix matrix, cacheItem]) {
     // Note: We cannot cache these results here, since we do not get
     // _changed() notifications here for changing geometry in children.
     // But cacheName is used in sub-classes such as PlacedItem.
