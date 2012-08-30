@@ -183,11 +183,12 @@ class CurveLocation {
    * @type Point
    * @bean
    */
-  getNormal: function() {
-    var parameter = this.getParameter();
-    return parameter != null && this._curve
-        && this._curve.getNormal(parameter);
-  },
+  Point getNormal() {
+    var parameter = getParameter();
+    return parameter != null && _curve != null
+        ? _curve.getNormal(parameter) : null;
+  }
+  Point get normal => getNormal();
 
   /**
    * The distance from the queried point to the returned location.
