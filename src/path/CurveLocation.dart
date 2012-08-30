@@ -170,11 +170,12 @@ class CurveLocation {
    * @type Point
    * @bean
    */
-  getTangent: function() {
-    var parameter = this.getParameter();
-    return parameter != null && this._curve
-        && this._curve.getTangent(parameter);
-  },
+  Point getTangent() {
+    var parameter = getParameter();
+    return parameter != null && _curve != null
+        ? _curve.getTangent(parameter) : null;
+  }
+  Point get tangent => getTangent();
 
   /**
    * The normal vector to the {@link #curve} at the given location.
