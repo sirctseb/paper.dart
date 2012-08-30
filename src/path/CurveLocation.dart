@@ -102,9 +102,9 @@ class CurveLocation {
    * @type Index
    * @bean
    */
-  getIndex: function() {
-    return this._curve && this._curve.getIndex();
-  },
+  int getIndex() {
+    return _curve != null ? _curve.getIndex() : null;
+  }
 
   /**
    * The length of the path from its beginning up to the location described
