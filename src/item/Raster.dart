@@ -414,6 +414,8 @@ class Raster extends PlacedItem {
         "offset": point.add(_size.divide(2)).round(),
         // Becomes HitResult#color
         "getColor": () {
+          // TODO this doesn't work in dart. HitResult should
+          // be modified to fix this
           return getPixel(offset);
         }
       });
@@ -426,7 +428,7 @@ class Raster extends PlacedItem {
   }
 
   void drawSelected(ctx, matrix) {
-    Item.drawSelectedBounds(new Rectangle(_size).setCenter(0, 0), ctx,
+    Item.drawSelectedBounds(new Rectangle(_size).setCenter(0), ctx,
         matrix);
   }
 }
