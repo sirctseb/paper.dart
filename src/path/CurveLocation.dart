@@ -196,9 +196,10 @@ class CurveLocation {
    * @type Number
    * @bean
    */
-  getDistance: function() {
-    return this._distance;
-  },
+  num getDistance() {
+    return _distance;
+  }
+  num get distance => getDistance();
 
   /**
    * @return {String} A string representation of the curve location.
