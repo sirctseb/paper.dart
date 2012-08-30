@@ -50,26 +50,28 @@ class CurveLocation {
    * @type Segment
    * @bean
    */
-  getSegment: function() {
-    if (!this._segment) {
-      var curve = this._curve,
-        parameter = this.getParameter();
+  Segment _segment;
+  Segment getSegment() {
+    if (_segment == null) {
+      var curve = _curve,
+        parameter = getParameter();
       if (parameter == 0) {
-        this._segment = curve._segment1;
+        _segment = curve._segment1;
       } else if (parameter == 1) {
-        this._segment = curve._segment2;
+        _segment = curve._segment2;
       } else if (parameter == null) {
         return null;
       } else {
         // Determine the closest segment by comparing curve lengths
-        this._segment = curve.getLength(0, parameter)
+        _segment = curve.getLength(0, parameter)
           < curve.getLength(parameter, 1)
             ? curve._segment1
             : curve._segment2;
       }
     }
-    return this._segment;
-  },
+    return _segment;
+  }
+  Segment get segment => getSegment();
 
   /**
    * The curve by which the location is defined.
