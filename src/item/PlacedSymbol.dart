@@ -61,10 +61,7 @@ class PlacedSymbol extends PlacedItem {
    *     instance.scale(0.25 + Math.random() * 0.75);
    * }
    */
-  PlacedSymbol (/*Symbol*/ symbol, [pointOrMatrix]) {
-    // TODO figure out what base does
-    this.base(pointOrMatrix);
-
+  PlacedSymbol (/*Symbol*/ symbol, [pointOrMatrix]) : super(pointOrMatrix) {
     setSymbol(symbol is Symbol ? symbol : new Symbol(symbol));
   }
 
