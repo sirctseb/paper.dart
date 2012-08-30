@@ -91,9 +91,9 @@ class CurveLocation {
    * @type Item
    * @bean
    */
-  getPath: function() {
-    return this._curve && this._curve._path;
-  },
+  Item getPath() {
+    return _curve != null ? _curve._path : null;
+  }
 
   /**
    * The index of the curve within the {@link Path#curves} list, if the
