@@ -18,6 +18,7 @@ import "../basic/Basic.dart";
 part "Segment.dart";
 part "SegmentPoint.dart";
 part "SelectionState.dart";
+part "CurveLocation.dart";
 
 /**
  * @name Path
