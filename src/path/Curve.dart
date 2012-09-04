@@ -28,7 +28,7 @@
  * convenient ways to work with parts of the path, finding lengths, positions or
  * tangents at given offsets.
  */
-var Curve = this.Curve = Base.extend(/** @lends Curve# */{
+class Curve {
   /**
    * Creates a new curve object.
    *
@@ -824,4 +824,4 @@ var Curve = this.Curve = Base.extend(/** @lends Curve# */{
       return this.getNearestLocation(point).getPoint();
     }
   };
-});
+}
