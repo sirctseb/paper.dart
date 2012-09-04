@@ -72,14 +72,16 @@ class Curve {
    * @type Point
    * @bean
    */
-  getPoint1: function() {
-    return this._segment1._point;
-  },
+  Point getPoint1() {
+    return _segment1._point;
+  }
+  Point get point1 => getPoint1();
 
-  setPoint1: function(point) {
-    point = Point.read(arguments);
-    this._segment1._point.set(point.x, point.y);
-  },
+  setPoint1(point) {
+    point = Point.read(point);
+    _segment1._point.set(point.x, point.y);
+  }
+  set point1(point) => setPoint1(point);
 
   /**
    * The second anchor point of the curve.
@@ -87,14 +89,16 @@ class Curve {
    * @type Point
    * @bean
    */
-  getPoint2: function() {
-    return this._segment2._point;
-  },
+  Point getPoint2() {
+    return _segment2._point;
+  }
+  Point get point2 => getPoint2();
 
-  setPoint2: function(point) {
-    point = Point.read(arguments);
-    this._segment2._point.set(point.x, point.y);
-  },
+  setPoint2(point) {
+    point = Point.read(point);
+    _segment2._point.set(point.x, point.y);
+  }
+  set point2(point) => setPoint2(point);
 
   /**
    * The handle point that describes the tangent in the first anchor point.
