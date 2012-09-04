@@ -295,9 +295,9 @@ class Curve {
    *        a value between {@code 0} and {@code 1}.
    * @return {Point}
    */
-  getPoint: function(parameter) {
-    return Curve.evaluate(this.getValues(), parameter, 0);
-  },
+  Point getPoint(num parameter) {
+    return Curve.evaluate(getValues(), parameter, 0);
+  }
 
   /**
    * Returns the tangent point on the curve at the specified position.
@@ -305,9 +305,9 @@ class Curve {
    * @param {Number} parameter the position at which to find the tangent
    *        point as a value between {@code 0} and {@code 1}.
    */
-  getTangent: function(parameter) {
-    return Curve.evaluate(this.getValues(), parameter, 1);
-  },
+  Point getTangent(parameter) {
+    return Curve.evaluate(getValues(), parameter, 1);
+  }
 
   /**
    * Returns the normal point on the curve at the specified position.
@@ -315,18 +315,18 @@ class Curve {
    * @param {Number} parameter the position at which to find the normal
    *        point as a value between {@code 0} and {@code 1}.
    */
-  getNormal: function(parameter) {
-    return Curve.evaluate(this.getValues(), parameter, 2);
-  },
+  Point getNormal(parameter) {
+    return Curve.evaluate(getValues(), parameter, 2);
+  }
 
   /**
    * @param {Point} point
    * @return {Number}
    */
-  getParameter: function(point) {
+  num getParameter(point) {
     point = Point.read(point);
-    return Curve.getParameter(this.getValues(), point.x, point.y);
-  },
+    return Curve.getParameter(getValues(), point.x, point.y);
+  }
 
   getCrossings: function(point, roots) {
     // Implement the crossing number algorithm:
