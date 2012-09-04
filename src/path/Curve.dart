@@ -61,10 +61,10 @@ class Curve {
     }
   }
 
-  _changed: function() {
+  _changed() {
     // Clear cached values.
-    delete this._length;
-  },
+    _length = null;
+  }
 
   /**
    * The first anchor point of the curve.
