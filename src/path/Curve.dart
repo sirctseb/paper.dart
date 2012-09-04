@@ -227,18 +227,19 @@ class Curve {
   }
   set selected(bool selected) => setSelected(selected);
 
-  getValues: function() {
-    return Curve.getValues(this._segment1, this._segment2);
-  },
+  getValues() {
+    return Curve.getValues(_segment1, _segment2);
+  }
+  get values => getValues();
 
-  getPoints: function() {
+  getPoints() {
     // Convert to array of absolute points
-    var coords = this.getValues(),
+    var coords = getValues(),
       points = [];
     for (var i = 0; i < 8; i += 2)
-      points.push(Point.create(coords[i], coords[i + 1]));
+      points.add(Point.create(coords[i], coords[i + 1]));
     return points;
-  },
+  }
 
   // DOCS: document Curve#getLength(from, to)
   /**
