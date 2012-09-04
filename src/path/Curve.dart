@@ -216,14 +216,16 @@ class Curve {
    * @type Boolean
    * @bean
    */
-  isSelected: function() {
-    return this.getHandle1().isSelected() && this.getHandle2().isSelected();
-  },
+  bool isSelected() {
+    return getHandle1().isSelected() && getHandle2().isSelected();
+  }
+  bool get selected => isSelected();
 
-  setSelected: function(selected) {
-    this.getHandle1().setSelected(selected);
-    this.getHandle2().setSelected(selected);
-  },
+  void setSelected(bool selected) {
+    getHandle1().setSelected(selected);
+    getHandle2().setSelected(selected);
+  }
+  set selected(bool selected) => setSelected(selected);
 
   getValues: function() {
     return Curve.getValues(this._segment1, this._segment2);
