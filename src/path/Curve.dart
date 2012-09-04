@@ -260,9 +260,9 @@ class Curve {
   }
   num get length => getLength();
 
-  getPart: function(from, to) {
-    return new Curve(Curve.getPart(this.getValues(), from, to));
-  },
+  Curve getPart(num from, num to) {
+    return new Curve(Curve.getPart(getValues(), from, to));
+  }
 
   /**
    * Checks if this curve is linear, meaning it does not define any curve
