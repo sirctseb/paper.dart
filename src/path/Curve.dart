@@ -248,18 +248,17 @@ class Curve {
    * @type Number
    * @bean
    */
-  getLength: function(/* from, to */) {
+  num getLength([num from = 0, num to = 1]) {
     // Hide parameters from Bootstrap so it injects bean too
-    var from = arguments[0],
-      to = arguments[1];
-      fullLength = arguments.length == 0 || from == 0 && to == 1;
-    if (fullLength && this._length != null)
-      return this._length;
-    var length = Curve.getLength(this.getValues(), from, to);
+    num fullLength = from == 0 && to == 1;
+    if (fullLength && _length != null)
+      return _length;
+    var length = Curve.getLength(getValues(), from, to);
     if (fullLength)
-      this._length = length;
+      _length = length;
     return length;
-  },
+  }
+  num get length => getLength();
 
   getPart: function(from, to) {
     return new Curve(Curve.getPart(this.getValues(), from, to));
