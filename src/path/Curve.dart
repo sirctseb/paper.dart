@@ -185,11 +185,14 @@ class Curve {
    * @type Curve
    * @bean
    */
-  getNext: function() {
-    var curves = this._path && this._path._curves;
-    return curves && (curves[this._segment1._index + 1]
-        || this._path._closed && curves[0]) || null;
-  },
+  Curve getNext() {
+    var curves = _path != null ? _path._curves : null;
+    if(curves == null) return null;
+    if(curves[_segment1._index + 1] != null) return curves[_segment1._index + 1];
+    if(_path._closed && curves[0] != null) return curves[0];
+    return null;
+  }
+  Curve get next => getNext();
 
   /**
    * The previous curve in the {@link Path#curves} array that the curve
@@ -198,11 +201,14 @@ class Curve {
    * @type Curve
    * @bean
    */
-  getPrevious: function() {
-    var curves = this._path && this._path._curves;
-    return curves && (curves[this._segment1._index - 1]
-        || this._path._closed && curves[curves.length - 1]) || null;
-  },
+  Curve getPrevious() {
+    var curves = _path != null ? _path._curves : null;
+    if(curves == null) return null;
+    if(curves[_segment1._index - 1] != null) return curves[_segment1._index - 1];
+    if(_path._closed && curves[curves.length - 1] != null) return curves[curves.length - 1];
+    return null;
+  }
+  Curve get previous => getPrevious();
 
   /**
    * Specifies whether the handles of the curve are selected.
