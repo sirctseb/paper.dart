@@ -328,15 +328,15 @@ class Curve {
     return Curve.getParameter(getValues(), point.x, point.y);
   }
 
-  getCrossings: function(point, roots) {
+  int getCrossings(Point point, roots) {
     // Implement the crossing number algorithm:
     // http://en.wikipedia.org/wiki/Point_in_polygon
     // Solve the y-axis cubic polynominal for point.y and count all
     // solutions to the right of point.x as crossings.
-    var vals = this.getValues(),
-      num = Curve.solveCubic(vals, 1, point.y, roots),
-      crossings = 0;
-    for (var i = 0; i < num; i++) {
+    var vals = this.getValues();
+    num number = Curve.solveCubic(vals, 1, point.y, roots);
+    int crossings = 0;
+    for (int i = 0; i < num; i++) {
       var t = roots[i];
       if (t >= 0 && t < 1 && Curve.evaluate(vals, t, 0).x > point.x) {
         // If we're close to 0 and are not changing y-direction from the
@@ -345,14 +345,14 @@ class Curve {
         // we're calculating tangents, and then check their y-slope for
         // a change of direction:
         if (t < Numerical.TOLERANCE && Curve.evaluate(
-              this.getPrevious().getValues(), 1, 1).y
+              getPrevious().getValues(), 1, 1).y
             * Curve.evaluate(vals, t, 1).y >= 0)
           continue;
         crossings++;
       }
     }
     return crossings;
-  },
+  }
 
   // TODO: getLocation
   // TODO: getIntersections
