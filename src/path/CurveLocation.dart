@@ -158,7 +158,7 @@ class CurveLocation {
    * @type Point
    * @bean
    */
-  num _point;
+  Point _point;
   Point getPoint() {
     if (_point == null && _curve != null && _parameter != null)
       _point = _curve.getPoint(_parameter);
