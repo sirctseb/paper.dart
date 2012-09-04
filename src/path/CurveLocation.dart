@@ -220,11 +220,11 @@ class CurveLocation {
     var parameter = getParameter();
     if (parameter != null) {
       if(!sb.isEmpty()) sb.add(', ');
-      parts.add('parameter: ${Base.formatNumber(parameter)}');
+      sb.add('parameter: ${Base.formatNumber(parameter)}');
     }
     if (_distance != null) {
       if(!sb.isEmpty()) sb.add(', ');
-      parts.add('distance: ${Base.formatNumber(this._distance)}');
+      sb.add('distance: ${Base.formatNumber(this._distance)}');
     }
     return sb.toString();
   }
