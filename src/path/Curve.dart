@@ -162,9 +162,10 @@ class Curve {
    * @type Path
    * @bean
    */
-  getPath: function() {
-    return this._path;
-  },
+  Path getPath() {
+    return _path;
+  }
+  Path get path => getPath();
 
   /**
    * The index of the curve in the {@link Path#curves} array.
@@ -172,9 +173,10 @@ class Curve {
    * @type Number
    * @bean
    */
-  getIndex: function() {
-    return this._segment1._index;
-  },
+  int getIndex() {
+    return _segment1._index;
+  }
+  int get index => getIndex();
 
   /**
    * The next curve in the {@link Path#curves} array that the curve
