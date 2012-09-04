@@ -130,8 +130,8 @@ class CurveLocation {
    */
   num getCurveOffset() {
     var parameter = getParameter();
-    return parameter != null && _curve
-        && _curve.getLength(0, parameter);
+    return parameter != null && _curve != null ?
+        _curve.getLength(0, parameter) : null;
   }
   num get curveOffset => getCurveOffset();
 
