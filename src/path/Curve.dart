@@ -283,10 +283,10 @@ class Curve {
    * @param {Number} [start]
    * @return {Number}
    */
-  getParameterAt: function(offset, start) {
+  num getParameterAt(num offset, [num start]) {
     return Curve.getParameterAt(this.getValues(), offset,
-        start !== undefined ? start : offset < 0 ? 1 : 0);
-  },
+        start != null ? start : offset < 0 ? 1 : 0);
+  }
 
   /**
    * Returns the point on the curve at the specified position.
