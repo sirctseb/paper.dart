@@ -13,6 +13,11 @@
  *
  * All rights reserved.
  */
+library Path;
+import "../basic/Basic.dart";
+part "Segment.dart";
+part "SegmentPoint.dart";
+part "SelectionState.dart";
 
 /**
  * @name Path

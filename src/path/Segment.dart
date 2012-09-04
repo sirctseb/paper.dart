@@ -13,10 +13,6 @@
  *
  * All rights reserved.
  */
-library Segment;
-import "../basic/Basic.dart";
-part "SegmentPoint.dart";
-part "SelectionState.dart";
 
 /**
  * @name Segment
