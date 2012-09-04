@@ -15,6 +15,7 @@
  */
 library Path;
 import "../basic/Basic.dart";
+import "../item/Item.dart";
 part "Segment.dart";
 part "SegmentPoint.dart";
 part "SelectionState.dart";
