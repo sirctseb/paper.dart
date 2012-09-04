@@ -364,9 +364,9 @@ class Curve {
    *
    * @return {Curve} a reversed version of the curve
    */
-  reverse: function() {
-    return new Curve(this._segment2.reverse(), this._segment1.reverse());
-  },
+  Curve reverse() {
+    return new Curve(_segment2.reverse(), _segment1.reverse());
+  }
 
   // TODO: divide
   // TODO: split
@@ -376,9 +376,9 @@ class Curve {
    *
    * @return {Curve}
    */
-  clone: function() {
-    return new Curve(this._segment1, this._segment2);
-  },
+  Curve clone() {
+    return new Curve(_segment1, _segment2);
+  }
 
   /**
    * @return {String} A string representation of the curve.
