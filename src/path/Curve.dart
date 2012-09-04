@@ -35,32 +35,31 @@ class Curve {
    * @param {Segment} segment1
    * @param {Segment} segment2
    */
-  initialize: function(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
-    var count = arguments.length;
-    if (count == 0) {
-      this._segment1 = new Segment();
-      this._segment2 = new Segment();
-    } else if (count == 1) {
+  Curve([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7]) {
+    if (arg0 == null) {
+      _segment1 = new Segment();
+      _segment2 = new Segment();
+    } else if (arg1 == null) {
       // TODO: If beans are not activated, this won't copy from
       // an existing segment. OK?
-      this._segment1 = new Segment(arg0.segment1);
-      this._segment2 = new Segment(arg0.segment2);
-    } else if (count == 2) {
-      this._segment1 = new Segment(arg0);
-      this._segment2 = new Segment(arg1);
-    } else if (count == 4) {
+      _segment1 = new Segment(arg0.segment1);
+      _segment2 = new Segment(arg0.segment2);
+    } else if (arg2 == null) {
+      _segment1 = new Segment(arg0);
+      _segment2 = new Segment(arg1);
+    } else if (arg 4 == null) {
       this._segment1 = new Segment(arg0, null, arg1);
       this._segment2 = new Segment(arg3, arg2, null);
-    } else if (count == 8) {
+    } else if (arg7 != null) {
       // An array as returned by getValues
       var p1 = Point.create(arg0, arg1),
         p2 = Point.create(arg6, arg7);
-      this._segment1 = new Segment(p1, null,
+      _segment1 = new Segment(p1, null,
           Point.create(arg2, arg3).subtract(p1));
-      this._segment2 = new Segment(p2,
+      _segment2 = new Segment(p2,
           Point.create(arg4, arg5).subtract(p2), null);
     }
-  },
+  }
 
   _changed: function() {
     // Clear cached values.
