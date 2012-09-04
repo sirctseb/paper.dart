@@ -270,10 +270,10 @@ class Curve {
 
    * @return {Boolean} {@true the curve is linear}
    */
-  isLinear: function() {
-    return this._segment1._handleOut.isZero()
-        && this._segment2._handleIn.isZero();
-  },
+  bool isLinear() {
+    return _segment1._handleOut.isZero()
+        && _segment2._handleIn.isZero();
+  }
 
   // PORT: Add support for start parameter to Sg
   // PORT: Rename #getParameter(length) -> #getParameterAt(offset)
