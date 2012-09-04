@@ -140,9 +140,10 @@ class Curve {
    * @type Segment
    * @bean
    */
-  getSegment1: function() {
-    return this._segment1;
-  },
+  Segment getSegment1() {
+    return _segment1;
+  }
+  Segment get segment1 => getSegment1();
 
   /**
    * The second segment of the curve.
@@ -150,9 +151,10 @@ class Curve {
    * @type Segment
    * @bean
    */
-  getSegment2: function() {
-    return this._segment2;
-  },
+  Segment getSegment2() {
+    return _segment2;
+  }
+  Segment get segment2 => getSegment2();
 
   /**
    * The path that the curve belongs to.
