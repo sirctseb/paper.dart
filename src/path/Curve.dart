@@ -401,11 +401,9 @@ class Curve {
 
   // TODO param types in static methods
   Curve.create(Path path, Segment segment1, Segment segment2) {
-    var curve = new Curve(Curve.dont);
-    curve._path = path;
-    curve._segment1 = segment1;
-    curve._segment2 = segment2;
-    return curve;
+    _path = path;
+    _segment1 = segment1;
+    _segment2 = segment2;
   }
 
   static List _getValues(segment1, segment2) {
