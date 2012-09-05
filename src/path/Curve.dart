@@ -512,9 +512,9 @@ class Curve {
   }
 
   static num _getParameter(v, x, y) {
-    var txs = [],
-      tys = [],
-      sx = Curve.solveCubic(v, 0, x, txs),
+    List txs = [],
+      tys = [];
+    num sx = Curve.solveCubic(v, 0, x, txs),
       sy = Curve.solveCubic(v, 1, y, tys),
       tx, ty;
     // sx, sy == -1 means infinite solutions:
