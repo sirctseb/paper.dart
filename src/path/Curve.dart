@@ -471,12 +471,12 @@ class Curve {
   }
 
   // TODO return type
-  static _subdivide(List v, num t) {
+  static _subdivide(List v, [num t]) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
       p2x = v[6], p2y = v[7];
-    if (t === undefined)
+    if (t == null)
       t = 0.5;
     // Triangle computation, with loops unrolled.
     var u = 1 - t,
