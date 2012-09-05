@@ -404,7 +404,7 @@ class Curve {
     return curve;
   }
 
-  List getValues(segment1, segment2) {
+  static List getValues(segment1, segment2) {
     var p1 = segment1._point,
       h1 = segment1._handleOut,
       h2 = segment2._handleIn,
@@ -417,7 +417,7 @@ class Curve {
       ];
   }
 
-  Point evaluate(List v, num t, int type) {
+  static Point evaluate(List v, num t, int type) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -469,7 +469,7 @@ class Curve {
   }
 
   // TODO return type
-  subdivide(List v, num t) {
+  static subdivide(List v, num t) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -497,7 +497,7 @@ class Curve {
   // Converts from the point coordinates (p1, c1, c2, p2) for one axis to
   // the polynomial coefficients and solves the polynomial for val
   // TODO return type
-  solveCubic (List v, int coord, val, roots) {
+  static solveCubic (List v, int coord, val, roots) {
     var p1 = v[coord],
       c1 = v[coord + 2],
       c2 = v[coord + 4],
@@ -509,7 +509,7 @@ class Curve {
         Numerical.TOLERANCE);
   }
 
-  num getParameter(v, x, y) {
+  static num getParameter(v, x, y) {
     var txs = [],
       tys = [],
       sx = Curve.solveCubic(v, 0, x, txs),
@@ -542,7 +542,7 @@ class Curve {
   }
 
   // TODO: Find better name
-  Curve getPart(v, from, to) {
+  static Curve getPart(v, from, to) {
     if (from > 0)
       v = Curve.subdivide(v, from)[1]; // [1] right
     // Interpolate the  parameter at 'to' in the new curve and
@@ -552,7 +552,7 @@ class Curve {
     return v;
   }
 
-  isFlatEnough(v) {
+  static isFlatEnough(v) {
     // Thanks to Kaspar Fischer for the following:
     // http://www.inf.ethz.ch/personal/fischerk/pubs/bez.pdf
     var p1x = v[0], p1y = v[1],
@@ -565,10 +565,10 @@ class Curve {
       vy = 3 * c2y - 2 * p2y - p1y;
     return Math.max(ux * ux, vx * vx) + Math.max(uy * uy, vy * vy) < 1;
   }
-}
-}, new function() { // Scope for methods that require numerical integration
+  
+  // methods that require numerical integration
 
-  function getLengthIntegrand(v) {
+  static _getLengthIntegrand(v) {
     // Calculate the coefficients of a Bezier derivative.
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
@@ -583,79 +583,75 @@ class Curve {
       by = 6 * (p1y + c2y) - 12 * c1y,
       cy = 3 * (c1y - p1y);
 
-    return function(t) {
+    return (num t) {
       // Calculate quadratic equations of derivatives for x and y
       var dx = (ax * t + bx) * t + cx,
         dy = (ay * t + by) * t + cy;
-      return Math.sqrt(dx * dx + dy * dy);
+      return (dx * dx + dy * dy).sqrt();
     };
   }
 
   // Amount of integral evaluations for the interval 0 <= a < b <= 1
-  function getIterations(a, b) {
+  static num _getIterations(a, b) {
     // Guess required precision based and size of range...
     // TODO: There should be much better educated guesses for
     // this. Also, what does this depend on? Required precision?
-    return Math.max(2, Math.min(16, Math.ceil(Math.abs(b - a) * 32)));
+    return Math.max(2, Math.min(16, ((b - a).abs() * 32).ceil()));
   }
 
-  return {
-    statics: true,
-
-    getLength: function(v, a, b) {
-      if (a === undefined)
-        a = 0;
-      if (b === undefined)
-        b = 1;
-      // if (p1 == c1 && p2 == c2):
-      if (v[0] == v[2] && v[1] == v[3] && v[6] == v[4] && v[7] == v[5]) {
-        // Straight line
-        var dx = v[6] - v[0], // p2x - p1x
-          dy = v[7] - v[1]; // p2y - p1y
-        return (b - a) * Math.sqrt(dx * dx + dy * dy);
-      }
-      var ds = getLengthIntegrand(v);
-      return Numerical.integrate(ds, a, b, getIterations(a, b));
-    },
-
-    getParameterAt: function(v, offset, start) {
-      if (offset == 0)
-        return start;
-      // See if we're going forward or backward, and handle cases
-      // differently
-      var forward = offset > 0,
-        a = forward ? start : 0,
-        b = forward ? 1 : start,
-        offset = Math.abs(offset),
-        // Use integrand to calculate both range length and part
-        // lengths in f(t) below.
-        ds = getLengthIntegrand(v),
-        // Get length of total range
-        rangeLength = Numerical.integrate(ds, a, b,
-            getIterations(a, b));
-      if (offset >= rangeLength)
-        return forward ? b : a;
-      // Use offset / rangeLength for an initial guess for t, to
-      // bring us closer:
-      var guess = offset / rangeLength,
-        length = 0;
-      // Iteratively calculate curve range lengths, and add them up,
-      // using integration precision depending on the size of the
-      // range. This is much faster and also more precise than not
-      // modifing start and calculating total length each time.
-      function f(t) {
-        var count = getIterations(start, t);
-        length += start < t
-            ? Numerical.integrate(ds, start, t, count)
-            : -Numerical.integrate(ds, t, start, count);
-        start = t;
-        return length - offset;
-      }
-      return Numerical.findRoot(f, ds,
-          forward ? a + guess : b - guess, // Initial guess for x
-          a, b, 16, Numerical.TOLERANCE);
+  static num getLength(v, a, b) {
+    if (a === undefined)
+      a = 0;
+    if (b === undefined)
+      b = 1;
+    // if (p1 == c1 && p2 == c2):
+    if (v[0] == v[2] && v[1] == v[3] && v[6] == v[4] && v[7] == v[5]) {
+      // Straight line
+      var dx = v[6] - v[0], // p2x - p1x
+        dy = v[7] - v[1]; // p2y - p1y
+      return (b - a) * Math.sqrt(dx * dx + dy * dy);
     }
-  };
+    var ds = _getLengthIntegrand(v);
+    return Numerical.integrate(ds, a, b, _getIterations(a, b));
+  }
+
+  static getParameterAt(v, offset, start) {
+    if (offset == 0)
+      return start;
+    // See if we're going forward or backward, and handle cases
+    // differently
+    var forward = offset > 0,
+      a = forward ? start : 0,
+      b = forward ? 1 : start,
+      offset = Math.abs(offset),
+      // Use integrand to calculate both range length and part
+      // lengths in f(t) below.
+      ds = _getLengthIntegrand(v),
+      // Get length of total range
+      rangeLength = Numerical.integrate(ds, a, b,
+          _getIterations(a, b));
+    if (offset >= rangeLength)
+      return forward ? b : a;
+    // Use offset / rangeLength for an initial guess for t, to
+    // bring us closer:
+    var guess = offset / rangeLength,
+      length = 0;
+    // Iteratively calculate curve range lengths, and add them up,
+    // using integration precision depending on the size of the
+    // range. This is much faster and also more precise than not
+    // modifing start and calculating total length each time.
+    function f(t) {
+      var count = _getIterations(start, t);
+      length += start < t
+          ? Numerical.integrate(ds, start, t, count)
+          : -Numerical.integrate(ds, t, start, count);
+      start = t;
+      return length - offset;
+    }
+    return Numerical.findRoot(f, ds,
+        forward ? a + guess : b - guess, // Initial guess for x
+        a, b, 16, Numerical.TOLERANCE);
+  }
 }, new function() { // Scope for nearest point on curve problem
 
   // Solving the Nearest Point-on-Curve Problem and A Bezier-Based Root-Finder
