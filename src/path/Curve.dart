@@ -250,6 +250,7 @@ class Curve {
    * @type Number
    * @bean
    */
+  num _length;
   num getLength([num from = 0, num to = 1]) {
     // Hide parameters from Bootstrap so it injects bean too
     num fullLength = from == 0 && to == 1;
