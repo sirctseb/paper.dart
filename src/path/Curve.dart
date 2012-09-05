@@ -420,7 +420,7 @@ class Curve {
   }
 
   static Point _evaluate(List v, num t, int type) {
-    var p1x = v[0], p1y = v[1],
+    num p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
       p2x = v[6], p2y = v[7],
