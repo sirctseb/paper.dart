@@ -140,6 +140,7 @@ class Curve {
    * @type Segment
    * @bean
    */
+  Segment _segment1;
   Segment getSegment1() {
     return _segment1;
   }
@@ -151,6 +152,7 @@ class Curve {
    * @type Segment
    * @bean
    */
+  Segment _segment2;
   Segment getSegment2() {
     return _segment2;
   }
