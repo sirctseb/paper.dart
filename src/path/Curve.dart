@@ -652,29 +652,30 @@ class Curve {
         forward ? a + guess : b - guess, // Initial guess for x
         a, b, 16, Numerical.TOLERANCE);
   }
-}, new function() { // Scope for nearest point on curve problem
+
+  // for nearest point on curve problem
 
   // Solving the Nearest Point-on-Curve Problem and A Bezier-Based Root-Finder
   // by Philip J. Schneider from "Graphics Gems", Academic Press, 1990
   // Optimised for Paper.js
 
-  var maxDepth = 32,
-    epsilon = Math.pow(2, -maxDepth - 1);
+  static final int _maxDepth = 32;
+  static final num _epsilon = Math.pow(2, -maxDepth - 1);
 
-  var zCubic = [
+  static final List<List<num>> _zCubic = [
     [1.0, 0.6, 0.3, 0.1],
     [0.4, 0.6, 0.6, 0.4],
     [0.1, 0.3, 0.6, 1.0]
   ];
 
-  var xAxis = new Line(new Point(0, 0), new Point(1, 0));
+  static Line _xAxis = new Line(new Point(0, 0), new Point(1, 0));
 
    /**
     * Given a point and a Bezier curve, generate a 5th-degree Bezier-format
     * equation whose solution finds the point on the curve nearest the
     * user-defined point.
     */
-  function toBezierForm(v, point) {
+  static _toBezierForm(v, point) {
     var n = 3, // degree of B(t)
        degree = 5, // degree of B(t) . P
       c = [],
@@ -720,7 +721,7 @@ class Curve {
    * Given a 5th-degree equation in Bernstein-Bezier form, find all of the
    * roots in the interval [0, 1].  Return the number of roots found.
    */
-  function findRoots(w, depth) {
+  static _findRoots(w, depth) {
     switch (countCrossings(w)) {
     case 0:
       // No solutions here
@@ -729,7 +730,7 @@ class Curve {
       // Unique solution
       // Stop recursion when the tree is deep enough
       // if deep enough, return 1 solution at midpoint
-      if (depth >= maxDepth)
+      if (depth >= _maxDepth)
         return [0.5 * (w[0].x + w[5].x)];
       // Compute intersection of chord from first control point to last
       // with x-axis.
@@ -770,7 +771,7 @@ class Curve {
    * Count the number of times a Bezier control polygon  crosses the x-axis.
    * This number is >= the number of roots.
    */
-  function countCrossings(v) {
+  static _countCrossings(v) {
     var crossings = 0,
       prevSign = null;
     for (var i = 0, l = v.length; i < l; i++)  {
@@ -786,7 +787,7 @@ class Curve {
    * Check if the control polygon of a Bezier curve is flat enough for
    * recursive subdivision to bottom out.
    */
-  function isFlatEnough(v) {
+  static _isFlatEnough(v) {
     // Find the  perpendicular distance from each interior control point to
     // line connecting v[0] and v[degree]
 
@@ -814,33 +815,31 @@ class Curve {
         < epsilon;
   }
 
-  return {
-    getNearestLocation: function(point) {
-      // NOTE: If we allow #matrix on Path, we need to inverse-transform
-      // point here first.
-      // point = this._matrix.inverseTransform(point);
-      var w = toBezierForm(this.getPoints(), point);
-      // Also look at beginning and end of curve (t = 0 / 1)
-      var roots = findRoots(w, 0).concat([0, 1]);
-      var minDist = Infinity,
-        minT,
-        minPoint;
-      // There are always roots, since we add [0, 1] above.
-      for (var i = 0; i < roots.length; i++) {
-        var pt = this.getPoint(roots[i]),
-          dist = point.getDistance(pt, true);
-        // We're comparing squared distances
-        if (dist < minDist) {
-          minDist = dist;
-          minT = roots[i];
-          minPoint = pt;
-        }
+  getNearestLocation(point) {
+    // NOTE: If we allow #matrix on Path, we need to inverse-transform
+    // point here first.
+    // point = this._matrix.inverseTransform(point);
+    var w = toBezierForm(this.getPoints(), point);
+    // Also look at beginning and end of curve (t = 0 / 1)
+    var roots = findRoots(w, 0).concat([0, 1]);
+    var minDist = Infinity,
+      minT,
+      minPoint;
+    // There are always roots, since we add [0, 1] above.
+    for (var i = 0; i < roots.length; i++) {
+      var pt = this.getPoint(roots[i]),
+        dist = point.getDistance(pt, true);
+      // We're comparing squared distances
+      if (dist < minDist) {
+        minDist = dist;
+        minT = roots[i];
+        minPoint = pt;
       }
-      return new CurveLocation(this, minT, minPoint, Math.sqrt(minDist));
-    },
-
-    getNearestPoint: function(point) {
-      return this.getNearestLocation(point).getPoint();
     }
-  };
+    return new CurveLocation(this, minT, minPoint, Math.sqrt(minDist));
+  }
+
+  getNearestPoint(point) {
+    return getNearestLocation(point).getPoint();
+  }
 }
