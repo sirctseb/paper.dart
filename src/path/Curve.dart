@@ -408,7 +408,7 @@ class Curve {
     return curve;
   }
 
-  static List getValues(segment1, segment2) {
+  static List _getValues(segment1, segment2) {
     var p1 = segment1._point,
       h1 = segment1._handleOut,
       h2 = segment2._handleIn,
@@ -421,7 +421,7 @@ class Curve {
       ];
   }
 
-  static Point evaluate(List v, num t, int type) {
+  static Point _evaluate(List v, num t, int type) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -473,7 +473,7 @@ class Curve {
   }
 
   // TODO return type
-  static subdivide(List v, num t) {
+  static _subdivide(List v, num t) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -513,7 +513,7 @@ class Curve {
         Numerical.TOLERANCE);
   }
 
-  static num getParameter(v, x, y) {
+  static num _getParameter(v, x, y) {
     var txs = [],
       tys = [],
       sx = Curve.solveCubic(v, 0, x, txs),
@@ -546,7 +546,7 @@ class Curve {
   }
 
   // TODO: Find better name
-  static Curve getPart(v, from, to) {
+  static Curve _getPart(v, from, to) {
     if (from > 0)
       v = Curve.subdivide(v, from)[1]; // [1] right
     // Interpolate the  parameter at 'to' in the new curve and
@@ -603,7 +603,7 @@ class Curve {
     return Math.max(2, Math.min(16, ((b - a).abs() * 32).ceil()));
   }
 
-  static num getLength(v, a, b) {
+  static num _getLength(v, a, b) {
     if (a === undefined)
       a = 0;
     if (b === undefined)
@@ -619,7 +619,7 @@ class Curve {
     return Numerical.integrate(ds, a, b, _getIterations(a, b));
   }
 
-  static getParameterAt(v, offset, start) {
+  static _getParameterAt(v, offset, start) {
     if (offset == 0)
       return start;
     // See if we're going forward or backward, and handle cases
