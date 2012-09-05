@@ -231,7 +231,7 @@ class Curve {
   set selected(bool selected) => setSelected(selected);
 
   getValues() {
-    return Curve.getValues(_segment1, _segment2);
+    return Curve._getValues(_segment1, _segment2);
   }
   get values => getValues();
 
@@ -257,7 +257,7 @@ class Curve {
     num fullLength = from == 0 && to == 1;
     if (fullLength && _length != null)
       return _length;
-    var length = Curve.getLength(getValues(), from, to);
+    var length = Curve._getLength(getValues(), from, to);
     if (fullLength)
       _length = length;
     return length;
@@ -265,7 +265,7 @@ class Curve {
   num get length => getLength();
 
   Curve getPart(num from, num to) {
-    return new Curve(Curve.getPart(getValues(), from, to));
+    return new Curve(Curve._getPart(getValues(), from, to));
   }
 
   /**
@@ -288,7 +288,7 @@ class Curve {
    * @return {Number}
    */
   num getParameterAt(num offset, [num start]) {
-    return Curve.getParameterAt(this.getValues(), offset,
+    return Curve._getParameterAt(this.getValues(), offset,
         start != null ? start : offset < 0 ? 1 : 0);
   }
 
@@ -300,7 +300,7 @@ class Curve {
    * @return {Point}
    */
   Point getPoint(num parameter) {
-    return Curve.evaluate(getValues(), parameter, 0);
+    return Curve._evaluate(getValues(), parameter, 0);
   }
 
   /**
@@ -310,7 +310,7 @@ class Curve {
    *        point as a value between {@code 0} and {@code 1}.
    */
   Point getTangent(parameter) {
-    return Curve.evaluate(getValues(), parameter, 1);
+    return Curve._evaluate(getValues(), parameter, 1);
   }
 
   /**
@@ -320,7 +320,7 @@ class Curve {
    *        point as a value between {@code 0} and {@code 1}.
    */
   Point getNormal(parameter) {
-    return Curve.evaluate(getValues(), parameter, 2);
+    return Curve._evaluate(getValues(), parameter, 2);
   }
 
   /**
@@ -329,7 +329,7 @@ class Curve {
    */
   num getParameter(point) {
     point = Point.read(point);
-    return Curve.getParameter(getValues(), point.x, point.y);
+    return Curve._getParameter(getValues(), point.x, point.y);
   }
 
   int getCrossings(Point point, roots) {
@@ -342,15 +342,15 @@ class Curve {
     int crossings = 0;
     for (int i = 0; i < num; i++) {
       var t = roots[i];
-      if (t >= 0 && t < 1 && Curve.evaluate(vals, t, 0).x > point.x) {
+      if (t >= 0 && t < 1 && Curve._evaluate(vals, t, 0).x > point.x) {
         // If we're close to 0 and are not changing y-direction from the
         // previous curve, do not count this root, as we're merely
         // touching a tip. Passing 1 for Curve.evaluate()'s type means
         // we're calculating tangents, and then check their y-slope for
         // a change of direction:
-        if (t < Numerical.TOLERANCE && Curve.evaluate(
+        if (t < Numerical.TOLERANCE && Curve._evaluate(
               getPrevious().getValues(), 1, 1).y
-            * Curve.evaluate(vals, t, 1).y >= 0)
+            * Curve._evaluate(vals, t, 1).y >= 0)
           continue;
         crossings++;
       }
@@ -548,11 +548,11 @@ class Curve {
   // TODO: Find better name
   static Curve _getPart(v, from, to) {
     if (from > 0)
-      v = Curve.subdivide(v, from)[1]; // [1] right
+      v = Curve._subdivide(v, from)[1]; // [1] right
     // Interpolate the  parameter at 'to' in the new curve and
     // cut there.
     if (to < 1)
-      v = Curve.subdivide(v, (to - from) / (1 - from))[0]; // [0] left
+      v = Curve._subdivide(v, (to - from) / (1 - from))[0]; // [0] left
     return v;
   }
 
@@ -726,7 +726,7 @@ class Curve {
    * roots in the interval [0, 1].  Return the number of roots found.
    */
   static _findRoots(w, depth) {
-    switch (countCrossings(w)) {
+    switch (_countCrossings(w)) {
     case 0:
       // No solutions here
       return [];
@@ -768,7 +768,7 @@ class Curve {
       right[j] = p[5 - j][j];
     }
 
-    return findRoots(left, depth + 1).concat(findRoots(right, depth + 1));
+    return _findRoots(left, depth + 1).concat(_findRoots(right, depth + 1));
   }
 
   /**
@@ -816,16 +816,16 @@ class Curve {
     }
     // Compute intercepts of bounding box
     return Math.abs((maxAbove + maxBelow) / (2 * a * (a * a + b * b)))
-        < epsilon;
+        < _epsilon;
   }
 
   getNearestLocation(point) {
     // NOTE: If we allow #matrix on Path, we need to inverse-transform
     // point here first.
     // point = this._matrix.inverseTransform(point);
-    var w = toBezierForm(this.getPoints(), point);
+    var w = _toBezierForm(this.getPoints(), point);
     // Also look at beginning and end of curve (t = 0 / 1)
-    var roots = findRoots(w, 0).concat([0, 1]);
+    var roots = _findRoots(w, 0).concat([0, 1]);
     var minDist = Infinity,
       minT,
       minPoint;
