@@ -52,12 +52,12 @@ class Curve {
       this._segment2 = new Segment(arg3, arg2, null);
     } else if (arg7 != null) {
       // An array as returned by getValues
-      var p1 = Point.create(arg0, arg1),
-        p2 = Point.create(arg6, arg7);
+      var p1 = new Point.create(arg0, arg1),
+        p2 = new Point.create(arg6, arg7);
       _segment1 = new Segment(p1, null,
-          Point.create(arg2, arg3).subtract(p1));
+          new Point.create(arg2, arg3).subtract(p1));
       _segment2 = new Segment(p2,
-          Point.create(arg4, arg5).subtract(p2), null);
+          new Point.create(arg4, arg5).subtract(p2), null);
     }
   }
 
