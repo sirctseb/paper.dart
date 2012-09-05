@@ -395,175 +395,174 @@ class Curve {
     sb.add(', point2: ${_segment2._point} }');
   }
 
-  statics: {
-    create: function(path, segment1, segment2) {
-      var curve = new Curve(Curve.dont);
-      curve._path = path;
-      curve._segment1 = segment1;
-      curve._segment2 = segment2;
-      return curve;
-    },
-
-    getValues: function(segment1, segment2) {
-      var p1 = segment1._point,
-        h1 = segment1._handleOut,
-        h2 = segment2._handleIn,
-        p2 = segment2._point;
-        return [
-          p1._x, p1._y,
-          p1._x + h1._x, p1._y + h1._y,
-          p2._x + h2._x, p2._y + h2._y,
-          p2._x, p2._y
-        ];
-    },
-
-    evaluate: function(v, t, type) {
-      var p1x = v[0], p1y = v[1],
-        c1x = v[2], c1y = v[3],
-        c2x = v[4], c2y = v[5],
-        p2x = v[6], p2y = v[7],
-        x, y;
-
-      // Handle special case at beginning / end of curve
-      // PORT: Change in Sg too, so 0.000000000001 won't be
-      // required anymore
-      if (type == 0 && (t == 0 || t == 1)) {
-        x = t == 0 ? p1x : p2x;
-        y = t == 0 ? p1y : p2y;
-      } else {
-        // TODO: Find a better solution for this:
-        // Prevent tangents and normals of length 0:
-        var tMin = Numerical.TOLERANCE;
-        if (t < tMin && c1x == p1x && c1y == p1y)
-          t = tMin;
-        else if (t > 1 - tMin && c2x == p2x && c2y == p2y)
-          t = 1 - tMin;
-        // Calculate the polynomial coefficients.
-        var cx = 3 * (c1x - p1x),
-          bx = 3 * (c2x - c1x) - cx,
-          ax = p2x - p1x - cx - bx,
-
-          cy = 3 * (c1y - p1y),
-          by = 3 * (c2y - c1y) - cy,
-          ay = p2y - p1y - cy - by;
-
-        switch (type) {
-        case 0: // point
-          // Calculate the curve point at parameter value t
-          x = ((ax * t + bx) * t + cx) * t + p1x;
-          y = ((ay * t + by) * t + cy) * t + p1y;
-          break;
-        case 1: // tangent
-        case 2: // normal
-          // Simply use the derivation of the bezier function for both
-          // the x and y coordinates:
-          x = (3 * ax * t + 2 * bx) * t + cx;
-          y = (3 * ay * t + 2 * by) * t + cy;
-          break;
-        }
-      }
-      // The normal is simply the rotated tangent:
-      // TODO: Rotate normals the other way in Scriptographer too?
-      // (Depending on orientation, I guess?)
-      return type == 2 ? new Point(y, -x) : new Point(x, y);
-    },
-
-    subdivide: function(v, t) {
-      var p1x = v[0], p1y = v[1],
-        c1x = v[2], c1y = v[3],
-        c2x = v[4], c2y = v[5],
-        p2x = v[6], p2y = v[7];
-      if (t === undefined)
-        t = 0.5;
-      // Triangle computation, with loops unrolled.
-      var u = 1 - t,
-        // Interpolate from 4 to 3 points
-        p3x = u * p1x + t * c1x, p3y = u * p1y + t * c1y,
-        p4x = u * c1x + t * c2x, p4y = u * c1y + t * c2y,
-        p5x = u * c2x + t * p2x, p5y = u * c2y + t * p2y,
-        // Interpolate from 3 to 2 points
-        p6x = u * p3x + t * p4x, p6y = u * p3y + t * p4y,
-        p7x = u * p4x + t * p5x, p7y = u * p4y + t * p5y,
-        // Interpolate from 2 points to 1 point
-        p8x = u * p6x + t * p7x, p8y = u * p6y + t * p7y;
-      // We now have all the values we need to build the subcurves:
-      return [
-        [p1x, p1y, p3x, p3y, p6x, p6y, p8x, p8y], // left
-        [p8x, p8y, p7x, p7y, p5x, p5y, p2x, p2y] // right
-      ];
-    },
-
-    // Converts from the point coordinates (p1, c1, c2, p2) for one axis to
-    // the polynomial coefficients and solves the polynomial for val
-    solveCubic: function (v, coord, val, roots) {
-      var p1 = v[coord],
-        c1 = v[coord + 2],
-        c2 = v[coord + 4],
-        p2 = v[coord + 6],
-        c = 3 * (c1 - p1),
-        b = 3 * (c2 - c1) - c,
-        a = p2 - p1 - c - b;
-      return Numerical.solveCubic(a, b, c, p1 - val, roots,
-          Numerical.TOLERANCE);
-    },
-
-    getParameter: function(v, x, y) {
-      var txs = [],
-        tys = [],
-        sx = Curve.solveCubic(v, 0, x, txs),
-        sy = Curve.solveCubic(v, 1, y, tys),
-        tx, ty;
-      // sx, sy == -1 means infinite solutions:
-      // Loop through all solutions for x and match with solutions for y,
-      // to see if we either have a matching pair, or infinite solutions
-      // for one or the other.
-      for (var cx = 0;  sx == -1 || cx < sx;) {
-        if (sx == -1 || (tx = txs[cx++]) >= 0 && tx <= 1) {
-          for (var cy = 0; sy == -1 || cy < sy;) {
-            if (sy == -1 || (ty = tys[cy++]) >= 0 && ty <= 1) {
-              // Handle infinite solutions by assigning root of
-              // the other polynomial
-              if (sx == -1) tx = ty;
-              else if (sy == -1) ty = tx;
-              // Use average if we're within tolerance
-              if (Math.abs(tx - ty) < Numerical.TOLERANCE)
-                return (tx + ty) * 0.5;
-            }
-          }
-          // Avoid endless loops here: If sx is infinite and there was
-          // no fitting ty, there's no solution for this bezier
-          if (sx == -1)
-            break;
-        }
-      }
-      return null;
-    },
-
-    // TODO: Find better name
-    getPart: function(v, from, to) {
-      if (from > 0)
-        v = Curve.subdivide(v, from)[1]; // [1] right
-      // Interpolate the  parameter at 'to' in the new curve and
-      // cut there.
-      if (to < 1)
-        v = Curve.subdivide(v, (to - from) / (1 - from))[0]; // [0] left
-      return v;
-    },
-
-    isFlatEnough: function(v) {
-      // Thanks to Kaspar Fischer for the following:
-      // http://www.inf.ethz.ch/personal/fischerk/pubs/bez.pdf
-      var p1x = v[0], p1y = v[1],
-        c1x = v[2], c1y = v[3],
-        c2x = v[4], c2y = v[5],
-        p2x = v[6], p2y = v[7],
-        ux = 3 * c1x - 2 * p1x - p2x,
-        uy = 3 * c1y - 2 * p1y - p2y,
-        vx = 3 * c2x - 2 * p2x - p1x,
-        vy = 3 * c2y - 2 * p2y - p1y;
-      return Math.max(ux * ux, vx * vx) + Math.max(uy * uy, vy * vy) < 1;
-    }
+  Curve.create(Path path, Segment segment1, Segment segment2) {
+    var curve = new Curve(Curve.dont);
+    curve._path = path;
+    curve._segment1 = segment1;
+    curve._segment2 = segment2;
+    return curve;
   }
+
+  getValues: function(segment1, segment2) {
+    var p1 = segment1._point,
+      h1 = segment1._handleOut,
+      h2 = segment2._handleIn,
+      p2 = segment2._point;
+      return [
+        p1._x, p1._y,
+        p1._x + h1._x, p1._y + h1._y,
+        p2._x + h2._x, p2._y + h2._y,
+        p2._x, p2._y
+      ];
+  },
+
+  evaluate: function(v, t, type) {
+    var p1x = v[0], p1y = v[1],
+      c1x = v[2], c1y = v[3],
+      c2x = v[4], c2y = v[5],
+      p2x = v[6], p2y = v[7],
+      x, y;
+
+    // Handle special case at beginning / end of curve
+    // PORT: Change in Sg too, so 0.000000000001 won't be
+    // required anymore
+    if (type == 0 && (t == 0 || t == 1)) {
+      x = t == 0 ? p1x : p2x;
+      y = t == 0 ? p1y : p2y;
+    } else {
+      // TODO: Find a better solution for this:
+      // Prevent tangents and normals of length 0:
+      var tMin = Numerical.TOLERANCE;
+      if (t < tMin && c1x == p1x && c1y == p1y)
+        t = tMin;
+      else if (t > 1 - tMin && c2x == p2x && c2y == p2y)
+        t = 1 - tMin;
+      // Calculate the polynomial coefficients.
+      var cx = 3 * (c1x - p1x),
+        bx = 3 * (c2x - c1x) - cx,
+        ax = p2x - p1x - cx - bx,
+
+        cy = 3 * (c1y - p1y),
+        by = 3 * (c2y - c1y) - cy,
+        ay = p2y - p1y - cy - by;
+
+      switch (type) {
+      case 0: // point
+        // Calculate the curve point at parameter value t
+        x = ((ax * t + bx) * t + cx) * t + p1x;
+        y = ((ay * t + by) * t + cy) * t + p1y;
+        break;
+      case 1: // tangent
+      case 2: // normal
+        // Simply use the derivation of the bezier function for both
+        // the x and y coordinates:
+        x = (3 * ax * t + 2 * bx) * t + cx;
+        y = (3 * ay * t + 2 * by) * t + cy;
+        break;
+      }
+    }
+    // The normal is simply the rotated tangent:
+    // TODO: Rotate normals the other way in Scriptographer too?
+    // (Depending on orientation, I guess?)
+    return type == 2 ? new Point(y, -x) : new Point(x, y);
+  },
+
+  subdivide: function(v, t) {
+    var p1x = v[0], p1y = v[1],
+      c1x = v[2], c1y = v[3],
+      c2x = v[4], c2y = v[5],
+      p2x = v[6], p2y = v[7];
+    if (t === undefined)
+      t = 0.5;
+    // Triangle computation, with loops unrolled.
+    var u = 1 - t,
+      // Interpolate from 4 to 3 points
+      p3x = u * p1x + t * c1x, p3y = u * p1y + t * c1y,
+      p4x = u * c1x + t * c2x, p4y = u * c1y + t * c2y,
+      p5x = u * c2x + t * p2x, p5y = u * c2y + t * p2y,
+      // Interpolate from 3 to 2 points
+      p6x = u * p3x + t * p4x, p6y = u * p3y + t * p4y,
+      p7x = u * p4x + t * p5x, p7y = u * p4y + t * p5y,
+      // Interpolate from 2 points to 1 point
+      p8x = u * p6x + t * p7x, p8y = u * p6y + t * p7y;
+    // We now have all the values we need to build the subcurves:
+    return [
+      [p1x, p1y, p3x, p3y, p6x, p6y, p8x, p8y], // left
+      [p8x, p8y, p7x, p7y, p5x, p5y, p2x, p2y] // right
+    ];
+  },
+
+  // Converts from the point coordinates (p1, c1, c2, p2) for one axis to
+  // the polynomial coefficients and solves the polynomial for val
+  solveCubic: function (v, coord, val, roots) {
+    var p1 = v[coord],
+      c1 = v[coord + 2],
+      c2 = v[coord + 4],
+      p2 = v[coord + 6],
+      c = 3 * (c1 - p1),
+      b = 3 * (c2 - c1) - c,
+      a = p2 - p1 - c - b;
+    return Numerical.solveCubic(a, b, c, p1 - val, roots,
+        Numerical.TOLERANCE);
+  },
+
+  getParameter: function(v, x, y) {
+    var txs = [],
+      tys = [],
+      sx = Curve.solveCubic(v, 0, x, txs),
+      sy = Curve.solveCubic(v, 1, y, tys),
+      tx, ty;
+    // sx, sy == -1 means infinite solutions:
+    // Loop through all solutions for x and match with solutions for y,
+    // to see if we either have a matching pair, or infinite solutions
+    // for one or the other.
+    for (var cx = 0;  sx == -1 || cx < sx;) {
+      if (sx == -1 || (tx = txs[cx++]) >= 0 && tx <= 1) {
+        for (var cy = 0; sy == -1 || cy < sy;) {
+          if (sy == -1 || (ty = tys[cy++]) >= 0 && ty <= 1) {
+            // Handle infinite solutions by assigning root of
+            // the other polynomial
+            if (sx == -1) tx = ty;
+            else if (sy == -1) ty = tx;
+            // Use average if we're within tolerance
+            if (Math.abs(tx - ty) < Numerical.TOLERANCE)
+              return (tx + ty) * 0.5;
+          }
+        }
+        // Avoid endless loops here: If sx is infinite and there was
+        // no fitting ty, there's no solution for this bezier
+        if (sx == -1)
+          break;
+      }
+    }
+    return null;
+  },
+
+  // TODO: Find better name
+  getPart: function(v, from, to) {
+    if (from > 0)
+      v = Curve.subdivide(v, from)[1]; // [1] right
+    // Interpolate the  parameter at 'to' in the new curve and
+    // cut there.
+    if (to < 1)
+      v = Curve.subdivide(v, (to - from) / (1 - from))[0]; // [0] left
+    return v;
+  },
+
+  isFlatEnough: function(v) {
+    // Thanks to Kaspar Fischer for the following:
+    // http://www.inf.ethz.ch/personal/fischerk/pubs/bez.pdf
+    var p1x = v[0], p1y = v[1],
+      c1x = v[2], c1y = v[3],
+      c2x = v[4], c2y = v[5],
+      p2x = v[6], p2y = v[7],
+      ux = 3 * c1x - 2 * p1x - p2x,
+      uy = 3 * c1y - 2 * p1y - p2y,
+      vx = 3 * c2x - 2 * p2x - p1x,
+      vy = 3 * c2y - 2 * p2y - p1y;
+    return Math.max(ux * ux, vx * vx) + Math.max(uy * uy, vy * vy) < 1;
+  }
+}
 }, new function() { // Scope for methods that require numerical integration
 
   function getLengthIntegrand(v) {
