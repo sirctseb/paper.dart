@@ -240,7 +240,7 @@ class Curve {
     var coords = getValues(),
       points = [];
     for (var i = 0; i < 8; i += 2)
-      points.add(Point.create(coords[i], coords[i + 1]));
+      points.add(new Point.create(coords[i], coords[i + 1]));
     return points;
   }
 
