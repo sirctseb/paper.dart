@@ -164,6 +164,7 @@ class Curve {
    * @type Path
    * @bean
    */
+  Path _path;
   Path getPath() {
     return _path;
   }
