@@ -383,15 +383,17 @@ class Curve {
   /**
    * @return {String} A string representation of the curve.
    */
-  toString: function() {
-    var parts = [ 'point1: ' + this._segment1._point ];
-    if (!this._segment1._handleOut.isZero())
-      parts.push('handle1: ' + this._segment1._handleOut);
-    if (!this._segment2._handleIn.isZero())
-      parts.push('handle2: ' + this._segment2._handleIn);
-    parts.push('point2: ' + this._segment2._point);
-    return '{ ' + parts.join(', ') + ' }';
-  },
+  String toString() {
+    StringBuffer sb =
+      new StringBuffer('{ point1: ${_segment1._point}');
+    if (!_segment1._handleOut.isZero()) {
+      sb.add(', handle1: ${_segment1._handleOut}');
+    }
+    if (!this._segment2._handleIn.isZero()) {
+      sb.add(', handle2: ${_segment2._handleIn}');
+    }
+    sb.add(', point2: ${_segment2._point} }');
+  }
 
   statics: {
     create: function(path, segment1, segment2) {
