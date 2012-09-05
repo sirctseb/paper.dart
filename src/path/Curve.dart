@@ -47,7 +47,7 @@ class Curve {
     } else if (arg2 == null) {
       _segment1 = new Segment(arg0);
       _segment2 = new Segment(arg1);
-    } else if (arg 4 == null) {
+    } else if (arg4 == null) {
       this._segment1 = new Segment(arg0, null, arg1);
       this._segment2 = new Segment(arg3, arg2, null);
     } else if (arg7 != null) {
