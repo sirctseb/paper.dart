@@ -340,7 +340,7 @@ class Curve {
     var vals = this.getValues();
     num number = Curve.solveCubic(vals, 1, point.y, roots);
     int crossings = 0;
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < number; i++) {
       var t = roots[i];
       if (t >= 0 && t < 1 && Curve._evaluate(vals, t, 0).x > point.x) {
         // If we're close to 0 and are not changing y-direction from the
