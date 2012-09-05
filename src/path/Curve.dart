@@ -395,6 +395,7 @@ class Curve {
     sb.add(', point2: ${_segment2._point} }');
   }
 
+  // TODO param types in static methods
   Curve.create(Path path, Segment segment1, Segment segment2) {
     var curve = new Curve(Curve.dont);
     curve._path = path;
@@ -403,7 +404,7 @@ class Curve {
     return curve;
   }
 
-  getValues: function(segment1, segment2) {
+  List getValues(segment1, segment2) {
     var p1 = segment1._point,
       h1 = segment1._handleOut,
       h2 = segment2._handleIn,
@@ -414,9 +415,9 @@ class Curve {
         p2._x + h2._x, p2._y + h2._y,
         p2._x, p2._y
       ];
-  },
+  }
 
-  evaluate: function(v, t, type) {
+  Point evaluate(List v, num t, int type) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -465,9 +466,10 @@ class Curve {
     // TODO: Rotate normals the other way in Scriptographer too?
     // (Depending on orientation, I guess?)
     return type == 2 ? new Point(y, -x) : new Point(x, y);
-  },
+  }
 
-  subdivide: function(v, t) {
+  // TODO return type
+  subdivide(List v, num t) {
     var p1x = v[0], p1y = v[1],
       c1x = v[2], c1y = v[3],
       c2x = v[4], c2y = v[5],
@@ -490,11 +492,12 @@ class Curve {
       [p1x, p1y, p3x, p3y, p6x, p6y, p8x, p8y], // left
       [p8x, p8y, p7x, p7y, p5x, p5y, p2x, p2y] // right
     ];
-  },
+  }
 
   // Converts from the point coordinates (p1, c1, c2, p2) for one axis to
   // the polynomial coefficients and solves the polynomial for val
-  solveCubic: function (v, coord, val, roots) {
+  // TODO return type
+  solveCubic (List v, int coord, val, roots) {
     var p1 = v[coord],
       c1 = v[coord + 2],
       c2 = v[coord + 4],
@@ -504,9 +507,9 @@ class Curve {
       a = p2 - p1 - c - b;
     return Numerical.solveCubic(a, b, c, p1 - val, roots,
         Numerical.TOLERANCE);
-  },
+  }
 
-  getParameter: function(v, x, y) {
+  num getParameter(v, x, y) {
     var txs = [],
       tys = [],
       sx = Curve.solveCubic(v, 0, x, txs),
@@ -525,7 +528,7 @@ class Curve {
             if (sx == -1) tx = ty;
             else if (sy == -1) ty = tx;
             // Use average if we're within tolerance
-            if (Math.abs(tx - ty) < Numerical.TOLERANCE)
+            if ((tx - ty).abs() < Numerical.TOLERANCE)
               return (tx + ty) * 0.5;
           }
         }
@@ -536,10 +539,10 @@ class Curve {
       }
     }
     return null;
-  },
+  }
 
   // TODO: Find better name
-  getPart: function(v, from, to) {
+  Curve getPart(v, from, to) {
     if (from > 0)
       v = Curve.subdivide(v, from)[1]; // [1] right
     // Interpolate the  parameter at 'to' in the new curve and
@@ -547,9 +550,9 @@ class Curve {
     if (to < 1)
       v = Curve.subdivide(v, (to - from) / (1 - from))[0]; // [0] left
     return v;
-  },
+  }
 
-  isFlatEnough: function(v) {
+  isFlatEnough(v) {
     // Thanks to Kaspar Fischer for the following:
     // http://www.inf.ethz.ch/personal/fischerk/pubs/bez.pdf
     var p1x = v[0], p1y = v[1],
