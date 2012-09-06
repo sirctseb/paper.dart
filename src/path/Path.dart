@@ -242,29 +242,33 @@ class Path extends PathItem {
   // taken into account.
 
   // DOCS: Explain that path matrix is always applied with each transformation.
-  transform: function(matrix) {
-    return this.base(matrix, true);
-  },
+  Path transform(matrix) {
+    // TODO does this go up to Item?
+    return super.transform(matrix, true);
+  }
 
-  getMatrix: function() {
+  Matrix getMatrix() {
     // Override matrix getter to always return null, since Paths act as if
     // they do not have a matrix, and always directly apply transformations
     // to their segment points.
     return null;
-  },
+  }
+  Matix get matrix() => getMatrix();
 
-  setMatrix: function(matrix) {
+  setMatrix(matrix) {
     // Do nothing for the same reason as above.
-  },
+  }
+  set matrix(Matrix matrix) => setMatrix(matrix);
 
-  _apply: function(matrix) {
-    var coords = new Array(6);
-    for (var i = 0, l = this._segments.length; i < l; i++) {
-      this._segments[i]._transformCoordinates(matrix, coords, true);
+  bool _apply(matrix) {
+    // TODO is this correct initialization of List?
+    var coords = new List(6);
+    for (var i = 0, l = _segments.length; i < l; i++) {
+      _segments[i]._transformCoordinates(matrix, coords, true);
     }
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
-    var style = this._style,
+    var style = _style,
       fillColor = style._fillColor,
       strokeColor = style._strokeColor;
     // Try calling transform on colors in case they are GradientColors.
@@ -273,7 +277,7 @@ class Path extends PathItem {
     if (strokeColor && strokeColor.transform)
       strokeColor.transform(matrix);
     return true;
-  },
+  }
 
   /**
    * Private method that adds a segment to the segment list. It assumes that
