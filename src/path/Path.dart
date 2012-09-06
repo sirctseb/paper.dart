@@ -893,20 +893,20 @@ class Path extends PathItem {
   /**
    * Reverses the segments of the path.
    */
-  reverse: function() {
-    this._segments.reverse();
+  reverse() {
+    _segments.reverse();
     // Reverse the handles:
-    for (var i = 0, l = this._segments.length; i < l; i++) {
-      var segment = this._segments[i];
+    for (var i = 0, l = _segments.length; i < l; i++) {
+      var segment = _segments[i];
       var handleIn = segment._handleIn;
       segment._handleIn = segment._handleOut;
       segment._handleOut = handleIn;
       segment._index = i;
     }
     // Flip clockwise state if it's defined
-    if (this._clockwise !== undefined)
-      this._clockwise = !this._clockwise;
-  },
+    if (_clockwise != null)
+      _clockwise = !_clockwise;
+  }
 
   // DOCS: document Path#join in more detail.
   /**
