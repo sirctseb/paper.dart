@@ -845,13 +845,14 @@ class Path extends PathItem {
    * @type Boolean
    * @bean
    */
-  isClockwise: function() {
-    if (this._clockwise !== undefined)
-      return this._clockwise;
+  bool _clockwise;
+  bool isClockwise() {
+    if (_clockwise !== undefined)
+      return _clockwise;
     var sum = 0,
       xPre, yPre;
-    function edge(x, y) {
-      if (xPre !== undefined)
+    var edge = (x, y) {
+      if (xPre != null)
         sum += (xPre - x) * (y + yPre);
       xPre = x;
       yPre = y;
@@ -862,9 +863,9 @@ class Path extends PathItem {
     // which we determine the orientation using the method of calculating
     // the sum over the edges. This will work even with non-convex polygons,
     // telling you whether it's mostly clockwise
-    for (var i = 0, l = this._segments.length; i < l; i++) {
-      var seg1 = this._segments[i],
-        seg2 = this._segments[i + 1 < l ? i + 1 : 0],
+    for (var i = 0, l = _segments.length; i < l; i++) {
+      var seg1 = _segments[i],
+        seg2 = _segments[i + 1 < l ? i + 1 : 0],
         point1 = seg1._point,
         handle1 = seg1._handleOut,
         handle2 = seg2._handleIn,
@@ -875,17 +876,19 @@ class Path extends PathItem {
       edge(point2._x, point2._y);
     }
     return sum > 0;
-  },
+  }
+  bool get clockwise => isClockwise();
 
-  setClockwise: function(clockwise) {
+  setClockwise([bool clockwise = true]) {
     // On-the-fly conversion to boolean:
-    if (this.isClockwise() != (clockwise = !!clockwise)) {
-      // Only revers the path if its clockwise orientation is not the same
+    if(isClockwise() != clockwise) {
+      // Only reverse the path if its clockwise orientation is not the same
       // as what it is now demanded to be.
-      this.reverse();
-      this._clockwise = clockwise;
+      reverse();
+      _clockwise = clockwise;
     }
-  },
+  }
+  set clockwise(bool clockwise) => setClockwise(clockwise);
 
   /**
    * Reverses the segments of the path.
