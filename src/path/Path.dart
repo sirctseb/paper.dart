@@ -962,44 +962,46 @@ class Path extends PathItem {
    * // Select the path to show that they have joined:
    * path.selected = true;
    */
-  join: function(path) {
-    if (path) {
+  bool join(Path path) {
+    if (path != null) {
       var segments = path._segments,
-        last1 = this.getLastSegment(),
+        last1 = getLastSegment(),
         last2 = path.getLastSegment();
       if (last1._point.equals(last2._point))
         path.reverse();
       var first2 = path.getFirstSegment();
       if (last1._point.equals(first2._point)) {
         last1.setHandleOut(first2._handleOut);
-        this._add(segments.slice(1));
+        _add(segments.getRange(1, segments.length));
       } else {
-        var first1 = this.getFirstSegment();
+        var first1 = getFirstSegment();
         if (first1._point.equals(first2._point))
           path.reverse();
         last2 = path.getLastSegment();
         if (first1._point.equals(last2._point)) {
           first1.setHandleIn(last2._handleIn);
           // Prepend all segments from path except the last one
-          this._add(segments.slice(0, segments.length - 1), 0);
+          _add(segments.getRange(0, segments.length - 1), 0);
         } else {
-          this._add(segments.slice(0));
+          // TODO slice(0) is just the whole thing right?
+          _add(segments)
+          //_add(segments.slice(0));
         }
       }
       path.remove();
       // Close if they touch in both places
-      var first1 = this.getFirstSegment();
-      last1 = this.getLastSegment();
+      var first1 = getFirstSegment();
+      last1 = getLastSegment();
       if (last1._point.equals(first1._point)) {
         first1.setHandleIn(last1._handleIn);
         last1.remove();
-        this.setClosed(true);
+        setClosed(true);
       }
-      this._changed(Change.GEOMETRY);
+      _changed(Change.GEOMETRY);
       return true;
     }
     return false;
-  },
+  }
 
   /**
    * The length of the perimeter of the path.
