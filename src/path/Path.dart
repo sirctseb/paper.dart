@@ -150,21 +150,24 @@ class Path extends PathItem {
    * @type Curve[]
    * @bean
    */
-  getCurves: function() {
-    if (!this._curves) {
-      var segments = this._segments,
+  List<Curve> _curves;
+  List<Curve> getCurves() {
+    if (_curves == null) {
+      var segments = _segments,
         length = segments.length;
       // Reduce length by one if it's an open path:
-      if (!this._closed && length > 0)
+      if (!_closed && length > 0)
         length--;
-      this._curves = new Array(length);
+      // TODO is this list initialization correct?
+      _curves = new List(length);
       for (var i = 0; i < length; i++)
-        this._curves[i] = Curve.create(this, segments[i],
+        _curves[i] = new Curve.create(this, segments[i],
           // Use first segment for segment2 of closing curve
           segments[i + 1] || segments[0]);
     }
-    return this._curves;
-  },
+    return _curves;
+  }
+  List<Curve> get curves => getCurves();
 
   /**
    * The first Curve contained within the path.
@@ -172,9 +175,10 @@ class Path extends PathItem {
    * @type Curve
    * @bean
    */
-  getFirstCurve: function() {
-    return this.getCurves()[0];
-  },
+  Curve getFirstCurve() {
+    return getCurves()[0];
+  }
+  Curve get firstCurve => getFirstCurve();
 
   /**
    * The last Curve contained within the path.
@@ -182,10 +186,11 @@ class Path extends PathItem {
    * @type Curve
    * @bean
    */
-  getLastCurve: function() {
-    var curves = this.getCurves();
+  Curve getLastCurve() {
+    var curves = getCurves();
     return curves[curves.length - 1];
-  },
+  }
+  Curve get lastCurve => getLastCurve();
 
   /**
    * Specifies whether the path is closed. If it is closed, Paper.js connects
