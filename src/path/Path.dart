@@ -1280,9 +1280,9 @@ class Path extends PathItem {
    * @return {CurveLocation} The location on the path that's the closest to
    * the specified point
    */
-  getNearestLocation: function(point) {
-    var curves = this.getCurves(),
-      minDist = Infinity,
+  CurveLocation getNearestLocation(point) {
+    var curves = getCurves(),
+      minDist = double.INFINITY,
       minLoc = null;
     for (var i = 0, l = curves.length; i < l; i++) {
       var loc = curves[i].getNearestLocation(point);
@@ -1292,7 +1292,7 @@ class Path extends PathItem {
       }
     }
     return minLoc;
-  },
+  }
 
   /**
    * Returns the nearest point on the path to the specified point.
