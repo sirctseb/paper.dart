@@ -686,6 +686,7 @@ class Path extends PathItem {
    * }
    *
    */
+  // TODO do we have to do anything for this?
   /**
    * Specifies whether the path and all its segments are selected.
    *
@@ -716,31 +717,33 @@ class Path extends PathItem {
    *   path2.fillColor = 'red';
    * }
    */
-  isFullySelected: function() {
-    return this._selected && this._selectedSegmentState
-        == this._segments.length * SelectionState.POINT;
-  },
+  bool isFullySelected() {
+    return _selected && _selectedSegmentState
+        == _segments.length * SelectionState.POINT;
+  }
+  bool get fullySelected => isFullySelected();
 
-  setFullySelected: function(selected) {
-    var length = this._segments.length;
-    this._selectedSegmentState = selected
+  void setFullySelected(bool selected) {
+    var length = _segments.length;
+    _selectedSegmentState = selected
         ? length * SelectionState.POINT : 0;
     for (var i = 0; i < length; i++)
-      this._segments[i]._selectionState = selected
+      _segments[i]._selectionState = selected
           ? SelectionState.POINT : 0;
     // No need to pass true for noChildren since Path has none anyway.
-    this.setSelected(selected);
-  },
+    setSelected(selected);
+  }
+  set fullySelected(bool selected) => setFullySelected(selected);
 
-  _updateSelection: function(segment, oldState, newState) {
+  _updateSelection(segment, oldState, newState) {
     segment._selectionState = newState;
-    var total = this._selectedSegmentState += newState - oldState;
+    var total = _selectedSegmentState += newState - oldState;
     // Set this path as selected in case we have selected segments. Do not
     // unselect if we're down to 0, as the path itself can still remain
     // selected even when empty.
     if (total > 0)
-      this.setSelected(true);
-  },
+      setSelected(true);
+  }
 
   /**
    * Converts the curves in a path to straight lines with an even distribution
