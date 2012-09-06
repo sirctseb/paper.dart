@@ -772,7 +772,7 @@ class Path extends PathItem {
    * // Select the copy, so we can inspect its segments:
    * copy.selected = true;
    */
-  flatten: function(maxDistance) {
+  flatten(num maxDistance) {
     var flattener = new PathFlattener(this),
       pos = 0,
       // Adapt step = maxDistance so the points distribute evenly.
@@ -780,15 +780,15 @@ class Path extends PathItem {
       // Add/remove half of step to end, so imprecisions are ok too.
       // For closed paths, remove it, because we don't want to add last
       // segment again
-      end = flattener.length + (this._closed ? -step : step) / 2;
+      end = flattener.length + (_closed ? -step : step) / 2;
     // Iterate over path and evaluate and add points at given offsets
     var segments = [];
     while (pos <= end) {
-      segments.push(new Segment(flattener.evaluate(pos, 0)));
+      segments.add(new Segment(flattener.evaluate(pos, 0)));
       pos += step;
     }
-    this.setSegments(segments);
-  },
+    setSegments(segments);
+  }
 
   /**
    * Smooths a path by simplifying it. The {@link Path#segments} array is
