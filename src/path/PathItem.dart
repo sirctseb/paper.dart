@@ -24,6 +24,9 @@
  * @extends Item
  */
 class PathItem extends Item {
+  
+  PathItem([pointOrMatrix]) {}
+  
   // Note: The PathItem class is currently empty but holds the documentation
   // for all the methods that exist both on Path and CompoundPath.
   /**
