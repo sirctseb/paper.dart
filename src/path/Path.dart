@@ -613,30 +613,30 @@ class Path extends PathItem {
    * // Select the path, so we can see its segments:
    * path.selected = true;
    */
-  removeSegments: function(from, to) {
+  removeSegments([int from = 0, int to]) {
     from = from || 0;
-     to = Base.pick(to, this._segments.length);
-    var segments = this._segments,
-      curves = this._curves,
+    to = to? to : _segments.length;
+    var segments = _segments,
+      curves = _curves,
       last = to >= segments.length,
-      removed = segments.splice(from, to - from),
+      removed = segments.removeRange(from, to - from),
       amount = removed.length;
-    if (!amount)
+    if (amount == 0)
       return removed;
     // Update selection state accordingly
     for (var i = 0; i < amount; i++) {
       var segment = removed[i];
       if (segment._selectionState)
-        this._updateSelection(segment, segment._selectionState, 0);
+        _updateSelection(segment, segment._selectionState, 0);
       // Clear the indices and path references of the removed segments
-      removed._index = removed._path = undefined;
+      removed._index = removed._path = null;
     }
     // Adjust the indices of the segments above.
     for (var i = from, l = segments.length; i < l; i++)
       segments[i]._index = i;
     // Keep curves in sync
-    if (curves) {
-      curves.splice(from, amount);
+    if (curves != null) {
+      curves.removeRange(from, amount);
       // Adjust segments for the curves before and after the removed ones
       var curve;
       if (curve = curves[from - 1])
@@ -645,12 +645,12 @@ class Path extends PathItem {
         curve._segment1 = segments[from];
       // If the last segment of a closing path was removed, we need to
       // readjust the last curve of the list now.
-      if (last && this._closed && (curve = curves[curves.length - 1]))
+      if (last && _closed && (curve = curves[curves.length - 1]))
         curve._segment2 = segments[0];
     }
-    this._changed(Change.GEOMETRY);
+    _changed(Change.GEOMETRY);
     return removed;
-  },
+  }
 
   /**
    * Specifies whether an path is selected and will also return {@code true}
