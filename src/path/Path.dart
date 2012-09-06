@@ -1328,12 +1328,12 @@ class Path extends PathItem {
     return (crossings & 1) == 1;
   }
 
-  _hitTest: function(point, options) {
+  HitResult _hitTest(point, options) {
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
-    var style = this._style,
-      tolerance = options.tolerance || 0,
-      radius = (options.stroke && style._strokeColor
+    var style = _style,
+      tolerance = options["tolerance"] || 0,
+      radius = (options["stroke"] && style._strokeColor
           ? style._strokeWidth / 2 : 0) + tolerance,
       loc,
       res;
@@ -1341,49 +1341,49 @@ class Path extends PathItem {
     // before stroke or fill.
     var coords = [],
       that = this;
-    function checkPoint(seg, pt, name) {
+    var checkPoint = (seg, pt, name) {
       // TODO: We need to transform the point back to the coordinate
       // system of the DOM level on which the inquiry was started!
       if (point.getDistance(pt) < tolerance)
-        return new HitResult(name, that, { segment: seg, point: pt });
+        return new HitResult(name, that, { "segment": seg, "point": pt });
     }
-    function checkSegment(seg, ends) {
+    var checkSegment = (seg, ends) {
       var point = seg._point;
       // Note, when checking for ends, we don't also check for handles,
       // since this will happen afterwards in a separate loop, see below.
-      return (ends || options.segments)
+      return (ends || options["segments"])
           && checkPoint(seg, point, 'segment')
-        || (!ends && options.handles) && (
+        || (!ends && options["handles"]) && (
           checkPoint(seg, point.add(seg._handleIn), 'handle-in') ||
           checkPoint(seg, point.add(seg._handleOut), 'handle-out'));
     }
-    if (options.ends && !options.segments && !this._closed) {
-      if (res = checkSegment(this.getFirstSegment(), true)
-          || checkSegment(this.getLastSegment(), true))
+    if (options["ends"] && !options["segments"] && !_closed) {
+      if (res = checkSegment(getFirstSegment(), true)
+          || checkSegment(getLastSegment(), true))
         return res;
-    } else if (options.segments || options.handles) {
-      for (var i = 0, l = this._segments.length; i < l; i++) {
-        if (res = checkSegment(this._segments[i]))
+    } else if (options["segments"] || options["handles"]) {
+      for (var i = 0, l = _segments.length; i < l; i++) {
+        if (res = checkSegment(_segments[i]))
           return res;
       }
     }
     // If we're querying for stroke, perform that before fill
-    if (options.stroke && radius > 0)
-      loc = this.getNearestLocation(point);
+    if (options["stroke"] && radius > 0)
+      loc = getNearestLocation(point);
     // Don't process loc yet, as we also need to query for stroke after fill
     // in some cases. Simply skip fill query if we already have a matching
     // stroke.
-    if (!(loc && loc._distance <= radius) && options.fill
-        && style._fillColor && this.contains(point))
+    if (!(loc && loc._distance <= radius) && options["fill"]
+        && style._fillColor && contains(point))
       return new HitResult('fill', this);
     // Now query stroke if we haven't already
-    if (!loc && options.stroke && radius > 0)
-      loc = this.getNearestLocation(point);
+    if (!loc && options["stroke"] && radius > 0)
+      loc = getNearestLocation(point);
     if (loc && loc._distance <= radius)
       // TODO: Do we need to transform the location back to the coordinate
       // system of the DOM level on which the inquiry was started?
-      return options.stroke
-          ? new HitResult('stroke', this, { location: loc })
+      return options["stroke"]
+          ? new HitResult('stroke', this, { "location": loc })
           : new HitResult('fill', this);
   }
 
