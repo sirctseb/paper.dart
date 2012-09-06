@@ -290,9 +290,9 @@ class Path extends PathItem {
     var segments = _segments,
       curves = _curves,
       amount = segs.length,
-      append = index == null,
-      index = append ? segments.length : index,
-      fullySelected = isFullySelected();
+      append = (index == null);
+    index = append ? segments.length : index;
+    bool fullySelected = isFullySelected();
     // Scan through segments to add first, convert if necessary and set
     // _path and _index references on them.
     for (var i = 0; i < amount; i++) {
