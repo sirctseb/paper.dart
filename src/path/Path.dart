@@ -829,12 +829,12 @@ class Path extends PathItem {
    *   path.selected = true;
    * }
    */
-  simplify: function(tolerance) {
-    if (this._segments.length > 2) {
-      var fitter = new PathFitter(this, tolerance || 2.5);
-      this.setSegments(fitter.fit());
+  simplify([num tolerance = 2.5]) {
+    if (_segments.length > 2) {
+      var fitter = new PathFitter(this, tolerance);
+      setSegments(fitter.fit());
     }
-  },
+  }
 
   // TODO: reduceSegments([flatness])
   // TODO: split(offset) / split(location) / split(index[, parameter])
