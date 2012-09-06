@@ -101,22 +101,26 @@ class Path extends PathItem {
    * @type Segment[]
    * @bean
    */
-  getSegments: function() {
-    return this._segments;
-  },
+  List<Segment> _segments;
+  List<Segment> getSegments() {
+    return _segments;
+  }
+  List<Segment> get segments => getSegments();
 
-  setSegments: function(segments) {
-    if (!this._segments) {
-      this._segments = [];
+  setSegments(segments) {
+    if (_segments == null) {
+      _segments = [];
     } else {
-      this._selectedSegmentState = 0;
-      this._segments.length = 0;
+      _selectedSegmentState = 0;
+      // TODO does this acutally clear the list?
+      _segments.length = 0;
       // Make sure new curves are calculated next time we call getCurves()
-      if (this._curves)
-        delete this._curves;
+      if (_curves != null)
+        _curves = null;
     }
-    this._add(Segment.readAll(segments));
-  },
+    _add(Segment.readAll(segments));
+  }
+  set segments(segments) => setSegments(segments);
 
   /**
    * The first Segment contained within the path.
@@ -124,9 +128,10 @@ class Path extends PathItem {
    * @type Segment
    * @bean
    */
-  getFirstSegment: function() {
-    return this._segments[0];
-  },
+  Segment getFirstSegment() {
+    return _segments[0];
+  }
+  Segment get firstSegment => getFirstSegment();
 
   /**
    * The last Segment contained within the path.
@@ -134,9 +139,10 @@ class Path extends PathItem {
    * @type Segment
    * @bean
    */
-  getLastSegment: function() {
-    return this._segments[this._segments.length - 1];
-  },
+  Segment getLastSegment() {
+    return _segments[_segments.length - 1];
+  }
+  Segment get lastSegment => getLastSegment();
 
   /**
    * The curves contained within the path.
