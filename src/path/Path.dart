@@ -1054,13 +1054,13 @@ class Path extends PathItem {
    * @param {Boolean} [isParameter=false]
    * @return {CurveLocation}
    */
-  getLocationAt: function(offset, isParameter) {
-    var curves = this.getCurves(),
+  CurveLocation getLocationAt(num offset, [bool isParameter = false]) {
+    var curves = getCurves(),
       length = 0;
     if (isParameter) {
       // offset consists of curve index and curve parameter, before and
       // after the fractional digit.
-      var index = ~~offset; // = Math.floor()
+      int index = offset.floor();
       return new CurveLocation(curves[index], offset - index);
     }
     for (var i = 0, l = curves.length; i < l; i++) {
@@ -1078,7 +1078,7 @@ class Path extends PathItem {
     if (offset <= this.getLength())
       return new CurveLocation(curves[curves.length - 1], 1);
     return null;
-  },
+  }
 
   /**
    * Get the point on the path at the given offset.
