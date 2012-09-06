@@ -411,14 +411,14 @@ class Path extends PathItem {
     // TODO add support for other kinds of params
     // add a single segment
     if(segment1 is Segment) {
-      _add([segment1]);
+      return _add([segment1]);
     } else if(segment1 is List) {
       // add list of segments
       if(segment1[0] is Segment) {
-        _add(segment1);
+        return _add(segment1);
       } else {
         // add list of segment type things
-        _add(segment1.map((seg_type) => Segment.read(seg_type)));
+        return _add(segment1.map((seg_type) => Segment.read(seg_type)));
       }
     }
     // TODO leaving in for reference because this will definitely change
@@ -469,14 +469,14 @@ class Path extends PathItem {
   insert(int index, segment1 /*, segment2, ... */) {
     // add a single segment
     if(segment1 is Segment) {
-      _add([segment1], index);
+      return _add([segment1], index);
     } else if(segment1 is List) {
       // add list of segments
       if(segment1[0] is Segment) {
-        _add(segment1, index);
+        return _add(segment1, index);
       } else {
         // add list of segment type things
-        _add(segment1.map((seg_type) => Segment.read(seg_type)), index);
+        return _add(segment1.map((seg_type) => Segment.read(seg_type)), index);
       }
     }
 
