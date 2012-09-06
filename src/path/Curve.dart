@@ -751,8 +751,8 @@ class Curve {
 
     // Otherwise, solve recursively after
     // subdividing control polygon
-    var p = [[]],
-      left = [],
+    List<List<Point>> p = [[]];
+    List left = [],
       right = [];
     for (var j = 0; j <= 5; j++)
        p[0][j] = new Point(w[j]);
@@ -797,7 +797,7 @@ class Curve {
 
     // Derive the implicit equation for line connecting first
     // and last control points
-    var n = v.length - 1,
+    num n = v.length - 1,
       a = v[0].y - v[n].y,
       b = v[n].x - v[0].x,
       c = v[0].x * v[n].y - v[n].x * v[0].y,
