@@ -33,7 +33,7 @@ part "PathItem.dart";
  * @extends PathItem
  */
 // DOCS: Explain that path matrix is always applied with each transformation.
-var Path = this.Path = PathItem.extend(/** @lends Path# */{
+class Path extends PathItem {
   /**
    * Creates a new Path item and places it at the top of the active layer.
    *
@@ -2122,4 +2122,4 @@ var Path = this.Path = PathItem.extend(/** @lends Path# */{
       return get[type].call(this, matrix);
     }
   };
-});
+}
