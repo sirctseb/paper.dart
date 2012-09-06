@@ -1021,10 +1021,10 @@ class Path extends PathItem {
   }
   num get length => getLength();
 
-  _getOffset: function(location) {
-    var index = location && location.getIndex();
+  num _getOffset(CurveLocation location) {
+    var index = location != null ? location.getIndex() : null;
     if (index != null) {
-      var curves = this.getCurves(),
+      var curves = getCurves(),
         offset = 0;
       for (var i = 0; i < index; i++)
         offset += curves[i].getLength();
@@ -1032,7 +1032,7 @@ class Path extends PathItem {
       return offset + curve.getLength(0, location.getParameter());
     }
     return null;
-  },
+  }
 
   getLocation: function(point) {
     var curves = this.getCurves();
