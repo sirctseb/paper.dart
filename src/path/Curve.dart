@@ -601,10 +601,10 @@ class Curve {
     return max(2, min(16, ((b - a).abs() * 32).ceil()));
   }
 
-  static num _getLength(v, a, b) {
-    if (a === undefined)
+  static num _getLength(v, [a, b]) {
+    if (a == null)
       a = 0;
-    if (b === undefined)
+    if (b == null)
       b = 1;
     // if (p1 == c1 && p2 == c2):
     if (v[0] == v[2] && v[1] == v[3] && v[6] == v[4] && v[7] == v[5]) {
