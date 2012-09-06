@@ -662,7 +662,7 @@ class Curve {
   // Optimised for Paper.js
 
   static final int _maxDepth = 32;
-  static final num _epsilon = Math.pow(2, -maxDepth - 1);
+  static num _epsilon;
 
   static final List<List<num>> _zCubic = [
     [1.0, 0.6, 0.3, 0.1],
@@ -812,6 +812,7 @@ class Curve {
         maxAbove = dist;
       }
     }
+    _epsilon = pow(2, -_maxDepth - 1);
     // Compute intercepts of bounding box
     return ((maxAbove + maxBelow) / (2 * a * (a * a + b * b))).abs()
         < _epsilon;
