@@ -813,7 +813,7 @@ class Curve {
         maxAbove = dist;
       }
     }
-    _epsilon = pow(2, -_maxDepth - 1);
+    if(_epsilon == null) _epsilon = pow(2, -_maxDepth - 1);
     // Compute intercepts of bounding box
     return ((maxAbove + maxBelow) / (2 * a * (a * a + b * b))).abs()
         < _epsilon;
