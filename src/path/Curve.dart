@@ -707,7 +707,8 @@ class Curve {
     for (var i = 0; i <= degree; i++)
       w[i] = new Point(i / degree, 0);
 
-    for (k = 0; k <= degree; k++) {
+    // TODO this k leaked into globals in paper.js. fix and submit pull request
+    for (int k = 0; k <= degree; k++) {
       var lb = Math.max(0, k - n + 1),
         ub = Math.min(k, n);
       for (var i = lb; i <= ub; i++) {
