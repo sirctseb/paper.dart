@@ -1198,10 +1198,10 @@ class Path extends PathItem {
    *   line.add(point + tangent);
    * }
    */
-  getTangentAt: function(offset, isParameter) {
-    var loc = this.getLocationAt(offset, isParameter);
-    return loc && loc.getTangent();
-  },
+  Point getTangentAt(num offset, [bool isParameter = false]) {
+    var loc = getLocationAt(offset, isParameter);
+    return loc != null ? loc.getTangent() : null;
+  }
 
   /**
    * Get the normal to the path at the given offset as a vector point.
@@ -1266,10 +1266,10 @@ class Path extends PathItem {
    *   line.add(point + normal);
    * }
    */
-  getNormalAt: function(offset, isParameter) {
-    var loc = this.getLocationAt(offset, isParameter);
-    return loc && loc.getNormal();
-  },
+  Point getNormalAt(num offset, [bool isParameter = false]) {
+    var loc = getLocationAt(offset, isParameter);
+    return loc != null ? loc.getNormal() : null;
+  }
 
   /**
    * Returns the nearest location on the path to the specified point.
