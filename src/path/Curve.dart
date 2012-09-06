@@ -622,8 +622,8 @@ class Curve {
       return start;
     // See if we're going forward or backward, and handle cases
     // differently
-    var forward = offset > 0,
-      a = forward ? start : 0,
+    bool forward = offset > 0;
+    num a = forward ? start : 0,
       b = forward ? 1 : start,
       // Use integrand to calculate both range length and part
       // lengths in f(t) below.
