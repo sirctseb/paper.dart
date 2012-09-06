@@ -53,16 +53,17 @@ class Path extends PathItem {
    * var path = new Path(segments);
    * path.strokeColor = 'black';
    */
-  initialize: function(segments) {
-    this.base();
-    this._closed = false;
-    this._selectedSegmentState = 0;
+  Path(List segments) : super() {
+    _closed = false;
+    _selectedSegmentState = 0;
     // Support both passing of segments as array or arguments
     // If it is an array, it can also be a description of a point, so
     // check its first entry for object as well
-    this.setSegments(!segments || !Array.isArray(segments)
-        || typeof segments[0] !== 'object' ? arguments : segments);
-  },
+    //this.setSegments(!segments || !Array.isArray(segments)
+    //    || typeof segments[0] !== 'object' ? arguments : segments);
+    // TODO support for segments as arguments instead of a list
+    setSegments(segments);
+  }
 
   clone: function() {
     var copy = this._clone(new Path(this._segments));
