@@ -163,7 +163,7 @@ class Path extends PathItem {
       for (var i = 0; i < length; i++)
         _curves[i] = new Curve.create(this, segments[i],
           // Use first segment for segment2 of closing curve
-          segments[i + 1] || segments[0]);
+          segments[i + 1] != null ? segments[i + 1] : segments[0]);
     }
     return _curves;
   }
