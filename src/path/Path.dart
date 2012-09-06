@@ -285,7 +285,7 @@ class Path extends PathItem {
    * If a curves list was requested, it will kept in sync with the segments
    * list automatically.
    */
-  List<Segment> _add(List<Segment> segs, int index) {
+  List<Segment> _add(List<Segment> segs, [int index]) {
     // Local short-cuts:
     var segments = _segments,
       curves = _curves,
@@ -466,13 +466,26 @@ class Path extends PathItem {
    * myPath.segments[1].selected = true;
    * myPath.segments[2].selected = true;
    */
-  insert: function(index, segment1 /*, segment2, ... */) {
-    return arguments.length > 2 && typeof segment1 !== 'number'
+  insert(int index, segment1 /*, segment2, ... */) {
+    // add a single segment
+    if(segment1 is Segment) {
+      _add([segment1], index);
+    } else if(segment1 is List) {
+      // add list of segments
+      if(segment1[0] is Segment) {
+        _add(segment1, index);
+      } else {
+        // add list of segment type things
+        _add(segment1.map((seg_type) => Segment.read(seg_type)), index);
+      }
+    }
+
+    /*return arguments.length > 2 && typeof segment1 !== 'number'
       // insertSegments
       ? this._add(Segment.readAll(arguments, 1), index)
       // insertSegment
-      : this._add([ Segment.read(arguments, 1) ], index)[0];
-  },
+      : this._add([ Segment.read(arguments, 1) ], index)[0];*/
+  }
 
   // PORT: Add to Scriptographer
   addSegment: function(segment) {
