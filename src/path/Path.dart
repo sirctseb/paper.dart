@@ -1009,15 +1009,17 @@ class Path extends PathItem {
    * @type Number
    * @bean
    */
-  getLength: function() {
-    if (this._length == null) {
-      var curves = this.getCurves();
-      this._length = 0;
+  num _length;
+  num getLength() {
+    if (_length == null) {
+      var curves = getCurves();
+      _length = 0;
       for (var i = 0, l = curves.length; i < l; i++)
-        this._length += curves[i].getLength();
+        _length += curves[i].getLength();
     }
-    return this._length;
-  },
+    return _length;
+  }
+  num get length => getLength();
 
   _getOffset: function(location) {
     var index = location && location.getIndex();
