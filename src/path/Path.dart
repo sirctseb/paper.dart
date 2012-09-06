@@ -1129,10 +1129,10 @@ class Path extends PathItem {
    *   circle.fillColor = 'red';
    * }
    */
-  getPointAt: function(offset, isParameter) {
-    var loc = this.getLocationAt(offset, isParameter);
-    return loc && loc.getPoint();
-  },
+  Point getPointAt(num offset, [bool isParameter = false]) {
+    var loc = getLocationAt(offset, isParameter);
+    return loc != null ? loc.getPoint() : null;
+  }
 
   /**
    * Get the tangent to the path at the given offset as a vector
