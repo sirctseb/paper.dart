@@ -23,7 +23,7 @@
  *
  * @extends Item
  */
-var PathItem = this.PathItem = Item.extend(/** @lends PathItem# */{
+class PathItem extends Item {
   // Note: The PathItem class is currently empty but holds the documentation
   // for all the methods that exist both on Path and CompoundPath.
   /**
@@ -356,4 +356,4 @@ var PathItem = this.PathItem = Item.extend(/** @lends PathItem# */{
    * @param {Point} throughVector
    * @param {Point} toVector
    */
-});
+}
