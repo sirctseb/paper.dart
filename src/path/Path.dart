@@ -78,7 +78,7 @@ class Path extends PathItem {
     //Item.prototype._changed.call(this, flags);
     // TODO will this get Item._changed if PathItem is between us?
     super._changed(flags);
-    if (flags & ChangeFlag.GEOMETRY != 0) {
+    if ((flags & ChangeFlag.GEOMETRY) != 0) {
       _length = null;
       // Clockwise state becomes undefined as soon as geometry changes.
       _clockwie = null;
@@ -88,7 +88,7 @@ class Path extends PathItem {
           _curves[i]._changed(Change.GEOMETRY);
         }
       }
-    } else if (flags & ChangeFlag.STROKE != 0) {
+    } else if ((flags & ChangeFlag.STROKE) != 0) {
       // TODO: We could preserve the purely geometric bounds that are not
       // affected by stroke: _bounds.bounds and _bounds.handleBounds
       _bounds = null;
