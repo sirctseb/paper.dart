@@ -81,7 +81,7 @@ class Path extends PathItem {
     if ((flags & ChangeFlag.GEOMETRY) != 0) {
       _length = null;
       // Clockwise state becomes undefined as soon as geometry changes.
-      _clockwie = null;
+      _clockwise = null;
       // Curves are no longer valid
       if (this._curves != null) {
         for (var i = 0, l = _curves.length; i < l; i++) {
