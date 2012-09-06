@@ -23,6 +23,7 @@ part "SegmentPoint.dart";
 part "SelectionState.dart";
 part "CurveLocation.dart";
 part "Curve.dart";
+part "PathItem.dart";
 
 /**
  * @name Path
