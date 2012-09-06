@@ -618,8 +618,9 @@ class Path extends PathItem {
     var segments = _segments,
       curves = _curves,
       last = to >= segments.length,
-      removed = segments.removeRange(from, to - from),
+      removed = segments.getRange(from, to - from),
       amount = removed.length;
+    segments.removeRange(from, to - from);
     if (amount == 0)
       return removed;
     // Update selection state accordingly
