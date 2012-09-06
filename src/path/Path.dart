@@ -578,10 +578,10 @@ class Path extends PathItem {
    * // Select the path, so we can see its segments:
    * path.selected = true;
    */
-  removeSegment: function(index) {
-    var segments = this.removeSegments(index, index + 1);
-    return segments[0] || null;
-  },
+  Segment removeSegment(int index) {
+    var segments = removeSegments(index, index + 1);
+    return segments[0];
+  }
 
   // PORT: Add to Scriptographer
   /**
