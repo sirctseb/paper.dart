@@ -209,30 +209,33 @@ class Path extends PathItem {
    * // Close the path:
    * myPath.closed = true;
    */
-  getClosed: function() {
-    return this._closed;
-  },
+  bool _closed;
+  bool getClosed() {
+    // TODO check for null?
+    return _closed;
+  }
+  bool get closed => getClosed();
 
-  setClosed: function(closed) {
-    // On-the-fly conversion to boolean:
-    if (this._closed != (closed = !!closed)) {
-      this._closed = closed;
+  setClosed([closed = true]) {
+    if(_closed != closed) {
+      _closed = closed;
       // Update _curves length
-      if (this._curves) {
-        var length = this._segments.length,
+      if (_curves != null) {
+        int length = _segments.length,
           i;
         // Reduce length by one if it's an open path:
         if (!closed && length > 0)
           length--;
-        this._curves.length = length;
+        _curves.length = length;
         // If we were closing this path, we need to add a new curve now
         if (closed)
-          this._curves[i = length - 1] = Curve.create(this,
-            this._segments[i], this._segments[0]);
+          _curves[i = length - 1] = new Curve.create(this,
+            _segments[i], _segments[0]);
       }
-      this._changed(Change.GEOMETRY);
+      _changed(Change.GEOMETRY);
     }
-  },
+  }
+  set closed(bool closed) => setClosed(closed);
 
   // TODO: Consider adding getSubPath(a, b), returning a part of the current
   // path, with the added benefit that b can be < a, and closed looping is
