@@ -488,14 +488,14 @@ class Path extends PathItem {
   }
 
   // PORT: Add to Scriptographer
-  addSegment: function(segment) {
-    return this._add([ Segment.read(arguments) ])[0];
-  },
+  addSegment(segment) {
+    return _add([ Segment.read(segment) ])[0];
+  }
 
   // PORT: Add to Scriptographer
-  insertSegment: function(index, segment) {
-    return this._add([ Segment.read(arguments, 1) ], index)[0];
-  },
+  insertSegment(int index, segment) {
+    return _add([ Segment.read(segment) ], index)[0];
+  }
 
   // PORT: Add to Scriptographer
   /**
