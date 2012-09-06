@@ -65,13 +65,13 @@ class Path extends PathItem {
     setSegments(segments);
   }
 
-  clone: function() {
-    var copy = this._clone(new Path(this._segments));
-    copy._closed = this._closed;
-    if (this._clockwise !== undefined)
-      copy._clockwise = this._clockwise;
+  Path clone() {
+    var copy = _clone(new Path(_segments));
+    copy._closed = _closed;
+    if (_clockwise != null)
+      copy._clockwise = _clockwise;
     return copy;
-  },
+  }
 
   _changed: function(flags) {
     // Don't use base() for reasons of performance.
