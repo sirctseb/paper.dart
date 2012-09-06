@@ -709,8 +709,8 @@ class Curve {
 
     // TODO this k leaked into globals in paper.js. fix and submit pull request
     for (int k = 0; k <= degree; k++) {
-      var lb = Math.max(0, k - n + 1),
-        ub = Math.min(k, n);
+      var lb = max(0, k - n + 1),
+        ub = min(k, n);
       for (var i = lb; i <= ub; i++) {
         var j = k - i;
         w[k].y += cd[j][i] * _zCubic[j][i];
