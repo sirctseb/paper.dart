@@ -678,9 +678,9 @@ class Curve {
     * user-defined point.
     */
   static _toBezierForm(v, point) {
-    var n = 3, // degree of B(t)
-       degree = 5, // degree of B(t) . P
-      c = [],
+    int n = 3, // degree of B(t)
+       degree = 5; // degree of B(t) . P
+    List c = [],
       d = [],
       cd = [],
       w = [];
