@@ -670,7 +670,7 @@ class Curve {
     const [0.1, 0.3, 0.6, 1.0]
   ];
 
-  static Line _xAxis = new Line(new Point(0, 0), new Point(1, 0));
+  static Line _xAxis;
 
    /**
     * Given a point and a Bezier curve, generate a 5th-degree Bezier-format
@@ -712,7 +712,7 @@ class Curve {
         ub = Math.min(k, n);
       for (var i = lb; i <= ub; i++) {
         var j = k - i;
-        w[k].y += cd[j][i] * zCubic[j][i];
+        w[k].y += cd[j][i] * _zCubic[j][i];
       }
     }
 
@@ -741,9 +741,10 @@ class Curve {
         // Compare the line's squared length with EPSILON. If we're
         // below, #intersect() will return null because of division
         // by near-zero.
+        if(_xAxis == null) _xAxis = new Line(new Point(0, 0), new Point(1, 0));
         return [ line.vector.getLength(true) <= Numerical.EPSILON
             ? line.point.x
-            : xAxis.intersect(line).x ];
+            : _xAxis.intersect(line).x ];
       }
     }
 
