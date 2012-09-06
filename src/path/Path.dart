@@ -537,9 +537,9 @@ class Path extends PathItem {
    * // Move path2 30pt to the right:
    * path2.position.x += 30;
    */
-  addSegments: function(segments) {
-    return this._add(Segment.readAll(segments));
-  },
+  addSegments(segments) {
+    return _add(Segment.readAll(segments));
+  }
 
   // PORT: Add to Scriptographer
   /**
@@ -552,9 +552,9 @@ class Path extends PathItem {
    * not necessarily the same objects, e.g. if the segment to be added already
    * belongs to another path.
    */
-  insertSegments: function(index, segments) {
-    return this._add(Segment.readAll(segments), index);
-  },
+  insertSegments(index, segments) {
+    return _add(Segment.readAll(segments), index);
+  }
 
   // PORT: Add to Scriptographer
   /**
