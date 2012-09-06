@@ -1307,26 +1307,26 @@ class Path extends PathItem {
     return getNearestLocation(point).getPoint();
   }
 
-  contains: function(point) {
-    point = Point.read(arguments);
+  bool contains(point) {
+    point = Point.read(point);
     // Note: This only works correctly with even-odd fill rule, or paths
     // that do not overlap with themselves.
     // TODO: Find out how to implement the "Point In Polygon" problem for
     // non-zero fill rule.
-    if (!this._closed || !this.getRoughBounds()._containsPoint(point))
+    if (!_closed || !getRoughBounds()._containsPoint(point))
       return false;
     // Use the crossing number algorithm, by counting the crossings of the
     // beam in right y-direction with the shape, and see if it's an odd
     // number, meaning the starting point is inside the shape.
     // http://en.wikipedia.org/wiki/Point_in_polygon
-    var curves = this.getCurves(),
+    var curves = getCurves(),
       crossings = 0,
       // Reuse one array for root-finding, give garbage collector a break
       roots = [];
     for (var i = 0, l = curves.length; i < l; i++)
       crossings += curves[i].getCrossings(point, roots);
     return (crossings & 1) == 1;
-  },
+  }
 
   _hitTest: function(point, options) {
     // See #draw() for an explanation of why we can access _style properties
