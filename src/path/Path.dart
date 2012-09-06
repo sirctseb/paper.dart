@@ -285,21 +285,21 @@ class Path extends PathItem {
    * If a curves list was requested, it will kept in sync with the segments
    * list automatically.
    */
-  _add: function(segs, index) {
+  List<Segment> _add(List<Segment> segs, int index) {
     // Local short-cuts:
-    var segments = this._segments,
-      curves = this._curves,
+    var segments = _segments,
+      curves = _curves,
       amount = segs.length,
       append = index == null,
       index = append ? segments.length : index,
-      fullySelected = this.isFullySelected();
+      fullySelected = isFullySelected();
     // Scan through segments to add first, convert if necessary and set
     // _path and _index references on them.
     for (var i = 0; i < amount; i++) {
       var segment = segs[i];
       // If the segments belong to another path already, clone them before
       // adding:
-      if (segment._path) {
+      if (segment._path != null) {
         segment = segs[i] = new Segment(segment);
       }
       segment._path = this;
@@ -310,14 +310,17 @@ class Path extends PathItem {
       // If parts of this segment are selected, adjust the internal
       // _selectedSegmentState now
       if (segment._selectionState)
-        this._updateSelection(segment, 0, segment._selectionState);
+        _updateSelection(segment, 0, segment._selectionState);
     }
     if (append) {
-      // Append them all at the end by using push
-      segments.push.apply(segments, segs);
+      // Append them all at the end by using addAll
+      segments.addAll(segs);
     } else {
       // Insert somewhere else
-      segments.splice.apply(segments, [index, 0].concat(segs));
+      // TODO dart doesn't have a reasonable insertRange.
+      // we have to insert then set
+      segments.insertRange(index, segs.length, null);
+      segments.setRange(index, segs.length, segs);
       // Adjust the indices of the segments above.
       for (var i = index + amount, l = segments.length; i < l; i++) {
         segments[i]._index = i;
@@ -326,19 +329,18 @@ class Path extends PathItem {
     // Keep the curves list in sync all the time in case it as requested
     // already. We need to step one index down from the inserted segment to
     // get its curve:
-    if (curves && --index >= 0) {
+    if (curves != null && --index >= 0) {
       // Insert a new curve as well and update the curves above
-      curves.splice(index, 0, Curve.create(this, segments[index],
-        segments[index + 1]));
+      curves.insertRange(index, 1, new Curve.create(this, segments[index], segments[index + 1]));
       // Adjust segment1 now for the curves above the inserted one
       var curve = curves[index + amount];
-      if (curve) {
+      if (curve != null) {
         curve._segment1 = segments[index + amount];
       }
     }
-    this._changed(Change.GEOMETRY);
+    _changed(Change.GEOMETRY);
     return segs;
-  },
+  }
 
   // PORT: Add support for adding multiple segments at once to Scriptographer
   // DOCS: find a way to document the variable segment parameters of Path#add
