@@ -407,13 +407,27 @@ class Path extends PathItem {
    *
    * path.add(new Point(170, 75));
    */
-  add: function(segment1 /*, segment2, ... */) {
-    return arguments.length > 1 && typeof segment1 !== 'number'
+  add(segment1 /*, segment2, ... */) {
+    // TODO add support for other kinds of params
+    // add a single segment
+    if(segment1 is Segment) {
+      _add([segment1]);
+    } else if(segment1 is List) {
+      // add list of segments
+      if(segment1[0] is Segment) {
+        _add(segment1);
+      } else {
+        // add list of segment type things
+        _add(segment1.map((seg_type) => Segment.read(seg_type)));
+      }
+    }
+    // TODO leaving in for reference because this will definitely change
+    /*return arguments.length > 1 && typeof segment1 !== 'number'
       // addSegments
       ? this._add(Segment.readAll(arguments))
       // addSegment
-      : this._add([ Segment.read(arguments) ])[0];
-  },
+      : this._add([ Segment.read(arguments) ])[0];*/
+  }
 
   // PORT: Add support for adding multiple segments at once to Scriptographer
   /**
