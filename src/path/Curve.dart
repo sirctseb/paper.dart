@@ -565,7 +565,7 @@ class Curve {
       uy = 3 * c1y - 2 * p1y - p2y,
       vx = 3 * c2x - 2 * p2x - p1x,
       vy = 3 * c2y - 2 * p2y - p1y;
-    return Math.max(ux * ux, vx * vx) + Math.max(uy * uy, vy * vy) < 1;
+    return max(ux * ux, vx * vx) + max(uy * uy, vy * vy) < 1;
   }
   
   // methods that require numerical integration
@@ -589,7 +589,7 @@ class Curve {
       // Calculate quadratic equations of derivatives for x and y
       var dx = (ax * t + bx) * t + cx,
         dy = (ay * t + by) * t + cy;
-      return (dx * dx + dy * dy).sqrt();
+      return sqrt(dx * dx + dy * dy);
     };
   }
 
@@ -598,7 +598,7 @@ class Curve {
     // Guess required precision based and size of range...
     // TODO: There should be much better educated guesses for
     // this. Also, what does this depend on? Required precision?
-    return Math.max(2, Math.min(16, ((b - a).abs() * 32).ceil()));
+    return max(2, min(16, ((b - a).abs() * 32).ceil()));
   }
 
   static num _getLength(v, a, b) {
@@ -611,7 +611,7 @@ class Curve {
       // Straight line
       var dx = v[6] - v[0], // p2x - p1x
         dy = v[7] - v[1]; // p2y - p1y
-      return (b - a) * Math.sqrt(dx * dx + dy * dy);
+      return (b - a) * sqrt(dx * dx + dy * dy);
     }
     var ds = _getLengthIntegrand(v);
     return Numerical.integrate(ds, a, b, _getIterations(a, b));
@@ -625,13 +625,13 @@ class Curve {
     var forward = offset > 0,
       a = forward ? start : 0,
       b = forward ? 1 : start,
-      offset = Math.abs(offset),
       // Use integrand to calculate both range length and part
       // lengths in f(t) below.
       ds = _getLengthIntegrand(v),
       // Get length of total range
       rangeLength = Numerical.integrate(ds, a, b,
           _getIterations(a, b));
+    offset = offset.abs();
     if (offset >= rangeLength)
       return forward ? b : a;
     // Use offset / rangeLength for an initial guess for t, to
@@ -813,7 +813,7 @@ class Curve {
       }
     }
     // Compute intercepts of bounding box
-    return Math.abs((maxAbove + maxBelow) / (2 * a * (a * a + b * b)))
+    return ((maxAbove + maxBelow) / (2 * a * (a * a + b * b))).abs()
         < _epsilon;
   }
 
@@ -838,7 +838,7 @@ class Curve {
         minPoint = pt;
       }
     }
-    return new CurveLocation(this, minT, minPoint, Math.sqrt(minDist));
+    return new CurveLocation(this, minT, minPoint, sqrt(minDist));
   }
 
   getNearestPoint(point) {

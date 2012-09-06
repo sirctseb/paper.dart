@@ -17,6 +17,7 @@ library Path;
 import "../basic/Basic.dart";
 import "../item/Item.dart";
 import "../util/Numerical.dart";
+import "dart:math";
 part "Segment.dart";
 part "SegmentPoint.dart";
 part "SelectionState.dart";
