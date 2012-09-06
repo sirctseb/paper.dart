@@ -73,25 +73,27 @@ class Path extends PathItem {
     return copy;
   }
 
-  _changed: function(flags) {
+  _changed(int flags) {
     // Don't use base() for reasons of performance.
-    Item.prototype._changed.call(this, flags);
-    if (flags & ChangeFlag.GEOMETRY) {
-      delete this._length;
+    //Item.prototype._changed.call(this, flags);
+    // TODO will this get Item._changed if PathItem is between us?
+    super._changed(flags);
+    if (flags & ChangeFlag.GEOMETRY != 0) {
+      _length = null;
       // Clockwise state becomes undefined as soon as geometry changes.
-      delete this._clockwise;
+      _clockwie = null;
       // Curves are no longer valid
       if (this._curves != null) {
-        for (var i = 0, l = this._curves.length; i < l; i++) {
-          this._curves[i]._changed(Change.GEOMETRY);
+        for (var i = 0, l = _curves.length; i < l; i++) {
+          _curves[i]._changed(Change.GEOMETRY);
         }
       }
-    } else if (flags & ChangeFlag.STROKE) {
+    } else if (flags & ChangeFlag.STROKE != 0) {
       // TODO: We could preserve the purely geometric bounds that are not
       // affected by stroke: _bounds.bounds and _bounds.handleBounds
-      delete this._bounds;
+      _bounds = null;
     }
-  },
+  }
 
   /**
    * The segments contained within the path.
