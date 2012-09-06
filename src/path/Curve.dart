@@ -664,10 +664,10 @@ class Curve {
   static final int _maxDepth = 32;
   static num _epsilon;
 
-  static final List<List<num>> _zCubic = [
-    [1.0, 0.6, 0.3, 0.1],
-    [0.4, 0.6, 0.6, 0.4],
-    [0.1, 0.3, 0.6, 1.0]
+  static final List<List<num>> _zCubic = const [
+    const [1.0, 0.6, 0.3, 0.1],
+    const [0.4, 0.6, 0.6, 0.4],
+    const [0.1, 0.3, 0.6, 1.0]
   ];
 
   static Line _xAxis = new Line(new Point(0, 0), new Point(1, 0));
