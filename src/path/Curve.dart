@@ -642,14 +642,14 @@ class Curve {
     // using integration precision depending on the size of the
     // range. This is much faster and also more precise than not
     // modifing start and calculating total length each time.
-    function f(t) {
+    var f = (t) {
       var count = _getIterations(start, t);
       length += start < t
           ? Numerical.integrate(ds, start, t, count)
           : -Numerical.integrate(ds, t, start, count);
       start = t;
       return length - offset;
-    }
+    };
     return Numerical.findRoot(f, ds,
         forward ? a + guess : b - guess, // Initial guess for x
         a, b, 16, Numerical.TOLERANCE);
