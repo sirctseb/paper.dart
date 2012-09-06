@@ -827,7 +827,7 @@ class Curve {
     var w = _toBezierForm(this.getPoints(), point);
     // Also look at beginning and end of curve (t = 0 / 1)
     var roots = _findRoots(w, 0).concat([0, 1]);
-    var minDist = Infinity,
+    var minDist = double.INFINITY,
       minT,
       minPoint;
     // There are always roots, since we add [0, 1] above.
