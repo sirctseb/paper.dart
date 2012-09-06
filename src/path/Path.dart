@@ -1034,8 +1034,8 @@ class Path extends PathItem {
     return null;
   }
 
-  getLocation: function(point) {
-    var curves = this.getCurves();
+  CurveLocation getLocation(point) {
+    var curves = getCurves();
     for (var i = 0, l = curves.length; i < l; i++) {
       var curve = curves[i];
       var t = curve.getParameter(point);
@@ -1043,7 +1043,7 @@ class Path extends PathItem {
         return new CurveLocation(curve, t);
     }
     return null;
-  },
+  }
 
   // PORT: Rename functions and add new isParameter argument in Scriptographer
   // DOCS: document Path#getLocationAt
