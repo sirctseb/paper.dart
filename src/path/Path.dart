@@ -1303,9 +1303,9 @@ class Path extends PathItem {
    * @return {Point} The point on the path that's the closest to the specified
    * point
    */
-  getNearestPoint: function(point) {
-    return this.getNearestLocation(point).getPoint();
-  },
+  Point getNearestPoint(point) {
+    return getNearestLocation(point).getPoint();
+  }
 
   contains: function(point) {
     point = Point.read(arguments);
