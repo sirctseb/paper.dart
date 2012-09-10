@@ -1393,8 +1393,9 @@ class Path extends PathItem {
   // TODO: unite(item)
   // TODO: exclude(item)
   // TODO: getIntersections(path)
-}, new function() { // Scope for drawing
 
+  // TODO we don't have access to the private members of point, so in paper.dart,
+  // we use the x,y accessors instead. we will go back and optimize if we need to
   // Note that in the code below we're often accessing _x and _y on point
   // objects that were read from segments. This is because the SegmentPoint
   // class overrides the plain x / y properties with getter / setters and
@@ -1404,17 +1405,16 @@ class Path extends PathItem {
   // SegmentPoint objects maybe seem a bit tedious but is worth the benefit in
   // performance.
 
-  function drawHandles(ctx, segments, matrix) {
-    var coords = new Array(6);
-    for (var i = 0, l = segments.length; i < l; i++) {
-      var segment = segments[i];
-      segment._transformCoordinates(matrix, coords, false);
+  static void _drawHandles(ctx, segments, matrix) {
+    List coods = new List(6); // TODO is this correct list initialization?
+    for(Segment segment in segments) {
+      segment.transformCoordinates(matrix, coords, false);
       var state = segment._selectionState,
         selected = state & SelectionState.POINT,
         pX = coords[0],
         pY = coords[1];
 
-      function drawHandle(index) {
+      var drawHandle = (int index) {
         var hX = coords[index],
           hY = coords[index + 1];
         if (pX != hX || pY != hY) {
@@ -1428,9 +1428,9 @@ class Path extends PathItem {
         }
       }
 
-      if (selected || (state & SelectionState.HANDLE_IN))
+      if (selected || (state & SelectionState.HANDLE_IN) != 0)
         drawHandle(2);
-      if (selected || (state & SelectionState.HANDLE_OUT))
+      if (selected || (state & SelectionState.HANDLE_OUT) != 0)
         drawHandle(4);
       // Draw a rectangle at segment.point:
       ctx.save();
@@ -1449,7 +1449,7 @@ class Path extends PathItem {
     }
   }
 
-  function drawSegments(ctx, path, matrix) {
+  static void _drawSegments(ctx, path, matrix) {
     var segments = path._segments,
       length = segments.length,
       coords = new Array(6),
@@ -1458,12 +1458,12 @@ class Path extends PathItem {
       inX, inY,
       outX, outY;
 
-    function drawSegment(i) {
+    var drawSegment = (int i) {
       var segment = segments[i];
       // Optimise code when no matrix is provided by accessing semgent
       // points hand handles directly, since this is the default when
       // drawing paths. Matrix is only used for drawing selections.
-      if (matrix) {
+      if (matrix != null) {
         segment._transformCoordinates(matrix, coords, false);
         pX = coords[0];
         pY = coords[1];
@@ -1476,7 +1476,7 @@ class Path extends PathItem {
         ctx.moveTo(pX, pY);
         first = false;
       } else {
-        if (matrix) {
+        if (matrix != null) {
           inX = coords[2];
           inY = coords[3];
         } else {
@@ -1490,7 +1490,7 @@ class Path extends PathItem {
           ctx.bezierCurveTo(outX, outY, inX, inY, pX, pY);
         }
       }
-      if (matrix) {
+      if (matrix != null) {
         outX = coords[4];
         outY = coords[5];
       } else {
@@ -1507,68 +1507,67 @@ class Path extends PathItem {
       drawSegment(0);
   }
 
-  return {
-    draw: function(ctx, param) {
-      if (!param.compound)
-        ctx.beginPath();
-
-      // We can access styles directly on the internal _styles object,
-      // since Path items do not have children, thus do not need style
-      // accessors for merged styles.
-      var style = this._style,
-        fillColor = style._fillColor,
-        strokeColor = style._strokeColor,
-        dashArray = style._dashArray,
-        hasDash = strokeColor && dashArray && dashArray.length;
-
-      // Prepare the canvas path if we have any situation that requires it
-      // to be defined.
-      if (param.compound || this._clipMask || fillColor
-          || strokeColor && !hasDash) {
-        drawSegments(ctx, this);
-      }
-
-      if (this._closed)
-        ctx.closePath();
-
-      if (this._clipMask) {
-        ctx.clip();
-      } else if (!param.compound && (fillColor || strokeColor)) {
-        // If the path is part of a compound path or doesn't have a fill
-        // or stroke, there is no need to continue.
-        ctx.save();
-        this._setStyles(ctx);
-        if (fillColor)
-          ctx.fill();
-        if (strokeColor) {
-          if (hasDash) {
-            // We cannot use the path created by drawSegments above
-            // Use CurveFlatteners to draw dashed paths:
-            ctx.beginPath();
-            var flattener = new PathFlattener(this),
-              from = style._dashOffset, to,
-              i = 0;
-            while (from < flattener.length) {
-              to = from + dashArray[(i++) % dashArray.length];
-              flattener.drawPart(ctx, from, to);
-              from = to + dashArray[(i++) % dashArray.length];
-            }
-          }
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-    },
-
-    drawSelected: function(ctx, matrix) {
+  void draw(ctx, param) {
+    if (!param.compound)
       ctx.beginPath();
-      drawSegments(ctx, this, matrix);
-      // Now stroke it and draw its handles:
-      ctx.stroke();
-      drawHandles(ctx, this._segments, matrix);
+
+    // We can access styles directly on the internal _styles object,
+    // since Path items do not have children, thus do not need style
+    // accessors for merged styles.
+    var style = _style,
+      fillColor = style._fillColor,
+      strokeColor = style._strokeColor,
+      dashArray = style._dashArray,
+      hasDash = strokeColor && dashArray && dashArray.length;
+
+    // Prepare the canvas path if we have any situation that requires it
+    // to be defined.
+    if (param.compound || _clipMask || fillColor
+        || strokeColor && !hasDash) {
+      _drawSegments(ctx, this);
     }
-  };
-}, new function() { // Path Smoothing
+
+    if (_closed)
+      ctx.closePath();
+
+    if (_clipMask) {
+      ctx.clip();
+    } else if (!param.compound && (fillColor || strokeColor)) {
+      // If the path is part of a compound path or doesn't have a fill
+      // or stroke, there is no need to continue.
+      ctx.save();
+      _setStyles(ctx);
+      if (fillColor)
+        ctx.fill();
+      if (strokeColor) {
+        if (hasDash) {
+          // We cannot use the path created by drawSegments above
+          // Use CurveFlatteners to draw dashed paths:
+          ctx.beginPath();
+          var flattener = new PathFlattener(this),
+            from = style._dashOffset, to,
+            i = 0;
+          while (from < flattener.length) {
+            to = from + dashArray[(i++) % dashArray.length];
+            flattener.drawPart(ctx, from, to);
+            from = to + dashArray[(i++) % dashArray.length];
+          }
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
+  void drawSelected(ctx, matrix) {
+    ctx.beginPath();
+    _drawSegments(ctx, this, matrix);
+    // Now stroke it and draw its handles:
+    ctx.stroke();
+    _drawHandles(ctx, _segments, matrix);
+  }
+
+  // Path Smoothing
 
   /**
    * Solves a tri-diagonal system for one of coordinates (x or y) of first
@@ -1577,7 +1576,7 @@ class Path extends PathItem {
    * @param rhs right hand side vector.
    * @return Solution vector.
    */
-  function getFirstControlPoints(rhs) {
+  List static _getFirstControlPoints(rhs) {
     var n = rhs.length,
       x = [], // Solution vector.
       tmp = [], // Temporary workspace.
@@ -1594,310 +1593,310 @@ class Path extends PathItem {
       x[n - i - 1] -= tmp[n - i] * x[n - i];
     }
     return x;
-  };
+  }
 
-  return {
-    // Note: Documentation for smooth() is in PathItem
-    smooth: function() {
-      // This code is based on the work by Oleg V. Polikarpotchkin,
-      // http://ov-p.spaces.live.com/blog/cns!39D56F0C7A08D703!147.entry
-      // It was extended to support closed paths by averaging overlapping
-      // beginnings and ends. The result of this approach is very close to
-      // Polikarpotchkin's closed curve solution, but reuses the same
-      // algorithm as for open paths, and is probably executing faster as
-      // well, so it is preferred.
-      var segments = this._segments,
-        size = segments.length,
-        n = size,
-        // Add overlapping ends for averaging handles in closed paths
-        overlap;
+  // Note: Documentation for smooth() is in PathItem
+  void smooth() {
+    // This code is based on the work by Oleg V. Polikarpotchkin,
+    // http://ov-p.spaces.live.com/blog/cns!39D56F0C7A08D703!147.entry
+    // It was extended to support closed paths by averaging overlapping
+    // beginnings and ends. The result of this approach is very close to
+    // Polikarpotchkin's closed curve solution, but reuses the same
+    // algorithm as for open paths, and is probably executing faster as
+    // well, so it is preferred.
+    var segments = _segments,
+      size = segments.length,
+      n = size,
+      // Add overlapping ends for averaging handles in closed paths
+      overlap;
 
-      if (size <= 2)
-        return;
+    if (size <= 2)
+      return;
 
-      if (this._closed) {
-        // Overlap up to 4 points since averaging beziers affect the 4
-        // neighboring points
-        overlap = Math.min(size, 4);
-        n += Math.min(size, overlap) * 2;
-      } else {
-        overlap = 0;
+    if (_closed) {
+      // Overlap up to 4 points since averaging beziers affect the 4
+      // neighboring points
+      overlap = min(size, 4);
+      n += min(size, overlap) * 2;
+    } else {
+      overlap = 0;
+    }
+    var knots = [];
+    for (var i = 0; i < size; i++)
+      knots[i + overlap] = segments[i]._point;
+    if (_closed) {
+      // If we're averaging, add the 4 last points again at the
+      // beginning, and the 4 first ones at the end.
+      for (var i = 0; i < overlap; i++) {
+        knots[i] = segments[i + size - overlap]._point;
+        knots[i + size + overlap] = segments[i]._point;
       }
-      var knots = [];
-      for (var i = 0; i < size; i++)
-        knots[i + overlap] = segments[i]._point;
-      if (this._closed) {
-        // If we're averaging, add the 4 last points again at the
-        // beginning, and the 4 first ones at the end.
-        for (var i = 0; i < overlap; i++) {
-          knots[i] = segments[i + size - overlap]._point;
-          knots[i + size + overlap] = segments[i]._point;
-        }
-      } else {
-        n--;
-      }
-      // Calculate first Bezier control points
-      // Right hand side vector
-      var rhs = [];
+    } else {
+      n--;
+    }
+    // Calculate first Bezier control points
+    // Right hand side vector
+    var rhs = [];
 
-      // Set right hand side X values
-      for (var i = 1; i < n - 1; i++)
-        rhs[i] = 4 * knots[i]._x + 2 * knots[i + 1]._x;
-      rhs[0] = knots[0]._x + 2 * knots[1]._x;
-      rhs[n - 1] = 3 * knots[n - 1]._x;
-      // Get first control points X-values
-      var x = getFirstControlPoints(rhs);
+    // Set right hand side X values
+    for (var i = 1; i < n - 1; i++)
+      rhs[i] = 4 * knots[i]._x + 2 * knots[i + 1]._x;
+    rhs[0] = knots[0]._x + 2 * knots[1]._x;
+    rhs[n - 1] = 3 * knots[n - 1]._x;
+    // Get first control points X-values
+    var x = _getFirstControlPoints(rhs);
 
-      // Set right hand side Y values
-      for (var i = 1; i < n - 1; i++)
-        rhs[i] = 4 * knots[i]._y + 2 * knots[i + 1]._y;
-      rhs[0] = knots[0]._y + 2 * knots[1]._y;
-      rhs[n - 1] = 3 * knots[n - 1]._y;
-      // Get first control points Y-values
-      var y = getFirstControlPoints(rhs);
+    // Set right hand side Y values
+    for (var i = 1; i < n - 1; i++)
+      rhs[i] = 4 * knots[i]._y + 2 * knots[i + 1]._y;
+    rhs[0] = knots[0]._y + 2 * knots[1]._y;
+    rhs[n - 1] = 3 * knots[n - 1]._y;
+    // Get first control points Y-values
+    var y = _getFirstControlPoints(rhs);
 
-      if (this._closed) {
-        // Do the actual averaging simply by linearly fading between the
-        // overlapping values.
-        for (var i = 0, j = size; i < overlap; i++, j++) {
-          var f1 = (i / overlap);
-          var f2 = 1 - f1;
-          // Beginning
-          x[j] = x[i] * f1 + x[j] * f2;
-          y[j] = y[i] * f1 + y[j] * f2;
-          // End
-          var ie = i + overlap, je = j + overlap;
-          x[je] = x[ie] * f2 + x[je] * f1;
-          y[je] = y[ie] * f2 + y[je] * f1;
-        }
-        n--;
+    if (_closed) {
+      // Do the actual averaging simply by linearly fading between the
+      // overlapping values.
+      for (var i = 0, j = size; i < overlap; i++, j++) {
+        var f1 = (i / overlap);
+        var f2 = 1 - f1;
+        // Beginning
+        x[j] = x[i] * f1 + x[j] * f2;
+        y[j] = y[i] * f1 + y[j] * f2;
+        // End
+        var ie = i + overlap, je = j + overlap;
+        x[je] = x[ie] * f2 + x[je] * f1;
+        y[je] = y[ie] * f2 + y[je] * f1;
       }
-      var handleIn = null;
-      // Now set the calculated handles
-      for (var i = overlap; i <= n - overlap; i++) {
-        var segment = segments[i - overlap];
-        if (handleIn)
-          segment.setHandleIn(handleIn.subtract(segment._point));
-        if (i < n) {
-          segment.setHandleOut(
-              Point.create(x[i], y[i]).subtract(segment._point));
-          if (i < n - 1)
-            handleIn = Point.create(
-                2 * knots[i + 1]._x - x[i + 1],
-                2 * knots[i + 1]._y - y[i + 1]);
-          else
-            handleIn = Point.create(
-                (knots[n]._x + x[n - 1]) / 2,
-                (knots[n]._y + y[n - 1]) / 2);
-        }
-      }
-      if (this._closed && handleIn) {
-        var segment = this._segments[0];
+      n--;
+    }
+    var handleIn = null;
+    // Now set the calculated handles
+    for (var i = overlap; i <= n - overlap; i++) {
+      var segment = segments[i - overlap];
+      if (handleIn)
         segment.setHandleIn(handleIn.subtract(segment._point));
+      if (i < n) {
+        segment.setHandleOut(
+            Point.create(x[i], y[i]).subtract(segment._point));
+        if (i < n - 1)
+          handleIn = new Point.create(
+              2 * knots[i + 1]._x - x[i + 1],
+              2 * knots[i + 1]._y - y[i + 1]);
+        else
+          handleIn = new Point.create(
+              (knots[n]._x + x[n - 1]) / 2,
+              (knots[n]._y + y[n - 1]) / 2);
       }
     }
-  };
-}, new function() { // PostScript-style drawing commands
+    if (_closed && handleIn) {
+      var segment = _segments[0];
+      segment.setHandleIn(handleIn.subtract(segment._point));
+    }
+  }
+ 
+  // PostScript-style drawing commands
   /**
    * Helper method that returns the current segment and checks if a moveTo()
    * command is required first.
    */
-  function getCurrentSegment(that) {
+  // TODO what is that?
+  static void _getCurrentSegment(that) {
     var segments = that._segments;
     if (segments.length == 0)
       throw new Error('Use a moveTo() command first');
     return segments[segments.length - 1];
   }
 
-  return {
-    // Note: Documentation for these methods is found in PathItem, as they
-    // are considered abstract methods of PathItem and need to be defined in
-    // all implementing classes.
-    moveTo: function(point) {
-      // Let's not be picky about calling moveTo() when not at the
-      // beginning of a path, just bail out:
-      if (!this._segments.length)
-        this._add([ new Segment(Point.read(arguments)) ]);
-    },
+  // Note: Documentation for these methods is found in PathItem, as they
+  // are considered abstract methods of PathItem and need to be defined in
+  // all implementing classes.
+  void moveTo(point) {
+    // Let's not be picky about calling moveTo() when not at the
+    // beginning of a path, just bail out:
+    if (_segments.length == 0)
+      _add([ new Segment(Point.read(point)) ]);
+  }
 
-    moveBy: function(point) {
-      throw new Error('moveBy() is unsupported on Path items.');
-    },
+  void moveBy(point) {
+    throw new Error('moveBy() is unsupported on Path items.');
+  }
 
-    lineTo: function(point) {
-      // Let's not be picky about calling moveTo() first:
-      this._add([ new Segment(Point.read(arguments)) ]);
-    },
+  void lineTo(point) {
+    // Let's not be picky about calling moveTo() first:
+    _add([ new Segment(Point.read(point)) ]);
+  }
 
-    cubicCurveTo: function(handle1, handle2, to) {
-      handle1 = Point.read(arguments, 0, 1);
-      handle2 = Point.read(arguments, 1, 1);
-      to = Point.read(arguments, 2, 1);
-      // First modify the current segment:
-      var current = getCurrentSegment(this);
-      // Convert to relative values:
-      current.setHandleOut(handle1.subtract(current._point));
-      // And add the new segment, with handleIn set to c2
-      this._add([ new Segment(to, handle2.subtract(to)) ]);
-    },
+  void cubicCurveTo(handle1, handle2, to) {
+    handle1 = Point.read(handle1);
+    handle2 = Point.read(handle2);
+    to = Point.read(to);
+    // First modify the current segment:
+    var current = _getCurrentSegment(this);
+    // Convert to relative values:
+    current.setHandleOut(handle1.subtract(current._point));
+    // And add the new segment, with handleIn set to c2
+    _add([ new Segment(to, handle2.subtract(to)) ]);
+  }
 
-    quadraticCurveTo: function(handle, to) {
-      handle = Point.read(arguments, 0, 1);
-      to = Point.read(arguments, 1, 1);
-      // This is exact:
-      // If we have the three quad points: A E D,
-      // and the cubic is A B C D,
-      // B = E + 1/3 (A - E)
-      // C = E + 1/3 (D - E)
-      var current = getCurrentSegment(this)._point;
-      this.cubicCurveTo(
-        handle.add(current.subtract(handle).multiply(1/3)),
-        handle.add(to.subtract(handle).multiply(1/3)),
-        to
-      );
-    },
+  void quadraticCurveTo(handle, to) {
+    handle = Point.read(handle);
+    to = Point.read(to);
+    // This is exact:
+    // If we have the three quad points: A E D,
+    // and the cubic is A B C D,
+    // B = E + 1/3 (A - E)
+    // C = E + 1/3 (D - E)
+    var current = _getCurrentSegment(this)._point;
+    cubicCurveTo(
+      handle.add(current.subtract(handle).multiply(1/3)),
+      handle.add(to.subtract(handle).multiply(1/3)),
+      to
+    );
+  }
 
-    curveTo: function(through, to, parameter) {
-      through = Point.read(arguments, 0, 1);
-      to = Point.read(arguments, 1, 1);
-      var t = Base.pick(parameter, 0.5),
-        t1 = 1 - t,
-        current = getCurrentSegment(this)._point,
-        // handle = (through - (1 - t)^2 * current - t^2 * to) /
-        // (2 * (1 - t) * t)
-        handle = through.subtract(current.multiply(t1 * t1))
-          .subtract(to.multiply(t * t)).divide(2 * t * t1);
-      if (handle.isNaN())
-        throw new Error(
-          'Cannot put a curve through points with parameter = ' + t);
-      this.quadraticCurveTo(handle, to);
-    },
+  void curveTo(through, to, [parameter = 0.5]) {
+    through = Point.read(through);
+    to = Point.read(to);
+    var t = parameter,
+      t1 = 1 - t,
+      current = getCurrentSegment(this)._point,
+      // handle = (through - (1 - t)^2 * current - t^2 * to) /
+      // (2 * (1 - t) * t)
+      handle = through.subtract(current.multiply(t1 * t1))
+        .subtract(to.multiply(t * t)).divide(2 * t * t1);
+    if (handle.isNaN())
+      throw new Error(
+        'Cannot put a curve through points with parameter = ' + t);
+    quadraticCurveTo(handle, to);
+  }
 
-    // PORT: New implementation back to Scriptographer
-    arcTo: function(to, clockwise /* | through, to */) {
-      // Get the start point:
-      var current = getCurrentSegment(this),
-        from = current._point,
-        through;
-      if (clockwise === undefined)
-        clockwise = true;
-      if (typeof clockwise === 'boolean') {
-        to = Point.read(arguments, 0, 1);
-        var middle = from.add(to).divide(2),
-        through = middle.add(middle.subtract(from).rotate(
-            clockwise ? -90 : 90));
-      } else {
-        through = Point.read(arguments, 0, 1);
-        to = Point.read(arguments, 1, 1);
-      }
-      // Construct the two perpendicular middle lines to (from, through)
-      // and (through, to), and intersect them to get the center
-      var l1 = new Line(from.add(through).divide(2),
-          through.subtract(from).rotate(90)),
-         l2 = new Line(through.add(to).divide(2),
-          to.subtract(through).rotate(90)),
-        center = l1.intersect(l2),
-        line = new Line(from, to, true),
-        throughSide = line.getSide(through);
-      if (!center) {
-        // If the two lines are colinear, there cannot be an arc as the
-        // circle is infinitely big and has no center point. If side is
-        // 0, the connecting arc line of this huge circle is a line
-        // between the two points, so we can use #lineTo instead.
-        // Otherwise we bail out:
-        if (!throughSide)
-          return this.lineTo(to);
-        throw new Error("Cannot put an arc through the given points: "
-          + [from, through, to]);
-      }
-      var vector = from.subtract(center),
-        radius = vector.getLength(),
-        extent = vector.getDirectedAngle(to.subtract(center)),
-        centerSide = line.getSide(center);
-      if (centerSide == 0) {
-        // If the center is lying on the line, we might have gotten the
-        // wrong sign for extent above. Use the sign of the side of the
-        // through point.
-        extent = throughSide * Math.abs(extent);
-      } else if (throughSide == centerSide) {
-        // If the center is on the same side of the line (from, to) as
-        // the through point, we're extending bellow 180 degrees and
-        // need to adapt extent.
-        extent -= 360 * (extent < 0 ? -1 : 1);
-      }
-      var ext = Math.abs(extent),
-        count =  ext >= 360 ? 4 : Math.ceil(ext / 90),
-        inc = extent / count,
-        half = inc * Math.PI / 360,
-        z = 4 / 3 * Math.sin(half) / (1 + Math.cos(half)),
-        segments = [];
-      for (var i = 0; i <= count; i++) {
-        // Explicitely use to point for last segment, since depending
-        // on values the calculation adds imprecision:
-        var pt = i < count ? center.add(vector) : to;
-        var out = i < count ? vector.rotate(90).multiply(z) : null;
-        if (i == 0) {
-          // Modify startSegment
-          current.setHandleOut(out);
-        } else {
-          // Add new Segment
-          segments.push(
-            new Segment(pt, vector.rotate(-90).multiply(z), out));
-        }
-        vector = vector.rotate(inc);
-      }
-      // Add all segments at once at the end for higher performance
-      this._add(segments);
-    },
-
-    lineBy: function(vector) {
-      vector = Point.read(arguments);
-      var current = getCurrentSegment(this);
-      this.lineTo(current._point.add(vector));
-    },
-
-    curveBy: function(throughVector, toVector, parameter) {
-      throughVector = Point.read(throughVector);
-      toVector = Point.read(toVector);
-      var current = getCurrentSegment(this)._point;
-      this.curveTo(current.add(throughVector), current.add(toVector),
-          parameter);
-    },
-
-    arcBy: function(throughVector, toVector) {
-      throughVector = Point.read(throughVector);
-      toVector = Point.read(toVector);
-      var current = getCurrentSegment(this)._point;
-      this.arcBy(current.add(throughVector), current.add(toVector));
-    },
-
-    closePath: function() {
-      this.setClosed(true);
+  // PORT: New implementation back to Scriptographer
+  void arcTo(to, clockwise /* | through, to */) {
+    // Get the start point:
+    var current = _getCurrentSegment(this),
+      from = current._point,
+      through;
+    if (!clockwise?)
+      clockwise = true;
+    if (clockwise is bool) {
+      to = Point.read(to);
+      var middle = from.add(to).divide(2),
+      through = middle.add(middle.subtract(from).rotate(
+          clockwise ? -90 : 90));
+    } else {
+      through = Point.read(to);
+      to = Point.read(clockwise);
     }
-  };
-}, new function() { // A dedicated scope for the tricky bounds calculations
+    // Construct the two perpendicular middle lines to (from, through)
+    // and (through, to), and intersect them to get the center
+    var l1 = new Line(from.add(through).divide(2),
+        through.subtract(from).rotate(90)),
+       l2 = new Line(through.add(to).divide(2),
+        to.subtract(through).rotate(90)),
+      center = l1.intersect(l2),
+      line = new Line(from, to, true),
+      throughSide = line.getSide(through);
+    if (center == null) {
+      // If the two lines are colinear, there cannot be an arc as the
+      // circle is infinitely big and has no center point. If side is
+      // 0, the connecting arc line of this huge circle is a line
+      // between the two points, so we can use #lineTo instead.
+      // Otherwise we bail out:
+      if (throughSide == 0)
+        return lineTo(to);
+      throw new Error("Cannot put an arc through the given points: "
+        + [from, through, to]);
+    }
+    var vector = from.subtract(center),
+      radius = vector.getLength(),
+      extent = vector.getDirectedAngle(to.subtract(center)),
+      centerSide = line.getSide(center);
+    if (centerSide == 0) {
+      // If the center is lying on the line, we might have gotten the
+      // wrong sign for extent above. Use the sign of the side of the
+      // through point.
+      extent = throughSide * extent.abs();
+    } else if (throughSide == centerSide) {
+      // If the center is on the same side of the line (from, to) as
+      // the through point, we're extending bellow 180 degrees and
+      // need to adapt extent.
+      extent -= 360 * (extent < 0 ? -1 : 1);
+    }
+    var ext = extent.abs(),
+      count =  ext >= 360 ? 4 : (ext / 90).ceil(),
+      inc = extent / count,
+      half = inc * PI / 360,
+      z = 4 / 3 * sin(half) / (1 + cos(half)),
+      segments = [];
+    for (var i = 0; i <= count; i++) {
+      // Explicitely use to point for last segment, since depending
+      // on values the calculation adds imprecision:
+      var pt = i < count ? center.add(vector) : to;
+      var out = i < count ? vector.rotate(90).multiply(z) : null;
+      if (i == 0) {
+        // Modify startSegment
+        current.setHandleOut(out);
+      } else {
+        // Add new Segment
+        segments.add(
+          new Segment(pt, vector.rotate(-90).multiply(z), out));
+      }
+      vector = vector.rotate(inc);
+    }
+    // Add all segments at once at the end for higher performance
+    _add(segments);
+  }
+
+  void lineBy(vector) {
+    vector = Point.read(vector);
+    var current = _getCurrentSegment(this);
+    lineTo(current._point.add(vector));
+  }
+
+  void curveBy(throughVector, toVector, parameter) {
+    throughVector = Point.read(throughVector);
+    toVector = Point.read(toVector);
+    var current = _getCurrentSegment(this)._point;
+    curveTo(current.add(throughVector), current.add(toVector),
+        parameter);
+  }
+
+  void arcBy(throughVector, toVector) {
+    throughVector = Point.read(throughVector);
+    toVector = Point.read(toVector);
+    var current = _getCurrentSegment(this)._point;
+    arcBy(current.add(throughVector), current.add(toVector));
+  }
+
+  void closePath() {
+    setClosed(true);
+  }
+
+  // A dedicated scope for the tricky bounds calculations
   /**
    * Returns the bounding rectangle of the item excluding stroke width.
    */
-  function getBounds(matrix, strokePadding) {
+  static void _getBounds(matrix, strokePadding) {
     // Code ported and further optimised from:
     // http://blog.hackers-cafe.net/2009/06/how-to-calculate-bezier-curves-bounding.html
-    var segments = this._segments,
+    var segments = _segments,
       first = segments[0];
     if (!first)
       return null;
-    var coords = new Array(6),
-      prevCoords = new Array(6);
+    // TODO is this correct list initialization?
+    List coords = new List(6),
+          prevCoords = new List(6);
     // Make coordinates for first segment available in prevCoords.
     first._transformCoordinates(matrix, prevCoords, false);
-    var min = prevCoords.slice(0, 2),
-      max = min.slice(0), // clone
+    var min = prevCoords.getRange(0, 2),
+      max = new List(min); // clone
       // Add some tolerance for good roots, as t = 0 / 1 are added
       // seperately anyhow, and we don't want joins to be added with
       // radiuses in getStrokeBounds()
       tMin = Numerical.TOLERANCE,
       tMax = 1 - tMin;
-    function processSegment(segment) {
+    var processSegment = (segment) {
       segment._transformCoordinates(matrix, coords, false);
 
       for (var i = 0; i < 2; i++) {
@@ -1906,7 +1905,7 @@ class Path extends PathItem {
           v2 = coords[i + 2], // segment.handleIn
           v3 = coords[i]; // segment.point
 
-        function add(value, t) {
+        var add = (value, t) {
           var padding = 0;
           if (value == null) {
             // Calculate bezier polynomial at t
@@ -1927,7 +1926,7 @@ class Path extends PathItem {
           if (right > max[i])
             max[i] = right;
 
-        }
+        };
         add(v3, null);
 
         // Calculate derivative of our bezier polynomial, divided by 3.
@@ -1955,7 +1954,7 @@ class Path extends PathItem {
         if (q < 0)
           continue;
         // TODO: Match this with Numerical.solveQuadratic
-        var sqrt = Math.sqrt(q),
+        var sqrt = q.sqrt();
           f = -0.5 / a,
            t1 = (b - sqrt) * f,
           t2 = (b + sqrt) * f;
@@ -1968,10 +1967,10 @@ class Path extends PathItem {
       var tmp = prevCoords;
       prevCoords = coords;
       coords = tmp;
-    }
+    };
     for (var i = 1, l = segments.length; i < l; i++)
       processSegment(segments[i]);
-    if (this._closed)
+    if (_closed)
       processSegment(first);
     return Rectangle.create(min[0], min[1],
           max[0] - min[0], max[1] - min[1]);
@@ -1982,8 +1981,8 @@ class Path extends PathItem {
    * stroke adds to the bounding box, by calculating the dimensions of a
    * rotated ellipse.
    */
-  function getPenPadding(radius, matrix) {
-    if (!matrix)
+  static void _getPenPadding(radius, [matrix]) {
+    if (matrix == null)
       return [radius, radius];
     // If a matrix is provided, we need to rotate the stroke circle
     // and calculate the bounding box of the resulting rotated elipse:
@@ -2010,23 +2009,23 @@ class Path extends PathItem {
     // t = pi * n - arctan(b * tan(phi) / a) // x
     // t = pi * n + arctan(b * cot(phi) / a)
     //   = pi * n + arctan(b / tan(phi) / a) // y
-    var sin = Math.sin(phi),
-      cos = Math.cos(phi),
-      tan = Math.tan(phi),
-      tx = -Math.atan(b * tan / a),
-      ty = Math.atan(b / (tan * a));
+    var sin_phi = sin(phi),
+      cos_phi = cos(phi),
+      tan_phi = tan(phi),
+      tx = -atan(b * tan / a),
+      ty = atan(b / (tan * a));
     // Due to symetry, we don't need to cycle through pi * n solutions:
-    return [Math.abs(a * Math.cos(tx) * cos - b * Math.sin(tx) * sin),
-        Math.abs(b * Math.sin(ty) * cos + a * Math.cos(ty) * sin)];
+    return [(a * cos(tx) * cos_phi - b * sin(tx) * sin_phi).abs(),
+        (b * sin(ty) * cos_phi + a * cos(ty) * sin_phi).abs()];
   }
 
   /**
    * Returns the bounding rectangle of the item including stroke width.
    */
-  function getStrokeBounds(matrix) {
+  void static _getStrokeBounds(matrix) {
     // See #draw() for an explanation of why we can access _style
     // properties directly here:
-    var style = this._style;
+    var style = _style;
     // TODO: Find a way to reuse 'bounds' cache instead?
     if (!style._strokeColor || !style._strokeWidth)
       return getBounds.call(this, matrix);
@@ -2045,19 +2044,19 @@ class Path extends PathItem {
     // further down
     var joinBounds = new Rectangle(new Size(padding).multiply(2));
 
-    function add(point) {
+    var add = (point) {
       bounds = bounds.include(matrix
         ? matrix._transformPoint(point, point) : point);
-    }
+    };
 
-    function addBevelJoin(curve, t) {
+    var addBevelJoin = (curve, t) {
       var point = curve.getPoint(t),
         normal = curve.getNormal(t).normalize(radius);
       add(point.add(normal));
       add(point.subtract(normal));
-    }
+    };
 
-    function addJoin(segment, join) {
+    var addJoin = (segment, join) {
       // When both handles are set in a segment, the join setting is
       // ignored and round is always used.
       if (join === 'round' || !segment._handleIn.isZero()
@@ -2088,9 +2087,9 @@ class Path extends PathItem {
           add(corner);
         }
       }
-    }
+    };
 
-    function addCap(segment, cap, t) {
+    var addCap = (segment, cap, t) {
       switch (cap) {
       case 'round':
         return addJoin(segment, cap);
@@ -2108,12 +2107,12 @@ class Path extends PathItem {
         add(point.subtract(normal));
         break;
       }
-    }
+    };
 
-    for (var i = 1, l = length - (this._closed ? 0 : 1); i < l; i++) {
+    for (var i = 1, l = length - (_closed ? 0 : 1); i < l; i++) {
       addJoin(segments[i], join);
     }
-    if (this._closed) {
+    if (_closed) {
       addJoin(segments[0], join);
     } else {
       addCap(segments[0], cap, 0);
@@ -2125,16 +2124,17 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item including handles.
    */
-  function getHandleBounds(matrix, stroke, join) {
-    var coords = new Array(6),
-      x1 = Infinity,
+  static _getHandleBounds(matrix, [stroke = 0, join = 0]) {
+    // TODO is this correct list initialization?
+    List coords = new List(6);
+    var x1 = double.INFINITY,
       x2 = -x1,
       y1 = x1,
       y2 = x2;
-    stroke = stroke / 2 || 0; // Stroke padding
-    join = join / 2 || 0; // Join padding, for miterLimit
-    for (var i = 0, l = this._segments.length; i < l; i++) {
-      var segment = this._segments[i];
+    stroke = stroke / 2; // Stroke padding
+    join = join / 2; // Join padding, for miterLimit
+    for (var i = 0, l = _segments.length; i < l; i++) {
+      var segment = _segments[i];
       segment._transformCoordinates(matrix, coords, false);
       for (var j = 0; j < 6; j += 2) {
         // Use different padding for points or handles
@@ -2158,11 +2158,11 @@ class Path extends PathItem {
    * Returns the rough bounding rectangle of the item that is shure to include
    * all of the drawing, including stroke width.
    */
-  function getRoughBounds(matrix) {
+  static _getRoughBounds(matrix) {
     // Delegate to handleBounds, but pass on radius values for stroke and
     // joins. Hanlde miter joins specially, by passing the largets radius
     // possible.
-    var style = this._style,
+    var style = _style,
       width = style._strokeWidth;
     return getHandleBounds.call(this, matrix, width,
         style._strokeJoin == 'miter'
@@ -2170,16 +2170,10 @@ class Path extends PathItem {
           : width);
   }
 
-  var get = {
-    bounds: getBounds,
-    strokeBounds: getStrokeBounds,
-    handleBounds: getHandleBounds,
-    roughBounds: getRoughBounds
-  };
-
-  return {
-    _getBounds: function(type, matrix) {
-      return get[type].call(this, matrix);
-    }
-  };
+  _getBounds(type, matrix) {
+    if(type == "bounds") _getBounds(matrix);
+    if(type == "strokeBounds") _getStrokeBounds(matrix);
+    if(type == "handleBounds") _getHandleBounds(matrix);
+    if(type == "roughBounds") _getRoughBounds(matrix);
+  }
 }
