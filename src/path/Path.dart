@@ -121,7 +121,9 @@ class Path extends PathItem {
       if (_curves != null)
         _curves = null;
     }
-    _add(Segment.readAll(segments));
+    // TODO do we lose anything just passing segments
+    //_add(Segment.readAll(segments));
+    _add(segments);
   }
   set segments(segments) => setSegments(segments);
 
