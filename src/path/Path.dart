@@ -273,6 +273,7 @@ class Path extends PathItem {
     }
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
+    // TODO editor can't resolve _style. shouldn't it at least see Item._style?
     var style = _style,
       fillColor = style._fillColor,
       strokeColor = style._strokeColor;
@@ -314,7 +315,7 @@ class Path extends PathItem {
         segment._selectionState = SelectionState.POINT;
       // If parts of this segment are selected, adjust the internal
       // _selectedSegmentState now
-      if (segment._selectionState)
+      if (segment._selectionState != 0)
         _updateSelection(segment, 0, segment._selectionState);
     }
     if (append) {
