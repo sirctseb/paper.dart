@@ -258,7 +258,7 @@ class Path extends PathItem {
     // to their segment points.
     return null;
   }
-  Matix get matrix() => getMatrix();
+  Matrix get matrix() => getMatrix();
 
   setMatrix(matrix) {
     // Do nothing for the same reason as above.
