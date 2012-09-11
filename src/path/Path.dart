@@ -17,6 +17,7 @@ library Path;
 import "../basic/Basic.dart";
 import "../item/Item.dart";
 import "../util/Numerical.dart";
+import "../item/ChangeFlag.dart";
 import "dart:math";
 part "Segment.dart";
 part "SegmentPoint.dart";
@@ -85,7 +86,9 @@ class Path extends PathItem {
       // Curves are no longer valid
       if (this._curves != null) {
         for (var i = 0, l = _curves.length; i < l; i++) {
-          _curves[i]._changed(Change.GEOMETRY);
+          // TODO argument to Curve._changed is unused in paper.js
+          //_curves[i]._changed(Change.GEOMETRY);
+          _curves[i]._changed();
         }
       }
     } else if ((flags & ChangeFlag.STROKE) != 0) {
