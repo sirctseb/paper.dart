@@ -247,7 +247,7 @@ class Path extends PathItem {
   // taken into account.
 
   // DOCS: Explain that path matrix is always applied with each transformation.
-  Path transform(matrix) {
+  Path transform(Matrix matrix, [bool apply = false]) {
     // TODO does this go up to Item?
     return super.transform(matrix, true);
   }
