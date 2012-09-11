@@ -424,7 +424,9 @@ class Path extends PathItem {
         return _add(segment1);
       } else {
         // add list of segment type things
-        return _add(segment1.map((seg_type) => Segment.read(seg_type)));
+        // TODO do we lose anything by passing the list directly?
+        //return _add(segment1.map((seg_type) => Segment.read(seg_type)));
+        return _add(segment1);
       }
     }
     // TODO leaving in for reference because this will definitely change
@@ -482,7 +484,9 @@ class Path extends PathItem {
         return _add(segment1, index);
       } else {
         // add list of segment type things
-        return _add(segment1.map((seg_type) => Segment.read(seg_type)), index);
+        // TODO do we lose anything by passing the list directly?
+        //return _add(segment1.map((seg_type) => Segment.read(seg_type)), index);
+        return _add(segment1, index);
       }
     }
 
@@ -494,13 +498,16 @@ class Path extends PathItem {
   }
 
   // PORT: Add to Scriptographer
+  // TODO add a Segment.create for these things
   addSegment(segment) {
-    return _add([ Segment.read(segment) ])[0];
+    //return _add([ Segment.read(segment) ])[0];
+    return _add([segment])[0];
   }
 
   // PORT: Add to Scriptographer
   insertSegment(int index, segment) {
-    return _add([ Segment.read(segment) ], index)[0];
+    //return _add([ Segment.read(segment) ], index)[0];
+    return _add([segment], index)[0];
   }
 
   // PORT: Add to Scriptographer
@@ -544,7 +551,9 @@ class Path extends PathItem {
    * path2.position.x += 30;
    */
   addSegments(segments) {
-    return _add(Segment.readAll(segments));
+    // TODO do we lose anything passing the list directly?
+    //return _add(Segment.readAll(segments));
+    return _add(segments);
   }
 
   // PORT: Add to Scriptographer
@@ -559,7 +568,9 @@ class Path extends PathItem {
    * belongs to another path.
    */
   insertSegments(index, segments) {
-    return _add(Segment.readAll(segments), index);
+    // TODO do we lose anything passing the list directly?
+    //return _add(Segment.readAll(segments), index);
+    return _add(segments, index);
   }
 
   // PORT: Add to Scriptographer
