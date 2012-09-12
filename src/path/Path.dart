@@ -631,7 +631,7 @@ class Path extends PathItem {
    * path.selected = true;
    */
   removeSegments([int from = 0, int to]) {
-    to = to? to : _segments.length;
+    to = to? ? to : _segments.length;
     var segments = _segments,
       curves = _curves,
       last = to >= segments.length,
