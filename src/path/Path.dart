@@ -873,7 +873,7 @@ class Path extends PathItem {
         sum += (xPre - x) * (y + yPre);
       xPre = x;
       yPre = y;
-    }
+    };
     // Method derived from:
     // http://stackoverflow.com/questions/1165647
     // We treat the curve points and handles as the outline of a polygon of
