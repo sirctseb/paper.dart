@@ -1001,7 +1001,7 @@ class Path extends PathItem {
           _add(segments.getRange(0, segments.length - 1), 0);
         } else {
           // TODO slice(0) is just the whole thing right?
-          _add(segments)
+          _add(segments);
           //_add(segments.slice(0));
         }
       }
