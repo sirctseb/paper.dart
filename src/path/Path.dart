@@ -793,7 +793,7 @@ class Path extends PathItem {
     var flattener = new PathFlattener(this),
       pos = 0,
       // Adapt step = maxDistance so the points distribute evenly.
-      step = flattener.length / Math.ceil(flattener.length / maxDistance),
+      step = flattener.length / (flattener.length / maxDistance).ceil(),
       // Add/remove half of step to end, so imprecisions are ok too.
       // For closed paths, remove it, because we don't want to add last
       // segment again
