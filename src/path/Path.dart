@@ -864,7 +864,7 @@ class Path extends PathItem {
    */
   bool _clockwise;
   bool isClockwise() {
-    if (_clockwise !== undefined)
+    if (_clockwise != null)
       return _clockwise;
     var sum = 0,
       xPre, yPre;
