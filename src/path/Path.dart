@@ -656,13 +656,13 @@ class Path extends PathItem {
       curves.removeRange(from, amount);
       // Adjust segments for the curves before and after the removed ones
       var curve;
-      if (curve = curves[from - 1])
+      if ((curve = curves[from - 1]) != null)
         curve._segment2 = segments[from];
-      if (curve = curves[from])
+      if ((curve = curves[from]) != null)
         curve._segment1 = segments[from];
       // If the last segment of a closing path was removed, we need to
       // readjust the last curve of the list now.
-      if (last && _closed && (curve = curves[curves.length - 1]))
+      if (last && _closed && ((curve = curves[curves.length - 1]) != null))
         curve._segment2 = segments[0];
     }
     _changed(Change.GEOMETRY);
