@@ -1425,7 +1425,7 @@ class Path extends PathItem {
   static void _drawHandles(ctx, segments, matrix) {
     List coods = new List(6); // TODO is this correct list initialization?
     for(Segment segment in segments) {
-      segment.transformCoordinates(matrix, coords, false);
+      segment._transformCoordinates(matrix, coords, false);
       var state = segment._selectionState,
         selected = state & SelectionState.POINT,
         pX = coords[0],
