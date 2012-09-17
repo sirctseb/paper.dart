@@ -1427,7 +1427,7 @@ class Path extends PathItem {
     for(Segment segment in segments) {
       segment._transformCoordinates(matrix, coords, false);
       var state = segment._selectionState,
-        selected = state & SelectionState.POINT,
+        selected = ((state & SelectionState.POINT) != 0),
         pX = coords[0],
         pY = coords[1];
 
@@ -1445,9 +1445,9 @@ class Path extends PathItem {
         }
       };
 
-      if (selected || (state & SelectionState.HANDLE_IN) != 0)
+      if (selected || ((state & SelectionState.HANDLE_IN) != 0))
         drawHandle(2);
-      if (selected || (state & SelectionState.HANDLE_OUT) != 0)
+      if (selected || ((state & SelectionState.HANDLE_OUT) != 0))
         drawHandle(4);
       // Draw a rectangle at segment.point:
       ctx.save();
