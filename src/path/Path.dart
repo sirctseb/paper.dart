@@ -1423,7 +1423,7 @@ class Path extends PathItem {
   // performance.
 
   static void _drawHandles(ctx, segments, matrix) {
-    List coods = new List(6); // TODO is this correct list initialization?
+    List coords = new List(6); // TODO is this correct list initialization?
     for(Segment segment in segments) {
       segment._transformCoordinates(matrix, coords, false);
       var state = segment._selectionState,
