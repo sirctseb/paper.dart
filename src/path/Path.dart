@@ -1364,7 +1364,7 @@ class Path extends PathItem {
       if (point.getDistance(pt) < tolerance)
         return new HitResult(name, that, { "segment": seg, "point": pt });
     };
-    var checkSegment = (seg, ends) {
+    var checkSegment = (seg, [ends]) {
       var point = seg._point;
       // Note, when checking for ends, we don't also check for handles,
       // since this will happen afterwards in a separate loop, see below.
