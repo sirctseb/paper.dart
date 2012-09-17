@@ -1330,7 +1330,7 @@ class Path extends PathItem {
     // that do not overlap with themselves.
     // TODO: Find out how to implement the "Point In Polygon" problem for
     // non-zero fill rule.
-    if (!_closed || !getRoughBounds()._containsPoint(point))
+    if (!_closed || !getRoughBounds().containsPoint(point))
       return false;
     // Use the crossing number algorithm, by counting the crossings of the
     // beam in right y-direction with the shape, and see if it's an odd
