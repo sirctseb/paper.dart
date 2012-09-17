@@ -1440,10 +1440,10 @@ class Path extends PathItem {
           ctx.lineTo(hX, hY);
           ctx.stroke();
           ctx.beginPath();
-          ctx.arc(hX, hY, 1.75, 0, Math.PI * 2, true);
+          ctx.arc(hX, hY, 1.75, 0, PI * 2, true);
           ctx.fill();
         }
-      }
+      };
 
       if (selected || (state & SelectionState.HANDLE_IN) != 0)
         drawHandle(2);
