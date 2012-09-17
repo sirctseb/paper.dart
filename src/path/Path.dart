@@ -1363,7 +1363,7 @@ class Path extends PathItem {
       // system of the DOM level on which the inquiry was started!
       if (point.getDistance(pt) < tolerance)
         return new HitResult(name, that, { "segment": seg, "point": pt });
-    }
+    };
     var checkSegment = (seg, ends) {
       var point = seg._point;
       // Note, when checking for ends, we don't also check for handles,
@@ -1373,7 +1373,7 @@ class Path extends PathItem {
         || (!ends && options["handles"]) && (
           checkPoint(seg, point.add(seg._handleIn), 'handle-in') ||
           checkPoint(seg, point.add(seg._handleOut), 'handle-out'));
-    }
+    };
     if (options["ends"] && !options["segments"] && !_closed) {
       if (res = checkSegment(getFirstSegment(), true)
           || checkSegment(getLastSegment(), true))
