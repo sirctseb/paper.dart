@@ -1349,7 +1349,7 @@ class Path extends PathItem {
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
     var style = _style,
-      tolerance = options["tolerance"] || 0,
+      tolerance = options.containsKey("tolerance") ? options["tolerance"] : 0,
       radius = (options["stroke"] && style._strokeColor
           ? style._strokeWidth / 2 : 0) + tolerance,
       loc,
