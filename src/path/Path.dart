@@ -1390,13 +1390,13 @@ class Path extends PathItem {
     // Don't process loc yet, as we also need to query for stroke after fill
     // in some cases. Simply skip fill query if we already have a matching
     // stroke.
-    if (!(loc && loc._distance <= radius) && options["fill"]
+    if (!(loc != null && loc._distance <= radius) && options["fill"]
         && style._fillColor && contains(point))
       return new HitResult('fill', this);
     // Now query stroke if we haven't already
-    if (!loc && options["stroke"] && radius > 0)
+    if (loc == null && options["stroke"] && radius > 0)
       loc = getNearestLocation(point);
-    if (loc && loc._distance <= radius)
+    if (loc != null && loc._distance <= radius)
       // TODO: Do we need to transform the location back to the coordinate
       // system of the DOM level on which the inquiry was started?
       return options["stroke"]
