@@ -274,7 +274,7 @@ class Path extends PathItem {
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
     // TODO editor can't resolve _style. shouldn't it at least see Item._style?
-    var style = _style,
+    var style = style,
       fillColor = style._fillColor,
       strokeColor = style._strokeColor;
     // Try calling transform on colors in case they are GradientColors.
@@ -1348,7 +1348,7 @@ class Path extends PathItem {
   HitResult _hitTest(point, options) {
     // See #draw() for an explanation of why we can access _style properties
     // directly here:
-    var style = _style,
+    var style = style,
       tolerance = options.containsKey("tolerance") ? options["tolerance"] : 0,
       radius = (options["stroke"] && style._strokeColor
           ? style._strokeWidth / 2 : 0) + tolerance,
@@ -1531,7 +1531,7 @@ class Path extends PathItem {
     // We can access styles directly on the internal _styles object,
     // since Path items do not have children, thus do not need style
     // accessors for merged styles.
-    var style = _style,
+    var style = style,
       fillColor = style._fillColor,
       strokeColor = style._strokeColor,
       dashArray = style._dashArray,
@@ -2049,7 +2049,7 @@ class Path extends PathItem {
   _getStrokeBounds(matrix) {
     // See #draw() for an explanation of why we can access _style
     // properties directly here:
-    var style = _style;
+    var style = style;
     // TODO: Find a way to reuse 'bounds' cache instead?
     if (!style._strokeColor || !style._strokeWidth)
       return _getNormalBounds(matrix);
@@ -2186,16 +2186,16 @@ class Path extends PathItem {
     // Delegate to handleBounds, but pass on radius values for stroke and
     // joins. Hanlde miter joins specially, by passing the largets radius
     // possible.
-    var style = _style,
+    var style = style,
       width = style._strokeWidth;
-    return getHandleBounds.call(this, matrix, width,
+    return _getHandleBounds(matrix, width,
         style._strokeJoin == 'miter'
           ? width * style._miterLimit
           : width);
   }
 
   _getBounds(type, matrix) {
-    if(type == "bounds") _getBounds(matrix);
+    if(type == "bounds") _getNormalBounds(matrix);
     if(type == "strokeBounds") _getStrokeBounds(matrix);
     if(type == "handleBounds") _getHandleBounds(matrix);
     if(type == "roughBounds") _getRoughBounds(matrix);
