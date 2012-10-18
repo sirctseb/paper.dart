@@ -2036,8 +2036,8 @@ class Path extends PathItem {
     var sin_phi = sin(phi),
       cos_phi = cos(phi),
       tan_phi = tan(phi),
-      tx = -atan(b * tan / a),
-      ty = atan(b / (tan * a));
+      tx = -atan(b * tan_phi / a),
+      ty = atan(b / (tan_phi * a));
     // Due to symetry, we don't need to cycle through pi * n solutions:
     return [(a * cos(tx) * cos_phi - b * sin(tx) * sin_phi).abs(),
         (b * sin(ty) * cos_phi + a * cos(ty) * sin_phi).abs()];
