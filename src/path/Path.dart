@@ -1978,7 +1978,7 @@ class Path extends PathItem {
         if (q < 0)
           continue;
         // TODO: Match this with Numerical.solveQuadratic
-        var sqrt = q.sqrt();
+        var sqrt = sqrt(q),
           f = -0.5 / a,
            t1 = (b - sqrt) * f,
           t2 = (b + sqrt) * f;
