@@ -1901,7 +1901,7 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item excluding stroke width.
    */
-  static void _getBounds(matrix, strokePadding) {
+  _getNormalBounds(matrix, strokePadding) {
     // Code ported and further optimised from:
     // http://blog.hackers-cafe.net/2009/06/how-to-calculate-bezier-curves-bounding.html
     var segments = _segments,
@@ -2005,7 +2005,7 @@ class Path extends PathItem {
    * stroke adds to the bounding box, by calculating the dimensions of a
    * rotated ellipse.
    */
-  static void _getPenPadding(radius, [matrix]) {
+  _getPenPadding(radius, [matrix]) {
     if (matrix == null)
       return [radius, radius];
     // If a matrix is provided, we need to rotate the stroke circle
@@ -2046,7 +2046,7 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item including stroke width.
    */
-  void static _getStrokeBounds(matrix) {
+  void _getStrokeBounds(matrix) {
     // See #draw() for an explanation of why we can access _style
     // properties directly here:
     var style = _style;
@@ -2148,7 +2148,7 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item including handles.
    */
-  static _getHandleBounds(matrix, [stroke = 0, join = 0]) {
+  _getHandleBounds(matrix, [stroke = 0, join = 0]) {
     // TODO is this correct list initialization?
     List coords = new List(6);
     var x1 = double.INFINITY,
@@ -2182,7 +2182,7 @@ class Path extends PathItem {
    * Returns the rough bounding rectangle of the item that is shure to include
    * all of the drawing, including stroke width.
    */
-  static _getRoughBounds(matrix) {
+  _getRoughBounds(matrix) {
     // Delegate to handleBounds, but pass on radius values for stroke and
     // joins. Hanlde miter joins specially, by passing the largets radius
     // possible.
