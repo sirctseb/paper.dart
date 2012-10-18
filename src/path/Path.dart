@@ -2099,9 +2099,9 @@ class Path extends PathItem {
           normal2 = curve2.getNormal(0).normalize(radius),
           // Intersect the two lines
           line1 = new Line(point.subtract(normal1),
-              Point.create(-normal1.y, normal1.x)),
+              new Point.create(-normal1.y, normal1.x)),
           line2 = new Line(point.subtract(normal2),
-              Point.create(-normal2.y, normal2.x)),
+              new Point.create(-normal2.y, normal2.x)),
           corner = line1.intersect(line2);
         // Now measure the distance from the segment to the
         // intersection, which his half of the miter distance
@@ -2175,7 +2175,7 @@ class Path extends PathItem {
         if (yx > y2) y2 = yx;
       }
     }
-    return Rectangle.create(x1, y1, x2 - x1, y2 - y1);
+    return new Rectangle.create(x1, y1, x2 - x1, y2 - y1);
   }
 
   /**
