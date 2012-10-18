@@ -1695,7 +1695,7 @@ class Path extends PathItem {
         segment.setHandleIn(handleIn.subtract(segment._point));
       if (i < n) {
         segment.setHandleOut(
-            Point.create(x[i], y[i]).subtract(segment._point));
+            new Point.create(x[i], y[i]).subtract(segment._point));
         if (i < n - 1)
           handleIn = new Point.create(
               2 * knots[i + 1]._x - x[i + 1],
@@ -1721,7 +1721,9 @@ class Path extends PathItem {
   static void _getCurrentSegment(that) {
     var segments = that._segments;
     if (segments.length == 0)
-      throw new Error('Use a moveTo() command first');
+      // TODO subclass Exception
+      throw "Use a moveTo() command first";
+      //throw new Error('Use a moveTo() command first');
     return segments[segments.length - 1];
   }
 
@@ -1736,7 +1738,9 @@ class Path extends PathItem {
   }
 
   void moveBy(point) {
-    throw new Error('moveBy() is unsupported on Path items.');
+    // TODO subclass Exception
+    throw "moveBy() is unsupported on Path items.";
+    //throw new Error('moveBy() is unsupported on Path items.');
   }
 
   void lineTo(point) {
