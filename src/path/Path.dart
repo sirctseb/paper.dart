@@ -1996,7 +1996,7 @@ class Path extends PathItem {
       processSegment(segments[i]);
     if (_closed)
       processSegment(first);
-    return Rectangle.create(min[0], min[1],
+    return new Rectangle.create(min[0], min[1],
           max[0] - min[0], max[1] - min[1]);
   }
 
@@ -2013,8 +2013,8 @@ class Path extends PathItem {
     // Get rotated hor and ver vectors, and determine rotation angle
     // and elipse values from them:
     var mx = matrix.createShiftless(),
-      hor = mx.transform(Point.create(radius, 0)),
-      ver = mx.transform(Point.create(0, radius)),
+      hor = mx.transform(new Point.create(radius, 0)),
+      ver = mx.transform(new Point.create(0, radius)),
       phi = hor.getAngleInRadians(),
       a = hor.getLength(),
       b = ver.getLength();
