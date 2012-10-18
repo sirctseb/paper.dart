@@ -1914,7 +1914,7 @@ class Path extends PathItem {
     // Make coordinates for first segment available in prevCoords.
     first._transformCoordinates(matrix, prevCoords, false);
     var min = prevCoords.getRange(0, 2),
-      max = new List(min); // clone
+      max = new List.from(min), // clone
       // Add some tolerance for good roots, as t = 0 / 1 are added
       // seperately anyhow, and we don't want joins to be added with
       // radiuses in getStrokeBounds()
