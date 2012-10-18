@@ -1800,7 +1800,7 @@ class Path extends PathItem {
     var current = _getCurrentSegment(this),
       from = current._point,
       through;
-    if (!clockwise?)
+    if (!?clockwise)
       clockwise = true;
     if (clockwise is bool) {
       to = Point.read(to);
