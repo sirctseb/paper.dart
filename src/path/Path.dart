@@ -1781,7 +1781,7 @@ class Path extends PathItem {
     to = Point.read(to);
     var t = parameter,
       t1 = 1 - t,
-      current = getCurrentSegment(this)._point,
+      current = _getCurrentSegment(this)._point,
       // handle = (through - (1 - t)^2 * current - t^2 * to) /
       // (2 * (1 - t) * t)
       handle = through.subtract(current.multiply(t1 * t1))
