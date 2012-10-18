@@ -54,9 +54,10 @@ class Path extends PathItem {
    * var path = new Path(segments);
    * path.strokeColor = 'black';
    */
+  int _selectedSegmentState = 0;
   Path(List segments) : super() {
     _closed = false;
-    _selectedSegmentState = 0;
+    //_selectedSegmentState = 0;
     // Support both passing of segments as array or arguments
     // If it is an array, it can also be a description of a point, so
     // check its first entry for object as well
