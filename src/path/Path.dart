@@ -1901,7 +1901,7 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item excluding stroke width.
    */
-  _getNormalBounds(matrix, strokePadding) {
+  _getNormalBounds(matrix, [strokePadding]) {
     // Code ported and further optimised from:
     // http://blog.hackers-cafe.net/2009/06/how-to-calculate-bezier-curves-bounding.html
     var segments = _segments,
@@ -1941,7 +1941,7 @@ class Path extends PathItem {
             // Only add strokeWidth to bounds for points which lie
             // within 0 < t < 1. The corner cases for cap and join
             // are handled in getStrokeBounds()
-            padding = strokePadding ? strokePadding[i] : 0;
+            padding = strokePadding != null ? strokePadding[i] : 0;
           }
           var left = value - padding,
             right = value + padding;
@@ -2046,16 +2046,16 @@ class Path extends PathItem {
   /**
    * Returns the bounding rectangle of the item including stroke width.
    */
-  void _getStrokeBounds(matrix) {
+  _getStrokeBounds(matrix) {
     // See #draw() for an explanation of why we can access _style
     // properties directly here:
     var style = _style;
     // TODO: Find a way to reuse 'bounds' cache instead?
     if (!style._strokeColor || !style._strokeWidth)
-      return getBounds.call(this, matrix);
+      return _getNormalBounds(matrix);
     var width = style._strokeWidth,
       radius = width / 2,
-      padding = getPenPadding(radius, matrix),
+      padding = _getPenPadding(radius, matrix),
       join = style._strokeJoin,
       cap = style._strokeCap,
       // miter is relative to width. Divide it by 2 since we're
@@ -2063,7 +2063,7 @@ class Path extends PathItem {
       miter = style._miterLimit * width / 2,
       segments = this._segments,
       length = segments.length,
-      bounds = getBounds.call(this, matrix, padding);
+      bounds = _getBounds(matrix, padding);
     // Create a rectangle of padding size, used for union with bounds
     // further down
     var joinBounds = new Rectangle(new Size(padding).multiply(2));
