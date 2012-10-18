@@ -1828,8 +1828,9 @@ class Path extends PathItem {
       // Otherwise we bail out:
       if (throughSide == 0)
         return lineTo(to);
-      throw new Error("Cannot put an arc through the given points: "
-        + [from, through, to]);
+      throw "Cannot put an arc through the given points: ${[from, through, to]}";
+      //throw new Error("Cannot put an arc through the given points: "
+      //  + [from, through, to]);
     }
     var vector = from.subtract(center),
       radius = vector.getLength(),
