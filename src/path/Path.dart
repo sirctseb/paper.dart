@@ -1593,7 +1593,7 @@ class Path extends PathItem {
    * @param rhs right hand side vector.
    * @return Solution vector.
    */
-  List static _getFirstControlPoints(rhs) {
+  static List _getFirstControlPoints(rhs) {
     var n = rhs.length,
       x = [], // Solution vector.
       tmp = [], // Temporary workspace.
