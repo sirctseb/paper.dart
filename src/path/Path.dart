@@ -1515,7 +1515,7 @@ class Path extends PathItem {
         outX = pX + handle._x;
         outY = pY + handle._y;
       }
-    }
+    };
 
     for (var i = 0; i < length; i++)
       drawSegment(i);
