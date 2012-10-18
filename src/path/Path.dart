@@ -1787,8 +1787,10 @@ class Path extends PathItem {
       handle = through.subtract(current.multiply(t1 * t1))
         .subtract(to.multiply(t * t)).divide(2 * t * t1);
     if (handle.isNaN())
-      throw new Error(
-        'Cannot put a curve through points with parameter = ' + t);
+      // TODO subclass Exception
+      throw "Cannot put a curve through points with parameter = $t";
+      //throw new Error(
+      //  'Cannot put a curve through points with parameter = ' + t);
     quadraticCurveTo(handle, to);
   }
 
