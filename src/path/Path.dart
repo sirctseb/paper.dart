@@ -1718,7 +1718,7 @@ class Path extends PathItem {
    * command is required first.
    */
   // TODO what is that?
-  static void _getCurrentSegment(that) {
+  static Segment _getCurrentSegment(that) {
     var segments = that._segments;
     if (segments.length == 0)
       // TODO subclass Exception
