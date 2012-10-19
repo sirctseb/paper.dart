@@ -56,17 +56,17 @@ class PathFlattener {
 			var curves = Curve._subdivide(curve);
 			var halfT = (minT + maxT) / 2;
 			// Recursively subdive and compute parts again.
-			this._computeParts(curves[0], index, minT, halfT);
-			this._computeParts(curves[1], index, halfT, maxT);
+			_computeParts(curves[0], index, minT, halfT);
+			_computeParts(curves[1], index, halfT, maxT);
 		} else {
 			// Calculate distance between p1 and p2
 			var x = curve[6] - curve[0],
 				y = curve[7] - curve[1],
 				dist = sqrt(x * x + y * y);
 			if (dist > Numerical.TOLERANCE) {
-				this.length += dist;
-				this.parts.add({
-					"offset": this.length,
+				length += dist;
+				parts.add({
+					"offset": length,
 					"value": maxT,
 					"index": index
 				});
@@ -77,22 +77,22 @@ class PathFlattener {
 	getParameterAt(offset) {
 		// Make sure we're not beyond the requested offset already. Search the
 		// start position backwards from where to then process the loop below.
-		var i, j = this.index;
+		var i, j = index;
 		for (;;) {
 			i = j;
-			if (j == 0 || this.parts[--j]["offset"] < offset)
+			if (j == 0 || parts[--j]["offset"] < offset)
 				break;
 		}
 		// Find the part that succeeds the given offset, then interpolate
 		// with the previous part
-		for (var l = this.parts.length; i < l; i++) {
-			var part = this.parts[i];
+		for (var l = parts.length; i < l; i++) {
+			var part = parts[i];
 			if (part["offset"] >= offset) {
 				// Found the right part, remember current position
-				this.index = i;
+				index = i;
 				// Now get the previous part so we can linearly interpolate
 				// the curve parameter
-				var prev = this.parts[i - 1];
+				var prev = parts[i - 1];
 				// Make sure we only use the previous parameter value if its
 				// for the same curve, by checking index. Use 0 otherwise.
 				var prevVal = prev != null && prev["index"] == part["index"] ? prev["value"] : 0,
@@ -106,7 +106,7 @@ class PathFlattener {
 			}
 		}
 		// Return last one
-		var part = this.parts[this.parts.length - 1];
+		var part = parts[parts.length - 1];
 		return {
 			"value": 1,
 			"index": part["index"]
@@ -114,15 +114,15 @@ class PathFlattener {
 	}
 
 	evaluate(offset, type) {
-		var param = this.getParameterAt(offset);
-		return Curve._evaluate(this.curves[param.index], param.value, type);
+		var param = getParameterAt(offset);
+		return Curve._evaluate(curves[param.index], param.value, type);
 	}
 
 	drawPart(ctx, from, to) {
-		from = this.getParameterAt(from);
-		to = this.getParameterAt(to);
+		from = getParameterAt(from);
+		to = getParameterAt(to);
 		for (var i = from.index; i <= to.index; i++) {
-			var curve = Curve._getPart(this.curves[i],
+			var curve = Curve._getPart(curves[i],
 					i == from.index ? from.value : 0,
 					i == to.index ? to.value : 1);
 			if (i == from.index)
