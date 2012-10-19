@@ -312,7 +312,7 @@ class Color {
     return result;
   }
   static _hexToRgbColor(String string) {
-    var hex = new RegExp(@"^#?(\w{1,2})(\w{1,2})(\w{1,2})$").firstMatch(string);
+    var hex = new RegExp(r"^#?(\w{1,2})(\w{1,2})(\w{1,2})$").firstMatch(string);
     if (hex.groupCount() >= 3) {
       var rgb = new List(3);
       for (var i = 0; i < 3; i++) {
@@ -481,7 +481,7 @@ class Color {
         _type = "rgb";
       }
     } else if (arg is String) {
-      var rgbColor = new RegExp(@"^#[0-9a-f]{3,6}$", false, true).hasMatch(arg) ?
+      var rgbColor = new RegExp(r"^#[0-9a-f]{3,6}$", false, true).hasMatch(arg) ?
         _hexToRgbColor(arg) : _nameToRgbColor(arg);
       _red = rgbColor.red;
       _green = rgbColor.green;
