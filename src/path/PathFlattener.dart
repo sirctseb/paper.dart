@@ -15,13 +15,15 @@
  */
 
 class PathFlattener {
+  
+  List<Curve> curves = []; // The curve values as returned by getValues()
+  List<Map> parts = []; // The calculated, subdivided parts of the path
+  double length = 0.0; // The total length of the path
+  // Keep a current index from the part where we last where in
+  // getParameterAt(), to optimise for iterator-like usage of flattener.
+  int index = 0;
+  
   PathFlattener(Path path) {
-		this.curves = []; // The curve values as returned by getValues()
-		this.parts = []; // The calculated, subdivided parts of the path
-		this.length = 0; // The total length of the path
-		// Keep a current index from the part where we last where in
-		// getParameterAt(), to optimise for iterator-like usage of flattener.
-		this.index = 0;
 
 		// Instead of relying on path.curves, we only use segments here and
 		// get the curve values from them.
