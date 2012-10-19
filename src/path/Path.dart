@@ -95,7 +95,7 @@ class Path extends PathItem {
     } else if ((flags & ChangeFlag.STROKE) != 0) {
       // TODO: We could preserve the purely geometric bounds that are not
       // affected by stroke: _bounds.bounds and _bounds.handleBounds
-      _bounds = null;
+      bounds = null;
     }
   }
 
