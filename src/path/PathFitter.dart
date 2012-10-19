@@ -62,7 +62,7 @@ class PathFitter {
     }
     // Parameterize points, and attempt to fit curve
     var uPrime = this.chordLengthParameterize(first, last),
-      maxError = Math.max(this.error, this.error * this.error),
+      maxError = max(this.error, this.error * this.error),
       error,
       split;
     // Try 4 iterations
@@ -92,7 +92,7 @@ class PathFitter {
   addCurve(curve) {
     var prev = this.segments[this.segments.length - 1];
     prev.setHandleOut(curve[1].subtract(curve[0]));
-    this.segments.push(
+    this.segments.add(
         new Segment(curve[3], curve[2].subtract(curve[3])));
   }
 
@@ -130,7 +130,7 @@ class PathFitter {
     // Compute the determinants of C and X
     var detC0C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1],
       alpha1, alpha2;
-    if (Math.abs(detC0C1) > epsilon) {
+    if (detC0C1.abs() > epsilon) {
       // Kramer's rule
       var detC0X  = C[0][0] * X[1]    - C[1][0] * X[0],
         detXC1  = X[0]    * C[1][1] - X[1]    * C[0][1];
@@ -141,13 +141,13 @@ class PathFitter {
       // Matrix is under-determined, try assuming alpha1 == alpha2
       var c0 = C[0][0] + C[0][1],
         c1 = C[1][0] + C[1][1];
-      if (Math.abs(c0) > epsilon) {
+      if (c0.abs() > epsilon) {
         alpha1 = alpha2 = X[0] / c0;
-      } else if (Math.abs(c1) > epsilon) {
+      } else if (c1.abs() > epsilon) {
         alpha1 = alpha2 = X[1] / c1;
       } else {
         // Handle below
-        alpha1 = alpha2 = 0.;
+        alpha1 = alpha2 = 0;
       }
     }
 
@@ -197,7 +197,7 @@ class PathFitter {
        diff = pt.subtract(point),
       df = pt1.dot(pt1) + diff.dot(pt2);
     // Compute f(u) / f'(u)
-    if (Math.abs(df) < Numerical.TOLERANCE)
+    if (df.abs() < Numerical.TOLERANCE)
       return u;
     // u = u - f(u) / f'(u)
     return u - diff.dot(pt1) / df;
@@ -232,7 +232,7 @@ class PathFitter {
 
   // Find the maximum squared distance of digitized points to fitted curve.
   findMaxError(first, last, curve, u) {
-    var index = Math.floor((last - first + 1) / 2),
+    var index = ((last - first + 1) / 2).floor(),
       maxDist = 0;
     for (var i = first + 1; i < last; i++) {
       var P = this.evaluate(3, curve, u[i - first]);
