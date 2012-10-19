@@ -146,7 +146,8 @@ class CurveLocation {
   num _parameter;
   num getParameter() {
     if (_parameter == null && _curve != null && _point != null)
-      _parameter = _curve.getParameterAt(_point);
+      // TODO paper.js bug: _curve.getParameterAt(_point)
+      _parameter = _curve.getParameter(_point);
     return _parameter;
   }
   num get parameter => getParameter();
