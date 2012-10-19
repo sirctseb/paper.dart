@@ -19,8 +19,9 @@
 // from "Graphics Gems", Academic Press, 1990
 // Modifications and optimisations of original algorithm by Juerg Lehni.
 
-var PathFitter = Base.extend({
-  initialize: function(path, error) {
+class PathFitter {
+
+  PathFitter(Path path, error) {
     this.points = [];
     var segments = path._segments,
       prev;
@@ -33,9 +34,9 @@ var PathFitter = Base.extend({
       }
     }
     this.error = error;
-  },
+  }
 
-  fit: function() {
+  fit() {
     this.segments = [new Segment(this.points[0])];
     this.fitCubic(0, this.points.length - 1,
         // Left Tangent
@@ -44,10 +45,10 @@ var PathFitter = Base.extend({
         this.points[this.points.length - 2].subtract(
           this.points[this.points.length - 1]).normalize());
     return this.segments;
-  },
+  }
 
   // Fit a Bezier curve to a (sub)set of digitized points
-  fitCubic: function(first, last, tan1, tan2) {
+  fitCubic(first, last, tan1, tan2) {
     //  Use heuristic if region only has two points in it
     if (last - first == 1) {
       var pt1 = this.points[first],
@@ -84,17 +85,17 @@ var PathFitter = Base.extend({
       tanCenter = V1.add(V2).divide(2).normalize();
     this.fitCubic(first, split, tan1, tanCenter);
     this.fitCubic(split, last, tanCenter.negate(), tan2);
-  },
+  }
 
-  addCurve: function(curve) {
+  addCurve(curve) {
     var prev = this.segments[this.segments.length - 1];
     prev.setHandleOut(curve[1].subtract(curve[0]));
     this.segments.push(
         new Segment(curve[3], curve[2].subtract(curve[3])));
-  },
+  }
 
   // Use least-squares method to find Bezier control points for region.
-  generateBezier: function(first, last, uPrime, tan1, tan2) {
+  generateBezier(first, last, uPrime, tan1, tan2) {
     var epsilon = Numerical.EPSILON,
       pt1 = this.points[first],
       pt2 = this.points[last],
@@ -165,18 +166,18 @@ var PathFitter = Base.extend({
     // on the tangent vectors, left and right, respectively
     return [pt1, pt1.add(tan1.normalize(alpha1)),
         pt2.add(tan2.normalize(alpha2)), pt2];
-  },
+  }
 
   // Given set of points and their parameterization, try to find
   // a better parameterization.
-  reparameterize: function(first, last, u, curve) {
+  reparameterize(first, last, u, curve) {
     for (var i = first; i <= last; i++) {
       u[i - first] = this.findRoot(curve, this.points[i], u[i - first]);
     }
-  },
+  }
 
   // Use Newton-Raphson iteration to find better root.
-  findRoot: function(curve, point, u) {
+  findRoot(curve, point, u) {
     var curve1 = [],
       curve2 = [];
     // Generate control vertices for Q'
@@ -198,10 +199,10 @@ var PathFitter = Base.extend({
       return u;
     // u = u - f(u) / f'(u)
     return u - diff.dot(pt1) / df;
-  },
+  }
 
   // Evaluate a Bezier curve at a particular parameter value
-  evaluate: function(degree, curve, t) {
+  evaluate(degree, curve, t) {
     // Copy array
     var tmp = curve.slice();
     // Triangle computation
@@ -211,11 +212,11 @@ var PathFitter = Base.extend({
       }
     }
     return tmp[0];
-  },
+  }
 
   // Assign parameter values to digitized points
   // using relative distances between points.
-  chordLengthParameterize: function(first, last) {
+  chordLengthParameterize(first, last) {
     var u = [0];
     for (var i = first + 1; i <= last; i++) {
       u[i - first] = u[i - first - 1]
@@ -225,10 +226,10 @@ var PathFitter = Base.extend({
       u[i] /= u[m];
     }
     return u;
-  },
+  }
 
   // Find the maximum squared distance of digitized points to fitted curve.
-  findMaxError: function(first, last, curve, u) {
+  findMaxError(first, last, curve, u) {
     var index = Math.floor((last - first + 1) / 2),
       maxDist = 0;
     for (var i = first + 1; i < last; i++) {
@@ -245,4 +246,4 @@ var PathFitter = Base.extend({
       index: index
     };
   }
-});
+}
