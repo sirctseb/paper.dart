@@ -469,7 +469,7 @@ class Point {
     return new Point.create(-x, -y);
   }
   // TODO implement operator version once they push the language changes
-  Point operator negate() {
+  Point operator -() {
     return negate();
   }
 
