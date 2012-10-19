@@ -80,14 +80,14 @@ class PathFlattener {
 		var i, j = this.index;
 		for (;;) {
 			i = j;
-			if (j == 0 || this.parts[--j].offset < offset)
+			if (j == 0 || this.parts[--j]["offset"] < offset)
 				break;
 		}
 		// Find the part that succeeds the given offset, then interpolate
 		// with the previous part
 		for (var l = this.parts.length; i < l; i++) {
 			var part = this.parts[i];
-			if (part.offset >= offset) {
+			if (part["offset"] >= offset) {
 				// Found the right part, remember current position
 				this.index = i;
 				// Now get the previous part so we can linearly interpolate
@@ -95,13 +95,13 @@ class PathFlattener {
 				var prev = this.parts[i - 1];
 				// Make sure we only use the previous parameter value if its
 				// for the same curve, by checking index. Use 0 otherwise.
-				var prevVal = prev && prev.index == part.index ? prev.value : 0,
-					prevLen = prev ? prev.offset : 0;
+				var prevVal = prev != null && prev["index"] == part["index"] ? prev["value"] : 0,
+					prevLen = prev != null ? prev["offset"] : 0;
 				return {
 					// Interpolate
-					"value": prevVal + (part.value - prevVal)
-						* (offset - prevLen) /  (part.offset - prevLen),
-					"index": part.index
+					"value": prevVal + (part["value"] - prevVal)
+						* (offset - prevLen) /  (part["offset"] - prevLen),
+					"index": part["index"]
 				};
 			}
 		}
@@ -109,7 +109,7 @@ class PathFlattener {
 		var part = this.parts[this.parts.length - 1];
 		return {
 			"value": 1,
-			"index": part.index
+			"index": part["index"]
 		};
 	}
 
