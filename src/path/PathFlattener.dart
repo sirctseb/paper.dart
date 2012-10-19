@@ -127,7 +127,7 @@ class PathFlattener {
 					i == to.index ? to.value : 1);
 			if (i == from.index)
 				ctx.moveTo(curve[0], curve[1]);
-			ctx.bezierCurveTo.apply(ctx, curve.slice(2));
+			ctx.bezierCurveTo.apply(ctx, curve.getRange(2, curve.length - 2));
 		}
 	}
 }
