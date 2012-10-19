@@ -649,6 +649,7 @@ class Path extends PathItem {
       if (segment._selectionState != 0)
         _updateSelection(segment, segment._selectionState, 0);
       // Clear the indices and path references of the removed segments
+      // TODO this looks like a paper.js bug
       removed._index = removed._path = null;
     }
     // Adjust the indices of the segments above.
