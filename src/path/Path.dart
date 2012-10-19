@@ -1554,7 +1554,7 @@ class Path extends PathItem {
       // If the path is part of a compound path or doesn't have a fill
       // or stroke, there is no need to continue.
       ctx.save();
-      _setStyles(ctx);
+      setStyles(ctx);
       if (fillColor)
         ctx.fill();
       if (strokeColor) {

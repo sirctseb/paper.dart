@@ -2525,6 +2525,11 @@ class Item extends Callback {
    * Not defined in Path as it is required by other classes too,
    * e.g. PointText.
    */
+  // public version
+  // TODO put in a class between Item and Path / other subclasses that use it?
+  void setStyles(ctx) {
+    _setStyles(ctx);
+  }
   void _setStyles(ctx) {
     // We can access internal properties since we're only using this on
     // items without children, where styles would be merged.
