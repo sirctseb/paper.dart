@@ -79,7 +79,7 @@ class Path extends PathItem {
     // Don't use base() for reasons of performance.
     //Item.prototype._changed.call(this, flags);
     // TODO will this get Item._changed if PathItem is between us?
-    super._changed(flags);
+    super.changed(flags);
     if ((flags & ChangeFlag.GEOMETRY) != 0) {
       _length = null;
       // Clockwise state becomes undefined as soon as geometry changes.

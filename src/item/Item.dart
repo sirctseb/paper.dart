@@ -177,6 +177,10 @@ class Item extends Callback {
    *
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
+  // public version
+  changed(int flags) {
+    _changed(flags);
+  }
   _changed(int flags) {
     if ((flags & ChangeFlag.GEOMETRY) != 0) {
       // Clear cached bounds and position whenever geometry changes
