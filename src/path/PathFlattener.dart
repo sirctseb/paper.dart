@@ -14,8 +14,8 @@
  * All rights reserved.
  */
 
-var PathFlattener = Base.extend({
-	initialize: function(path) {
+class PathFlattener {
+  PathFlattener(Path path) {
 		this.curves = []; // The curve values as returned by getValues()
 		this.parts = []; // The calculated, subdivided parts of the path
 		this.length = 0; // The total length of the path
@@ -33,11 +33,11 @@ var PathFlattener = Base.extend({
 			segment2,
 			that = this;
 
-		function addCurve(segment1, segment2) {
+		var addCurve = (segment1, segment2) {
 			var curve = Curve.getValues(segment1, segment2);
 			that.curves.push(curve);
 			that._computeParts(curve, segment1._index, 0, 1);
-		}
+		};
 
 		for (var i = 1, l = segments.length; i < l; i++) {
 			segment2 = segments[i];
@@ -46,9 +46,9 @@ var PathFlattener = Base.extend({
 		}
 		if (path._closed)
 			addCurve(segment2, segments[0]);
-	},
+	}
 
-	_computeParts: function(curve, index, minT, maxT) {
+	_computeParts(curve, index, minT, maxT) {
 		// Check if the t-span is big enough for subdivision.
 		// We're not subdividing more than 32 times...
 		if ((maxT - minT) > 1 / 32 && !Curve.isFlatEnough(curve)) {
@@ -71,9 +71,9 @@ var PathFlattener = Base.extend({
 				});
 			}
 		}
-	},
+	}
 
-	getParameterAt: function(offset) {
+	getParameterAt(offset) {
 		// Make sure we're not beyond the requested offset already. Search the
 		// start position backwards from where to then process the loop below.
 		var i, j = this.index;
@@ -110,14 +110,14 @@ var PathFlattener = Base.extend({
 			value: 1,
 			index: part.index
 		};
-	},
+	}
 
-	evaluate: function(offset, type) {
+	evaluate(offset, type) {
 		var param = this.getParameterAt(offset);
 		return Curve.evaluate(this.curves[param.index], param.value, type);
-	},
+	}
 
-	drawPart: function(ctx, from, to) {
+	drawPart(ctx, from, to) {
 		from = this.getParameterAt(from);
 		to = this.getParameterAt(to);
 		for (var i = from.index; i <= to.index; i++) {
@@ -129,4 +129,4 @@ var PathFlattener = Base.extend({
 			ctx.bezierCurveTo.apply(ctx, curve.slice(2));
 		}
 	}
-});
+}
