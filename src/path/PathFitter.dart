@@ -20,9 +20,12 @@
 // Modifications and optimisations of original algorithm by Juerg Lehni.
 
 class PathFitter {
+  
+  List<Point> points = [];
+  List<Segment> segments;
+  double error;
 
-  PathFitter(Path path, error) {
-    this.points = [];
+  PathFitter(Path path, double this.error) {
     var segments = path._segments,
       prev;
     // Copy over points from path and filter out adjacent duplicates.
@@ -33,18 +36,17 @@ class PathFitter {
         prev = point;
       }
     }
-    this.error = error;
   }
 
-  fit() {
-    this.segments = [new Segment(this.points[0])];
+  List<Segment> fit() {
+    segments = [new Segment(this.points[0])];
     this.fitCubic(0, this.points.length - 1,
         // Left Tangent
         this.points[1].subtract(this.points[0]).normalize(),
         // Right Tangent
         this.points[this.points.length - 2].subtract(
           this.points[this.points.length - 1]).normalize());
-    return this.segments;
+    return segments;
   }
 
   // Fit a Bezier curve to a (sub)set of digitized points
