@@ -644,7 +644,7 @@ class Path extends PathItem {
     // Update selection state accordingly
     for (var i = 0; i < amount; i++) {
       var segment = removed[i];
-      if (segment._selectionState)
+      if (segment._selectionState != 0)
         _updateSelection(segment, segment._selectionState, 0);
       // Clear the indices and path references of the removed segments
       removed._index = removed._path = null;
