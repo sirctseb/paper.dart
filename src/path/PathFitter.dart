@@ -244,8 +244,8 @@ class PathFitter {
       }
     }
     return {
-      error: maxDist,
-      index: index
+      "error": maxDist,
+      "index": index
     };
   }
 }
