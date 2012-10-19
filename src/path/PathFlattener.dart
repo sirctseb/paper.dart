@@ -16,7 +16,7 @@
 
 class PathFlattener {
   
-  List<Curve> curves = []; // The curve values as returned by getValues()
+  List curves = []; // The curve values as returned by getValues()
   List<Map> parts = []; // The calculated, subdivided parts of the path
   double length = 0.0; // The total length of the path
   // Keep a current index from the part where we last where in
@@ -35,7 +35,7 @@ class PathFlattener {
 			segment2;
 
 		var addCurve = (segment1, segment2) {
-			var curve = Curve.getValues(segment1, segment2);
+			var curve = Curve._getValues(segment1, segment2);
 			curves.add(curve);
 			_computeParts(curve, segment1._index, 0, 1);
 		};
@@ -53,7 +53,7 @@ class PathFlattener {
 		// Check if the t-span is big enough for subdivision.
 		// We're not subdividing more than 32 times...
 		if ((maxT - minT) > 1 / 32 && !Curve.isFlatEnough(curve)) {
-			var curves = Curve.subdivide(curve);
+			var curves = Curve._subdivide(curve);
 			var halfT = (minT + maxT) / 2;
 			// Recursively subdive and compute parts again.
 			this._computeParts(curves[0], index, minT, halfT);
@@ -115,14 +115,14 @@ class PathFlattener {
 
 	evaluate(offset, type) {
 		var param = this.getParameterAt(offset);
-		return Curve.evaluate(this.curves[param.index], param.value, type);
+		return Curve._evaluate(this.curves[param.index], param.value, type);
 	}
 
 	drawPart(ctx, from, to) {
 		from = this.getParameterAt(from);
 		to = this.getParameterAt(to);
 		for (var i = from.index; i <= to.index; i++) {
-			var curve = Curve.getPart(this.curves[i],
+			var curve = Curve._getPart(this.curves[i],
 					i == from.index ? from.value : 0,
 					i == to.index ? to.value : 1);
 			if (i == from.index)
