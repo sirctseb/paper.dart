@@ -62,10 +62,10 @@ class PathFlattener {
 			// Calculate distance between p1 and p2
 			var x = curve[6] - curve[0],
 				y = curve[7] - curve[1],
-				dist = Math.sqrt(x * x + y * y);
+				dist = sqrt(x * x + y * y);
 			if (dist > Numerical.TOLERANCE) {
 				this.length += dist;
-				this.parts.push({
+				this.parts.add({
 					offset: this.length,
 					value: maxT,
 					index: index
