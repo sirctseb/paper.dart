@@ -86,10 +86,11 @@ class Segment {
 
   // TODO I have no idea what is going on in this function
   _changed(Point point) {
-    if (!this._path)
+    if (_path != null)
       return;
     // Delegate changes to affected curves if they exist
-    var curve = this._path._curves && this.getCurve(), other;
+    // TODO what is this I don't even
+    var curve = _path._curves != null && getCurve() != null, other;
     if (curve) {
       curve._changed();
       // Get the other affected curve, which is the previous one for
@@ -209,9 +210,9 @@ class Segment {
         var next = getNext();
         // When deselecting a point, the handles get selected instead
         // depending on the selection state of their neighbors.
-        selection[1] = previous && (previous._point.isSelected()
+        selection[1] = previous != null && (previous._point.isSelected()
             || previous._handleOut.isSelected());
-        selection[2] = next && (next._point.isSelected()
+        selection[2] = next != null && (next._point.isSelected()
             || next._handleIn.isSelected());
       }
       selection[0] = selected;
@@ -338,7 +339,7 @@ class Segment {
    * @type Segment
    * @bean
    */
-  getPrevious() {
+  Segment getPrevious() {
     if(_path != null) {
       var segments = _path._segments;
       if(segments != null) {
