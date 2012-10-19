@@ -15,7 +15,7 @@
  */
 library Item;
 import "dart:math";
-import "dart:html";
+import "dart:html" hide Point;
 import "../color/Color.dart";
 import "../core/Core.dart";
 import "../basic/Basic.dart";
