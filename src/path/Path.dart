@@ -1467,7 +1467,7 @@ class Path extends PathItem {
     }
   }
 
-  static void _drawSegments(ctx, path, matrix) {
+  static void _drawSegments(ctx, path, [matrix]) {
     var segments = path._segments,
       length = segments.length,
       coords = new List(6),
