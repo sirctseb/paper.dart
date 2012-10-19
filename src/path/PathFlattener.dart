@@ -32,13 +32,12 @@ class PathFlattener {
 		// by recursively calling _computeParts().
 		var segments = path._segments,
 			segment1 = segments[0],
-			segment2,
-			that = this;
+			segment2;
 
 		var addCurve = (segment1, segment2) {
 			var curve = Curve.getValues(segment1, segment2);
-			that.curves.push(curve);
-			that._computeParts(curve, segment1._index, 0, 1);
+			curves.add(curve);
+			_computeParts(curve, segment1._index, 0, 1);
 		};
 
 		for (var i = 1, l = segments.length; i < l; i++) {
