@@ -66,9 +66,9 @@ class PathFlattener {
 			if (dist > Numerical.TOLERANCE) {
 				this.length += dist;
 				this.parts.add({
-					offset: this.length,
-					value: maxT,
-					index: index
+					"offset": this.length,
+					"value": maxT,
+					"index": index
 				});
 			}
 		}
@@ -99,17 +99,17 @@ class PathFlattener {
 					prevLen = prev ? prev.offset : 0;
 				return {
 					// Interpolate
-					value: prevVal + (part.value - prevVal)
+					"value": prevVal + (part.value - prevVal)
 						* (offset - prevLen) /  (part.offset - prevLen),
-					index: part.index
+					"index": part.index
 				};
 			}
 		}
 		// Return last one
 		var part = this.parts[this.parts.length - 1];
 		return {
-			value: 1,
-			index: part.index
+			"value": 1,
+			"index": part.index
 		};
 	}
 
