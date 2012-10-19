@@ -736,7 +736,7 @@ class Path extends PathItem {
    * }
    */
   bool isFullySelected() {
-    return _selected && _selectedSegmentState
+    return selected && _selectedSegmentState
         == _segments.length * SelectionState.POINT;
   }
   bool get fullySelected => isFullySelected();
