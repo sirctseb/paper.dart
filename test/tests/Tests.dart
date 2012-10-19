@@ -2,7 +2,7 @@ library paper_dart_test;
 import "../../../../Downloads/dart/dart-sdk/lib/unittest/unittest.dart";
 import "../../src/basic/Basic.dart";
 import "../../src/color/Color.dart";
-import "../../src/path/Segment.dart";
+import "../../src/path/Path.dart";
 part "./Point.dart";
 part "./Rectangle.dart";
 part "./Size.dart";

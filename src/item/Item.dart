@@ -177,6 +177,10 @@ class Item extends Callback {
    *
    * @param {ChangeFlag} flags describes what exactly has changed.
    */
+  // public version
+  changed(int flags) {
+    _changed(flags);
+  }
   _changed(int flags) {
     if ((flags & ChangeFlag.GEOMETRY) != 0) {
       // Clear cached bounds and position whenever geometry changes
@@ -1056,6 +1060,9 @@ class Item extends Callback {
     return _clone(new Item());
   }
 
+  Item cloneTo(Item copy) {
+    return _clone(copy);
+  }
   Item _clone(Item copy) {
     // Copy over style
     copy.setStyle(_style);
@@ -2518,6 +2525,11 @@ class Item extends Callback {
    * Not defined in Path as it is required by other classes too,
    * e.g. PointText.
    */
+  // public version
+  // TODO put in a class between Item and Path / other subclasses that use it?
+  void setStyles(ctx) {
+    _setStyles(ctx);
+  }
   void _setStyles(ctx) {
     // We can access internal properties since we're only using this on
     // items without children, where styles would be merged.
