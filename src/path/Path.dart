@@ -25,6 +25,7 @@ part "SelectionState.dart";
 part "CurveLocation.dart";
 part "Curve.dart";
 part "PathItem.dart";
+part "PathFitter.dart";
 
 /**
  * @name Path
