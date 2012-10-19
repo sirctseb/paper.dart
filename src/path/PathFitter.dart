@@ -50,7 +50,7 @@ class PathFitter {
   }
 
   // Fit a Bezier curve to a (sub)set of digitized points
-  fitCubic(first, last, tan1, tan2) {
+  void fitCubic(first, last, tan1, tan2) {
     //  Use heuristic if region only has two points in it
     if (last - first == 1) {
       var pt1 = points[first],
@@ -71,16 +71,16 @@ class PathFitter {
       var curve = generateBezier(first, last, uPrime, tan1, tan2);
       //  Find max deviation of points to fitted curve
       var max = findMaxError(first, last, curve, uPrime);
-      if (max.error < error) {
+      if (max["error"] < error) {
         addCurve(curve);
         return;
       }
-      split = max.index;
+      split = max["index"];
       // If error not too large, try reparameterization and iteration
-      if (max.error >= maxError)
+      if (max["error"] >= maxError)
         break;
       reparameterize(first, last, uPrime, curve);
-      maxError = max.error;
+      maxError = max["error"];
     }
     // Fitting failed -- split at max error point and fit recursively
     var V1 = points[split - 1].subtract(points[split]),
@@ -90,7 +90,7 @@ class PathFitter {
     fitCubic(split, last, tanCenter.negate(), tan2);
   }
 
-  addCurve(curve) {
+  void addCurve(curve) {
     var prev = segments[segments.length - 1];
     prev.setHandleOut(curve[1].subtract(curve[0]));
     segments.add(
@@ -98,7 +98,7 @@ class PathFitter {
   }
 
   // Use least-squares method to find Bezier control points for region.
-  generateBezier(first, last, uPrime, tan1, tan2) {
+  List<Point> generateBezier(first, last, uPrime, tan1, tan2) {
     var epsilon = Numerical.EPSILON,
       pt1 = points[first],
       pt2 = points[last],
@@ -173,14 +173,14 @@ class PathFitter {
 
   // Given set of points and their parameterization, try to find
   // a better parameterization.
-  reparameterize(first, last, u, curve) {
+  void reparameterize(first, last, u, curve) {
     for (var i = first; i <= last; i++) {
       u[i - first] = findRoot(curve, points[i], u[i - first]);
     }
   }
 
   // Use Newton-Raphson iteration to find better root.
-  findRoot(curve, point, u) {
+  double findRoot(curve, point, u) {
     var curve1 = [],
       curve2 = [];
     // Generate control vertices for Q'
@@ -205,7 +205,7 @@ class PathFitter {
   }
 
   // Evaluate a Bezier curve at a particular parameter value
-  evaluate(degree, curve, t) {
+  Point evaluate(degree, curve, t) {
     // Copy array
     var tmp = curve.slice();
     // Triangle computation
@@ -219,7 +219,7 @@ class PathFitter {
 
   // Assign parameter values to digitized points
   // using relative distances between points.
-  chordLengthParameterize(first, last) {
+  List<double> chordLengthParameterize(first, last) {
     var u = [0];
     for (var i = first + 1; i <= last; i++) {
       u[i - first] = u[i - first - 1]
@@ -232,7 +232,7 @@ class PathFitter {
   }
 
   // Find the maximum squared distance of digitized points to fitted curve.
-  findMaxError(first, last, curve, u) {
+  Map findMaxError(first, last, curve, u) {
     var index = ((last - first + 1) / 2).floor(),
       maxDist = 0;
     for (var i = first + 1; i < last; i++) {
