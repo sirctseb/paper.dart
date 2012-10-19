@@ -544,7 +544,7 @@ class Curve {
   }
 
   // TODO: Find better name
-  static Curve _getPart(v, from, to) {
+  static List _getPart(v, from, to) {
     if (from > 0)
       v = Curve._subdivide(v, from)[1]; // [1] right
     // Interpolate the  parameter at 'to' in the new curve and
