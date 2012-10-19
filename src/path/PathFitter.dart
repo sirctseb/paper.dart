@@ -39,13 +39,13 @@ class PathFitter {
   }
 
   List<Segment> fit() {
-    segments = [new Segment(this.points[0])];
-    this.fitCubic(0, this.points.length - 1,
+    segments = [new Segment(points[0])];
+    fitCubic(0, points.length - 1,
         // Left Tangent
-        this.points[1].subtract(this.points[0]).normalize(),
+        points[1].subtract(points[0]).normalize(),
         // Right Tangent
-        this.points[this.points.length - 2].subtract(
-          this.points[this.points.length - 1]).normalize());
+        points[points.length - 2].subtract(
+          points[points.length - 1]).normalize());
     return segments;
   }
 
@@ -53,54 +53,55 @@ class PathFitter {
   fitCubic(first, last, tan1, tan2) {
     //  Use heuristic if region only has two points in it
     if (last - first == 1) {
-      var pt1 = this.points[first],
-        pt2 = this.points[last],
+      var pt1 = points[first],
+        pt2 = points[last],
         dist = pt1.getDistance(pt2) / 3;
-      this.addCurve([pt1, pt1.add(tan1.normalize(dist)),
+      addCurve([pt1, pt1.add(tan1.normalize(dist)),
           pt2.add(tan2.normalize(dist)), pt2]);
       return;
     }
     // Parameterize points, and attempt to fit curve
-    var uPrime = this.chordLengthParameterize(first, last),
-      maxError = max(this.error, this.error * this.error),
-      error,
+    var uPrime = chordLengthParameterize(first, last),
+      maxError = max(error, error * error),
+      // TODO i'm pretty sure this should not be redeclared here
+      /*error,*/
       split;
     // Try 4 iterations
     for (var i = 0; i <= 4; i++) {
-      var curve = this.generateBezier(first, last, uPrime, tan1, tan2);
+      var curve = generateBezier(first, last, uPrime, tan1, tan2);
       //  Find max deviation of points to fitted curve
-      var max = this.findMaxError(first, last, curve, uPrime);
-      if (max.error < this.error) {
-        this.addCurve(curve);
+      var max = findMaxError(first, last, curve, uPrime);
+      if (max.error < error) {
+        addCurve(curve);
         return;
       }
       split = max.index;
       // If error not too large, try reparameterization and iteration
       if (max.error >= maxError)
         break;
-      this.reparameterize(first, last, uPrime, curve);
+      reparameterize(first, last, uPrime, curve);
       maxError = max.error;
     }
     // Fitting failed -- split at max error point and fit recursively
-    var V1 = this.points[split - 1].subtract(this.points[split]),
-      V2 = this.points[split].subtract(this.points[split + 1]),
+    var V1 = points[split - 1].subtract(points[split]),
+      V2 = points[split].subtract(points[split + 1]),
       tanCenter = V1.add(V2).divide(2).normalize();
-    this.fitCubic(first, split, tan1, tanCenter);
-    this.fitCubic(split, last, tanCenter.negate(), tan2);
+    fitCubic(first, split, tan1, tanCenter);
+    fitCubic(split, last, tanCenter.negate(), tan2);
   }
 
   addCurve(curve) {
-    var prev = this.segments[this.segments.length - 1];
+    var prev = segments[segments.length - 1];
     prev.setHandleOut(curve[1].subtract(curve[0]));
-    this.segments.add(
+    segments.add(
         new Segment(curve[3], curve[2].subtract(curve[3])));
   }
 
   // Use least-squares method to find Bezier control points for region.
   generateBezier(first, last, uPrime, tan1, tan2) {
     var epsilon = Numerical.EPSILON,
-      pt1 = this.points[first],
-      pt2 = this.points[last],
+      pt1 = points[first],
+      pt2 = points[last],
       // Create the C and X matrices
        C = [[0, 0], [0, 0]],
       X = [0, 0];
@@ -115,7 +116,7 @@ class PathFitter {
         b3 = u * u * u,
         a1 = tan1.normalize(b1),
         a2 = tan2.normalize(b2),
-        tmp = this.points[first + i]
+        tmp = points[first + i]
           .subtract(pt1.multiply(b0 + b1))
           .subtract(pt2.multiply(b2 + b3));
       C[0][0] += a1.dot(a1);
@@ -174,7 +175,7 @@ class PathFitter {
   // a better parameterization.
   reparameterize(first, last, u, curve) {
     for (var i = first; i <= last; i++) {
-      u[i - first] = this.findRoot(curve, this.points[i], u[i - first]);
+      u[i - first] = findRoot(curve, points[i], u[i - first]);
     }
   }
 
@@ -191,9 +192,9 @@ class PathFitter {
       curve2[i] = curve1[i + 1].subtract(curve1[i]).multiply(2);
     }
     // Compute Q(u), Q'(u) and Q''(u)
-    var pt = this.evaluate(3, curve, u),
-       pt1 = this.evaluate(2, curve1, u),
-       pt2 = this.evaluate(1, curve2, u),
+    var pt = evaluate(3, curve, u),
+       pt1 = evaluate(2, curve1, u),
+       pt2 = evaluate(1, curve2, u),
        diff = pt.subtract(point),
       df = pt1.dot(pt1) + diff.dot(pt2);
     // Compute f(u) / f'(u)
@@ -222,7 +223,7 @@ class PathFitter {
     var u = [0];
     for (var i = first + 1; i <= last; i++) {
       u[i - first] = u[i - first - 1]
-          + this.points[i].getDistance(this.points[i - 1]);
+          + points[i].getDistance(points[i - 1]);
     }
     for (var i = 1, m = last - first; i <= m; i++) {
       u[i] /= u[m];
@@ -235,8 +236,8 @@ class PathFitter {
     var index = ((last - first + 1) / 2).floor(),
       maxDist = 0;
     for (var i = first + 1; i < last; i++) {
-      var P = this.evaluate(3, curve, u[i - first]);
-      var v = P.subtract(this.points[i]);
+      var P = evaluate(3, curve, u[i - first]);
+      var v = P.subtract(points[i]);
       var dist = v.x * v.x + v.y * v.y; // squared
       if (dist >= maxDist) {
         maxDist = dist;
