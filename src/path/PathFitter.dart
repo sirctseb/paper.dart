@@ -32,7 +32,7 @@ class PathFitter {
     for (var i = 0, l = segments.length; i < l; i++) {
       var point = segments[i].point.clone();
       if (prev == null || !prev.equals(point)) {
-        this.points.push(point);
+        points.add(point);
         prev = point;
       }
     }
