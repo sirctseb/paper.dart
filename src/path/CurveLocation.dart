@@ -37,7 +37,7 @@ class CurveLocation {
    * @param {Number} parameter
    * @param {Point} point
    */
-  CurveLocation(Curve curve, num parameter, Point point, num distance) {
+  CurveLocation(Curve curve, num parameter, [Point point, num distance]) {
     _curve = curve;
     _parameter = parameter;
     _point = point;
