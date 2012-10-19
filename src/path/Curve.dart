@@ -747,6 +747,7 @@ class Curve {
             ? line.point.x
             : _xAxis.intersect(line).x ];
       }
+      break;
     }
 
     // Otherwise, solve recursively after
