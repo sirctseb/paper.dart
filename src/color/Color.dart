@@ -481,7 +481,7 @@ class Color {
         _type = "rgb";
       }
     } else if (arg is String) {
-      var rgbColor = new RegExp(r"^#[0-9a-f]{3,6}$", false, true).hasMatch(arg) ?
+      var rgbColor = new RegExp(r"^#[0-9a-f]{3,6}$", ignoreCase:true).hasMatch(arg) ?
         _hexToRgbColor(arg) : _nameToRgbColor(arg);
       _red = rgbColor.red;
       _green = rgbColor.green;
