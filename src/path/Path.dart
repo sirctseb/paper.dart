@@ -68,7 +68,7 @@ class Path extends PathItem {
   }
 
   Path clone() {
-    var copy = _clone(new Path(_segments));
+    Path copy = cloneTo(new Path(_segments));
     copy._closed = _closed;
     if (_clockwise != null)
       copy._clockwise = _clockwise;

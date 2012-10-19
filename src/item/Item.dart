@@ -1056,6 +1056,9 @@ class Item extends Callback {
     return _clone(new Item());
   }
 
+  Item cloneTo(Item copy) {
+    return _clone(copy);
+  }
   Item _clone(Item copy) {
     // Copy over style
     copy.setStyle(_style);
