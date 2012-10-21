@@ -44,7 +44,7 @@ class PaperScope {
    * @name PaperScope#initialize
    * @function
    */
-  initialize: function(script) {
+  PaperScope(script) {
     // script is only used internally, when creating scopes for PaperScript.
     // Whenever a PaperScope is created, it automatically becomes the active
     // one.
@@ -62,7 +62,7 @@ class PaperScope {
     if (script)
       script.setAttribute('id', this._id);
     PaperScope._scopes[this._id] = this;
-  },
+  }
 
   /**
    * The version of Paper.js, as a float number.
@@ -88,22 +88,22 @@ class PaperScope {
    * @type View
    * @bean
    */
-  getView: function() {
+  View getView() {
     return this.project.view;
-  },
+  }
 
   /**
    * The reference to the active tool.
    * @type Tool
    * @bean
    */
-  getTool: function() {
+  Tool getTool() {
     // If no tool exists yet but one is requested, produce it now on the fly
     // so it can be used in PaperScript.
     if (!this._tool)
       this._tool = new Tool();
     return this._tool;
-   },
+   }
 
   /**
    * The list of available tools.
@@ -111,11 +111,11 @@ class PaperScope {
    * @type Tool[]
    */
 
-  evaluate: function(code) {
+  evaluate(code) {
     var res = PaperScript.evaluate(code, this);
     View.updateFocus();
     return res;
-  },
+  }
 
   /**
    * Injects the paper scope into any other given scope. Can be used for
@@ -126,7 +126,7 @@ class PaperScope {
    * @example
    * paper.install(window);
    */
-  install: function(scope) {
+  install(scope) {
     // Define project, view and tool as getters that redirect to these
     // values on the PaperScope, so they are kept up to date
     var that = this;
@@ -146,7 +146,7 @@ class PaperScope {
       if (!/^(version|_id|load)/.test(key) && !(key in scope))
         scope[key] = this[key];
     }
-  },
+  }
 
   /**
    * Sets up an empty project for us. If a canvas is provided, it also creates
@@ -155,27 +155,27 @@ class PaperScope {
    * @param {HTMLCanvasElement} canvas The canvas this scope should be
    * associated with.
    */
-  setup: function(canvas) {
+  setup(canvas) {
     // Create an empty project for the scope.
     // Make sure this is the active scope, so the created project and view
     // are automatically associated with it.
     paper = this;
     this.project = new Project(canvas);
-  },
+  }
 
-  clear: function() {
+  clear() {
     // Remove all projects, views and tools.
     // This also removes the installed event handlers.
     for (var i = this.projects.length - 1; i >= 0; i--)
       this.projects[i].remove();
     for (var i = this.tools.length - 1; i >= 0; i--)
       this.tools[i].remove();
-  },
+  }
 
-  remove: function() {
+  remove() {
     this.clear();
     delete PaperScope._scopes[this._id];
-  },
+  }
 
   statics: /** @lends PaperScope */{
     _scopes: {},
@@ -194,4 +194,4 @@ class PaperScope {
       return this._scopes[id] || null;
     }
   }
-});
+}
