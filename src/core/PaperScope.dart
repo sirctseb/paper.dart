@@ -176,22 +176,21 @@ class PaperScope {
     this.clear();
     delete PaperScope._scopes[this._id];
   }
+  
+  static Map _scopes = {};
+  static int id = 0;
 
-  statics: /** @lends PaperScope */{
-    _scopes: {},
-    _id: 0,
-
-    /**
-     * Retrieves a PaperScope object with the given id or associated with
-     * the passed canvas element.
-     *
-     * @param id
-     */
-    get: function(id) {
-      // If a script tag is passed, get the id from it.
-      if (typeof id === 'object')
-        id = id.getAttribute('id');
-      return this._scopes[id] || null;
+  /**
+   * Retrieves a PaperScope object with the given id or associated with
+   * the passed canvas element.
+   *
+   * @param id
+   */  
+  static PaperScope get(id) {
+    // If a script tag is passed, get the id from it
+    if(id is Element) {
+      id = id.attributes["id"];
     }
+    return _scopes[id];
   }
 }
