@@ -49,19 +49,16 @@ class PaperScope {
     // Whenever a PaperScope is created, it automatically becomes the active
     // one.
     paper = this;
-    this.project = null;
-    this.projects = [];
-    this.tools = [];
     // Assign an id to this canvas that's either extracted from the script
     // or automatically generated.
-    this._id = script && (script.getAttribute('id') || script.src)
+    _id = script && (script.getAttribute('id') || script.src)
         || ('paperscope-' + (PaperScope._id++));
     // Make sure the script tag also has this id now. If it already had an
     // id, we're not changing it, since it's the first option we're
     // trying to get an id from above.
     if (script)
-      script.setAttribute('id', this._id);
-    PaperScope._scopes[this._id] = this;
+      script.setAttribute('id', _id);
+    PaperScope._scopes[_id] = this;
   }
 
   /**
@@ -76,12 +73,14 @@ class PaperScope {
    * @name PaperScope#project
    * @type Project
    */
+  Project project = null;
 
   /**
    * The list of all open projects within the current Paper.js context.
    * @name PaperScope#projects
    * @type Project[]
    */
+  List<Project> projects = [];
 
   /**
    * The reference to the active project's view.
@@ -97,6 +96,7 @@ class PaperScope {
    * @type Tool
    * @bean
    */
+  Tool _tool = null;
   Tool getTool() {
     // If no tool exists yet but one is requested, produce it now on the fly
     // so it can be used in PaperScript.
@@ -104,12 +104,14 @@ class PaperScope {
       this._tool = new Tool();
     return this._tool;
    }
+  Tool get tool => getTool();
 
   /**
    * The list of available tools.
    * @name PaperScope#tools
    * @type Tool[]
    */
+  List<Tool> tools = [];
 
   evaluate(code) {
     var res = PaperScript.evaluate(code, this);
