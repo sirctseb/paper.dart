@@ -88,7 +88,7 @@ class PaperScope {
    * @bean
    */
   View getView() {
-    return this.project.view;
+    return project.view;
   }
 
   /**
@@ -100,9 +100,9 @@ class PaperScope {
   Tool getTool() {
     // If no tool exists yet but one is requested, produce it now on the fly
     // so it can be used in PaperScript.
-    if (!this._tool)
-      this._tool = new Tool();
-    return this._tool;
+    if (_tool == null)
+      _tool = new Tool();
+    return _tool;
    }
   Tool get tool => getTool();
 
@@ -162,7 +162,7 @@ class PaperScope {
     // Make sure this is the active scope, so the created project and view
     // are automatically associated with it.
     paper = this;
-    this.project = new Project(canvas);
+    project = new Project(canvas);
   }
 
   clear() {
@@ -175,8 +175,8 @@ class PaperScope {
   }
 
   remove() {
-    this.clear();
-    delete PaperScope._scopes[this._id];
+    clear();
+    delete PaperScope._scopes[_id];
   }
   
   static Map _scopes = {};
