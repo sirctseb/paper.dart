@@ -66,7 +66,7 @@ class PaperScope {
    *
    * @type Number
    */
-  version: /*#=*/ options.version,
+  num version = /*#=*/ options.version;
 
   /**
    * The currently active project.
