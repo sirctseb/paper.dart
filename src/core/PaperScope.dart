@@ -131,7 +131,9 @@ class PaperScope {
   install(scope) {
     // Define project, view and tool as getters that redirect to these
     // values on the PaperScope, so they are kept up to date
-    var that = this;
+    
+    // TODO what does this do exactly?
+    /*var that = this;
     Base.each(['project', 'view', 'tool'], function(key) {
       Base.define(scope, key, {
         configurable: true,
@@ -140,14 +142,15 @@ class PaperScope {
           return that[key];
         }
       });
-    });
+    });*/
     // Copy over all fields from this scope to the destination.
     // Do not use Base.each, since we also want to enumerate over
     // fields on PaperScope.prototype, e.g. all classes
-    for (var key in this) {
+    // TODO what does this do?
+    /*for (var key in this) {
       if (!/^(version|_id|load)/.test(key) && !(key in scope))
         scope[key] = this[key];
-    }
+    }*/
   }
 
   /**
@@ -176,11 +179,11 @@ class PaperScope {
 
   remove() {
     clear();
-    delete PaperScope._scopes[_id];
+    PaperScope._scopes.remove(_id);
   }
   
   static Map _scopes = {};
-  static int id = 0;
+  static int _id = 0;
 
   /**
    * Retrieves a PaperScope object with the given id or associated with
