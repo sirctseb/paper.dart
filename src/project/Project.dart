@@ -54,22 +54,22 @@ class Project extends PaperScopeItem {
   Project(View view) : super(true) {
     // Activate straight away by passing true to base(), so paper.project is
     // set, as required by Layer and DoumentView constructors.
-    this._currentStyle = new PathStyle();
-    this._selectedItems = {};
-    this._selectedItemCount = 0;
-    this.layers = [];
-    this.symbols = [];
-    this.activeLayer = new Layer();
+    _currentStyle = new PathStyle();
+    _selectedItems = {};
+    _selectedItemCount = 0;
+    layers = [];
+    symbols = [];
+    activeLayer = new Layer();
     if (view)
-      this.view = view instanceof View ? view : View.create(view);
+      view = view instanceof View ? view : View.create(view);
     // Change tracking, not in use for now. Activate once required:
     // this._changes = [];
     // this._changesById = {};
   }
 
   void _needsRedraw() {
-    if (this.view)
-      this.view._redrawNeeded = true;
+    if (view)
+      view._redrawNeeded = true;
   }
 
   /**
@@ -85,10 +85,10 @@ class Project extends PaperScopeItem {
    * removes its view, if one was defined.
    */
   bool remove() {
-    if (!this.base())
+    if (!base())
       return false;
-    if (this.view)
-      this.view.remove();
+    if (view)
+      view.remove();
     return true;
   }
 
@@ -125,12 +125,12 @@ class Project extends PaperScopeItem {
    * var path2 = new Path.Circle(new Point(175, 50), 20);
    */
   PathStyle getCurrentStyle() {
-    return this._currentStyle;
+    return _currentStyle;
   }
 
   void setCurrentStyle(style) {
     // TODO: Style selected items with the style:
-    this._currentStyle.initialize(style);
+    _currentStyle.initialize(style);
   }
 
   /**
@@ -140,7 +140,7 @@ class Project extends PaperScopeItem {
    * @bean
    */
   int getIndex() {
-    return this._index;
+    return _index;
   }
 
   /**
@@ -155,7 +155,7 @@ class Project extends PaperScopeItem {
     // TODO: The order of these items should be that of their
     // drawing order.
     var items = [];
-    Base.each(this._selectedItems, function(item) {
+    Base.each(_selectedItems, function(item) {
       items.push(item);
     });
     return items;
@@ -165,11 +165,11 @@ class Project extends PaperScopeItem {
 
   void _updateSelection(Item item) {
     if (item._selected) {
-      this._selectedItemCount++;
-      this._selectedItems[item._id] = item;
+      _selectedItemCount++;
+      _selectedItems[item._id] = item;
     } else {
-      this._selectedItemCount--;
-      delete this._selectedItems[item._id];
+      _selectedItemCount--;
+      delete _selectedItems[item._id];
     }
   }
 
@@ -177,16 +177,16 @@ class Project extends PaperScopeItem {
    * Selects all items in the project.
    */
   void selectAll() {
-    for (var i = 0, l = this.layers.length; i < l; i++)
-      this.layers[i].setSelected(true);
+    for (var i = 0, l = layers.length; i < l; i++)
+      layers[i].setSelected(true);
   }
 
   /**
    * Deselects all selected items in the project.
    */
   void deselectAll() {
-    for (var i in this._selectedItems)
-      this._selectedItems[i].setSelected(false);
+    for (var i in _selectedItems)
+      _selectedItems[i].setSelected(false);
   }
 
   /**
@@ -228,8 +228,8 @@ class Project extends PaperScopeItem {
     options = HitResult.getOptions(point, options);
     point = options.point;
     // Loop backwards, so layers that get drawn last are tested first
-    for (var i = this.layers.length - 1; i >= 0; i--) {
-      var res = this.layers[i].hitTest(point, options);
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var res = layers[i].hitTest(point, options);
       if (res) return res;
     }
     return null;
@@ -264,12 +264,12 @@ class Project extends PaperScopeItem {
     if (!matrix.isIdentity())
       matrix.applyToContext(ctx);
     var param = { offset: new Point(0, 0) };
-    for (var i = 0, l = this.layers.length; i < l; i++)
-      Item.draw(this.layers[i], ctx, param);
+    for (var i = 0, l = layers.length; i < l; i++)
+      Item.draw(layers[i], ctx, param);
     ctx.restore();
 
     // Draw the selection of the selected items in the project:
-    if (this._selectedItemCount > 0) {
+    if (_selectedItemCount > 0) {
       ctx.save();
       ctx.strokeWidth = 1;
       // TODO: use Layer#color
@@ -307,8 +307,8 @@ class Project extends PaperScopeItem {
           matrices[item._id] = mx.clone();
         return mx;
       }
-      for (var id in this._selectedItems) {
-        var item = this._selectedItems[id];
+      for (var id in _selectedItems) {
+        var item = _selectedItems[id];
         item.drawSelected(ctx, getGlobalMatrix(item, matrix.clone()));
       }
       ctx.restore();
