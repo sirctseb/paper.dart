@@ -1,4 +1,4 @@
-part of Core.dart;
+//part of Core.dart;
 
 /*
  * Paper.js
