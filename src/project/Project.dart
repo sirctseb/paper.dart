@@ -14,6 +14,9 @@
  * All rights reserved.
  */
 
+library Project;
+import "../core/Core.dart";
+
 /**
  * @name Project
  *
