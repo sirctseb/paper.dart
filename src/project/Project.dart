@@ -40,6 +40,13 @@ import "../core/Core.dart";
 class Project extends PaperScopeItem {
   String _list = "projects";
   String _reference = "project";
+  
+  PathStyle _currentStyle = new PathStyle();
+  Map _selectedItems = {};
+  int _selectedItemCount = 0;
+  List<Layer> layers = [];
+  List<Symbol> symbols = [];
+  Layer activeLayer = new Layer();
 
   // TODO: Add arguments to define pages
   /**
@@ -54,12 +61,6 @@ class Project extends PaperScopeItem {
   Project(View view) : super(true) {
     // Activate straight away by passing true to base(), so paper.project is
     // set, as required by Layer and DoumentView constructors.
-    _currentStyle = new PathStyle();
-    _selectedItems = {};
-    _selectedItemCount = 0;
-    layers = [];
-    symbols = [];
-    activeLayer = new Layer();
     if (view)
       view = view instanceof View ? view : View.create(view);
     // Change tracking, not in use for now. Activate once required:
