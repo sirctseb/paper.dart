@@ -230,7 +230,7 @@ class Project extends PaperScopeItem {
    */
   HitResult hitTest(Point point, Map options) {
     options = HitResult.getOptions(point, options);
-    point = options.point;
+    point = options["point"];
     // Loop backwards, so layers that get drawn last are tested first
     for (var i = layers.length - 1; i >= 0; i--) {
       var res = layers[i].hitTest(point, options);
