@@ -172,7 +172,7 @@ class Project extends PaperScopeItem {
       _selectedItems[item._id] = item;
     } else {
       _selectedItemCount--;
-      delete _selectedItems[item._id];
+      _selectedItems.remove(item._id);
     }
   }
 
