@@ -51,10 +51,9 @@ class Project extends PaperScopeItem {
    * @param {View|HTMLCanvasElement} view Either a view object or an HTML
    * Canvas element that should be wrapped in a newly created view.
    */
-  Project(View view) {
+  Project(View view) : super(true) {
     // Activate straight away by passing true to base(), so paper.project is
     // set, as required by Layer and DoumentView constructors.
-    this.base(true);
     this._currentStyle = new PathStyle();
     this._selectedItems = {};
     this._selectedItemCount = 0;
