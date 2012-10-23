@@ -33,7 +33,7 @@ class PaperScopeItem {
   /**
    * Creates a PaperScopeItem object.
    */  
-  PaperScopeItem(bool activate) {
+  PaperScopeItem([bool activate = false]) {
     // Store reference to the currently active global paper scope:
     _scope = paper;
     // Push it onto this._scope.projects and set index:
