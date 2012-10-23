@@ -25,34 +25,34 @@
  */
 var PaperScopeItem = Base.extend(/** @lends PaperScopeItem# */{
 
-	/**
-	 * Creates a PaperScopeItem object.
-	 */  
-	initialize: function(activate) {
-		// Store reference to the currently active global paper scope:
-		this._scope = paper;
-		// Push it onto this._scope.projects and set index:
-		this._index = this._scope[this._list].push(this) - 1;
-		// If the project has no active reference, activate this one
-		if (activate || !this._scope[this._reference])
-			this.activate();
-	},
+  /**
+   * Creates a PaperScopeItem object.
+   */  
+  initialize: function(activate) {
+    // Store reference to the currently active global paper scope:
+    this._scope = paper;
+    // Push it onto this._scope.projects and set index:
+    this._index = this._scope[this._list].push(this) - 1;
+    // If the project has no active reference, activate this one
+    if (activate || !this._scope[this._reference])
+      this.activate();
+  },
 
-	activate: function() {
-		if (!this._scope)
-			return false;
-		this._scope[this._reference] = this;
-		return true;
-	},
+  activate: function() {
+    if (!this._scope)
+      return false;
+    this._scope[this._reference] = this;
+    return true;
+  },
 
-	remove: function() {
-		if (this._index == null)
-			return false;
-		Base.splice(this._scope[this._list], null, this._index, 1);
-		// Clear the active tool reference if it was pointint to this.
-		if (this._scope[this._reference] == this)
-			this._scope[this._reference] = null;
-		this._scope = null;
-		return true;
-	}
+  remove: function() {
+    if (this._index == null)
+      return false;
+    Base.splice(this._scope[this._list], null, this._index, 1);
+    // Clear the active tool reference if it was pointint to this.
+    if (this._scope[this._reference] == this)
+      this._scope[this._reference] = null;
+    this._scope = null;
+    return true;
+  }
 });
