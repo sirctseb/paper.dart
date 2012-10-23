@@ -288,7 +288,7 @@ class Project extends PaperScopeItem {
       // to getGlobalMatrix() on the initial call.
       // cached defines wether the result of the concatenation should be
       // cached, only used for parents of items that this is called for.
-      function getGlobalMatrix(item, mx, cached) {
+      Function getGlobalMatrix = (item, mx, cached) {
         var cache = cached && matrices[item._id];
         if (cache) {
           // Found a cached version, copy over the values and return
@@ -311,7 +311,7 @@ class Project extends PaperScopeItem {
         if (cached)
           matrices[item._id] = mx.clone();
         return mx;
-      }
+      };
       for (var id in _selectedItems) {
         var item = _selectedItems[id];
         item.drawSelected(ctx, getGlobalMatrix(item, matrix.clone()));
