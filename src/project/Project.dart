@@ -38,8 +38,8 @@ import "../core/Core.dart";
  * {@link PaperScope#projects} variable.
  */
 class Project extends PaperScopeItem {
-  _list: 'projects',
-  _reference: 'project',
+  String _list = "projects";
+  String _referenct = "project";
 
   // TODO: Add arguments to define pages
   /**
