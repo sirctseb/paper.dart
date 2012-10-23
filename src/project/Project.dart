@@ -86,7 +86,7 @@ class Project extends PaperScopeItem {
    * removes its view, if one was defined.
    */
   bool remove() {
-    if (!base())
+    if (!super.remove())
       return false;
     if (view != null)
       view.remove();
