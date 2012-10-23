@@ -39,12 +39,12 @@ class PaperScopeItem {
     // Push it onto this._scope.projects and set index:
     _index = _scope[_list].push(this) - 1;
     // If the project has no active reference, activate this one
-    if (activate || !_scope[_reference])
+    if (activate || _scope[_reference] == null)
       activate();
   }
 
   bool activate() {
-    if (!_scope)
+    if (_scope == null)
       return false;
     _scope[_reference] = this;
     return true;
