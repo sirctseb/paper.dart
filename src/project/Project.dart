@@ -188,7 +188,7 @@ class Project extends PaperScopeItem {
    * Deselects all selected items in the project.
    */
   void deselectAll() {
-    for (var i in _selectedItems)
+    for (var i in _selectedItems.getKeys())
       _selectedItems[i].setSelected(false);
   }
 
