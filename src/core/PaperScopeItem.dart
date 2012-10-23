@@ -24,6 +24,11 @@
  * @private
  */
 class PaperScopeItem {
+  
+  PaperScope _scope;
+  int _index;
+  String _list;
+  String _reference;
 
   /**
    * Creates a PaperScopeItem object.
