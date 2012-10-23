@@ -35,29 +35,29 @@ class PaperScopeItem {
    */  
   PaperScopeItem(bool activate) {
     // Store reference to the currently active global paper scope:
-    this._scope = paper;
+    _scope = paper;
     // Push it onto this._scope.projects and set index:
-    this._index = this._scope[this._list].push(this) - 1;
+    _index = _scope[_list].push(this) - 1;
     // If the project has no active reference, activate this one
-    if (activate || !this._scope[this._reference])
-      this.activate();
+    if (activate || !_scope[_reference])
+      activate();
   }
 
   bool activate() {
-    if (!this._scope)
+    if (!_scope)
       return false;
-    this._scope[this._reference] = this;
+    _scope[_reference] = this;
     return true;
   }
 
   bool remove() {
-    if (this._index == null)
+    if (_index == null)
       return false;
-    Base.splice(this._scope[this._list], null, this._index, 1);
+    Base.splice(_scope[_list], null, _index, 1);
     // Clear the active tool reference if it was pointint to this.
-    if (this._scope[this._reference] == this)
-      this._scope[this._reference] = null;
-    this._scope = null;
+    if (_scope[_reference] == this)
+      _scope[_reference] = null;
+    _scope = null;
     return true;
   }
 }
