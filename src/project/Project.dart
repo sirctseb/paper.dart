@@ -158,8 +158,8 @@ class Project extends PaperScopeItem {
     // TODO: The order of these items should be that of their
     // drawing order.
     var items = [];
-    Base.each(_selectedItems, function(item) {
-      items.push(item);
+    _selectedItems.forEach((key, item) {
+      items.add(item);
     });
     return items;
   }
