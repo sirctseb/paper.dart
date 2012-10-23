@@ -61,15 +61,15 @@ class Project extends PaperScopeItem {
   Project(View view) : super(true) {
     // Activate straight away by passing true to base(), so paper.project is
     // set, as required by Layer and DoumentView constructors.
-    if (view)
-      view = view instanceof View ? view : View.create(view);
+    if (view != null)
+      this.view = view is View ? view : View.create(view);
     // Change tracking, not in use for now. Activate once required:
     // this._changes = [];
     // this._changesById = {};
   }
 
   void _needsRedraw() {
-    if (view)
+    if (view != null)
       view._redrawNeeded = true;
   }
 
@@ -88,7 +88,7 @@ class Project extends PaperScopeItem {
   bool remove() {
     if (!base())
       return false;
-    if (view)
+    if (view != null)
       view.remove();
     return true;
   }
