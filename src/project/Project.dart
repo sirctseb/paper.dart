@@ -17,6 +17,7 @@
 library Project;
 import "../core/Core.dart";
 import "../basic/Basic.dart";
+import "../item/Item.dart";
 
 /**
  * @name Project
