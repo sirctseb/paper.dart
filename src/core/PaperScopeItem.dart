@@ -23,12 +23,12 @@
  *
  * @private
  */
-var PaperScopeItem = Base.extend(/** @lends PaperScopeItem# */{
+class PaperScopeItem {
 
   /**
    * Creates a PaperScopeItem object.
    */  
-  initialize: function(activate) {
+  PaperScopeItem(bool activate) {
     // Store reference to the currently active global paper scope:
     this._scope = paper;
     // Push it onto this._scope.projects and set index:
@@ -36,16 +36,16 @@ var PaperScopeItem = Base.extend(/** @lends PaperScopeItem# */{
     // If the project has no active reference, activate this one
     if (activate || !this._scope[this._reference])
       this.activate();
-  },
+  }
 
-  activate: function() {
+  bool activate() {
     if (!this._scope)
       return false;
     this._scope[this._reference] = this;
     return true;
-  },
+  }
 
-  remove: function() {
+  bool remove() {
     if (this._index == null)
       return false;
     Base.splice(this._scope[this._list], null, this._index, 1);
@@ -55,4 +55,4 @@ var PaperScopeItem = Base.extend(/** @lends PaperScopeItem# */{
     this._scope = null;
     return true;
   }
-});
+}
