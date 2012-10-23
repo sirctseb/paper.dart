@@ -47,6 +47,7 @@ class Project extends PaperScopeItem {
   List<Layer> layers = [];
   List<Symbol> symbols = [];
   Layer activeLayer = new Layer();
+  View view;
 
   // TODO: Add arguments to define pages
   /**
@@ -141,6 +142,7 @@ class Project extends PaperScopeItem {
    * @bean
    */
   int getIndex() {
+    // TODO put Project in Core so we can get _index
     return _index;
   }
 
