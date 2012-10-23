@@ -312,7 +312,7 @@ class Project extends PaperScopeItem {
           matrices[item._id] = mx.clone();
         return mx;
       };
-      for (var id in _selectedItems) {
+      for (var id in _selectedItems.getKeys()) {
         var item = _selectedItems[id];
         item.drawSelected(ctx, getGlobalMatrix(item, matrix.clone()));
       }
