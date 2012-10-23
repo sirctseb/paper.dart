@@ -44,7 +44,7 @@ class PaperScope {
    * @name PaperScope#initialize
    * @function
    */
-  PaperScope(script) {
+  PaperScope([script]) {
     // script is only used internally, when creating scopes for PaperScript.
     // Whenever a PaperScope is created, it automatically becomes the active
     // one.
@@ -56,7 +56,7 @@ class PaperScope {
     // Make sure the script tag also has this id now. If it already had an
     // id, we're not changing it, since it's the first option we're
     // trying to get an id from above.
-    if (script)
+    if (script != null)
       script.setAttribute('id', _id);
     PaperScope._scopes[_id] = this;
   }
