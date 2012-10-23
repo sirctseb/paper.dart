@@ -34,7 +34,7 @@
  * An array of all open projects is accessible through the
  * {@link PaperScope#projects} variable.
  */
-var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
+class Project extends PaperScopeItem {
   _list: 'projects',
   _reference: 'project',
 
@@ -48,7 +48,7 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * @param {View|HTMLCanvasElement} view Either a view object or an HTML
    * Canvas element that should be wrapped in a newly created view.
    */
-  initialize: function(view) {
+  Project(View view) {
     // Activate straight away by passing true to base(), so paper.project is
     // set, as required by Layer and DoumentView constructors.
     this.base(true);
@@ -63,12 +63,12 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
     // Change tracking, not in use for now. Activate once required:
     // this._changes = [];
     // this._changesById = {};
-  },
+  }
 
-  _needsRedraw: function() {
+  void _needsRedraw() {
     if (this.view)
       this.view._redrawNeeded = true;
-  },
+  }
 
   /**
    * Activates this project, so all newly created items will be placed
@@ -82,13 +82,13 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * Removes this project from the {@link PaperScope#projects} list, and also
    * removes its view, if one was defined.
    */
-  remove: function() {
+  bool remove() {
     if (!this.base())
       return false;
     if (this.view)
       this.view.remove();
     return true;
-  },
+  }
 
   /**
    * The reference to the project's view.
@@ -122,14 +122,14 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * var path = new Path.Circle(new Point(75, 50), 30);
    * var path2 = new Path.Circle(new Point(175, 50), 20);
    */
-  getCurrentStyle: function() {
+  PathStyle getCurrentStyle() {
     return this._currentStyle;
-  },
+  }
 
-  setCurrentStyle: function(style) {
+  void setCurrentStyle(style) {
     // TODO: Style selected items with the style:
     this._currentStyle.initialize(style);
-  },
+  }
 
   /**
    * The index of the project in the {@link PaperScope#projects} list.
@@ -137,9 +137,9 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * @type Number
    * @bean
    */
-  getIndex: function() {
+  int getIndex() {
     return this._index;
-  },
+  }
 
   /**
    * The selected items contained within the project.
@@ -147,7 +147,7 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * @type Item[]
    * @bean
    */
-  getSelectedItems: function() {
+  List<Item> getSelectedItems() {
     // TODO: Return groups if their children are all selected,
     // and filter out their children from the list.
     // TODO: The order of these items should be that of their
@@ -157,11 +157,11 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
       items.push(item);
     });
     return items;
-  },
+  }
 
   // TODO: Implement setSelectedItems?
 
-  _updateSelection: function(item) {
+  void _updateSelection(Item item) {
     if (item._selected) {
       this._selectedItemCount++;
       this._selectedItems[item._id] = item;
@@ -169,23 +169,23 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
       this._selectedItemCount--;
       delete this._selectedItems[item._id];
     }
-  },
+  }
 
   /**
    * Selects all items in the project.
    */
-  selectAll: function() {
+  void selectAll() {
     for (var i = 0, l = this.layers.length; i < l; i++)
       this.layers[i].setSelected(true);
-  },
+  }
 
   /**
    * Deselects all selected items in the project.
    */
-  deselectAll: function() {
+  void deselectAll() {
     for (var i in this._selectedItems)
       this._selectedItems[i].setSelected(false);
-  },
+  }
 
   /**
    * Perform a hit test on the items contained within the project at the
@@ -222,7 +222,7 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * information about what exactly was hit or {@code null} if nothing was
    * hit.
    */
-  hitTest: function(point, options) {
+  HitResult hitTest(Point point, Map options) {
     options = HitResult.getOptions(point, options);
     point = options.point;
     // Loop backwards, so layers that get drawn last are tested first
@@ -231,7 +231,7 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
       if (res) return res;
     }
     return null;
-  },
+  }
 
   /**
    * {@grouptitle Project Hierarchy}
@@ -257,7 +257,7 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
    * @type Symbol[]
    */
 
-  draw: function(ctx, matrix) {
+  void draw(ctx, matrix) {
     ctx.save();
     if (!matrix.isIdentity())
       matrix.applyToContext(ctx);
@@ -312,4 +312,4 @@ var Project = this.Project = PaperScopeItem.extend(/** @lends Project# */{
       ctx.restore();
     }
   }
-});
+}
