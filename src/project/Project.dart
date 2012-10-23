@@ -267,7 +267,7 @@ class Project extends PaperScopeItem {
     ctx.save();
     if (!matrix.isIdentity())
       matrix.applyToContext(ctx);
-    var param = { offset: new Point(0, 0) };
+    var param = { "offset": new Point(0, 0) };
     for (var i = 0, l = layers.length; i < l; i++)
       Item.draw(layers[i], ctx, param);
     ctx.restore();
