@@ -64,15 +64,17 @@ SegmentTests() {
     
     test('segment.remove()', () {
       // TODO enable when Path is implemented
-      /*var path = new Path([10, 10], [5, 5], [10, 10]);
+      //var path = new Path([10, 10], [5, 5], [10, 10]);
+      var path = new Path([new Segment(10,10), new Segment(5,5), new Segment(10,10)]);
       path.segments[1].remove();
-      equals(path.segments.toString(), '{ point: { x: 10, y: 10 } },{ point: { x: 10, y: 10 } }');*/
-      expect(false);
+      equals(path.segments.toString(), '{ point: { x: 10, y: 10 } },{ point: { x: 10, y: 10 } }');
+      //expect(false);
     });
     
     test('segment.selected', () {
       // TODO enable when Path is implemented
-      /*var path = new Path([10, 20], [50, 100]);
+      //var path = new Path([10, 20], [50, 100]);
+      var path = new Path([new Segment(10,20), new Segment(50,100)]);
       path.segments[0].point.selected = true;
       equals(() {
         return path.segments[0].point.selected;
@@ -80,8 +82,9 @@ SegmentTests() {
       path.segments[0].point.selected = false;
       equals(() {
         return path.segments[0].point.selected;
-      }, false);});*/
-      expect(false);
+      }, false);
     });
+      //expect(false);
+    //});
   });
 }
