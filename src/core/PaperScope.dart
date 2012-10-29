@@ -36,6 +36,14 @@
  * The global {@link paper} object is simply a reference to the currently active
  * {@code PaperScope}.
  */
+
+PaperScope paper = new PaperScope();
+Map options = {
+  "version": "dev",
+  "stats": true,
+  "browser": true
+};
+
 class PaperScope {
 
   /**
@@ -51,8 +59,17 @@ class PaperScope {
     paper = this;
     // Assign an id to this canvas that's either extracted from the script
     // or automatically generated.
-    _id = script && (script.getAttribute('id') || script.src)
-        || ('paperscope-' + (PaperScope._id++));
+    if(script != null) {
+      _id = script.attributes['id'];
+      if(_id == null) {
+        _id = script.src;
+      }
+    }
+    if(_id == null) {
+      _id = 'paperscope-${PaperScope._lastId++}';
+    }
+    /*_id = script && (script.getAttribute('id') || script.src)
+        || ('paperscope-' + (PaperScope._lastId++));*/
     // Make sure the script tag also has this id now. If it already had an
     // id, we're not changing it, since it's the first option we're
     // trying to get an id from above.
@@ -66,7 +83,7 @@ class PaperScope {
    *
    * @type Number
    */
-  num version = /*#=*/ options.version;
+  //num version = /*#=*/ options["version"];
 
   /**
    * The currently active project.
@@ -111,7 +128,8 @@ class PaperScope {
    * @name PaperScope#tools
    * @type Tool[]
    */
-  List<Tool> tools = [];
+  //List<Tool> tools = [];
+  List tools = [];
 
   evaluate(code) {
     var res = PaperScript.evaluate(code, this);
@@ -183,7 +201,8 @@ class PaperScope {
   }
   
   static Map _scopes = {};
-  static int _id = 0;
+  static int _lastId = 0;
+  String _id;
 
   /**
    * Retrieves a PaperScope object with the given id or associated with

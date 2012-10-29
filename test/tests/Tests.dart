@@ -1,8 +1,10 @@
 library paper_dart_test;
+import "dart:html";
 import "../../../../Downloads/dart/dart-sdk/pkg/unittest/unittest.dart";
 import "../../src/basic/Basic.dart";
 import "../../src/color/Color.dart";
 import "../../src/path/Path.dart";
+import "../../src/core/Core.dart";
 part "./Point.dart";
 part "./Rectangle.dart";
 part "./Size.dart";
@@ -29,6 +31,7 @@ part "PlacedSymbol.dart";
 part "Project.dart";
 
 void main() {
+  paper.setup(query("#canvas"));
 	PointTests();
 	RectangleTests();
 	SizeTests();
