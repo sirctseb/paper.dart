@@ -26,62 +26,70 @@ import "../core/Core.dart";
  * screen.
  */
 class View extends Callback {
-  Map _events = {
-    "onFrame": {
-      "install": () {
-/*#*/ if (options.browser) {
-        var that = this,
-          requested = false,
-          before,
-          time = 0,
-          count = 0;
-        this._onFrameCallback = function(param, dontRequest) {
-          requested = false;
-          // See if we need to stop due to a call to uninstall()
-          if (!that._onFrameCallback)
-            return;
-          // Set the global paper object to the current scope
-          paper = that._scope;
-          if (!dontRequest) {
-            // Request next frame already
-            requested = true;
-            DomEvent.requestAnimationFrame(that._onFrameCallback,
-                that._element);
-          }
-          var now = Date.now() / 1000,
-             delta = before ? now - before : 0;
-          // delta: Time elapsed since last redraw in seconds
-          // time: Time since first call of frame() in seconds
-          // Use Base.merge to convert into a Base object,
-          // for #toString()
-          that.fire('frame', Base.merge({
-            "delta": delta,
-            "time": time += delta,
-            "count": count++
-          }));
-          before = now;
-          // Update framerate stats
-          if (that._stats)
-            that._stats.update();
-          // Automatically draw view on each frame.
-          that.draw(true);
-        };
-        // Call the onFrame handler straight away, initializing the
-        // sequence of onFrame calls.
-        if (!requested)
-          this._onFrameCallback();
-/*#*/ } // options.browser
-      },
-
-      "uninstall": function() {
-        delete this._onFrameCallback;
+  
+  var _onFrameCallback;
+  get onFrame => getEvent("frame");
+  set onFrame(value) => setEvent("frame", value);
+  get onResize => getEvent("resize");
+  set onResize(value) => setEvent("resize", value);
+  
+  void _installFrameHandler() {
+    if (options.browser) {
+    var that = this,
+      requested = false,
+      before,
+      time = 0,
+      count = 0;
+    this._onFrameCallback = function(param, dontRequest) {
+      requested = false;
+      // See if we need to stop due to a call to uninstall()
+      if (!that._onFrameCallback)
+        return;
+      // Set the global paper object to the current scope
+      paper = that._scope;
+      if (!dontRequest) {
+        // Request next frame already
+        requested = true;
+        DomEvent.requestAnimationFrame(that._onFrameCallback,
+            that._element);
       }
-    },
-
-    "onResize": {}
-  };
+      var now = Date.now() / 1000,
+         delta = before ? now - before : 0;
+      // delta: Time elapsed since last redraw in seconds
+      // time: Time since first call of frame() in seconds
+      // Use Base.merge to convert into a Base object,
+      // for #toString()
+      that.fire('frame', Base.merge({
+        "delta": delta,
+        "time": time += delta,
+        "count": count++
+      }));
+      before = now;
+      // Update framerate stats
+      if (that._stats)
+        that._stats.update();
+      // Automatically draw view on each frame.
+      that.draw(true);
+    };
+    // Call the onFrame handler straight away, initializing the
+    // sequence of onFrame calls.
+    if (!requested)
+      this._onFrameCallback();
+  } // options.browser
+  
+  void _uninstallFrameHandler() {
+    _onFrameCallback = null;
+  }
+  
+  // TODO should be the one in Callback
+  Map _eventTypes;
 
   View(Element element) {
+
+    _eventTypes["onFrame"] = {"install": _installFrameHandler,
+                              "uninstall": _uninstallFrameHandler};
+    _eventTypes["onResize"] = {};
+    
     // Store reference to the currently active global paper scope, and the
     // active project, which will be represented by this view
     _scope = paper;
