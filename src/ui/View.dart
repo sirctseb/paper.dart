@@ -14,7 +14,10 @@
  * All rights reserved.
  */
 library View;
+import "dart:html" hide Point;
 import "../core/Core.dart";
+import "../project/Project.dart";
+import "../basic/Basic.dart";
 
 /**
  * @name View
@@ -75,7 +78,8 @@ class View extends Callback {
     // sequence of onFrame calls.
     if (!requested)
       this._onFrameCallback();
-  } // options.browser
+    } // options.browser
+  }
   
   void _uninstallFrameHandler() {
     _onFrameCallback = null;
@@ -83,6 +87,10 @@ class View extends Callback {
   
   // TODO should be the one in Callback
   Map _eventTypes;
+  
+  PaperScope _scope;
+  Project _project;
+  Element _element;
 
   View(Element element) {
 
@@ -219,6 +227,7 @@ class View extends Callback {
   Element getElement() {
     return _element;
   }
+  Element get element => getElement();
 
   /**
    * The size of the view. Changing the view's size will resize it's
@@ -227,9 +236,11 @@ class View extends Callback {
    * @type Size
    * @bean
    */
+  Size _viewSize;
   Size getViewSize() {
     return _viewSize;
   }
+  Size get viewSize => getViewSize();
 
   void setViewSize(size) {
     size = Size.read(arguments);
@@ -250,6 +261,7 @@ class View extends Callback {
     });
     _redraw();
   }
+  set viewSize(size) => setViewSize(size);
 
   /**
    * The bounds of the currently visible area in project coordinates.
@@ -257,12 +269,14 @@ class View extends Callback {
    * @type Rectangle
    * @bean
    */
+  Rectangle _bounds;
   Rectangle getBounds() {
     if (!_bounds)
       _bounds = _getInverse()._transformBounds(
           new Rectangle(new Point(), _viewSize));
     return _bounds;
   }
+  Rectangle get bounds => getBounds();
 
   /**
    * The size of the visible area in project coordinates.
@@ -273,6 +287,7 @@ class View extends Callback {
   Size getSize() {
     return getBounds().getSize();
   }
+  Size get size => getSize();
 
   /**
    * The center of the visible area in project coordinates.
@@ -283,10 +298,12 @@ class View extends Callback {
   Point getCenter() {
     return getBounds().getCenter();
   }
+  Point get center => getCenter();
 
   void setCenter(center) {
     scrollBy(Point.read(arguments).subtract(getCenter()));
   }
+  set center(center) => setCenter(center);
 
   /**
    * The zoom factor by which the project coordinates are magnified.
@@ -294,9 +311,11 @@ class View extends Callback {
    * @type Number
    * @bean
    */
+  num _zoom;
   num getZoom() {
     return _zoom;
   }
+  num get zoom => getZoom();
 
   void setZoom(num zoom) {
     // TODO: Clamp the view between 1/32 and 64, just like Illustrator?
@@ -304,6 +323,7 @@ class View extends Callback {
       getCenter()));
     _zoom = zoom;
   }
+  set zoom(zoom) => setZoom(zoom);
 
   /**
    * Checks whether the view is currently visible within the current browser
