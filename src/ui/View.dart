@@ -82,17 +82,18 @@ class View {
   View(Element element) {
     // Store reference to the currently active global paper scope, and the
     // active project, which will be represented by this view
-    this._scope = paper;
-    this._project = paper.project;
-    this._element = element;
+    _scope = paper;
+    _project = paper.project;
+    _element = element;
     var size;
 /*#*/ if (options.browser) {
     // Generate an id for this view / element if it does not have one
-    this._id = element.getAttribute('id');
-    if (this._id == null)
-      element.setAttribute('id', this._id = 'view-' + View._id++);
+    // TODO separate static and member _id
+    _id = element.getAttribute('id');
+    if (_id == null)
+      element.setAttribute('id', _id = 'view-' + View._id++);
     // Install event handlers
-    DomEvent.add(element, this._handlers);
+    DomEvent.add(element, _handlers);
     // If the element has the resize attribute, resize the it to fill the
     // window and resize it again whenever the user resizes the window.
     if (PaperScript.hasAttribute(element, 'resize')) {
@@ -127,9 +128,9 @@ class View {
     }
     // TODO: Test this on IE:
     if (PaperScript.hasAttribute(element, 'stats')) {
-      this._stats = new Stats();
+      _stats = new Stats();
       // Align top-left to the element
-      var stats = this._stats.domElement,
+      var stats = _stats.domElement,
         style = stats.style,
         offset = DomElement.getOffset(element);
       style.position = 'absolute';
@@ -139,17 +140,17 @@ class View {
     }
 /*#*/ } else if (options.server) {
     // Generate an id for this view
-    this._id = 'view-' + View._id++;
+    _id = 'view-' + View._id++;
     size = Size.create(element.width, element.height);
 /*#*/ } // options.server
     // Keep track of views internally
     View._views.push(this);
     // Link this id to our view
-    View._viewsById[this._id] = this;
-    this._viewSize = LinkedSize.create(this, 'setViewSize',
+    View._viewsById[_id] = this;
+    _viewSize = LinkedSize.create(this, 'setViewSize',
         size.width, size.height);
-    this._matrix = new Matrix();
-    this._zoom = 1;
+    _matrix = new Matrix();
+    _zoom = 1;
     // Make sure the first view is focused for keyboard input straight away
     if (!View._focused)
       View._focused = this;
@@ -159,44 +160,44 @@ class View {
    * Removes this view from and frees the associated element.
    */
   bool remove() {
-    if (!this._project)
+    if (!_project)
       return false;
     // Clear focus if removed view had it
     if (View._focused == this)
       View._focused = null;
     // Remove view from internal structures
     View._views.splice(View._views.indexOf(this), 1);
-    delete View._viewsById[this._id];
+    delete View._viewsById[_id];
     // Unlink from project
-    if (this._project.view == this)
-      this._project.view = null;
+    if (_project.view == this)
+      _project.view = null;
     // Uninstall event handlers again for this view.
-    DomEvent.remove(this._element, this._handlers);
-    this._element = this._project = null;
+    DomEvent.remove(_element, _handlers);
+    _element = _project = null;
     // Removing all onFrame handlers makes the _onFrameCallback handler stop
     // automatically through its uninstall method.
-    this.detach('frame');
+    detach('frame');
     return true;
   }
 
   void _redraw() {
-    this._redrawNeeded = true;
-    if (this._onFrameCallback) {
+    _redrawNeeded = true;
+    if (_onFrameCallback) {
       // If there's a _onFrameCallback, call it staight away,
       // but without requesting another animation frame.
-      this._onFrameCallback(0, true);
+      _onFrameCallback(0, true);
     } else {
       // Otherwise simply redraw the view now
-      this.draw();
+      draw();
     }
   }
 
   void _transform(matrix) {
-    this._matrix.preConcatenate(matrix);
+    _matrix.preConcatenate(matrix);
     // Force recalculation of these values next time they are requested.
-    this._bounds = null;
-    this._inverse = null;
-    this._redraw();
+    _bounds = null;
+    _inverse = null;
+    _redraw();
   }
 
   /**
@@ -206,7 +207,7 @@ class View {
    * @bean
    */
   Element getElement() {
-    return this._element;
+    return _element;
   }
 
   /**
@@ -217,27 +218,27 @@ class View {
    * @bean
    */
   Size getViewSize() {
-    return this._viewSize;
+    return _viewSize;
   }
 
   void setViewSize(size) {
     size = Size.read(arguments);
-    var delta = size.subtract(this._viewSize);
+    var delta = size.subtract(_viewSize);
     if (delta.isZero())
       return;
-    this._element.width = size.width;
-    this._element.height = size.height;
+    _element.width = size.width;
+    _element.height = size.height;
     // Update _viewSize but don't notify of change.
-    this._viewSize.set(size.width, size.height, true);
+    _viewSize.set(size.width, size.height, true);
     // Force recalculation
-    this._bounds = null;
-    this._redrawNeeded = true;
+    _bounds = null;
+    _redrawNeeded = true;
     // Call onResize handler on any size change
-    this.fire('resize', {
+    fire('resize', {
       size: size,
       delta: delta
     });
-    this._redraw();
+    _redraw();
   }
 
   /**
@@ -247,10 +248,10 @@ class View {
    * @bean
    */
   Rectangle getBounds() {
-    if (!this._bounds)
-      this._bounds = this._getInverse()._transformBounds(
-          new Rectangle(new Point(), this._viewSize));
-    return this._bounds;
+    if (!_bounds)
+      _bounds = _getInverse()._transformBounds(
+          new Rectangle(new Point(), _viewSize));
+    return _bounds;
   }
 
   /**
@@ -260,7 +261,7 @@ class View {
    * @bean
    */
   Size getSize() {
-    return this.getBounds().getSize();
+    return getBounds().getSize();
   }
 
   /**
@@ -270,11 +271,11 @@ class View {
    * @bean
    */
   Point getCenter() {
-    return this.getBounds().getCenter();
+    return getBounds().getCenter();
   }
 
   void setCenter(center) {
-    this.scrollBy(Point.read(arguments).subtract(this.getCenter()));
+    scrollBy(Point.read(arguments).subtract(getCenter()));
   }
 
   /**
@@ -284,14 +285,14 @@ class View {
    * @bean
    */
   num getZoom() {
-    return this._zoom;
+    return _zoom;
   }
 
   void setZoom(num zoom) {
     // TODO: Clamp the view between 1/32 and 64, just like Illustrator?
-    this._transform(new Matrix().scale(zoom / this._zoom,
-      this.getCenter()));
-    this._zoom = zoom;
+    _transform(new Matrix().scale(zoom / _zoom,
+      getCenter()));
+    _zoom = zoom;
   }
 
   /**
@@ -301,7 +302,7 @@ class View {
    * @return {Boolean} Whether the view is visible.
    */
   bool isVisible() {
-    return DomElement.isVisible(this._element);
+    return DomElement.isVisible(_element);
   }
 
   /**
@@ -310,7 +311,7 @@ class View {
    * @param {Point} point
    */
   Point scrollBy(point) {
-    this._transform(new Matrix().translate(Point.read(arguments).negate()));
+    _transform(new Matrix().translate(Point.read(arguments).negate()));
   }
 
   /**
@@ -332,17 +333,17 @@ class View {
   // TODO: projectToView(rect)
 
   Point projectToView(point) {
-    return this._matrix._transformPoint(Point.read(arguments));
+    return _matrix._transformPoint(Point.read(arguments));
   }
 
   Point viewToProject(point) {
-    return this._getInverse()._transformPoint(Point.read(arguments));
+    return _getInverse()._transformPoint(Point.read(arguments));
   }
 
   Matrix _getInverse() {
-    if (!this._inverse)
-      this._inverse = this._matrix.createInverse();
-    return this._inverse;
+    if (!_inverse)
+      _inverse = _matrix.createInverse();
+    return _inverse;
   }
 
   /**
