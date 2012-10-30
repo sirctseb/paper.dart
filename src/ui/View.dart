@@ -23,7 +23,7 @@
  * center, both useful for constructing artwork that should appear centered on
  * screen.
  */
-var View = this.View = Base.extend(Callback, /** @lends View# */{
+class View {
   _events: {
     onFrame: {
       install: function() {
@@ -79,7 +79,7 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     onResize: {}
   },
 
-  initialize: function(element) {
+  View(Element element) {
     // Store reference to the currently active global paper scope, and the
     // active project, which will be represented by this view
     this._scope = paper;
@@ -153,12 +153,12 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     // Make sure the first view is focused for keyboard input straight away
     if (!View._focused)
       View._focused = this;
-  },
+  }
 
   /**
    * Removes this view from and frees the associated element.
    */
-  remove: function() {
+  bool remove() {
     if (!this._project)
       return false;
     // Clear focus if removed view had it
@@ -177,9 +177,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     // automatically through its uninstall method.
     this.detach('frame');
     return true;
-  },
+  }
 
-  _redraw: function() {
+  void _redraw() {
     this._redrawNeeded = true;
     if (this._onFrameCallback) {
       // If there's a _onFrameCallback, call it staight away,
@@ -189,15 +189,15 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
       // Otherwise simply redraw the view now
       this.draw();
     }
-  },
+  }
 
-  _transform: function(matrix) {
+  void _transform(matrix) {
     this._matrix.preConcatenate(matrix);
     // Force recalculation of these values next time they are requested.
     this._bounds = null;
     this._inverse = null;
     this._redraw();
-  },
+  }
 
   /**
    * The underlying native element.
@@ -205,9 +205,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type HTMLCanvasElement
    * @bean
    */
-  getElement: function() {
+  Element getElement() {
     return this._element;
-  },
+  }
 
   /**
    * The size of the view. Changing the view's size will resize it's
@@ -216,11 +216,11 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type Size
    * @bean
    */
-  getViewSize: function() {
+  Size getViewSize() {
     return this._viewSize;
-  },
+  }
 
-  setViewSize: function(size) {
+  void setViewSize(size) {
     size = Size.read(arguments);
     var delta = size.subtract(this._viewSize);
     if (delta.isZero())
@@ -238,7 +238,7 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
       delta: delta
     });
     this._redraw();
-  },
+  }
 
   /**
    * The bounds of the currently visible area in project coordinates.
@@ -246,12 +246,12 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type Rectangle
    * @bean
    */
-  getBounds: function() {
+  Rectangle getBounds() {
     if (!this._bounds)
       this._bounds = this._getInverse()._transformBounds(
           new Rectangle(new Point(), this._viewSize));
     return this._bounds;
-  },
+  }
 
   /**
    * The size of the visible area in project coordinates.
@@ -259,9 +259,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type Size
    * @bean
    */
-  getSize: function() {
+  Size getSize() {
     return this.getBounds().getSize();
-  },
+  }
 
   /**
    * The center of the visible area in project coordinates.
@@ -269,13 +269,13 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type Point
    * @bean
    */
-  getCenter: function() {
+  Point getCenter() {
     return this.getBounds().getCenter();
-  },
+  }
 
-  setCenter: function(center) {
+  void setCenter(center) {
     this.scrollBy(Point.read(arguments).subtract(this.getCenter()));
-  },
+  }
 
   /**
    * The zoom factor by which the project coordinates are magnified.
@@ -283,16 +283,16 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @type Number
    * @bean
    */
-  getZoom: function() {
+  num getZoom() {
     return this._zoom;
-  },
+  }
 
-  setZoom: function(zoom) {
+  void setZoom(num zoom) {
     // TODO: Clamp the view between 1/32 and 64, just like Illustrator?
     this._transform(new Matrix().scale(zoom / this._zoom,
       this.getCenter()));
     this._zoom = zoom;
-  },
+  }
 
   /**
    * Checks whether the view is currently visible within the current browser
@@ -300,18 +300,18 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    *
    * @return {Boolean} Whether the view is visible.
    */
-  isVisible: function() {
+  bool isVisible() {
     return DomElement.isVisible(this._element);
-  },
+  }
 
   /**
    * Scrolls the view by the given vector.
    *
    * @param {Point} point
    */
-  scrollBy: function(point) {
+  Point scrollBy(point) {
     this._transform(new Matrix().translate(Point.read(arguments).negate()));
-  },
+  }
 
   /**
    * Draws the view.
@@ -331,15 +331,15 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
   // TODO: getMousePoint
   // TODO: projectToView(rect)
 
-  projectToView: function(point) {
+  Point projectToView(point) {
     return this._matrix._transformPoint(Point.read(arguments));
-  },
+  }
 
-  viewToProject: function(point) {
+  Point viewToProject(point) {
     return this._getInverse()._transformPoint(Point.read(arguments));
-  },
+  }
 
-  _getInverse: function() {
+  Matrix _getInverse() {
     if (!this._inverse)
       this._inverse = this._matrix.createInverse();
     return this._inverse;
@@ -451,13 +451,11 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
    * @return {Boolean} {@true if the view has one or more event handlers of
    * the specified type}
    */
-}, {
-  statics: {
-    _views: [],
-    _viewsById: {},
-    _id: 0,
+  static List _views = [];
+  static Map _viewsById = {};
+  static int _id = 0;
 
-    create: function(element) {
+  static create(Element element) {
 /*#*/ if (options.browser) {
       if (typeof element === 'string')
         element = document.getElementById(element);
@@ -465,26 +463,25 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
       // Factory to provide the right View subclass for a given element.
       // Produces only Canvas-Views for now:
       return new CanvasView(element);
-    }
   }
-}, new function() {
-  // Injection scope for mouse events on the browser
-/*#*/ if (options.browser) {
-  var tool,
-    curPoint,
-    tempFocus,
-    dragging = false;
 
-  function getView(event) {
+  // Injection scope for mouse events on the browser
+/*#*/// if (options.browser) {
+  Tool tool;
+  Point curPoint;
+  var tempFocus;
+  bool dragging = false;
+
+  var getView = (event) {
     // Get the view from the current event target.
     return View._viewsById[DomEvent.getTarget(event).getAttribute('id')];
-  }
+  };
 
-  function viewToProject(view, event) {
+  var viewToProject = (view, event) {
     return view.viewToProject(DomEvent.getOffset(event, view._element));
-  }
+  };
 
-  function updateFocus() {
+  var updateFocus = () {
     if (!View._focused || !View._focused.isVisible()) {
       // Find the first visible view
       for (var i = 0, l = View._views.length; i < l; i++) {
@@ -495,9 +492,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
         }
       }
     }
-  }
+  };
 
-  function mousedown(event) {
+  var mousedown = (event) {
     // Get the view from the event, and store a reference to the view that
     // should receive keyboard input.
     var view = View._focused = getView(event);
@@ -512,9 +509,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     // In the end we always call draw(), but pass checkRedraw = true, so we
     // only redraw the view if anything has changed in the above calls.
     view.draw(true);
-  }
+  };
 
-  function mousemove(event) {
+  var mousemove = (event) {
     var view;
     if (!dragging) {
       // See if we can get the view from the current event target, and
@@ -549,9 +546,9 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
       }
     }
     view.draw(true);
-  }
+  };
 
-  function mouseup(event) {
+  var mouseup = (event) {
     var view = View._focused;
     if (!view || !dragging)
       return;
@@ -564,20 +561,21 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     if (tool && tool._onHandleEvent('mouseup', point, event))
       DomEvent.stop(event);
     view.draw(true);
-  }
+  };
 
-  function selectstart(event) {
+  var selectstart = (event) {
     // Only stop this even if we're dragging already, since otherwise no
     // text whatsoever can be selected on the page.
     if (dragging)
       DomEvent.stop(event);
-  }
+  };
 
   // mousemove and mouseup events need to be installed on document, not the
   // view element, since we want to catch the end of drag events even outside
   // our view. Only the mousedown events are installed on the view, as handled
   // by _createHandlers below.
 
+  // TODO put in constructor
   DomEvent.add(document, {
     mousemove: mousemove,
     mouseup: mouseup,
@@ -586,25 +584,19 @@ var View = this.View = Base.extend(Callback, /** @lends View# */{
     selectstart: selectstart,
     scroll: updateFocus
   });
-
   DomEvent.add(window, {
     load: updateFocus
   });
 
-  return {
-    _handlers: {
+  Map _handlers: {
       mousedown: mousedown,
       touchstart: mousedown,
       selectstart: selectstart
-    },
-
-    statics: {
-      /**
-       * Loops through all views and sets the focus on the first
-       * active one.
-       */
-      updateFocus: updateFocus
-    }
   };
-/*#*/ } // options.browser
-});
+
+    /**
+     * Loops through all views and sets the focus on the first
+     * active one.
+     */
+    static var updateFocus = updateFocus;
+}
