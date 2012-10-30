@@ -24,9 +24,9 @@
  * screen.
  */
 class View {
-  _events: {
-    onFrame: {
-      install: function() {
+  Map _events = {
+    "onFrame": {
+      "install": () {
 /*#*/ if (options.browser) {
         var that = this,
           requested = false,
@@ -53,9 +53,9 @@ class View {
           // Use Base.merge to convert into a Base object,
           // for #toString()
           that.fire('frame', Base.merge({
-            delta: delta,
-            time: time += delta,
-            count: count++
+            "delta": delta,
+            "time": time += delta,
+            "count": count++
           }));
           before = now;
           // Update framerate stats
@@ -71,13 +71,13 @@ class View {
 /*#*/ } // options.browser
       },
 
-      uninstall: function() {
+      "uninstall": function() {
         delete this._onFrameCallback;
       }
     },
 
-    onResize: {}
-  },
+    "onResize": {}
+  };
 
   View(Element element) {
     // Store reference to the currently active global paper scope, and the
@@ -105,7 +105,7 @@ class View {
       element.width = size.width;
       element.height = size.height;
       DomEvent.add(window, {
-        resize: function(event) {
+        "resize": function(event) {
           // Only update element offset if it's not invisible, as
           // otherwise the offset would be wrong.
           if (!DomElement.isInvisible(element))
@@ -577,21 +577,21 @@ class View {
 
   // TODO put in constructor
   DomEvent.add(document, {
-    mousemove: mousemove,
-    mouseup: mouseup,
-    touchmove: mousemove,
-    touchend: mouseup,
-    selectstart: selectstart,
-    scroll: updateFocus
+    "mousemove": mousemove,
+    "mouseup": mouseup,
+    "touchmove": mousemove,
+    "touchend": mouseup,
+    "selectstart": selectstart,
+    "scroll": updateFocus
   });
   DomEvent.add(window, {
-    load: updateFocus
+    "load": updateFocus
   });
 
-  Map _handlers: {
-      mousedown: mousedown,
-      touchstart: mousedown,
-      selectstart: selectstart
+  Map _handlers = {
+      "mousedown": mousedown,
+      "touchstart": mousedown,
+      "selectstart": selectstart
   };
 
     /**
