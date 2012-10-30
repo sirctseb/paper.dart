@@ -91,7 +91,7 @@ class View extends Callback {
   PaperScope _scope;
   Project _project;
   Element _element;
-  int _id;
+  String _id;
 
   View(Element element) {
 
