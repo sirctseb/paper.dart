@@ -108,9 +108,9 @@ class View extends Callback {
 /*#*/ if (options.browser) {
     // Generate an id for this view / element if it does not have one
     // TODO separate static and member _id
-    _id = element.getAttribute('id');
+    _id = element.attributes['id'];
     if (_id == null)
-      element.setAttribute('id', _id = 'view-' + View._lastId++);
+      element.attributes['id'] = _id = 'view-${View._lastId++}';
     // Install event handlers
     DomEvent.add(element, _handlers);
     // If the element has the resize attribute, resize the it to fill the
@@ -159,7 +159,7 @@ class View extends Callback {
     }
 /*#*/ } else if (options.server) {
     // Generate an id for this view
-    _id = 'view-' + View._lastId++;
+    _id = 'view-${View._lastId++}';
     size = Size.create(element.width, element.height);
 /*#*/ } // options.server
     // Keep track of views internally
@@ -186,7 +186,7 @@ class View extends Callback {
       View._focused = null;
     // Remove view from internal structures
     View._views.splice(View._views.indexOf(this), 1);
-    delete View._viewsById[_id];
+    _viewsById.remove(_id);
     // Unlink from project
     if (_project.view == this)
       _project.view = null;
