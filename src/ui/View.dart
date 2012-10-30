@@ -91,6 +91,7 @@ class View extends Callback {
   PaperScope _scope;
   Project _project;
   Element _element;
+  int _id;
 
   View(Element element) {
 
@@ -109,7 +110,7 @@ class View extends Callback {
     // TODO separate static and member _id
     _id = element.getAttribute('id');
     if (_id == null)
-      element.setAttribute('id', _id = 'view-' + View._id++);
+      element.setAttribute('id', _id = 'view-' + View._lastId++);
     // Install event handlers
     DomEvent.add(element, _handlers);
     // If the element has the resize attribute, resize the it to fill the
@@ -158,7 +159,7 @@ class View extends Callback {
     }
 /*#*/ } else if (options.server) {
     // Generate an id for this view
-    _id = 'view-' + View._id++;
+    _id = 'view-' + View._lastId++;
     size = Size.create(element.width, element.height);
 /*#*/ } // options.server
     // Keep track of views internally
@@ -484,7 +485,7 @@ class View extends Callback {
    */
   static List _views = [];
   static Map _viewsById = {};
-  static int _id = 0;
+  static int _lastId = 0;
 
   static create(Element element) {
 /*#*/ if (options.browser) {
