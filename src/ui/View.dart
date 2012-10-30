@@ -13,6 +13,8 @@
  *
  * All rights reserved.
  */
+library View;
+import "../core/Core.dart";
 
 /**
  * @name View
@@ -23,7 +25,7 @@
  * center, both useful for constructing artwork that should appear centered on
  * screen.
  */
-class View {
+class View extends Callback {
   Map _events = {
     "onFrame": {
       "install": () {
