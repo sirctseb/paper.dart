@@ -104,6 +104,12 @@ class View extends Callback {
     _scope = paper;
     _project = paper.project;
     _element = element;
+    
+    // Install event handlers
+    element.on.mouseDown.add(_mousedown, false);
+    element.on.touchStart.add(_mousedown, false);
+    element.on.selectStart.add(_selectstart, false);
+    
     var size;
 /*#*/ if (options.browser) {
     // Generate an id for this view / element if it does not have one
@@ -111,8 +117,7 @@ class View extends Callback {
     _id = element.attributes['id'];
     if (_id == null)
       element.attributes['id'] = _id = 'view-${View._lastId++}';
-    // Install event handlers
-    DomEvent.add(element, _handlers);
+
     // If the element has the resize attribute, resize the it to fill the
     // window and resize it again whenever the user resizes the window.
     if (PaperScript.hasAttribute(element, 'resize')) {
@@ -513,7 +518,7 @@ class View extends Callback {
     return view.viewToProject(DomEvent.getOffset(event, view._element));
   };
 
-  var updateFocus = () {
+  static void _updateFocus(event) {
     if (!View._focused || !View._focused.isVisible()) {
       // Find the first visible view
       for (var i = 0, l = View._views.length; i < l; i++) {
@@ -524,9 +529,9 @@ class View extends Callback {
         }
       }
     }
-  };
+  }
 
-  var mousedown = (event) {
+  void _mousedown(event) {
     // Get the view from the event, and store a reference to the view that
     // should receive keyboard input.
     var view = View._focused = getView(event);
@@ -541,9 +546,9 @@ class View extends Callback {
     // In the end we always call draw(), but pass checkRedraw = true, so we
     // only redraw the view if anything has changed in the above calls.
     view.draw(true);
-  };
+  }
 
-  var mousemove = (event) {
+  static void _mousemove(event) {
     var view;
     if (!dragging) {
       // See if we can get the view from the current event target, and
@@ -578,9 +583,9 @@ class View extends Callback {
       }
     }
     view.draw(true);
-  };
+  }
 
-  var mouseup = (event) {
+  static void _mouseup(event) {
     var view = View._focused;
     if (!view || !dragging)
       return;
@@ -593,38 +598,30 @@ class View extends Callback {
     if (tool && tool._onHandleEvent('mouseup', point, event))
       DomEvent.stop(event);
     view.draw(true);
-  };
+  }
 
-  var selectstart = (event) {
+  static void _selectstart(event) {
     // Only stop this even if we're dragging already, since otherwise no
     // text whatsoever can be selected on the page.
     if (dragging)
       DomEvent.stop(event);
-  };
+  }
 
   // mousemove and mouseup events need to be installed on document, not the
   // view element, since we want to catch the end of drag events even outside
   // our view. Only the mousedown events are installed on the view, as handled
   // by _createHandlers below.
-
-  // TODO put in constructor
-  DomEvent.add(document, {
-    "mousemove": mousemove,
-    "mouseup": mouseup,
-    "touchmove": mousemove,
-    "touchend": mouseup,
-    "selectstart": selectstart,
-    "scroll": updateFocus
-  });
-  DomEvent.add(window, {
-    "load": updateFocus
-  });
-
-  Map _handlers = {
-      "mousedown": mousedown,
-      "touchstart": mousedown,
-      "selectstart": selectstart
-  };
+  
+  static bool _addStaticHandlers() {
+    document.on.mouseMove.add(_mousemove, false);
+    document.on.mouseUp.add(_mouseup, false);
+    document.on.touchMove.add(_mousemove, false);
+    document.on.touchEnd.add(_mouseup, false);
+    document.on.selectStart.add(_selectstart, false);
+    document.on.scroll.add(_updateFocus, false);
+    window.on.load.add(_updateFocus, false);
+  }
+  static bool _staticHandlersInitialized = _addStaticHandlers();
 
     /**
      * Loops through all views and sets the focus on the first
