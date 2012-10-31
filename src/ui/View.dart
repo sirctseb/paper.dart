@@ -53,10 +53,12 @@ class View extends Callback {
       if (!dontRequest) {
         // Request next frame already
         requested = true;
-        DomEvent.requestAnimationFrame(that._onFrameCallback,
-            that._element);
+        window.requestAnimationFrame(_onFrameCallback);
+        // TODO js took an element, but I don't think rAF takes one
+        /*DomEvent.requestAnimationFrame(that._onFrameCallback,
+            that._element);*/
       }
-      var now = Date.now() / 1000,
+      var now = new Date.now().millisecondsSinceEpoch / 1000,
          delta = before ? now - before : 0;
       // delta: Time elapsed since last redraw in seconds
       // time: Time since first call of frame() in seconds
@@ -507,11 +509,11 @@ class View extends Callback {
   Tool tool;
   Point curPoint;
   var tempFocus;
-  bool dragging = false;
+  static bool dragging = false;
 
-  var getView = (event) {
+  var getView = (Event event) {
     // Get the view from the current event target.
-    return View._viewsById[DomEvent.getTarget(event).getAttribute('id')];
+    return View._viewsById[((event.target != null ? event.target : event.srcElement) as Element).attributes['id']];
   };
 
   var viewToProject = (view, event) {
@@ -531,6 +533,7 @@ class View extends Callback {
     }
   }
 
+  // TODO these used to store in _handlers, which might interact with Callback
   void _mousedown(event) {
     // Get the view from the event, and store a reference to the view that
     // should receive keyboard input.
