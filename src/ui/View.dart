@@ -186,7 +186,7 @@ class View extends Callback {
    * Removes this view from and frees the associated element.
    */
   bool remove() {
-    if (!_project)
+    if (_project == null)
       return false;
     // Clear focus if removed view had it
     if (View._focused == this)
@@ -264,8 +264,8 @@ class View extends Callback {
     _redrawNeeded = true;
     // Call onResize handler on any size change
     fire('resize', {
-      size: size,
-      delta: delta
+      'size': size,
+      'delta': delta
     });
     _redraw();
   }
@@ -279,7 +279,7 @@ class View extends Callback {
    */
   Rectangle _bounds;
   Rectangle getBounds() {
-    if (!_bounds)
+    if (_bounds == null)
       _bounds = _getInverse()._transformBounds(
           new Rectangle(new Point(), _viewSize));
     return _bounds;
@@ -379,7 +379,7 @@ class View extends Callback {
   }
 
   Matrix _getInverse() {
-    if (!_inverse)
+    if (_inverse == null)
       _inverse = _matrix.createInverse();
     return _inverse;
   }
@@ -496,8 +496,8 @@ class View extends Callback {
 
   static create(Element element) {
 /*#*/ if (options.browser) {
-      if (typeof element === 'string')
-        element = document.getElementById(element);
+      if (element is String)
+        element = document.query('#$element');
 /*#*/ } // options.browser
       // Factory to provide the right View subclass for a given element.
       // Produces only Canvas-Views for now:
